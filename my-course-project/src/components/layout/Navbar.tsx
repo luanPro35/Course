@@ -44,10 +44,20 @@ export default function Navbar() {
     setShowLoginForm(false);
   };
 
+  const handleSwitchToRegister = () => {
+    setShowLoginForm(false);
+    setShowRegisterForm(true);
+  };
+
+  const handleSwitchToLogin = () => {
+    setShowRegisterForm(false);
+    setShowLoginForm(true);
+  };
+
   return (
     <div className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
       <div className="flex items-center gap-3">
-        <Image src="/images/Brand.png" alt="logo" width={100} height={50} />
+        <Image src="/images/Brand.jpg" alt="logo" width={100} height={50} />
         <h2 className="text-sm font-semibold text-black">
           Học Tập Không Giới Hạn
         </h2>
@@ -74,12 +84,18 @@ export default function Navbar() {
 
       {showRegisterForm && (
         <Modal onClose={handleCloseModal}>
-          <RegisterForm onClose={handleCloseModal} />
+          <RegisterForm
+            onClose={handleCloseModal}
+            onSwitchToLogin={handleSwitchToLogin}
+          />
         </Modal>
       )}
       {showLoginForm && (
         <Modal onClose={handleCloseModal}>
-          <LoginForm onClose={handleCloseModal} />
+          <LoginForm
+            onClose={handleCloseModal}
+            onSwitchToRegister={handleSwitchToRegister}
+          />
         </Modal>
       )}
     </div>

@@ -16,9 +16,13 @@ interface RegisterFormData {
 
 interface RegisterFormProps {
   onClose: () => void;
+  onSwitchToLogin: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  onClose,
+  onSwitchToLogin,
+}) => {
   const [formData, setFormData] = useState<RegisterFormData>({
     fullName: "",
     phone: "",
@@ -140,12 +144,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
       <div className="text-center">
         <div className="flex justify-center space-x-1 text-sm">
           <span className="text-gray-600">Đã có tài khoản?</span>
-          <Link
-            href="/login"
+          <button
+            type="button"
+            onClick={onSwitchToLogin}
             className="text-orange-500 hover:text-orange-600 font-medium"
           >
             Đăng nhập
-          </Link>
+          </button>
         </div>
       </div>
 
