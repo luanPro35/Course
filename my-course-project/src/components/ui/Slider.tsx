@@ -95,7 +95,7 @@ const CourseLandingSlider: React.FC = () => {
     <>
       <div className="relative">
         {/* Main Slider Container */}
-        <div className="relative w-full h-[70vh] overflow-hidden rounded-3xl shadow-2xl">
+        <div className="relative w-full h-[50vh] overflow-hidden rounded-3xl shadow-2xl">
           {courses.map((course, index) => (
             <section
               key={course.id}
