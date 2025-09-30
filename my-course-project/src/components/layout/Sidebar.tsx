@@ -21,7 +21,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-2 p-4 w-32 bg-white h-screen">
+    <div className="flex flex-col gap-2 p-4 w-32 bg-white h-60">
       {links.map((link) => (
         <Link
           key={link.href}

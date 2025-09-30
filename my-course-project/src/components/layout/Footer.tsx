@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative overflow-hidden w-full">
       <div className="absolute inset-0">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_25%_25%,rgba(59,130,246,0.2),transparent_50%),radial-gradient(circle_at_75%_75%,rgba(147,51,234,0.2),transparent_50%)]"></div>
         <div className="absolute inset-0"></div>

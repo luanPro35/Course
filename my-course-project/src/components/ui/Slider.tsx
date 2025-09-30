@@ -87,15 +87,11 @@ const CourseLandingSlider: React.FC = () => {
     setCurrentSlide(index);
   };
 
-  const toggleAutoplay = (): void => {
-    setIsPlaying(!isPlaying);
-  };
-
   return (
     <>
       <div className="relative">
         {/* Main Slider Container */}
-        <div className="relative w-full h-[50vh] overflow-hidden rounded-3xl shadow-2xl">
+        <div className="relative w-full h-[60vh] overflow-hidden rounded-3xl shadow-2xl">
           {courses.map((course, index) => (
             <section
               key={course.id}
