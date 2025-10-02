@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { InputField } from "@/components/course/InputField";
 import { Mail, Lock } from "lucide-react";
-import { SocialButton } from "@/app/auth/SocialButton";
+import { SocialButton } from "./SocialButton";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "next/link";
-import Image from "next/image";
+import { AuthLayout } from "@/components/auth/AuthLayout";
 
 interface LoginFormData {
   email: string;
@@ -37,33 +37,27 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    onClose(); // Close modal after submission
+    // TODO: Add your login API call here
+    onClose();
   };
 
   const handleSocialLogin = (provider: string) => {
     console.log(`Logging in with ${provider}`);
-    onClose(); // Close modal after social login attempt
+    // TODO: Add your social login logic here
+    onClose();
   };
 
   return (
-    <div className="p-8">
-      {/* Logo và tiêu đề */}
-      <div className="text-center mb-8">
-        <div className="w-32 h-32 bg-gradient-to-r flex items-center justify-center text-white text-2xl font-bold mx-auto">
-          <Image src="/images/Brand.png" alt="logo" width={100} height={50} />
-        </div>
-
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Đăng ký tài khoản LearnX
-        </h1>
-        <p className="text-gray-600 text-sm leading-relaxed">
+    <AuthLayout>
+      <div className="p-8">
+        <h2 className="text-2xl font-bold text-center mb-1">Đăng nhập</h2>
+        <p className="text-center text-gray-500 mb-6">
           Truy cập vào hệ sinh thái học tập và phát triển
           <br />
           kỹ năng lập trình hàng đầu Việt Nam
         </p>
       </div>
 
-      {/* Form đăng nhập */}
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <InputField
           type="email"
@@ -91,7 +85,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </button>
       </form>
 
-      {/* Đăng nhập mạng xã hội */}
       <div className="space-y-3 mb-6">
         <SocialButton
           icon={<FaGoogle />}
@@ -106,7 +99,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         />
       </div>
 
-      {/* Links */}
       <div className="text-center space-y-4">
         <div className="flex justify-center space-x-1 text-sm">
           <span className="text-gray-600">Chưa có tài khoản?</span>
@@ -127,7 +119,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </Link>
       </div>
 
-      {/* Terms */}
       <div className="mt-8 pt-6 border-t border-gray-100">
         <p className="text-xs text-gray-500 text-center leading-relaxed">
           Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với{" "}
@@ -137,7 +128,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           của chúng tôi.
         </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 

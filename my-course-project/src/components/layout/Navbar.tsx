@@ -1,59 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import CourseSearch from "../course/CourseSearch";
-import RegisterForm from "../auth/RegisterForm";
-import LoginForm from "../auth/LoginForm";
 
-interface ModalProps {
-  children: React.ReactNode;
-  onClose: () => void;
+interface NavbarProps {
+  onLoginClick: () => void;
+  onRegisterClick: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center">
-    <div className="bg-white rounded-lg shadow-xl relative max-w-lg w-full">
-      <button
-        onClick={onClose}
-        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10"
-      >
-        &times;
-      </button>
-      <div className="max-h-[90vh]">{children}</div>
-    </div>
-  </div>
-);
-
-export default function Navbar() {
-  const [showRegisterForm, setShowRegisterForm] = useState(false);
-  const [showLoginForm, setShowLoginForm] = useState(false);
-
-  const handleRegisterClick = () => {
-    setShowRegisterForm(true);
-    setShowLoginForm(false);
-  };
-
-  const handleLoginClick = () => {
-    setShowLoginForm(true);
-    setShowRegisterForm(false);
-  };
-
-  const handleCloseModal = () => {
-    setShowRegisterForm(false);
-    setShowLoginForm(false);
-  };
-
-  const handleSwitchToRegister = () => {
-    setShowLoginForm(false);
-    setShowRegisterForm(true);
-  };
-
-  const handleSwitchToLogin = () => {
-    setShowRegisterForm(false);
-    setShowLoginForm(true);
-  };
-
+export default function Navbar({ onLoginClick, onRegisterClick }: NavbarProps) {
   return (
     <div className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
       <div className="flex items-center gap-3">
@@ -69,35 +25,18 @@ export default function Navbar() {
 
       <div className="flex items-center gap-3">
         <button
-          onClick={handleRegisterClick}
+          onClick={onRegisterClick}
           className="bg-white-500 text-black font-bold px-4 py-2 rounded"
         >
           Đăng ký
         </button>
         <button
-          onClick={handleLoginClick}
+          onClick={onLoginClick}
           className="bg-orange-500 text-white font-bold px-4 py-2 rounded-3xl"
         >
           Đăng nhập
         </button>
       </div>
-
-      {showRegisterForm && (
-        <Modal onClose={handleCloseModal}>
-          <RegisterForm
-            onClose={handleCloseModal}
-            onSwitchToLogin={handleSwitchToLogin}
-          />
-        </Modal>
-      )}
-      {showLoginForm && (
-        <Modal onClose={handleCloseModal}>
-          <LoginForm
-            onClose={handleCloseModal}
-            onSwitchToRegister={handleSwitchToRegister}
-          />
-        </Modal>
-      )}
     </div>
   );
 }

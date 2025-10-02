@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { InputField } from "@/components/course/InputField";
 import { User, Mail, Phone, Lock } from "lucide-react";
-import { SocialButton } from "@/app/auth/SocialButton";
+import { SocialButton } from "./SocialButton";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "next/link";
-import Image from "next/image";
+import { AuthLayout } from "@/components/auth/AuthLayout";
 
 interface RegisterFormData {
   fullName: string;
@@ -31,7 +31,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     confirmPassword: "",
   });
 
-  const hanldeInputChange = (field: keyof RegisterFormData, value: string) => {
+  const handleInputChange = (field: keyof RegisterFormData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -45,25 +45,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       return;
     }
     console.log("Register Data:", formData);
-    onClose(); // Close modal after submission
+    // TODO: Add your register API call here
+    onClose();
   };
 
-  const handleSocialRegister = (provider: "google" | "facebook" | "github") => {
+  const handleSocialRegister = (provider: "google" | "facebook") => {
     console.log(`Register with ${provider}`);
-    onClose(); // Close modal after social login attempt
+    // TODO: Add your social register logic here
+    onClose();
   };
 
   return (
-    <div className="p-8">
-      {/* Logo và tiêu đề */}
-      <div className="text-center mb-8">
-        <div className="w-32 h-32 bg-gradient-to-r flex items-center justify-center text-white text-2xl font-bold mx-auto">
-          <Image src="/images/Brand.png" alt="logo" width={100} height={50} />
-        </div>
-
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Đăng ký tài khoản LearnX
-        </h1>
+    <AuthLayout>
+      <div className="p-8">
+        <h2 className="text-2xl font-bold text-center mb-1">
+          Đăng ký tài khoản
+        </h2>
         <p className="text-gray-600 text-sm leading-relaxed">
           Tham gia cộng đồng học lập trình miễn phí
           <br />
@@ -77,8 +74,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="text"
           placeholder="Họ và tên"
           value={formData.fullName}
-          onChange={(e) => hanldeInputChange("fullName", e.target.value)}
-          icon={<User size={20} className="text-gray-400" />}
+          onChange={(e) => handleInputChange("fullName", e.target.value)}
+          icon=<User size={20} className="text-gray-400" />
           required
         />
 
@@ -86,8 +83,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="email"
           placeholder="Email"
           value={formData.email}
-          onChange={(e) => hanldeInputChange("email", e.target.value)}
-          icon={<Mail size={20} className="text-gray-400" />}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          icon=<Mail size={20} className="text-gray-400" />
           required
         />
 
@@ -95,8 +92,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="tel"
           placeholder="Số điện thoại"
           value={formData.phone}
-          onChange={(e) => hanldeInputChange("phone", e.target.value)}
-          icon={<Phone size={20} className="text-gray-400" />}
+          onChange={(e) => handleInputChange("phone", e.target.value)}
+          icon=<Phone size={20} className="text-gray-400" />
           required
         />
 
@@ -104,8 +101,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="password"
           placeholder="Mật khẩu"
           value={formData.password}
-          onChange={(e) => hanldeInputChange("password", e.target.value)}
-          icon={<Lock size={20} className="text-gray-400" />}
+          onChange={(e) => handleInputChange("password", e.target.value)}
+          icon=<Lock size={20} className="text-gray-400" />
           required
         />
 
@@ -113,8 +110,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="password"
           placeholder="Xác nhận mật khẩu"
           value={formData.confirmPassword}
-          onChange={(e) => hanldeInputChange("confirmPassword", e.target.value)}
-          icon={<Lock size={20} className="text-gray-400" />}
+          onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+          icon=<Lock size={20} className="text-gray-400" />
           required
         />
 
@@ -128,14 +125,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
       <div className="space-y-3 mb-6">
         <SocialButton
-          icon={<FaGoogle />}
-          text="Đăng nhập với Google"
+          icon=<FaGoogle />
+          text="Đăng ký với Google"
           onClick={() => handleSocialRegister("google")}
         />
 
         <SocialButton
-          icon={<FaFacebook />}
-          text="Đăng nhập với Facebook"
+          icon=<FaFacebook />
+          text="Đăng ký với Facebook"
           onClick={() => handleSocialRegister("facebook")}
         />
       </div>
@@ -165,10 +162,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           <Link href="/privacy" className="text-orange-500 hover:underline">
             Chính sách bảo mật
           </Link>{" "}
-          của F8.
+          của LearnX.
         </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 

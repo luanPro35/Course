@@ -12,7 +12,7 @@ export default function Route() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-        <Navbar />
+        <Navbar onLoginClick={() => {}} onRegisterClick={() => {}} />
       </header>
       <div className="flex flex-1 pt-16">
         <aside className="w-28 flex-shrink-0">
@@ -31,9 +31,7 @@ export default function Route() {
             {/* Danh sách link */}
             <div className="px-6 md:px-12 py-8 pt-8">
               {linkPosts.map((item) => (
-                <Link href={`/article/${item.id}`} key={item.id}>
-                  <LinkPosts prop={item} />
-                </Link>
+                <LinkPosts prop={item} key={item.id} />
               ))}
             </div>
 
