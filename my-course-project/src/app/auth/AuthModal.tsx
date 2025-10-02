@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
@@ -18,6 +18,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
   initialView = "login",
 }) => {
   const [currentView, setCurrentView] = useState<AuthView>(initialView);
+
+  useEffect(() => {
+    setCurrentView(initialView);
+  }, [initialView]);
 
   if (!isOpen) return null;
 

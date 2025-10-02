@@ -1,15 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import CourseSearch from "../course/CourseSearch";
+import AuthModal from "@/app/auth/AuthModal";
 
 interface NavbarProps {
-  onLoginClick: () => void;
-  onRegisterClick: () => void;
+  onLoginClick?: () => void;
+  onRegisterClick?: () => void;
 }
 
-export default function Navbar({ onLoginClick, onRegisterClick }: NavbarProps) {
+export default function Navbar({
+  onLoginClick: propOnLoginClick,
+  onRegisterClick: propOnRegisterClick,
+}: NavbarProps) {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authView, setAuthView] = useState<"login" | "register">("login");
+
+  // Use prop functions if provided, otherwise use internal ones
+  const internalOnRegisterClick = () => {
+    setIsAuthModalOpen(true);
+    setAuthView("register");
+  };
+  const handleRegisterClick = propOnRegisterClick || internalOnRegisterClick;
+
+  const internalOnLoginClick = () => {
+    setIsAuthModalOpen(true);
+    setAuthView("login");
+  };
+  const handleLoginClick = propOnLoginClick || internalOnLoginClick;
+
+  const onCloseAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
   return (
     <div className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
       <div className="flex items-center gap-3">
@@ -25,18 +49,24 @@ export default function Navbar({ onLoginClick, onRegisterClick }: NavbarProps) {
 
       <div className="flex items-center gap-3">
         <button
-          onClick={onRegisterClick}
+          onClick={handleRegisterClick}
           className="bg-white-500 text-black font-bold px-4 py-2 rounded"
         >
           Đăng ký
         </button>
         <button
-          onClick={onLoginClick}
+          onClick={handleLoginClick}
           className="bg-orange-500 text-white font-bold px-4 py-2 rounded-3xl"
         >
           Đăng nhập
         </button>
       </div>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={onCloseAuthModal}
+        initialView={authView}
+      />
     </div>
   );
 }

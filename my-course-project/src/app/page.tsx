@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-        <Navbar onLoginClick={() => {}} onRegisterClick={() => {}} />
+        <Navbar />
       </header>
 
       <div className="flex flex-1 pt-16">

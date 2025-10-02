@@ -18,12 +18,12 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative my-8">
+    <div className="fixed inset-0 bg-black/50 flex justify-center p-4 z-[9999] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative my-8 p-8">
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-black transition-colors z-50"
             aria-label="Close"
           >
             <X size={24} />
