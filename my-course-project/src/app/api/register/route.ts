@@ -1,7 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { users } from "@/app/data/users";
 
-let users = [];
-export async function POST(req) {
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  password?: string;
+}
+
+export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const { fullName, phone, email, password, confirmPassword } = body;
@@ -20,14 +28,25 @@ export async function POST(req) {
     );
   }
 
-  if (users.find((u) => u.email === email)) {
+  if (users.find((u: User) => u.email === email)) {
     return NextResponse.json(
       { mess: "Email đã được đăng kí" },
       { status: 400 }
     );
   }
 
-  const newUser = { id: Date.now().toString(), fullName, email, phone };
+  if (!/^0\d{9}$/.test(phone)) {
+    const msg = "Số điện thoại không hợp lệ! (phải đủ 10 số và bắt đầu bằng 0)";
+    return NextResponse.json({ mess: msg }, { status: 400 });
+  }
+
+  const newUser: User = {
+    id: Date.now().toString(),
+    fullName,
+    email,
+    phone,
+    password,
+  };
   users.push(newUser);
   return NextResponse.json(
     { message: "Đăng ký thành công!", user: newUser },

@@ -5,6 +5,11 @@ import { SocialButton } from "./SocialButton";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "next/link";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import SuccessAnimation from "@/components/ui/SuccessAnimation";
+import ErrorAnimation from "@/components/ui/ErrorAnimation";
+import { useRouter } from "next/navigation";
+// import { toast } from "react-toastify"; // Removed toast import
+// import "react-toastify/dist/ReactToastify.css"; // Removed toast CSS import
 
 interface LoginFormData {
   email: string;
@@ -20,6 +25,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onClose,
   onSwitchToRegister,
 }) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -34,11 +43,42 @@ const LoginForm: React.FC<LoginFormProps> = ({
       });
     };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // TODO: Add your login API call here
-    onClose();
+    setIsLoading(true);
+    setIsError(false);
+    setIsSuccess(false);
+
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          onClose();
+          router.push("/dashboard"); // Redirect to dashboard or desired page
+        }, 2000);
+      } else {
+        await response.json();
+        setIsError(true);
+        setTimeout(() => {
+          setIsError(false);
+        }, 2000);
+      }
+    } catch {
+      setIsError(true);
+      setTimeout(() => {
+        setIsError(false);
+      }, 2000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -49,6 +89,27 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <AuthLayout onClose={onClose}>
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+          <p>Đang đăng nhập...</p>
+        </div>
+      )}
+
+      {isSuccess && (
+        <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
+          <SuccessAnimation onComplete={() => setIsSuccess(false)} />
+        </div>
+      )}
+
+      {isError && (
+        <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
+          <ErrorAnimation
+            mess="Đăng nhập thất bại!"
+            onComplete={() => setIsError(false)}
+          />
+        </div>
+      )}
+
       <div>
         <h2 className="text-2xl font-bold text-center mb-1">Đăng nhập</h2>
         <p className="text-center text-gray-500 mb-6">
@@ -80,8 +141,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <button
           type="submit"
           className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-4 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-medium"
+          disabled={isLoading}
         >
-          Đăng nhập
+          {isLoading ? "Đang xử lý..." : "Đăng nhập"}
         </button>
       </form>
 

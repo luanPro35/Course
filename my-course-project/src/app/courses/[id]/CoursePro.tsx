@@ -12,7 +12,9 @@ export default function CoursePro() {
   useEffect(() => {
     getCourses()
       .then(setCourses)
-      .catch((error) => console.error("Error fetching courses:", error))
+      .catch((error: unknown) =>
+        console.error("Error fetching courses:", error)
+      )
       .finally(() => setLoading(false));
   }, []);
 

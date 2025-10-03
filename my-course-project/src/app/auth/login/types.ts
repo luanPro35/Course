@@ -1,0 +1,20 @@
+// components/auth/login/types.ts
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+export interface LoginFormProps {
+  onClose: () => void;
+  onSwitchToRegister: () => void;
+}
+
+export interface LoginResponse {
+  mess?: string;
+  success?: boolean;
+  token?: string;
+  user?: User;
+}
+
+export type User = object;

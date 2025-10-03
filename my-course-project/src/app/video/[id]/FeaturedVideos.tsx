@@ -12,7 +12,7 @@ export default function FeaturedVideos() {
   useEffect(() => {
     getTopVideos()
       .then(setVideoTop)
-      .catch((error) => console.error("Error fetching courses:", error))
+      .catch((error: Error) => console.error("Error fetching courses:", error))
       .finally(() => setLoading(false));
   }, []);
 

@@ -1,11 +1,10 @@
 import { TopVideo } from "@/types/topVideo";
 
-export const getTopVideos = async (): Promise<TopVideo[]> => {
-  const res = await fetch("/api/topVideos");
-
-  if (!res.ok) {
+export async function getTopVideos(): Promise<TopVideo[]> {
+  const response = await fetch("/api/topVideos");
+  if (!response.ok) {
     throw new Error("Failed to fetch top videos");
   }
-
-  return res.json();
-};
+  const data: TopVideo[] = await response.json();
+  return data;
+}
