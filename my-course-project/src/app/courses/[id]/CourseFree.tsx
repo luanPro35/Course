@@ -53,13 +53,7 @@ export default function CourseFree() {
             <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
               <span className="text-orange-600 font-bold text-lg">
                 {course.free}
-              </span>
-              <div className="flex items-center gap-1">
-                <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">🧑‍🤝‍🧑</span>
-                </div>
-                <span>{course.people.toLocaleString()}</span>
-              </div>
+              </span>{" "}
             </div>
 
             <div className="flex items-center justify-between text-sm text-gray-600">

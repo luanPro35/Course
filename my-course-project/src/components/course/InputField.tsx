@@ -30,7 +30,7 @@ export const InputField: React.FC<InputFieldProps> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className={`w-full ${icon ? 'pl-10' : 'px-4'} py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600`}
           required={required}
         />
       </div>

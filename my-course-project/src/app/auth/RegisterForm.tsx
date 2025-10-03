@@ -5,6 +5,7 @@ import { SocialButton } from "./SocialButton";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "next/link";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import toast from "react-hot-toast";
 
 interface RegisterFormData {
   fullName: string;
@@ -38,15 +39,32 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Mật khẩu không khớp");
+      toast.error("Mật khẩu không khớp");
       return;
     }
-    console.log("Register Data:", formData);
-    // TODO: Add your register API call here
-    onClose();
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.mess || "Có lỗi xảy ra");
+        return;
+      }
+      toast.success(data.mess || "Đăng kí thành công");
+      console.log("User:", data.user);
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Đăng ký thất bại, thử lại sau!");
+    }
   };
 
   const handleSocialRegister = (provider: "google" | "facebook") => {
@@ -56,7 +74,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout onClose={onClose}>
       <div className="p-8">
         <h2 className="text-2xl font-bold text-center mb-1">
           Đăng ký tài khoản

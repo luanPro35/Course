@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
@@ -25,19 +26,45 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
   if (!isOpen) return null;
 
+  const formVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
   return (
     <AuthLayout onClose={onClose}>
-      {currentView === "login" ? (
-        <LoginForm
-          onClose={onClose}
-          onSwitchToRegister={() => setCurrentView("register")}
-        />
-      ) : (
-        <RegisterForm
-          onClose={onClose}
-          onSwitchToLogin={() => setCurrentView("login")}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {currentView === "login" ? (
+          <motion.div
+            key="login"
+            variants={formVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+          >
+            <LoginForm
+              onClose={onClose}
+              onSwitchToRegister={() => setCurrentView("register")}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="register"
+            variants={formVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+          >
+            <RegisterForm
+              onClose={onClose}
+              onSwitchToLogin={() => setCurrentView("login")}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </AuthLayout>
   );
 };

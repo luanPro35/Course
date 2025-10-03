@@ -48,8 +48,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <AuthLayout>
-      <div className="p-8">
+    <AuthLayout onClose={onClose}>
+      <div>
         <h2 className="text-2xl font-bold text-center mb-1">Đăng nhập</h2>
         <p className="text-center text-gray-500 mb-6">
           Truy cập vào hệ sinh thái học tập và phát triển
