@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import LoginForm from "./LoginForm";
+import LoginForm from "./login/LoginForm";
 import RegisterForm from "./register/RegisterForm";
 
 type AuthView = "login" | "register";

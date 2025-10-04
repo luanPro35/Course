@@ -28,31 +28,31 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <AuthLayout onClose={onClose}>
+      {/* Loading, Success, Error States */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+          <p className="text-gray-600 font-medium text-lg">Đang đăng nhập...</p>
+        </div>
+      )}
+      {isSuccess && (
+        <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
+          <SuccessAnimation onComplete={onClose} />
+        </div>
+      )}
+      {isError && (
+        <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
+          <ErrorAnimation
+            mess={errorMessage || "Đăng nhập thất bại!"}
+            onComplete={() => {
+              /* You might want to reset the error state here */
+            }}
+          />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
         {/* Left side - Form */}
-        <div className="relative">
-          {/* Loading State */}
-          {isLoading && (
-            <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-              <p className="text-gray-600 font-medium">Đang đăng nhập...</p>
-            </div>
-          )}
-
-          {isSuccess && (
-            <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
-              <SuccessAnimation onComplete={() => {}} />
-            </div>
-          )}
-
-          {isError && (
-            <div className="absolute inset-0 bg-white flex items-center justify-center z-10">
-              <ErrorAnimation
-                mess={errorMessage || "Đăng nhập thất bại!"}
-                onComplete={() => {}}
-              />
-            </div>
-          )}
-
+        <div>
           {/* Header */}
           <div>
             <h2 className="text-2xl font-bold text-center mb-1">Đăng nhập</h2>
@@ -131,7 +131,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </div>
 
         {/* Right side - Animation */}
-        <div className="block md:flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg p-4">
+        <div className="hidden md:flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg p-4">
           <LoginAnimation />
         </div>
       </div>
