@@ -1,5 +1,3 @@
-// components/auth/login/types.ts
-
 export interface LoginFormData {
   email: string;
   password: string;
@@ -10,16 +8,11 @@ export interface LoginFormProps {
   onSwitchToRegister: () => void;
 }
 
+import { User } from "../../../types/user";
+
 export interface LoginResponse {
   mess?: string;
   success?: boolean;
   token?: string;
   user?: User;
-}
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: string;
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { users } from "@/app/data/users";
 import bcrypt from "bcryptjs"; // Import bcryptjs
+import jwt from "jsonwebtoken"; // Import jsonwebtoken
 
 interface User {
   email: string;
@@ -26,6 +27,14 @@ export async function POST(req: Request) {
     );
   }
 
+  const accessToken = jwt.sign(
+    {
+      email: user.email,
+    },
+    process.env.JWT_SECRET || "secret_key",
+    { expiresIn: "6d" }
+  );
+
   // Compare the provided password with the hashed password
   const passwordMatch = await bcrypt.compare(password, user.password);
 
@@ -34,7 +43,7 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json(
-    { mess: "Đăng nhập thành công!", user },
+    { mess: "Đăng nhập thành công!", user, accessToken },
     { status: 200 }
   );
 }

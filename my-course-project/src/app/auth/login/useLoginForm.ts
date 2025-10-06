@@ -54,8 +54,7 @@ export const useLoginForm = (onClose: () => void) => {
       // Redirect after success animation
       setTimeout(() => {
         onClose();
-        router.push("/dashboard");
-      }, 2000);
+      }, 1500);
     } catch (error) {
       const message =
         error instanceof Error

@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     // Create new user
     const newUser: User = {
-      id: `user_${Date.now()}`,
+      id: Date.now(),
       fullName,
       email,
       phone,
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     users.push(newUser);
 
     // --- Persist users to file ---
-    const fileContent = `import { User } from '@/models/user.model';\n\nexport const users: User[] = ${JSON.stringify(
+    const fileContent = `import { User } from "../../types/user";\n\nexport const users: User[] = ${JSON.stringify(
       users,
       null,
       2

@@ -1,5 +1,4 @@
 "use client";
-import { User } from "lucide-react";
 import React, {
   createContext,
   useState,
@@ -7,13 +6,7 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: string;
-}
+import { User } from "../types/user";
 
 interface AuthContextType {
   user: User | null;
