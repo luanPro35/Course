@@ -2,7 +2,7 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { useEffect, useState } from "react";
+import { AuthProvider } from "@/content/AuthContent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,18 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [fontClass, setFontClass] = useState(
-    `${geistSans.variable} ${geistMono.variable} antialiased`
-  );
-
-  useEffect(() => {
-    // No need to set the fontClass again here, as it's already initialized
-  }, []);
-
   return (
     <html lang="en">
-      <body className={fontClass} suppressHydrationWarning={true}>
-        {children}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
+      >
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

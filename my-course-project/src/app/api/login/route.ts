@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { users } from "@/app/data/users";
+import bcrypt from "bcryptjs"; // Import bcryptjs
 
 interface User {
   email: string;
@@ -25,7 +26,10 @@ export async function POST(req: Request) {
     );
   }
 
-  if (user.password !== password) {
+  // Compare the provided password with the hashed password
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  if (!passwordMatch) {
     return NextResponse.json({ mess: "Mật khẩu không đúng" }, { status: 400 });
   }
 

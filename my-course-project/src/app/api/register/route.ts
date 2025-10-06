@@ -1,59 +1,113 @@
 import { NextResponse, NextRequest } from "next/server";
 import { users } from "@/app/data/users";
+import bcrypt from "bcryptjs";
+import { User } from "@/types/user";
+import fs from "fs";
+import path from "path";
 
-export interface User {
-  id: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  password?: string;
-}
+// Path to the users data file
+const usersFilePath = path.join(process.cwd(), "src/app/data/users.ts");
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
+    const { fullName, phone, email, password, confirmPassword } = body;
 
-  const { fullName, phone, email, password, confirmPassword } = body;
+    // Basic validation
+    if (!fullName || !phone || !email || !password || !confirmPassword) {
+      return NextResponse.json(
+        { message: "Vui lòng điền đầy đủ thông tin." },
+        { status: 400 }
+      );
+    }
 
-  if (!fullName || !phone || !email || !password || !confirmPassword) {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        { message: "Mật khẩu xác nhận không khớp." },
+        { status: 400 }
+      );
+    }
+
+    // Check if email already exists
+    if (users.some((user) => user.email === email)) {
+      return NextResponse.json(
+        { message: "Email này đã được sử dụng." },
+        { status: 409 }
+      );
+    }
+
+    // Validate phone number format
+    if (!/^0\d{9}$/.test(phone)) {
+      return NextResponse.json(
+        {
+          message:
+            "Số điện thoại không hợp lệ. Vui lòng sử dụng định dạng 10 chữ số bắt đầu bằng 0.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser: User = {
+      id: `user_${Date.now()}`,
+      fullName,
+      email,
+      phone,
+      password: hashedPassword,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // Add user to the in-memory array
+    users.push(newUser);
+
+    // --- Persist users to file ---
+    const fileContent = `import { User } from '@/models/user.model';\n\nexport const users: User[] = ${JSON.stringify(
+      users,
+      null,
+      2
+    )};\n`;
+
+    try {
+      fs.writeFileSync(usersFilePath, fileContent, "utf-8");
+    } catch (writeError) {
+      console.error("Failed to write to users file:", writeError);
+      // In a real app, you might want to handle this more gracefully
+      return NextResponse.json(
+        {
+          message: "Đăng ký thành công nhưng không thể lưu dữ liệu người dùng.",
+        },
+        { status: 500 }
+      );
+    }
+    // -----------------------------
+
+    // Remove password from the returned user object
+    const userWithoutPassword = { ...newUser };
+    delete userWithoutPassword.password;
+
     return NextResponse.json(
-      { mess: "Vui lòng nhập đủ thông tin" },
-      { status: 400 }
+      {
+        message: "Đăng ký thành công!",
+        user: userWithoutPassword,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Registration error:", error);
+    return NextResponse.json(
+      { message: "Đã xảy ra lỗi phía máy chủ." },
+      { status: 500 }
     );
   }
-
-  if (password !== confirmPassword) {
-    return NextResponse.json(
-      { mess: "Mật khẩu xác định không xác định" },
-      { status: 400 }
-    );
-  }
-
-  if (users.find((u: User) => u.email === email)) {
-    return NextResponse.json(
-      { mess: "Email đã được đăng kí" },
-      { status: 400 }
-    );
-  }
-
-  if (!/^0\d{9}$/.test(phone)) {
-    const msg = "Số điện thoại không hợp lệ! (phải đủ 10 số và bắt đầu bằng 0)";
-    return NextResponse.json({ mess: msg }, { status: 400 });
-  }
-
-  const newUser: User = {
-    id: Date.now().toString(),
-    fullName,
-    email,
-    phone,
-    password,
-  };
-  users.push(newUser);
-  return NextResponse.json(
-    { message: "Đăng ký thành công!", user: newUser },
-    { status: 201 }
-  );
 }
 
 export async function GET() {
-  return NextResponse.json(users);
+  // Return users without their passwords
+  const usersWithoutPasswords = users.map(({ ...rest }) => rest);
+  return NextResponse.json(usersWithoutPasswords);
 }

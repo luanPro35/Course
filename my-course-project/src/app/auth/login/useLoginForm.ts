@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/app/auth/login/types";
 import { validateLoginForm } from "@/lib/validations/login.validation";
 import { AuthService } from "@/services/auth.service";
-
+import { useAuth } from "@/content/AuthContent";
 export const useLoginForm = (onClose: () => void) => {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -46,7 +47,8 @@ export const useLoginForm = (onClose: () => void) => {
     setIsLoading(true);
 
     try {
-      await AuthService.login(formData);
+      const data = await AuthService.login(formData);
+      login(data.token!, data.user!);
       setIsSuccess(true);
 
       // Redirect after success animation

@@ -17,4 +17,9 @@ export interface LoginResponse {
   user?: User;
 }
 
-export type User = object;
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  avatar?: string;
+}

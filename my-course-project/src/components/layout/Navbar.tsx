@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import CourseSearch from "../course/CourseSearch";
 import AuthModal from "@/app/auth/AuthModal";
-
+import { useAuth } from "@/content/AuthContent";
 interface NavbarProps {
   onLoginClick?: () => void;
   onRegisterClick?: () => void;
@@ -14,6 +14,7 @@ export default function Navbar({
   onLoginClick: propOnLoginClick,
   onRegisterClick: propOnRegisterClick,
 }: NavbarProps) {
+  const { user, logout } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
 
@@ -47,20 +48,34 @@ export default function Navbar({
         <CourseSearch onSearch={(query) => console.log(query)} />
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          onClick={handleRegisterClick}
-          className="bg-white-500 text-black font-bold px-4 py-2 rounded"
-        >
-          Đăng ký
-        </button>
-        <button
-          onClick={handleLoginClick}
-          className="bg-orange-500 text-white font-bold px-4 py-2 rounded-3xl"
-        >
-          Đăng nhập
-        </button>
-      </div>
+      {user ? (
+        <div className="flex items-center gap-3">
+          <a href="/user/courses" className="text-gray-700 font-medium">
+            Khóa học của tôi
+          </a>
+          <Image
+            src={user.avatar || "/images/avatar.jpg"}
+            alt={user.name}
+            width={40}
+            height={40}
+          />
+        </div>
+      ) : (
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleRegisterClick}
+            className="bg-white-500 text-black font-bold px-4 py-2 rounded"
+          >
+            Đăng ký
+          </button>
+          <button
+            onClick={handleLoginClick}
+            className="bg-orange-500 text-white font-bold px-4 py-2 rounded-3xl"
+          >
+            Đăng nhập
+          </button>
+        </div>
+      )}
 
       <AuthModal
         isOpen={isAuthModalOpen}
