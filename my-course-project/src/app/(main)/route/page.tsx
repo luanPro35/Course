@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { route, learningRoutes } from "../../types/learningPath";
+import { route, learningRoutes } from "@/types/learningPath";
 
 interface CardRouteProps {
   learning: route;

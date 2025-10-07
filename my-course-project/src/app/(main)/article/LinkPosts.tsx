@@ -1,6 +1,6 @@
 import React from "react";
 import LinkPost from "next/link";
-import type { LinkPosts } from "../../types/post";
+import type { LinkPosts } from "../../../types/post";
 
 interface LinkPostsProps {
   prop: LinkPosts;

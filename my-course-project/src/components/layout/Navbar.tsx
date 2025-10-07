@@ -6,6 +6,10 @@ import CourseSearch from "../course/CourseSearch";
 import AuthModal from "@/app/auth/AuthModal";
 import { useAuth } from "@/content/AuthContent";
 import ProfileMenu from "@/components/profile/ProfileMenu";
+import { FiArrowLeft as ArrowLeft } from "react-icons/fi";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { ROUTES_WITH_BACK_BUTTON } from "@/constants/routes";
 
 interface NavbarProps {
   onLoginClick?: () => void;
@@ -17,13 +21,19 @@ export default function Navbar({
   onRegisterClick: propOnRegisterClick,
 }: NavbarProps) {
   const { user } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
   const [showProfile, setShowProfile] = useState(false);
-
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Đóng menu khi click ra ngoài
+  // Check if the current route should have a back button
+  const showBackButton = ROUTES_WITH_BACK_BUTTON.some((route) =>
+    pathname.startsWith(route)
+  );
+
   useEffect(() => {
     const handleClickOutSide = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -34,7 +44,6 @@ export default function Navbar({
     return () => document.removeEventListener("mousedown", handleClickOutSide);
   }, []);
 
-  // ✅ Dùng prop callback nếu có, nếu không dùng mặc định
   const handleRegisterClick =
     propOnRegisterClick ||
     (() => {
@@ -49,18 +58,33 @@ export default function Navbar({
       setAuthView("login");
     });
 
-  const onCloseAuthModal = () => {
-    setIsAuthModalOpen(false);
-  };
+  const onCloseAuthModal = () => setIsAuthModalOpen(false);
 
   return (
-    <div className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
-      {/* LOGO */}
-      <div className="flex items-center gap-3">
-        <Image src="/images/Brand.jpg" alt="logo" width={100} height={50} />
-        <h2 className="text-sm font-semibold text-black">
-          Học Tập Không Giới Hạn
-        </h2>
+    <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
+      <div className="flex items-center gap-4">
+        {showBackButton ? (
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition"
+          >
+            <ArrowLeft size={22} />
+            <span>Quay lại</span>
+          </button>
+        ) : (
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/images/Brand.jpg"
+              alt="logo"
+              width={100}
+              height={50}
+              className="object-contain"
+            />
+            <h2 className="text-sm font-semibold text-black hidden md:block">
+              Học Tập Không Giới Hạn
+            </h2>
+          </Link>
+        )}
       </div>
 
       {/* SEARCH */}
@@ -71,13 +95,14 @@ export default function Navbar({
       {/* USER SECTION */}
       {user ? (
         <div className="relative flex items-center gap-3" ref={menuRef}>
-          <a href="/user/courses" className="text-gray-700 font-medium">
+          <Link
+            href="/user/courses"
+            className="text-gray-700 font-medium hover:text-orange-600 transition"
+          >
             Khóa học của tôi
-          </a>
-
-          {/* Avatar có thể click */}
+          </Link>
           <div
-            className="rounded-full overflow-hidden cursor-pointer border border-gray-200"
+            className="rounded-full overflow-hidden cursor-pointer border-2 border-transparent hover:border-orange-500 transition"
             onClick={() => setShowProfile(!showProfile)}
           >
             <Image
@@ -85,10 +110,9 @@ export default function Navbar({
               alt={user.fullName || "User"}
               width={40}
               height={40}
+              className="object-cover"
             />
           </div>
-
-          {/* Profile Menu thả xuống */}
           <div
             className={`absolute right-0 top-14 transition-all duration-300 ease-out transform origin-top-right ${
               showProfile
@@ -100,29 +124,27 @@ export default function Navbar({
           </div>
         </div>
       ) : (
-        // Nút đăng nhập / đăng ký
         <div className="flex items-center gap-3">
           <button
             onClick={handleRegisterClick}
-            className="bg-white text-black font-bold px-4 py-2 rounded"
+            className="bg-white text-black font-bold px-4 py-2 rounded hover:bg-gray-100 transition"
           >
             Đăng ký
           </button>
           <button
             onClick={handleLoginClick}
-            className="bg-orange-500 text-white font-bold px-4 py-2 rounded-3xl"
+            className="bg-orange-500 text-white font-bold px-4 py-2 rounded-full hover:bg-orange-600 transition"
           >
             Đăng nhập
           </button>
         </div>
       )}
 
-      {/* Modal đăng nhập / đăng ký */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={onCloseAuthModal}
         initialView={authView}
       />
-    </div>
+    </nav>
   );
 }

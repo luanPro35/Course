@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@heroicons/react": "^2.2.0",
+    "@nextui-org/react": "^2.6.11",
     "framer-motion": "^12.23.22",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",

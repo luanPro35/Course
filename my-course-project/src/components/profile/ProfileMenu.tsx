@@ -21,9 +21,7 @@ export default function ProfileMenu() {
   };
 
   const menuItems = [
-    { label: "Trang cá nhân", icon: <FiUser />, href: "/profile" },
-    { label: "Khóa học của tôi", icon: <FiBookOpen />, href: "/user/courses" },
-    { label: "Bài tập của tôi", icon: <FiEdit />, href: "/user/exercises" },
+    { label: "Trang cá nhân", icon: <FiUser />, href: "/profile " },
     { label: "Viết blog", icon: <FiEdit />, href: "/blog/create" },
     { label: "Bài viết của tôi", icon: <FiBookOpen />, href: "/blog/my-posts" },
     { label: "Bài viết đã lưu", icon: <FiBookmark />, href: "/blog/saved" },

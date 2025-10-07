@@ -14,19 +14,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import { NextRouterProvider } from "@/app/NextRouterProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning={true}
-      >
-        <AuthProvider>{children}</AuthProvider>
-      </body>
-    </html>
+    <NextRouterProvider>
+      <html lang="vi">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          suppressHydrationWarning={true}
+        >
+          <AuthProvider>{children}</AuthProvider>
+        </body>
+      </html>
+    </NextRouterProvider>
   );
 }

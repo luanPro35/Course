@@ -4,7 +4,7 @@ import React from "react";
 import { useAuth } from "@/content/AuthContent";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { User } from "../../types/user";
+import { User } from "@/types/user";
 
 // Dynamically import the CalendarHeatmap component with SSR turned off
 const CalendarHeatmap = dynamic(
