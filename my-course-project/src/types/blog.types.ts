@@ -16,6 +16,7 @@ export interface BlogFormData {
   content: string;
   category: string;
   image: string;
+  updatedAt?: string;
 }
 
 export type BlogStatus = "draft" | "published";

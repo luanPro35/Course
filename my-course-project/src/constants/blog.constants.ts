@@ -7,7 +7,7 @@ export const BLOG_CATEGORIES = [
   { value: "ui-ux", label: "UI/UX Design" },
   { value: "marketing", label: "Marketing" },
   { value: "business", label: "Kinh doanh" },
-] as const;
+];
 
 export const FORM_VALIDATION = {
   AUTHOR_MIN_LENGTH: 2,
