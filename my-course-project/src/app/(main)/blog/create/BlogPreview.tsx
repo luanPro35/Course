@@ -58,7 +58,7 @@ export const BlogPreview: React.FC<BlogPreviewProps> = ({
           <div className="relative w-52 h-36 rounded-xl overflow-hidden bg-gray-100">
             {formData.image || imagePreview ? (
               <Image
-                src={imagePreview || formData.image}
+                src={imagePreview || formData.image || ""}
                 alt="Preview"
                 width={208}
                 height={144}

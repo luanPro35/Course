@@ -2,11 +2,12 @@ import React from "react";
 import { AlertCircle } from "lucide-react";
 
 interface ErrorMessagesProps {
-  errors: string[];
+  errors: Record<string, string | undefined>;
 }
 
 export const ErrorMessages: React.FC<ErrorMessagesProps> = ({ errors }) => {
-  if (errors.length === 0) return null;
+  const errorKeys = Object.keys(errors);
+  if (errorKeys.length === 0) return null;
 
   return (
     <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-lg p-4">
@@ -17,11 +18,14 @@ export const ErrorMessages: React.FC<ErrorMessagesProps> = ({ errors }) => {
             Vui lòng kiểm tra lại:
           </h4>
           <ul className="space-y-1">
-            {errors.map((error, index) => (
-              <li key={index} className="text-sm text-red-700">
-                • {error}
-              </li>
-            ))}
+            {errorKeys.map((key, index) => {
+              const error = errors[key];
+              return error ? (
+                <li key={index} className="text-sm text-red-700">
+                  • {error}
+                </li>
+              ) : null;
+            })}
           </ul>
         </div>
       </div>

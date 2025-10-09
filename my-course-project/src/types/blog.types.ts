@@ -11,6 +11,7 @@ export interface BlogPost {
 }
 
 export interface BlogFormData {
+  id: number;
   author: string;
   title: string;
   content: string;

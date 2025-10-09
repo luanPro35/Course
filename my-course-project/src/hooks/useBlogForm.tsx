@@ -1,52 +1,70 @@
 "use client";
-import { useState } from "react";
-import { BlogFormData } from "@/types/blog.types";
+import { useState, ChangeEvent, useEffect } from "react";
 import { BlogService } from "@/services/blog.service";
-import {
-  formatImagePath,
-  readFileDataUrl,
-  validateForm,
-} from "@/utils/blog.utils";
-import { BlogPost } from "@/types/blog.types";
+import { BlogFormData, BlogPost } from "@/types/blog.types";
 
-export const useBlogForm = () => {
-  const [formData, setFormData] = useState<BlogFormData>({
-    author: "",
-    title: "",
-    content: "",
-    category: "",
-    image: "",
-  });
-
-  const [imagePreview, setImagePreview] = useState<string>("");
-  const [error, setError] = useState<string[]>([]);
+export const useBlogForm = (initialState: BlogFormData) => {
+  const [formData, setFormData] = useState<BlogFormData>(initialState);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // State for image upload
 
-  const handleChange = (field: keyof BlogFormData, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-    if (error.length > 0) {
-      setError([]);
+  useEffect(() => {
+    if (formData.image) {
+      setImagePreview(formData.image);
+    } else {
+      setImagePreview(null);
     }
+  }, [formData.image]);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    name: string
+  ) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = async (file: File | null) => {
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
     if (!file) return;
+
+    // Set uploading state
+    setIsUploading(true);
+    setErrors((prev) => ({ ...prev, image: undefined })); // Clear previous image error
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", file);
+
     try {
-      const dataUrl = await readFileDataUrl(file);
-      setImagePreview(dataUrl);
-      handleChange("image", formatImagePath(file.name));
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
+
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Tải ảnh lên thất bại.");
+      }
+
+      // On successful upload, update the form data with the REAL path
+      setFormData((prev) => ({ ...prev, image: result.path }));
     } catch (error) {
-      console.error("Error reading file:", error);
-      const errorMessage = ["Không thể đọc file ảnh"];
-      setError(errorMessage);
+      console.error(error);
+      setErrors((prev) => ({
+        ...prev,
+        image: "Lỗi khi tải ảnh lên. Vui lòng thử lại.",
+      }));
+    } finally {
+      // Unset uploading state
+      setIsUploading(false);
     }
   };
 
   const handleSubmit = async (status: "draft" | "published") => {
-    setError([]);
+    setErrors({});
     const newErrors: Record<string, string> = {};
 
     if (!formData.author) newErrors.author = "Tên tác giả là bắt buộc";
@@ -56,23 +74,18 @@ export const useBlogForm = () => {
     if (!formData.image) newErrors.image = "Ảnh đại diện là bắt buộc";
 
     if (Object.keys(newErrors).length > 0) {
-      setError(Object.values(newErrors));
+      setErrors(newErrors);
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const postData: BlogPost = {
-        ...formData,
-        status,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-      };
-
-      await BlogService.create(postData, status);
+      // The data now contains the permanent image path
+      await BlogService.create(formData, status);
       alert(`Bài viết đã được lưu dưới dạng ${status}`);
-      // Reset form or redirect user
+      // Optionally reset form or redirect
+      // setFormData(initialState);
     } catch (error) {
       console.error("Failed to save the post:", error);
       alert("Có lỗi xảy ra khi lưu bài viết.");
@@ -83,11 +96,13 @@ export const useBlogForm = () => {
 
   return {
     formData,
-    imagePreview,
-    errors: error,
+    setFormData,
+    errors,
     isSubmitting,
+    isUploading, // Expose uploading state to the component
+    imagePreview,
     handleChange,
-    handleImageChange,
+    handleImageChange, // Use this new handler for the file input
     handleSubmit,
   };
 };

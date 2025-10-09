@@ -2,12 +2,9 @@
 import { useEffect, useState } from "react";
 import { BlogService } from "@/services/blog.service";
 import { BlogPost } from "@/types/blog.types";
-
 export default function MyPosts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [activeContent, setActiveContent] = useState<"draft" | "published">(
-    "draft"
-  );
+  const [activeContent, setActiveContent] = useState<"draft" | "published">("draft");
 
   useEffect(() => {
     BlogService.getAll()

@@ -1,8 +1,39 @@
 import { NextResponse } from "next/server";
 import { BlogPost } from "@/types/blog.types";
+import fs from "fs";
+import path from "path";
 
-const blogPosts: BlogPost[] = [];
+// Đường dẫn đến tệp dữ liệu
+const postsFilePath = path.join(
+  process.cwd(),
+  "src",
+  "app",
+  "data",
+  "posts.json"
+);
+
+// Hàm để đọc dữ liệu từ tệp
+const readPostsFromFile = (): BlogPost[] => {
+  try {
+    const fileContent = fs.readFileSync(postsFilePath, "utf-8");
+    return JSON.parse(fileContent);
+  } catch (error) {
+    console.error("Lỗi khi đọc từ tệp posts.json:", error);
+    return [];
+  }
+};
+
+// Hàm để ghi dữ liệu vào tệp
+const savePostsToFile = (posts: BlogPost[]) => {
+  try {
+    fs.writeFileSync(postsFilePath, JSON.stringify(posts, null, 2), "utf-8");
+  } catch (error) {
+    console.error("Lỗi khi ghi vào tệp posts.json:", error);
+  }
+};
+
 export async function GET() {
+  const blogPosts: BlogPost[] = readPostsFromFile();
   return NextResponse.json(blogPosts);
 }
 
@@ -10,14 +41,10 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    if (!data.title || !data.title) {
+    if (!data.title || !data.content) {
       return NextResponse.json(
-        {
-          error: "Thiếu tiêu đề nội dung",
-        },
-        {
-          status: 400,
-        }
+        { error: "Thiếu tiêu đề hoặc nội dung" },
+        { status: 400 }
       );
     }
 
@@ -33,7 +60,10 @@ export async function POST(req: Request) {
       status: data.status || "draft",
     };
 
-    blogPosts.push(newPost);
+    const currentPosts = readPostsFromFile();
+    currentPosts.push(newPost);
+    savePostsToFile(currentPosts);
+
     return NextResponse.json(newPost, { status: 201 });
   } catch (error) {
     return NextResponse.json(
