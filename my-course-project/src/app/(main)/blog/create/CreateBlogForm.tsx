@@ -1,12 +1,30 @@
-// ... existing code ...
+"use client";
+import React from "react";
 import { useBlogForm } from "@/hooks/useBlogForm";
-import { Loader2 } from "lucide-react"; // Import loader icon
+import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
+import { FileText, Tag, User } from "lucide-react";
 
-export default function CreateBlogForm() {
+// Import các component con
+import { FormInput } from "./FormInput";
+import { FormTextarea } from "./FormTextarea";
+import { FormSelect } from "./FormSelect";
+import { ImageUpload } from "./ImageUpload";
+import { ErrorMessages } from "./ErrorMessages";
+import { FormActions } from "./FormActions";
+import { FormHeader } from "./FormHeader";
+import { TipsSection } from "./TipsSection";
+import { BlogPreview } from "./BlogPreview";
+
+export default function CreateBlogPost() {
   const {
+    formData,
     errors,
-    isUploading, // Get the new state
-    handleImageChange, // Get the new handler
+    isSubmitting,
+    isUploading,
+    imagePreview,
+    handleChange,
+    handleImageChange,
+    handleSubmit,
   } = useBlogForm({
     id: 0,
     author: "",
@@ -17,27 +35,104 @@ export default function CreateBlogForm() {
   });
 
   return (
-    <>
-      <label
-        htmlFor="image"
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
-        Ảnh đại diện
-      </label>
-      <div className="flex items-center gap-4">
-        <input
-          id="image"
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange} // Use the new handler
-          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-        />
-        {isUploading && <Loader2 className="animate-spin text-orange-500" />}
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Form Section */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <FormHeader
+              title="Tạo Bài Viết Mới"
+              subtitle="Chia sẻ kiến thức và khóa học của bạn"
+              variant="form"
+            />
+
+            <div className="px-8 py-8">
+              <ErrorMessages errors={errors} />
+
+              <FormInput
+                label="Tác giả"
+                name="author"
+                icon={User}
+                required
+                value={formData.author}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "author")
+                }
+                placeholder="VD: Huyền Lê Ngọc"
+              />
+
+              <FormInput
+                label="Tiêu đề bài viết"
+                name="title"
+                icon={FileText}
+                required
+                value={formData.title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "title")
+                }
+                placeholder="VD: TRẢI NGHIỆM HỌC THỬ REACT NATIVE"
+              />
+
+              <FormSelect
+                label="Danh mục"
+                name="category"
+                icon={Tag}
+                required
+                value={formData.category}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  handleChange(e, "category")
+                }
+                options={BLOG_CATEGORIES}
+                placeholder="Chọn danh mục"
+              />
+
+              <ImageUpload
+                onChange={handleImageChange}
+                image={formData.image}
+                imagePreview={imagePreview || ""}
+              />
+
+              <FormTextarea
+                label="Nội dung bài viết"
+                name="content"
+                icon={FileText}
+                required
+                rows={10}
+                value={formData.content}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  handleChange(e, "content")
+                }
+                placeholder="Nhập nội dung bài viết của bạn tại đây..."
+              />
+
+              <FormActions
+                onDraft={() => handleSubmit("draft")}
+                onPublish={() => handleSubmit("published")}
+                isSubmitting={isSubmitting}
+                isUploading={isUploading}
+              />
+            </div>
+          </div>
+
+          {/* Preview Section */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <FormHeader
+              title="Xem trước"
+              subtitle="Bài viết sẽ hiển thị như thế này"
+              variant="preview"
+            />
+
+            <div className="p-8">
+              <BlogPreview
+                formData={formData}
+                imagePreview={imagePreview || ""}
+              />
+
+              <TipsSection tips={TIPS} />
+            </div>
+          </div>
+        </div>
       </div>
-      {errors.image && (
-        <p className="mt-2 text-sm text-red-600">{errors.image}</p>
-      )}
-    </>
+    </div>
   );
 }

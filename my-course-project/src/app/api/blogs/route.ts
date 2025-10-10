@@ -73,3 +73,32 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+    }
+
+    const currentPosts = readPostsFromFile();
+    const postIndex = currentPosts.findIndex((p) => String(p.id) === id);
+
+    if (postIndex === -1) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    const updatedPosts = currentPosts.filter((p) => String(p.id) !== id);
+    savePostsToFile(updatedPosts);
+
+    return new Response(null, { status: 204 }); // No Content
+  } catch (error) {
+    return NextResponse.json(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { error: (error as any).message || "An error occurred" },
+      { status: 500 }
+    );
+  }
+}

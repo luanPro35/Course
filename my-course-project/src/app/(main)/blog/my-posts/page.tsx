@@ -1,10 +1,26 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BlogService } from "@/services/blog.service";
+import { BlogService } from "@/services/blog.service"; // Force re-import
 import { BlogPost } from "@/types/blog.types";
+import { PostItem } from "./PostItem";
+import { useRouter } from "next/navigation";
+
 export default function MyPosts() {
+  const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [activeContent, setActiveContent] = useState<"draft" | "published">("draft");
+  const [activeContent, setActiveContent] = useState<"draft" | "published">(
+    "draft"
+  );
+
+  const handleDelete = (id: number) => {
+    BlogService.delete(id).then(() => {
+      setPosts(posts.filter((p) => p.id !== id));
+    });
+  };
+
+  const handleEdit = (id: number) => {
+    router.push(`/blog/create?id=${id}`);
+  };
 
   useEffect(() => {
     BlogService.getAll()
@@ -48,9 +64,12 @@ export default function MyPosts() {
         <section>
           {drafts.length ? (
             drafts.map((p) => (
-              <div key={p.id} className="p-3 border rounded mb-2">
-                {p.title}
-              </div>
+              <PostItem
+                key={p.id}
+                post={p}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
             ))
           ) : (
             <p className="text-gray-500">Chưa có bài nháp</p>
@@ -62,9 +81,12 @@ export default function MyPosts() {
         <section>
           {published.length ? (
             published.map((p) => (
-              <div key={p.id} className="p-3 border rounded mb-2">
-                {p.title}
-              </div>
+              <PostItem
+                key={p.id}
+                post={p}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
             ))
           ) : (
             <p className="text-gray-500">Chưa có bài viết nào được xuất bản</p>

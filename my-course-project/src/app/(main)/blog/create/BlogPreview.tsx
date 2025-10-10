@@ -1,17 +1,17 @@
 import React from "react";
 import Image from "next/image";
-import { User } from "lucide-react";
-import { BlogPost } from "@/types/blog.types";
-
 interface BlogPreviewProps {
-  formData: BlogPost;
+  formData: {
+    author: string;
+    title: string;
+    content: string;
+    category: string;
+    image: string;
+  };
   imagePreview: string;
 }
 
-export const BlogPreview: React.FC<BlogPreviewProps> = ({
-  formData,
-  imagePreview,
-}) => {
+export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
   const hasContent = formData.title || formData.content || formData.author;
 
   if (!hasContent) {
@@ -63,6 +63,7 @@ export const BlogPreview: React.FC<BlogPreviewProps> = ({
                 width={208}
                 height={144}
                 className="w-full h-full object-cover"
+                unoptimized
               />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-400">

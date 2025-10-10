@@ -11,17 +11,6 @@
     "status": "published"
   },
   {
-    "id": 1759971443672,
-    "author": "dsadds",
-    "title": "adsda",
-    "content": "đấeádsa",
-    "category": "DevOps",
-    "image": "/images/posts-2.png",
-    "createdAt": "2025-10-09T00:57:23.672Z",
-    "updatedAt": "2025-10-09T00:57:23.672Z",
-    "status": "draft"
-  },
-  {
     "id": 1759972341275,
     "author": "sadsdsaa",
     "title": "fafasdfasd",
@@ -42,5 +31,27 @@
     "createdAt": "2025-10-09T02:09:42.695Z",
     "updatedAt": "2025-10-09T02:09:42.695Z",
     "status": "published"
+  },
+  {
+    "id": 1759979889766,
+    "author": "Lê Quang Luân",
+    "title": "Học bài React",
+    "content": "Code thêm được không",
+    "category": "react-native",
+    "image": "/images/1759979881386-z6897744282001_620ae10805adbc7bf710758177dd127f.jpg",
+    "createdAt": "2025-10-09T03:18:09.766Z",
+    "updatedAt": "2025-10-09T03:18:09.766Z",
+    "status": "published"
+  },
+  {
+    "id": 1760066614207,
+    "author": "Huyền Ngọc",
+    "title": "dád",
+    "content": "Code thêm đi nhé",
+    "category": "react-native",
+    "image": "/images/1760066610633-snapedit_1759301056404.jpeg",
+    "createdAt": "2025-10-10T03:23:34.207Z",
+    "updatedAt": "2025-10-10T03:23:34.207Z",
+    "status": "draft"
   }
 ]

@@ -63,7 +63,10 @@ export const useBlogForm = (initialState: BlogFormData) => {
     }
   };
 
-  const handleSubmit = async (status: "draft" | "published") => {
+  const handleSubmit = async (
+    status: "draft" | "published",
+    postId?: number
+  ) => {
     setErrors({});
     const newErrors: Record<string, string> = {};
 
@@ -81,9 +84,15 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setIsSubmitting(true);
 
     try {
-      // The data now contains the permanent image path
-      await BlogService.create(formData, status);
-      alert(`Bài viết đã được lưu dưới dạng ${status}`);
+      if (postId) {
+        // Update existing post
+        await BlogService.update(postId, formData, status);
+        alert(`Bài viết đã được cập nhật dưới dạng ${status}`);
+      } else {
+        // Create new post
+        await BlogService.create(formData, status);
+        alert(`Bài viết đã được lưu dưới dạng ${status}`);
+      }
       // Optionally reset form or redirect
       // setFormData(initialState);
     } catch (error) {
@@ -101,6 +110,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
     isSubmitting,
     isUploading, // Expose uploading state to the component
     imagePreview,
+    setImagePreview, // Expose setImagePreview
     handleChange,
     handleImageChange, // Use this new handler for the file input
     handleSubmit,

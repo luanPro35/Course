@@ -35,13 +35,13 @@ export default function Navbar({
   );
 
   useEffect(() => {
-    const handleClickOutSide = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setShowProfile(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutSide);
-    return () => document.removeEventListener("mousedown", handleClickOutSide);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleRegisterClick =
@@ -62,7 +62,20 @@ export default function Navbar({
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white fixed top-0 left-0 w-full z-10">
-      <div className="flex items-center gap-4">
+      {/* LOGO + Quay lại / Tiêu đề */}
+      <div className="flex items-center gap-3">
+        {/* Logo luôn hiển thị */}
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/images/Brand.jpg"
+            alt="logo"
+            width={100}
+            height={50}
+            className="object-contain cursor-pointer"
+          />
+        </Link>
+
+        {/* Nếu ở route đặc biệt thì hiện "Quay lại", ngược lại thì hiện tiêu đề */}
         {showBackButton ? (
           <button
             onClick={() => router.back()}
@@ -72,22 +85,13 @@ export default function Navbar({
             <span>Quay lại</span>
           </button>
         ) : (
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/images/Brand.jpg"
-              alt="logo"
-              width={100}
-              height={50}
-              className="object-contain"
-            />
-            <h2 className="text-sm font-semibold text-black hidden md:block">
-              Học Tập Không Giới Hạn
-            </h2>
-          </Link>
+          <h2 className="text-sm font-semibold text-black hidden md:block">
+            Học Tập Không Giới Hạn
+          </h2>
         )}
       </div>
 
-      {/* SEARCH */}
+      {/* THANH TÌM KIẾM */}
       <div className="flex-1 max-w-md mx-6">
         <CourseSearch onSearch={(query) => console.log(query)} />
       </div>
@@ -101,6 +105,7 @@ export default function Navbar({
           >
             Khóa học của tôi
           </Link>
+
           <div
             className="rounded-full overflow-hidden cursor-pointer border-2 border-transparent hover:border-orange-500 transition"
             onClick={() => setShowProfile(!showProfile)}
@@ -113,6 +118,8 @@ export default function Navbar({
               className="object-cover"
             />
           </div>
+
+          {/* Profile menu thả xuống */}
           <div
             className={`absolute right-0 top-14 transition-all duration-300 ease-out transform origin-top-right ${
               showProfile
@@ -124,6 +131,7 @@ export default function Navbar({
           </div>
         </div>
       ) : (
+        // Nút đăng ký / đăng nhập
         <div className="flex items-center gap-3">
           <button
             onClick={handleRegisterClick}
@@ -140,6 +148,7 @@ export default function Navbar({
         </div>
       )}
 
+      {/* Modal đăng nhập / đăng ký */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={onCloseAuthModal}

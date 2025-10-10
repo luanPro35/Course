@@ -2,10 +2,11 @@
 import { useBlogForm } from "@/hooks/useBlogForm";
 import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
 import { BookOpen, Eye, FileText, Loader2, Tag, User } from "lucide-react";
-import { BlogPreview } from "./BlogPreview"; // Assuming this component is updated or doesn't need imagePreview
-
-// Simple FormInput component for clarity
-import React, { ComponentType, ReactNode } from "react";
+import { BlogPreview } from "./BlogPreview";
+import React, { ComponentType, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { BlogService } from "@/services/blog.service";
+import { BlogPost } from "@/types/blog.types";
 
 interface BaseProps {
   label: string;
@@ -23,18 +24,14 @@ const FormInput = ({
 }: FormInputProps) => {
   return (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
+        <Icon className="w-5 h-5 text-gray-600" />
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="relative">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <Icon className="w-5 h-5 text-gray-400" />
-        </span>
-        <input
-          {...rest}
-          className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
-        />
-      </div>
+      <input
+        {...rest}
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-500 transition-all outline-none"
+      />
     </div>
   );
 };
@@ -50,18 +47,14 @@ const FormTextarea = ({
 }: FormTextareaProps) => {
   return (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
+        <Icon className="w-5 h-5 text-gray-600" />
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="relative">
-        <span className="absolute top-3 left-0 flex items-center pl-3">
-          <Icon className="w-5 h-5 text-gray-400" />
-        </span>
-        <textarea
-          {...rest}
-          className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
-        />
-      </div>
+      <textarea
+        {...rest}
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-500 transition-all outline-none resize-none"
+      />
     </div>
   );
 };
@@ -82,39 +75,41 @@ const FormSelect = ({
 }: FormSelectProps) => {
   return (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
+        <Icon className="w-5 h-5 text-gray-600" />
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="relative">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <Icon className="w-5 h-5 text-gray-400" />
-        </span>
-        <select
-          {...rest}
-          className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
-        >
-          <option value="">{placeholder}</option>
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <select
+        {...rest}
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-500 transition-all outline-none bg-white"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
 
 export default function CreateBlogPost() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const postId = searchParams.get("id");
+
   const {
     formData,
     errors,
     isSubmitting,
-    isUploading, // Use the new state
+    isUploading,
     imagePreview,
     handleChange,
-    handleImageChange, // Use the new handler
+    handleImageChange,
     handleSubmit,
+    setFormData,
+    setImagePreview,
   } = useBlogForm({
     id: 0,
     author: "",
@@ -124,31 +119,47 @@ export default function CreateBlogPost() {
     image: "",
   });
 
+  useEffect(() => {
+    if (postId) {
+      BlogService.getById(Number(postId))
+        .then((post) => {
+          setFormData(post);
+          setImagePreview(post.image);
+        })
+        .catch((err) => {
+          console.error("Error fetching post for editing:", err);
+          router.push("/blog/create"); // Redirect if post not found or error
+        });
+    }
+  }, [postId, setFormData, setImagePreview, router]);
+
+  const pageTitle = postId ? "Chỉnh Sửa Bài Viết" : "Tạo Bài Viết Mới";
+  const draftButtonText = postId ? "Cập nhật bản nháp" : "Lưu bản nháp";
+  const publishButtonText = postId ? "Cập nhật bài viết" : "Xuất bản ngay";
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Form Section */}
-          <div className="bg-white rounded-xl shadow-lg">
-            <div className="bg-gray-800 px-8 py-6 rounded-t-xl">
-              <div className="flex items-center gap-4">
-                <BookOpen className="w-8 h-8 text-orange-400" />
-                <h2 className="text-3xl font-bold text-white">
-                  Tạo Bài Viết Mới
-                </h2>
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-gray-800 px-8 py-6">
+              <div className="flex items-center gap-3">
+                <BookOpen className="w-8 h-8 text-white" />
+                <h2 className="text-2xl font-bold text-white">{pageTitle}</h2>
               </div>
               <p className="text-gray-300 mt-2">
-                Chia sẻ kiến thức và kinh nghiệm của bạn đến với mọi người.
+                Chia sẻ kiến thức và khóa học của bạn
               </p>
             </div>
 
-            <div className="p-8">
+            <div className="px-8 py-8">
               {Object.keys(errors).length > 0 && (
-                <div className="mb-6 bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-                  <h3 className="text-sm font-bold text-red-800">
-                    Vui lòng sửa các lỗi sau:
+                <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                  <h3 className="text-sm font-semibold text-red-800 mb-2">
+                    Vui lòng kiểm tra lại:
                   </h3>
-                  <ul className="mt-2 list-disc list-inside text-sm text-red-700">
+                  <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
                     {Object.values(errors).map((error, i) => (
                       <li key={i}>{error}</li>
                     ))}
@@ -177,7 +188,7 @@ export default function CreateBlogPost() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   handleChange(e, "title")
                 }
-                placeholder="VD: Kinh nghiệm học React Native cho người mới"
+                placeholder="VD: TRẢI NGHIỆM HỌC THỬ REACT NATIVE"
               />
 
               <FormSelect
@@ -194,19 +205,20 @@ export default function CreateBlogPost() {
               />
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
+                  <FileText className="w-5 h-5 text-gray-600" />
                   Ảnh đại diện <span className="text-red-500">*</span>
                 </label>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
                     disabled={isUploading}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
+                    className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer disabled:opacity-50"
                   />
                   {isUploading && (
-                    <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
+                    <Loader2 className="w-5 h-5 animate-spin text-gray-600" />
                   )}
                 </div>
                 {errors.image && (
@@ -227,36 +239,43 @@ export default function CreateBlogPost() {
                 placeholder="Nhập nội dung bài viết của bạn tại đây..."
               />
 
-              <div className="flex justify-end gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="button"
-                  onClick={() => handleSubmit("draft")}
+                  onClick={() =>
+                    handleSubmit("draft", postId ? Number(postId) : undefined)
+                  }
                   disabled={isSubmitting || isUploading}
-                  className="px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50"
+                  className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200 border-2 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Lưu nháp
+                  {isSubmitting ? "Đang lưu..." : draftButtonText}
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleSubmit("published")}
+                  onClick={() =>
+                    handleSubmit(
+                      "published",
+                      postId ? Number(postId) : undefined
+                    )
+                  }
                   disabled={isSubmitting || isUploading}
-                  className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
+                  className="flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Đang xuất bản..." : "Xuất bản"}
+                  {isSubmitting ? "Đang xuất bản..." : publishButtonText}
                 </button>
               </div>
             </div>
           </div>
 
           {/* Preview Section */}
-          <div className="bg-white rounded-xl shadow-lg">
-            <div className="bg-gray-700 px-8 py-6 rounded-t-xl">
-              <div className="flex items-center gap-4">
-                <Eye className="w-8 h-8 text-orange-400" />
-                <h2 className="text-3xl font-bold text-white">Xem trước</h2>
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-gray-700 px-8 py-6">
+              <div className="flex items-center gap-3">
+                <Eye className="w-8 h-8 text-white" />
+                <h2 className="text-2xl font-bold text-white">Xem trước</h2>
               </div>
               <p className="text-gray-300 mt-2">
-                Bài viết của bạn sẽ hiển thị như thế này.
+                Bài viết sẽ hiển thị như thế này
               </p>
             </div>
 
@@ -266,14 +285,14 @@ export default function CreateBlogPost() {
                 imagePreview={imagePreview || ""}
               />
 
-              <div className="mt-8 bg-orange-50 rounded-lg p-6">
-                <h3 className="font-bold text-orange-800 mb-3 flex items-center gap-2 text-lg">
-                  <span className="text-2xl">💡</span> Mẹo viết bài
+              <div className="mt-6 bg-gray-100 rounded-lg p-6">
+                <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <span className="text-xl">💡</span> Mẹo viết bài hiệu quả
                 </h3>
-                <ul className="space-y-2 text-orange-700 text-sm">
+                <ul className="space-y-2 text-gray-600 text-sm">
                   {TIPS.map((tip, index) => (
                     <li key={index} className="flex items-start">
-                      <span className="mr-2">✓</span>
+                      <span className="mr-2">•</span>
                       <span>{tip}</span>
                     </li>
                   ))}

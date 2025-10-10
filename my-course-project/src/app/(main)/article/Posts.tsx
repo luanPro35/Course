@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Post } from "@/types/post";
 import Image from "next/image";
 import Loading from "../../../components/ui/Loading";
+import { FiBookmark } from "react-icons/fi";
 
 const POSTS_PER_PAGE = 10;
 
@@ -52,6 +53,9 @@ export default function Posts() {
             {/* Header với tên tác giả */}
             <div className="flex items-center justify-between mb-4">
               <span className="font-medium text-gray-800">{post.author}</span>
+              <button className="bg-gray-100 hover:bg-gray-200 rounded-full p-1 transition-colors cursor-pointer">
+                <FiBookmark size={20} color="gray" />
+              </button>
             </div>
 
             {/* Nội dung chính */}

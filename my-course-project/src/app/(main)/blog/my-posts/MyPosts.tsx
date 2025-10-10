@@ -93,6 +93,7 @@ export default function MyPosts() {
                           src={p.image}
                           alt={p.title}
                           className="w-full h-full object-cover"
+                          unoptimized
                         />
                       </div>
                     </div>

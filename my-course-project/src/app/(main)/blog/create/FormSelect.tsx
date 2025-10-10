@@ -1,25 +1,25 @@
-import React from "react";
-import { LucideIcon } from "lucide-react";
+import React, { ComponentType } from "react";
 
-interface FormSelectProps {
+interface BaseProps {
   label: string;
-  icon: LucideIcon;
+  icon: ComponentType<{ className: string }>;
   required?: boolean;
-  value: string;
-  onChange: (value: string) => void;
-  options: Array<{ value: string; label: string }>;
-  placeholder?: string;
 }
 
-export const FormSelect: React.FC<FormSelectProps> = ({
+type FormSelectProps = React.SelectHTMLAttributes<HTMLSelectElement> &
+  BaseProps & {
+    options: { value: string; label: string }[];
+    placeholder: string;
+  };
+
+export const FormSelect = ({
   label,
   icon: Icon,
-  required = false,
-  value,
-  onChange,
+  required,
   options,
-  placeholder = "Chọn một tùy chọn",
-}) => {
+  placeholder,
+  ...rest
+}: FormSelectProps) => {
   return (
     <div className="mb-6">
       <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
@@ -27,14 +27,13 @@ export const FormSelect: React.FC<FormSelectProps> = ({
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        {...rest}
         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-500 transition-all outline-none bg-white"
       >
         <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.label}>
-            {option.label}
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>

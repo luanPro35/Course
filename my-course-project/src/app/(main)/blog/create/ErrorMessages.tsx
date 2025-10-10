@@ -1,34 +1,22 @@
 import React from "react";
-import { AlertCircle } from "lucide-react";
 
 interface ErrorMessagesProps {
   errors: Record<string, string | undefined>;
 }
 
-export const ErrorMessages: React.FC<ErrorMessagesProps> = ({ errors }) => {
-  const errorKeys = Object.keys(errors);
-  if (errorKeys.length === 0) return null;
+export const ErrorMessages = ({ errors }: ErrorMessagesProps) => {
+  if (Object.keys(errors).length === 0) return null;
 
   return (
-    <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-lg p-4">
-      <div className="flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-        <div className="flex-1">
-          <h4 className="font-semibold text-red-800 mb-2">
-            Vui lòng kiểm tra lại:
-          </h4>
-          <ul className="space-y-1">
-            {errorKeys.map((key, index) => {
-              const error = errors[key];
-              return error ? (
-                <li key={index} className="text-sm text-red-700">
-                  • {error}
-                </li>
-              ) : null;
-            })}
-          </ul>
-        </div>
-      </div>
+    <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+      <h3 className="text-sm font-semibold text-red-800 mb-2">
+        Vui lòng kiểm tra lại:
+      </h3>
+      <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+        {Object.values(errors).map((error, i) => (
+          <li key={i}>{error}</li>
+        ))}
+      </ul>
     </div>
   );
 };
