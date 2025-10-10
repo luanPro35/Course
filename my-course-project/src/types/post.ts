@@ -4,8 +4,6 @@ export interface Post {
   title: string;
   content: string;
   category: string;
-  timeAgo: string;
-  readTime: string;
   image: string;
 }
 
