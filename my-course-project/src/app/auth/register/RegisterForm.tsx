@@ -58,7 +58,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             </p>
           </div>
 
-          {/* Form đăng kí */}
+          {/* Form đăng kí **/}
           <form onSubmit={handleSubmit} className="space-y-4 mb-6">
             <RegisterFormFields
               formData={formData}
