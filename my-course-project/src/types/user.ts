@@ -7,4 +7,11 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   avatar?: string;
+  username?: string;
+  about?: string;
+  personalWebsite?: string;
+  github?: string;
+  linkedin?: string;
+  facebook?: string;
+  youtube?: string;
 }

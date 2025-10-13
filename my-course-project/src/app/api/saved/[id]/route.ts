@@ -32,11 +32,14 @@ const savePostsToFile = (posts: BlogPost[]) => {
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log(`--- BẮT ĐẦU YÊU CẦU DELETE cho /api/saved/${params.id} ---`);
-    const idFromUrl = params.id;
+    const resolvedParams = await context.params;
+    console.log(
+      `--- BẮT ĐẦU YÊU CẦU DELETE cho /api/saved/${resolvedParams.id} ---`
+    );
+    const idFromUrl = resolvedParams.id;
     console.log(`ID từ URL (string): '${idFromUrl}'`);
 
     const idToDelete = Number(idFromUrl);

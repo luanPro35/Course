@@ -32,9 +32,12 @@ const savePostsToFile = (posts: BlogPost[]) => {
   }
 };
 
-export async function GET(req: Request, context: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const currentPosts = readPostsFromFile();
     const post = currentPosts.find((p) => String(p.id) === id);
 
@@ -54,10 +57,10 @@ export async function GET(req: Request, context: { params: { id: string } }) {
 
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params; // id is a string
+    const { id } = await context.params; // id is a string
     console.log("Deleting post with id:", id);
 
     const currentPosts = readPostsFromFile();
@@ -80,9 +83,12 @@ export async function DELETE(
   }
 }
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = context.params; // id is a string
+    const { id } = await context.params; // id is a string
     console.log("Updating post with id:", id);
 
     const currentPosts = readPostsFromFile();
