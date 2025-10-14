@@ -6,7 +6,7 @@ import fs from "fs";
 export async function POST(req: Request) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get("file") as unknown as File;
+    const file: File | null = data.get("avatar") as unknown as File;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided." }, { status: 400 });

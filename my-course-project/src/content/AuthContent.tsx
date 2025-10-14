@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { User } from "../types/user";
+import { profileService } from "../services/profileService";
 
 interface AuthContextType {
   user: User | null;
@@ -27,9 +28,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUser = localStorage.getItem("authUser");
     if (storedToken && storedUser) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
     }
   }, []);
+
+  useEffect(() => {
+    const fecthProfile = async () => {
+      if (user?.id) {
+        try {
+          const result = await profileService.getProfile(
+            String(user.id as unknown)
+          );
+          if (result.success && result.data) {
+            setUser(result.data);
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+        }
+      }
+    };
+    fecthProfile();
+  }, [user?.id]);
 
   useEffect(() => {
     if (token && user) {
