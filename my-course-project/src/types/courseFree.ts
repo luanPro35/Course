@@ -1,4 +1,4 @@
-export interface Course {
+export interface CourseFree {
   id: string;
   image: string;
   title: string;

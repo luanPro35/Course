@@ -54,6 +54,11 @@ export const useLoginForm = (onClose: () => void) => {
       // Redirect after success animation
       setTimeout(() => {
         onClose();
+        if (data.user?.role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
       }, 1500);
     } catch (error) {
       const message =

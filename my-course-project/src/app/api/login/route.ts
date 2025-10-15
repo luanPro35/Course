@@ -1,49 +1,66 @@
 import { NextResponse } from "next/server";
 import { users } from "@/app/data/users";
-import bcrypt from "bcryptjs"; // Import bcryptjs
-import jwt from "jsonwebtoken"; // Import jsonwebtoken
-
-interface User {
-  email: string;
-  password: string;
-}
+import bcrypt from "bcryptjs";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { email, password } = body;
+  try {
+    const { email, password } = await req.json();
 
-  if (!email || !password) {
-    return NextResponse.json(
-      { mess: "Vui lòng nhập email và mật khẩu" },
-      { status: 400 }
+    // Admin login check
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const adminUser = {
+        id: 0,
+        email: process.env.ADMIN_EMAIL,
+        fullName: "Admin",
+        role: "admin",
+      };
+
+      const token = jwt.sign(
+        { id: adminUser.id, role: adminUser.role },
+        process.env.JWT_SECRET! as string,
+        {
+          expiresIn: process.env.JWT_EXPIRES_IN! as string | number,
+        } as SignOptions
+      );
+
+      return NextResponse.json({
+        mess: "Đăng nhập quản trị viên thành công",
+        token,
+        user: adminUser,
+      });
+    }
+
+    // Regular user login
+    const user = users.find((user) => user.email === email);
+
+    if (!user || !(await bcrypt.compare(password, user.password!))) {
+      return NextResponse.json(
+        { mess: "Email hoặc mật khẩu không đúng!" },
+        { status: 401 }
+      );
+    }
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role || "user" },
+      process.env.JWT_SECRET! as string,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN! as string | number,
+      } as SignOptions
     );
+
+    const { password: _password, ...userWithoutPassword } = user;
+
+    return NextResponse.json({
+      mess: "Đăng nhập thành công",
+      token,
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json({ mess: "Lỗi máy chủ nội bộ" }, { status: 500 });
   }
-
-  const user = (users as User[]).find((u: User) => u.email === email);
-  if (!user) {
-    return NextResponse.json(
-      { mess: "Email chưa được đăng ký" },
-      { status: 400 }
-    );
-  }
-
-  const accessToken = jwt.sign(
-    {
-      email: user.email,
-    },
-    process.env.JWT_SECRET || "secret_key",
-    { expiresIn: "6d" }
-  );
-
-  // Compare the provided password with the hashed password
-  const passwordMatch = await bcrypt.compare(password, user.password);
-
-  if (!passwordMatch) {
-    return NextResponse.json({ mess: "Mật khẩu không đúng" }, { status: 400 });
-  }
-
-  return NextResponse.json(
-    { mess: "Đăng nhập thành công!", user, accessToken },
-    { status: 200 }
-  );
 }
