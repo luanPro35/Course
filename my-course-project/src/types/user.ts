@@ -14,4 +14,5 @@ export interface User {
   linkedin?: string;
   facebook?: string;
   youtube?: string;
+  role?: "admin" | "user";
 }

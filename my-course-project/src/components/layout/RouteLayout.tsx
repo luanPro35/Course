@@ -24,7 +24,7 @@ export default function RouteLayout({
         <div className="flex flex-1 pt-16">
           {!hideSideBar && (
             <aside className="w-28 flex-shrink-0">
-              <div className="sticky top-32 h-[calc(100vh-5rem)] overflow-y-auto">
+              <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
                 <Sidebar />
               </div>
             </aside>

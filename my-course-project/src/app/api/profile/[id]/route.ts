@@ -22,12 +22,13 @@ function readInformations(): User[] {
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id, 10);
+    const { id } = await context.params;
+    const userId = parseInt(id, 10);
 
-    if (isNaN(id)) {
+    if (isNaN(userId)) {
       return NextResponse.json(
         { message: "Thiếu ID người dùng" },
         { status: 400 }
@@ -35,7 +36,7 @@ export async function GET(
     }
 
     const informations = readInformations();
-    const user = informations.find((user) => user.id === id);
+    const user = informations.find((user) => user.id === userId);
 
     if (!user) {
       return NextResponse.json(
