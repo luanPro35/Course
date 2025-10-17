@@ -1,6 +1,6 @@
-import { Course } from "@/types/courseFree";
+import type { CourseFree } from "@/types/courseFree";
 
-export const getCourses = async (): Promise<Course[]> => {
+export const getCourses = async (): Promise<CourseFree[]> => {
   const res = await fetch("/api/coursesFree");
 
   if (!res.ok) {

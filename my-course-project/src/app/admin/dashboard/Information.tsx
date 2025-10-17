@@ -1,11 +1,12 @@
 import React from "react";
-import { Users, Package } from "lucide-react";
+import { Users, Package, BookOpen } from "lucide-react"; // Thêm icon BookOpen
 import StatCard from "./StatCard";
 import { DashboardProps, StatItem } from "./dashboard.types";
 
 export default function Information({
   totalOrders,
   totalUsers,
+  totalCourses, // Thêm totalCourses
 }: DashboardProps) {
   const statsData: StatItem[] = [
     {
@@ -35,7 +36,7 @@ export default function Information({
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[200px]">
       {statsData.map((stat) => (
         <StatCard
           key={stat.id}

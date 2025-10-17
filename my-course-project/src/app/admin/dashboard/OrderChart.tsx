@@ -22,7 +22,7 @@ interface OrderChartProps {
 
 export default function OrderChart({ data }: OrderChartProps) {
   return (
-    <div className="w-full h-[400px] bg-white shadow-md p-4 rounded-xl">
+    <div className="w-full h-[400px] bg-white shadow-lg p-4 rounded-xl">
       <h2 className="text-xl font-semibold mb-4">
         Biểu đồ đơn hàng theo tháng
       </h2>
@@ -41,7 +41,7 @@ export default function OrderChart({ data }: OrderChartProps) {
           <Bar
             dataKey="totalOrders"
             fill="#3b82f6"
-            name="Tổng đơn hàng"
+            name="Tổng khóa học"
             radius={[6, 6, 0, 0]}
           />
         </BarChart>

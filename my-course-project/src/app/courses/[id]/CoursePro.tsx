@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Course } from "@/types/coursePro";
+import type { CoursePro } from "@/types/coursePro";
 import { getCourses } from "@/services/coursesPro";
 import Loading from "@/components/ui/Loading";
 
 export default function CoursePro() {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CoursePro[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
