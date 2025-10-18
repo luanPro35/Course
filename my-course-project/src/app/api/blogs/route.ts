@@ -1,39 +1,10 @@
 import { NextResponse } from "next/server";
 import { BlogPost } from "@/types/blog.types";
-import fs from "fs";
-import path from "path";
-
-// Đường dẫn đến tệp dữ liệu
-const postsFilePath = path.join(
-  process.cwd(),
-  "src",
-  "app",
-  "data",
-  "posts.json"
-);
-
-// Hàm để đọc dữ liệu từ tệp
-const readPostsFromFile = (): BlogPost[] => {
-  try {
-    const fileContent = fs.readFileSync(postsFilePath, "utf-8");
-    return JSON.parse(fileContent);
-  } catch (error) {
-    console.error("Lỗi khi đọc từ tệp posts.json:", error);
-    return [];
-  }
-};
-
-// Hàm để ghi dữ liệu vào tệp
-const savePostsToFile = (posts: BlogPost[]) => {
-  try {
-    fs.writeFileSync(postsFilePath, JSON.stringify(posts, null, 2), "utf-8");
-  } catch (error) {
-    console.error("Lỗi khi ghi vào tệp posts.json:", error);
-  }
-};
-
 export async function GET() {
-  const blogPosts: BlogPost[] = readPostsFromFile();
+  const res = await fetch("http://localhost:3001/posts", {
+    cache: "no-store",
+  });
+  const blogPosts: BlogPost[] = await res.json();
   return NextResponse.json(blogPosts);
 }
 
@@ -60,11 +31,17 @@ export async function POST(req: Request) {
       status: data.status || "draft",
     };
 
-    const currentPosts = readPostsFromFile();
-    currentPosts.push(newPost);
-    savePostsToFile(currentPosts);
+    const res = await fetch("http://localhost:3001/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPost),
+    });
 
-    return NextResponse.json(newPost, { status: 201 });
+    const addedPost = await res.json();
+
+    return NextResponse.json(addedPost, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,15 +60,13 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    const currentPosts = readPostsFromFile();
-    const postIndex = currentPosts.findIndex((p) => String(p.id) === id);
+    const res = await fetch(`http://localhost:3001/posts/${id}`, {
+      method: "DELETE",
+    });
 
-    if (postIndex === -1) {
+    if (res.status === 404) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
-
-    const updatedPosts = currentPosts.filter((p) => String(p.id) !== id);
-    savePostsToFile(updatedPosts);
 
     return new Response(null, { status: 204 }); // No Content
   } catch (error) {

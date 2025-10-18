@@ -12,13 +12,20 @@ export default function MyPosts() {
     "draft"
   );
 
-  const handleDelete = (id: number) => {
-    BlogService.delete(id).then(() => {
-      setPosts(posts.filter((p) => p.id !== id));
-    });
+  const handleDelete = (id: number | string) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+      BlogService.delete(id)
+        .then(() => {
+          setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
+        })
+        .catch((error) => {
+          console.error("Lỗi khi xóa bài viết:", error);
+          alert(`Lỗi khi xóa bài viết: ${error.message}`);
+        });
+    }
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: number | string) => {
     router.push(`/blog/create?id=${id}`);
   };
 

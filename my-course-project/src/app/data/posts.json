@@ -44,14 +44,36 @@
     "status": "published"
   },
   {
-    "id": 1760066614207,
+    "id": 1760707768479,
     "author": "Huyền Ngọc",
-    "title": "dád",
-    "content": "Code thêm đi nhé",
+    "title": "dádads",
+    "content": "adsdadsdadsdadsdads",
     "category": "react-native",
-    "image": "/images/1760066610633-snapedit_1759301056404.jpeg",
-    "createdAt": "2025-10-10T03:23:34.207Z",
-    "updatedAt": "2025-10-10T03:23:34.207Z",
+    "image": "/images/1760707761245-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+    "createdAt": "2025-10-17T13:29:28.479Z",
+    "updatedAt": "2025-10-17T13:29:28.479Z",
+    "status": "published"
+  },
+  {
+    "id": 1760752917804,
+    "author": "sadasd",
+    "title": "adadsadasd",
+    "content": "dấdasd",
+    "category": "devops",
+    "image": "/images/1760752913875-snapedit_1759301056404.jpeg",
+    "createdAt": "2025-10-18T02:01:57.805Z",
+    "updatedAt": "2025-10-18T02:01:57.805Z",
+    "status": "draft"
+  },
+  {
+    "id": 1760753190858,
+    "author": "Lê Quang Luân",
+    "title": "ssss",
+    "content": "dádsads",
+    "category": "cpp",
+    "image": "/images/1760753185953-z6896290592822_d42186b7cbb7bc7a50ea25009d3eceee.jpg",
+    "createdAt": "2025-10-18T02:06:30.859Z",
+    "updatedAt": "2025-10-18T02:06:30.859Z",
     "status": "draft"
   }
 ]

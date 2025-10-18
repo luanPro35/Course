@@ -1,0 +1,365 @@
+{
+  "posts": [
+    {
+      "id": "7897",
+      "author": "Lê Quang Luân",
+      "title": "s",
+      "content": "s",
+      "category": "react-native",
+      "image": "/images/1760758300059-snapedit_1759301056404.jpeg",
+      "status": "published",
+      "createdAt": "2025-10-18T03:31:41.789Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "5866",
+      "fullName": "Test User",
+      "phone": "0123456789",
+      "email": "test@example.com",
+      "password": "password123"
+    },
+    {
+      "id": "2a6a",
+      "fullName": "luan",
+      "email": "quangluan0@gmail.com",
+      "phone": "0906666666",
+      "password": "$2b$10$6YeTng55lqVe/SfAroB1OODu9OEC380NhxTx6OTBxopsNEqkVWv4i",
+      "createdAt": "2025-10-18T03:42:50.947Z",
+      "updatedAt": "2025-10-18T03:42:50.947Z"
+    }
+  ],
+  "informations": [
+    {
+      "id": "b891",
+      "fullName": "Luân Quang Lê",
+      "avatar": "",
+      "about": "Fullstack",
+      "personalWebsite": "dsadds",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": 1759756023221,
+      "fullName": "",
+      "avatar": "/images/1760452903551-z7025751621904_35284c6a45e063fe520091a871aef8fe.jpg",
+      "about": "",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": "",
+      "email": "",
+      "phone": "",
+      "createdAt": "2025-10-14T14:41:45.901Z",
+      "updatedAt": "2025-10-14T14:41:45.901Z"
+    },
+    {
+      "id": "2a6a",
+      "fullName": "luan",
+      "about": "",
+      "avatar": "/images/1760782910979-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "personalWebsite": "",
+      "github": "đâsdads",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "ce51",
+      "fullName": "luan",
+      "avatar": "/images/1760782910979-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "about": "",
+      "personalWebsite": "",
+      "github": "đâsdads",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    }
+  ],
+  "saved": [],
+  "upload": [],
+  "coursesFree": [
+    {
+      "id": "1",
+      "image": "/images/Introductory.png",
+      "title": "Kiến Thức Nhập Môn IT",
+      "free": "Miễn phí",
+      "people": 136848,
+      "numberOfPosts": 9,
+      "totalTime": "3h12p"
+    },
+    {
+      "id": "2",
+      "image": "/images/Cpp.png",
+      "title": "Lập trình C++ cơ bản, nâng cao",
+      "free": "Miễn phí",
+      "people": 37107,
+      "numberOfPosts": 55,
+      "totalTime": "10h18p"
+    },
+    {
+      "id": "3",
+      "image": "/images/HTML-CSS_Basic.png",
+      "title": "HTML CSS từ Zero đến Hero",
+      "free": "Miễn phí",
+      "people": 214957,
+      "numberOfPosts": 117,
+      "totalTime": "29h5p"
+    },
+    {
+      "id": "4",
+      "image": "/images/Responsive.png",
+      "title": "Responsive Với Grid System",
+      "free": "Miễn phí",
+      "people": 47905,
+      "numberOfPosts": 34,
+      "totalTime": "6h31p"
+    },
+    {
+      "id": "5",
+      "image": "/images/JSBasic.png",
+      "title": "Lập Trình JavaScript Cơ Bản",
+      "free": "Miễn phí",
+      "people": 151347,
+      "numberOfPosts": 112,
+      "totalTime": "24h15p"
+    },
+    {
+      "id": "6",
+      "image": "/images/JSAdvanced.png",
+      "title": "Lập Trình JavaScript Nâng Cao",
+      "free": "Miễn phí",
+      "people": 41600,
+      "numberOfPosts": 19,
+      "totalTime": "8h41p"
+    },
+    {
+      "id": "7",
+      "image": "/images/Ubuntu.png",
+      "title": "Làm việc với Terminal & Ubuntu",
+      "free": "Miễn phí",
+      "people": 21296,
+      "numberOfPosts": 28,
+      "totalTime": "4h59p"
+    },
+    {
+      "id": "8",
+      "image": "/images/ReactJS.png",
+      "title": "Xây Dựng Website với ReactJS",
+      "free": "Miễn phí",
+      "people": 78375,
+      "numberOfPosts": 112,
+      "totalTime": "27h32p"
+    }
+  ],
+  "coursesPro": [
+    {
+      "id": "1",
+      "image": "/images/HTML-CSS.png",
+      "title": "HTML, CSS Pro",
+      "price": 1299000,
+      "discountPrice": 2500000,
+      "author": "Sơn Đặng",
+      "numberOfPosts": 590,
+      "totalTime": "116h50p"
+    },
+    {
+      "id": "2",
+      "image": "/images/JSPro.png",
+      "title": "Javascript Pro",
+      "price": 1399000,
+      "discountPrice": 3299000,
+      "author": "Sơn Đặng",
+      "numberOfPosts": 254,
+      "totalTime": "49h34p"
+    },
+    {
+      "id": "3",
+      "image": "/images/Sass.png",
+      "title": "Ngôn ngữ Sass",
+      "price": 299000,
+      "discountPrice": 400000,
+      "author": "Sơn Đặng",
+      "numberOfPosts": 27,
+      "totalTime": "6h18p"
+    }
+  ],
+  "trending": [
+    {
+      "id": 1,
+      "image": "/images/Girls.png",
+      "title": "Tổng hợp các sản phẩm của học viên tại F8",
+      "author": "Sơn Đặng",
+      "time_posts": "6 phút đọc"
+    },
+    {
+      "id": 2,
+      "image": "/images/Webpack.png",
+      "title": "[Phần 1] Tạo dự án ReactJS với Webpack và Babel",
+      "author": "Sơn Đặng",
+      "time_posts": "12 phút đọc"
+    },
+    {
+      "id": 3,
+      "image": "/images/Github.png",
+      "title": "Cách đưa code lên GitHub và tạo GitHub Pages",
+      "author": "Vo Minh Kha",
+      "time_posts": "4 phút đọc"
+    },
+    {
+      "id": 4,
+      "image": "/images/Girl.png",
+      "title": "Ký sự ngày thứ 25 học ở F8",
+      "author": "Sơn Sơn",
+      "time_posts": "1 phút đọc"
+    },
+    {
+      "id": 5,
+      "image": "/images/TS.png",
+      "title": "Các nguồn tài nguyên hữu ích cho 1 front-end developer",
+      "author": "Dương Vương",
+      "time_posts": "2 phút đọc"
+    },
+    {
+      "id": 6,
+      "image": "/images/Calendar.png",
+      "title": "Thời gian và Động lực",
+      "author": "Dong Ngo",
+      "time_posts": "6 phút đọc"
+    },
+    {
+      "id": 7,
+      "image": "/images/LearnEnglish.png",
+      "title": "Tổng hợp tài liệu tự học tiếng anh cơ bản.",
+      "author": "Trung Lê Thành",
+      "time_posts": "10 phút đọc"
+    },
+    {
+      "id": 8,
+      "image": "/images/Laster.png",
+      "title": "Học như thế nào là phù hợp ?",
+      "author": "Ngoc Tien Pham",
+      "time_posts": "4 phút đọc"
+    }
+  ],
+  "profile": [
+    {
+      "id": "2a6a",
+      "fullName": "luan",
+      "about": "",
+      "avatar": "/images/1760782749078-redux-workflows.gif",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "2a6a",
+      "fullName": "",
+      "about": "",
+      "avatar": "/images/1760782776078-dscn4570.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "2a6a",
+      "fullName": "Luân Quang Lê",
+      "about": "",
+      "avatar": "/images/1760782790916-z6896290592822_d42186b7cbb7bc7a50ea25009d3eceee.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "dádad",
+      "facebook": "",
+      "youtube": ""
+    }
+  ],
+  "topVideos": [
+    {
+      "id": "1",
+      "image": "/images/video-1.png",
+      "time": "03:15",
+      "title": "Bạn sẽ làm được gì sau khóa học?",
+      "numberOfEyes": 1112900,
+      "numberOfLike": 6542,
+      "numberOfComment": 161,
+      "url": "https://www.youtube.com/watch?v=R6plN3FvzFY&feature=youtu.be"
+    },
+    {
+      "id": "2",
+      "image": "/images/video-2.png",
+      "time": "34:51",
+      "title": "Sinh viên IT di thực tập tại doanh nghiệp cần biết những gì?",
+      "numberOfEyes": 263338,
+      "numberOfLike": 6428,
+      "numberOfComment": 236,
+      "url": "https://www.youtube.com/watch?v=YH-E4Y3EaT4&feature=youtu.be"
+    },
+    {
+      "id": "3",
+      "image": "/images/video-3.png",
+      "time": "24:06",
+      "title": "Phương pháp học lập trình của Admin F8?",
+      "numberOfEyes": 131508,
+      "numberOfLike": 6211,
+      "numberOfComment": 340,
+      "url": "https://www.youtube.com/watch?v=DpvYHLUiZpc"
+    },
+    {
+      "id": "4",
+      "image": "/images/video-4.png",
+      "time": "25:10",
+      "title": "\"Code Thiếu Nhi Battle\" Tranh Giành Trà Sữa Size L",
+      "numberOfEyes": 282369,
+      "numberOfLike": 5686,
+      "numberOfComment": 182,
+      "url": "https://www.youtube.com/watch?v=sgq7BH6WxL8"
+    },
+    {
+      "id": "5",
+      "image": "/images/video-5.png",
+      "time": "07:53",
+      "title": "Javascript có thể làm được gì? Giới thiệu qua về trang F8 | Học lập trình...",
+      "numberOfEyes": 862140,
+      "numberOfLike": 4567,
+      "numberOfComment": 132,
+      "url": "https://www.youtube.com/watch?v=0SJE9dYdpps"
+    },
+    {
+      "id": "6",
+      "image": "/images/video-6.png",
+      "time": "10:41",
+      "title": "ReactJS là gì? Tại sao nên học ReactJS?",
+      "numberOfEyes": 513229,
+      "numberOfLike": 3898,
+      "numberOfComment": 352,
+      "url": "https://www.youtube.com/watch?v=x0fSBAgBrOQ&feature=youtu.be"
+    },
+    {
+      "id": "7",
+      "image": "/images/video-7.png",
+      "time": "35:04",
+      "title": "Các thẻ HTML thông dụng",
+      "numberOfEyes": 365386,
+      "numberOfLike": 3762,
+      "numberOfComment": 211,
+      "url": "https://www.youtube.com/watch?v=AzmdwZ6e_aM&feature=youtu.be"
+    },
+    {
+      "id": "8",
+      "image": "/images/video-8.png",
+      "time": "35:04",
+      "title": "Học Flexbox qua ví dụ",
+      "numberOfEyes": 257286,
+      "numberOfLike": 3478,
+      "numberOfComment": 216,
+      "url": "https://www.youtube.com/watch?v=G19jZzK5FWI"
+    }
+  ]
+}

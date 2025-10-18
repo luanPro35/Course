@@ -94,7 +94,7 @@ export function useProfileForm() {
 
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("avatar", file);
+    formData.append("file", file);
 
     setLoading(true);
     setError("");

@@ -28,4 +28,13 @@ export const users: User[] = [
     createdAt: new Date("2025-10-07T08:06:59.817Z"),
     updatedAt: new Date("2025-10-07T08:06:59.817Z"),
   },
+  {
+    id: 1760758387604,
+    fullName: "Test User",
+    email: "test@example.com",
+    phone: "0123456789",
+    password: "$2b$10$eYCYz0bW0YY9in3oZqncV.oZJt2WQlaVd.DkggbArgjI8zt4Q3kCu",
+    createdAt: new Date("2025-10-18T03:33:07.604Z"),
+    updatedAt: new Date("2025-10-18T03:33:07.604Z"),
+  },
 ];

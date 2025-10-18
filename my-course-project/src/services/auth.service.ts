@@ -1,5 +1,3 @@
-// services/auth.service.ts
-
 import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
 

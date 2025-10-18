@@ -82,7 +82,7 @@ export default function ProfileForm() {
             <div className="mt-1 flex items-center">
               <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                 <Image
-                  src={form.avatar || "/placeholder-avatar.svg"}
+                  src={form.avatar || "/images/avatar.png"}
                   alt="Avatar"
                   width={48}
                   height={48}

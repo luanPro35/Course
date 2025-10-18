@@ -1,12 +1,7 @@
+// ... existing code ...
 import { NextResponse, NextRequest } from "next/server";
-import { users } from "@/app/data/users";
 import bcrypt from "bcryptjs";
 import { User } from "@/types/user";
-import fs from "fs";
-import path from "path";
-
-// Path to the users data file
-const usersFilePath = path.join(process.cwd(), "src/app/data/users.ts");
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,8 +24,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if email already exists
-    if (users.some((user) => user.email === email)) {
+    // Check if email already exists in json-server
+    const userExistsResponse = await fetch(
+      `http://localhost:3001/users?email=${email}`
+    );
+    const existingUsers = await userExistsResponse.json();
+
+    if (existingUsers.length > 0) {
       return NextResponse.json(
         { message: "Email này đã được sử dụng." },
         { status: 409 }
@@ -51,44 +51,33 @@ export async function POST(req: NextRequest) {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
-    const newUser: User = {
-      id: Date.now(),
+    // Create new user object for json-server
+    const newUser = {
       fullName,
       email,
       phone,
       password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
-    // Add user to the in-memory array
-    users.push(newUser);
+    // POST new user to json-server
+    const createUserResponse = await fetch("http://localhost:3001/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
 
-    // --- Persist users to file ---
-    const fileContent = `import { User } from "../../types/user";\n\nexport const users: User[] = ${JSON.stringify(
-      users,
-      null,
-      2
-    )};\n`;
-
-    try {
-      fs.writeFileSync(usersFilePath, fileContent, "utf-8");
-    } catch (writeError) {
-      console.error("Failed to write to users file:", writeError);
-      // In a real app, you might want to handle this more gracefully
-      return NextResponse.json(
-        {
-          message: "Đăng ký thành công nhưng không thể lưu dữ liệu người dùng.",
-        },
-        { status: 500 }
-      );
+    if (!createUserResponse.ok) {
+      throw new Error("Không thể tạo người dùng trên máy chủ JSON.");
     }
-    // -----------------------------
+
+    const createdUser = await createUserResponse.json();
 
     // Remove password from the returned user object
-    const userWithoutPassword = { ...newUser };
-    delete userWithoutPassword.password;
+    const { password: _password, ...userWithoutPassword } = createdUser;
 
     return NextResponse.json(
       {
@@ -107,7 +96,13 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  // Fetch users from json-server
+  const res = await fetch("http://localhost:3001/users");
+  const users = await res.json();
   // Return users without their passwords
-  const usersWithoutPasswords = users.map(({ ...rest }) => rest);
+  const usersWithoutPasswords = users.map((user: User) => {
+    const { password, ...rest } = user;
+    return rest;
+  });
   return NextResponse.json(usersWithoutPasswords);
 }

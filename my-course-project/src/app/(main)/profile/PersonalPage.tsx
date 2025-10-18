@@ -37,7 +37,7 @@ export default function PersonalPage() {
       <div className="flex flex-col md:flex-row items-start gap-6">
         <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200">
           <Image
-            src={user.avatar || "/default-avatar.png"}
+            src={user.avatar || "/images/avatar.png"}
             alt={user.fullName}
             layout="fill"
             objectFit="cover"

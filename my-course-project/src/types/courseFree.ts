@@ -6,4 +6,5 @@ export interface CourseFree {
   people: number;
   numberOfPosts: number;
   totalTime: string;
+  price: number;
 }

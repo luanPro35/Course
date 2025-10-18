@@ -3,17 +3,43 @@ import { useEffect, useState } from "react";
 import { BlogService } from "@/services/blog.service";
 import { BlogPost } from "@/types/blog.types";
 import Image from "next/image";
+import { PostItem } from "./PostItem";
+import { useRouter } from "next/navigation";
+
 export default function MyPosts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [activeContent, setActiveContent] = useState<"draft" | "published">(
     "draft"
   );
+  const router = useRouter();
 
   useEffect(() => {
     BlogService.getAll()
       .then(setPosts)
       .catch((err) => console.error(err));
   }, []);
+
+  const handleDelete = async (id: number | string) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+      return;
+    }
+    try {
+      await BlogService.delete(id);
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+      alert("Xóa bài viết thành công!");
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+      if (error instanceof Error) {
+        alert(`Lỗi khi xóa bài viết: ${error.message}`);
+      } else {
+        alert("Lỗi khi xóa bài viết. Vui lòng thử lại.");
+      }
+    }
+  };
+
+  const handleEdit = (id: number | string) => {
+    router.push(`/blog/create?id=${id}`);
+  };
 
   const drafts = posts.filter((p) => p.status === "draft");
   const published = posts.filter((p) => p.status === "published");
@@ -51,55 +77,12 @@ export default function MyPosts() {
         <section>
           {drafts.length ? (
             drafts.map((p) => (
-              <div
+              <PostItem
                 key={p.id}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow"
-              >
-                {/* Header với tên tác giả */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-medium text-gray-800">{p.author}</span>
-                  <span className="text-xs text-gray-400">
-                    {new Date(p.createdAt || "").toLocaleDateString("vi-VN")}
-                  </span>
-                </div>
-
-                {/* Nội dung chính */}
-                <div className="flex gap-6">
-                  {/* Text bên trái */}
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
-                      {p.title}
-                    </h2>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {p.content}
-                    </p>
-
-                    {/* Tags và thông tin */}
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
-                      <span className="bg-gray-100 px-3 py-1 rounded-full">
-                        {p.category}
-                      </span>
-                      <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
-                        📝 Bản nháp
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Hình ảnh bên phải */}
-                  {p.image && (
-                    <div className="flex-shrink-0">
-                      <div className="relative w-52 h-36 rounded-xl overflow-hidden bg-gray-100">
-                        <Image
-                          src={p.image}
-                          alt={p.title}
-                          className="w-full h-full object-cover"
-                          unoptimized
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+                post={p}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
             ))
           ) : (
             <div className="text-center py-12 bg-gray-50 rounded-lg">
@@ -113,54 +96,12 @@ export default function MyPosts() {
         <section>
           {published.length ? (
             published.map((p) => (
-              <div
+              <PostItem
                 key={p.id}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow"
-              >
-                {/* Header với tên tác giả */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-medium text-gray-800">{p.author}</span>
-                  <span className="text-xs text-gray-400">
-                    {new Date(p.createdAt || "").toLocaleDateString("vi-VN")}
-                  </span>
-                </div>
-
-                {/* Nội dung chính */}
-                <div className="flex gap-6">
-                  {/* Text bên trái */}
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
-                      {p.title}
-                    </h2>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {p.content}
-                    </p>
-
-                    {/* Tags và thông tin */}
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
-                      <span className="bg-gray-100 px-3 py-1 rounded-full">
-                        {p.category}
-                      </span>
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-                        ✅ Đã xuất bản
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Hình ảnh bên phải */}
-                  {p.image && (
-                    <div className="flex-shrink-0">
-                      <div className="relative w-52 h-36 rounded-xl overflow-hidden bg-gray-100">
-                        <Image
-                          src={p.image}
-                          alt={p.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+                post={p}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
             ))
           ) : (
             <div className="text-center py-12 bg-gray-50 rounded-lg">
