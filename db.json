@@ -27,6 +27,15 @@
       "password": "$2b$10$6YeTng55lqVe/SfAroB1OODu9OEC380NhxTx6OTBxopsNEqkVWv4i",
       "createdAt": "2025-10-18T03:42:50.947Z",
       "updatedAt": "2025-10-18T03:42:50.947Z"
+    },
+    {
+      "id": "e783",
+      "fullName": "Lê Quang Luân",
+      "email": "quangluan03052000@gmail.com",
+      "phone": "0905622341",
+      "password": "$2b$10$ndLiN00hriQlWtqGGacbne0/.KdtXXUS91PG5GmNscv4rR4UaFttS",
+      "createdAt": "2025-10-19T00:28:54.458Z",
+      "updatedAt": "2025-10-19T00:28:54.458Z"
     }
   ],
   "informations": [
@@ -42,7 +51,7 @@
       "youtube": ""
     },
     {
-      "id": 1759756023221,
+      "id": "1759756023221",
       "fullName": "",
       "avatar": "/images/1760452903551-z7025751621904_35284c6a45e063fe520091a871aef8fe.jpg",
       "about": "",
@@ -61,7 +70,7 @@
       "fullName": "luan",
       "about": "",
       "avatar": "/images/1760782910979-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
-      "personalWebsite": "",
+      "personalWebsite": "sssss",
       "github": "đâsdads",
       "linkedin": "",
       "facebook": "",
@@ -77,9 +86,110 @@
       "linkedin": "",
       "facebook": "",
       "youtube": ""
+    },
+    {
+      "id": "3679",
+      "fullName": "luan",
+      "avatar": "/images/1760782910979-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "about": "",
+      "personalWebsite": "sssss",
+      "github": "đâsdads",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "e783",
+      "fullName": "Lê Quang Luânn",
+      "about": "Tôi có ước mơ là trở thành FullStack",
+      "avatar": "/images/1760833765784-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "personalWebsite": "Cá nhân",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "fe84",
+      "fullName": "Lê Quang Luân",
+      "avatar": "/images/1760833765784-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "about": "Tôi có ước mơ là trở thành FullStack",
+      "personalWebsite": "Cá nhân",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "0330",
+      "fullName": "Lê Quang Luânn",
+      "avatar": "/images/1760833765784-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "about": "Tôi có ước mơ là trở thành FullStack",
+      "personalWebsite": "Cá nhân",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "aeab",
+      "fullName": "Lê Quang Luânn",
+      "avatar": "/images/1760833765784-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "about": "Tôi có ước mơ là trở thành FullStack",
+      "personalWebsite": "Cá nhân",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "",
+      "youtube": ""
     }
   ],
-  "saved": [],
+  "saved": [
+    {
+      "id": 4,
+      "title": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "content": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "author": "Hải Đoàn",
+      "category": "Javascript",
+      "image": "/images/posts-4.png",
+      "createdAt": "2025-10-18T23:01:22.792Z"
+    },
+    {
+      "id": 3,
+      "title": "SOLID – 5 nguyên lý \"vàng\" giúp viết code sạch và dễ bảo trì",
+      "content": "Trong hành trình phát triển phần mềm, chắc hẳn bạn đã từng gặp phải những đoạn code dài, khó hiểu và rất khó mở rộng hay sửa chữa....",
+      "author": "Hoàng Tuấn 12A1 40.Võ",
+      "category": "OOP",
+      "image": "/images/posts-3.png",
+      "createdAt": "2025-10-18T23:15:54.382Z"
+    },
+    {
+      "id": 7,
+      "title": "Thư cảm ơn gửi đến anh Sơn",
+      "content": "Xin chào mọi người và anh Sơn. Em tên là Lý Cao Nguyên Vào năm 2022 em có vô tình lướt thấy những video dạy học của anh trên...",
+      "author": "Lý Cao Nguyên",
+      "category": "",
+      "image": "/images/posts-7.png",
+      "createdAt": "2025-10-18T23:16:19.305Z"
+    },
+    {
+      "id": 2,
+      "title": "Giới thiệu về ngành Công Nghệ Thông Tin và Những Kiến Thức Cơ Bản Bắt Buộc Phải Học",
+      "content": "Ngành Công Nghệ Thông Tin (CNTT) là một lĩnh vực đang phát triển mạnh mẽ và có vai trò quan trọng trong hầu hết mọi mặt của đời...",
+      "author": "Hoàng Tuấn 12A1 40.Võ",
+      "category": "hoc-lap-trinh",
+      "image": "/images/posts-2.png",
+      "createdAt": "2025-10-18T23:50:04.749Z"
+    },
+    {
+      "id": 5,
+      "title": "Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án \"AI Powered Learning\"",
+      "content": "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
+      "author": "Sơn Đặng",
+      "category": "ReactJS",
+      "image": "/images/posts-5.png",
+      "createdAt": "2025-10-18T23:50:35.515Z"
+    }
+  ],
   "upload": [],
   "coursesFree": [
     {
@@ -187,58 +297,170 @@
       "totalTime": "6h18p"
     }
   ],
-  "trending": [
+  "article": [
     {
       "id": 1,
+      "author": "Huyền Lê Ngọc",
+      "title": "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
+      "content": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
+      "category": "React Native",
+      "timeAgo": "một tháng trước",
+      "readTime": "2 phút đọc",
+      "image": "/images/posts-1.png"
+    },
+    {
+      "id": 2,
+      "author": "Hoàng Tuấn 12A1 40.Võ",
+      "title": "Giới thiệu về ngành Công Nghệ Thông Tin và Những Kiến Thức Cơ Bản Bắt Buộc Phải Học",
+      "content": "Ngành Công Nghệ Thông Tin (CNTT) là một lĩnh vực đang phát triển mạnh mẽ và có vai trò quan trọng trong hầu hết mọi mặt của đời...",
+      "category": "hoc-lap-trinh",
+      "timeAgo": "3 tháng trước",
+      "readTime": "3 phút đọc",
+      "image": "/images/posts-2.png"
+    },
+    {
+      "id": 3,
+      "author": "Hoàng Tuấn 12A1 40.Võ",
+      "title": "SOLID – 5 nguyên lý \"vàng\" giúp viết code sạch và dễ bảo trì",
+      "content": "Trong hành trình phát triển phần mềm, chắc hẳn bạn đã từng gặp phải những đoạn code dài, khó hiểu và rất khó mở rộng hay sửa chữa....",
+      "category": "OOP",
+      "timeAgo": "3 tháng trước",
+      "readTime": "3 phút đọc",
+      "image": "/images/posts-3.png"
+    },
+    {
+      "id": 4,
+      "author": "Hải Đoàn",
+      "title": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "content": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "category": "Javascript",
+      "timeAgo": "5 tháng trước",
+      "readTime": "2 phút đọc",
+      "image": "/images/posts-4.png"
+    },
+    {
+      "id": 5,
+      "author": "Sơn Đặng",
+      "title": "Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án \"AI Powered Learning\"",
+      "content": "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
+      "category": "ReactJS",
+      "timeAgo": "một năm trước",
+      "readTime": "6 phút đọc",
+      "image": "/images/posts-5.png"
+    },
+    {
+      "id": 6,
+      "author": "Lý Cao Nguyên",
+      "title": "Mình đã làm thế nào để hoàn thành một dự án website chỉ trong 15 ngày",
+      "content": "Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài học và 200 bài viết. Bài viết này...",
+      "category": "Front-end",
+      "timeAgo": "một năm trước",
+      "readTime": "4 phút đọc",
+      "image": "/images/posts-6.png"
+    },
+    {
+      "id": 7,
+      "author": "Lý Cao Nguyên",
+      "title": "Thư cảm ơn gửi đến anh Sơn",
+      "content": "Xin chào mọi người và anh Sơn. Em tên là Lý Cao Nguyên Vào năm 2022 em có vô tình lướt thấy những video dạy học của anh trên...",
+      "category": "",
+      "timeAgo": "một năm trước",
+      "readTime": "2 phút đọc",
+      "image": "/images/posts-7.png"
+    },
+    {
+      "id": 8,
+      "author": "Evich Tran",
+      "title": "Config Zsh bằng Oh-my-zsh và P10k trên WSL cực ngầu ✨",
+      "content": "Hello anh em , thì như blog trước mình có nói rằng mình ko có dùng Ubuntu, nhưng sao lại có...",
+      "category": "Ubuntu",
+      "timeAgo": "một năm trước",
+      "readTime": "4 phút đọc",
+      "image": "/images/posts-8.png"
+    },
+    {
+      "id": 9,
+      "author": "Hòa Nguyễn Thanh",
+      "title": "LÀ THÀNH VIÊN CỦA F8. BẠN ĐÃ THỰC SỰ SỬ DỤNG \"F8\" HIỆU QUẢ CHƯA?",
+      "content": "F8 sẽ đưa bạn đến chính xác từng vị trí xảy ra vấn đề. F8 là phím tắt mặc định trong VScode các bạn nhé (không phải cài thêm bất cứ Extensions nào)",
+      "category": "",
+      "timeAgo": "2 năm trước",
+      "readTime": "12 phút đọc",
+      "image": "/images/posts-9.png"
+    },
+    {
+      "id": 10,
+      "author": "Trọng Nam Đoàn",
+      "title": "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
+      "content": "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
+      "category": "Javascript",
+      "timeAgo": "2 năm trước",
+      "readTime": "5 phút đọc",
+      "image": "/images/posts-10.png"
+    },
+    {
+      "id": 11,
+      "author": "Trọng Nam Đoàn",
+      "title": "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
+      "content": "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
+      "category": "Javascript",
+      "timeAgo": "2 năm trước",
+      "readTime": "5 phút đọc",
+      "image": "/images/posts-10.png"
+    }
+  ],
+  "trending": [
+    {
+      "id": "1",
       "image": "/images/Girls.png",
       "title": "Tổng hợp các sản phẩm của học viên tại F8",
       "author": "Sơn Đặng",
       "time_posts": "6 phút đọc"
     },
     {
-      "id": 2,
+      "id": "2",
       "image": "/images/Webpack.png",
       "title": "[Phần 1] Tạo dự án ReactJS với Webpack và Babel",
       "author": "Sơn Đặng",
       "time_posts": "12 phút đọc"
     },
     {
-      "id": 3,
+      "id": "3",
       "image": "/images/Github.png",
       "title": "Cách đưa code lên GitHub và tạo GitHub Pages",
       "author": "Vo Minh Kha",
       "time_posts": "4 phút đọc"
     },
     {
-      "id": 4,
+      "id": "4",
       "image": "/images/Girl.png",
       "title": "Ký sự ngày thứ 25 học ở F8",
       "author": "Sơn Sơn",
       "time_posts": "1 phút đọc"
     },
     {
-      "id": 5,
+      "id": "5",
       "image": "/images/TS.png",
       "title": "Các nguồn tài nguyên hữu ích cho 1 front-end developer",
       "author": "Dương Vương",
       "time_posts": "2 phút đọc"
     },
     {
-      "id": 6,
+      "id": "6",
       "image": "/images/Calendar.png",
       "title": "Thời gian và Động lực",
       "author": "Dong Ngo",
       "time_posts": "6 phút đọc"
     },
     {
-      "id": 7,
+      "id": "7",
       "image": "/images/LearnEnglish.png",
       "title": "Tổng hợp tài liệu tự học tiếng anh cơ bản.",
       "author": "Trung Lê Thành",
       "time_posts": "10 phút đọc"
     },
     {
-      "id": 8,
+      "id": "8",
       "image": "/images/Laster.png",
       "title": "Học như thế nào là phù hợp ?",
       "author": "Ngoc Tien Pham",

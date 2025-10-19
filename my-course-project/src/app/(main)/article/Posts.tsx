@@ -17,7 +17,7 @@ export default function Posts() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("api/posts")
+    fetch("http://localhost:3001/article")
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);

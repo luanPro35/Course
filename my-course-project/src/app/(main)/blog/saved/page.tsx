@@ -13,10 +13,18 @@ export default function SavedPostsPage() {
 
   const handleToggle = async (post: BlogPost) => {
     try {
-      console.log("Attempting to delete post:", post.id);
-      await SavedService.delete(post.id);
-      setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id));
-      console.log("Post deleted successfully, UI updated.");
+      const savedPosts = await SavedService.getAll();
+      const postToDelete = savedPosts.find((p) => p.id === post.id);
+
+      if (postToDelete) {
+        await SavedService.delete(postToDelete.id);
+        setPosts((prevPosts) =>
+          prevPosts.filter((p) => p.id !== postToDelete.id)
+        );
+        console.log("Post deleted successfully, UI updated.");
+      } else {
+        console.warn("Post not found in saved list.");
+      }
     } catch (error) {
       console.error("Failed to delete post:", error);
     }

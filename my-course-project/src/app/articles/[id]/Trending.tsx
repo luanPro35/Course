@@ -10,7 +10,7 @@ export default function CourseTrending() {
   useEffect(() => {
     const fetchTrendingPosts = async () => {
       try {
-        const res = await fetch("/api/Trending");
+        const res = await fetch("http://localhost:3001/trending");
         if (!res.ok) {
           throw new Error("Failed to fetch trending posts");
         }

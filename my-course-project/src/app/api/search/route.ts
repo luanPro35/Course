@@ -4,15 +4,20 @@ import { CoursePro } from "@/types/coursePro";
 import { CardTrending } from "@/types/trending";
 import { TopVideo } from "@/types/topVideo";
 import { Post } from "@/types/post";
+import { FREE_API_URL } from "@/services/coursesFree";
+import { PRO_API_URL } from "@/services/coursesPro";
+import { TRENDING_API_URL } from "@/services/postTrending";
+import { TOP_VIDEO_API_URL } from "@/services/topVideo";
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("query")?.toLowerCase() || "";
 
   const [proRes, trendingRes, freeRes, videoRes, postRes] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coursesFree`),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Trending`),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coursesPro`),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/topVideos`),
+    fetch(PRO_API_URL),
+    fetch(TRENDING_API_URL),
+    fetch(FREE_API_URL),
+    fetch(TOP_VIDEO_API_URL),
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`),
   ]);
 

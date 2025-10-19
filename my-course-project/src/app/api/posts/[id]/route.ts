@@ -12,7 +12,16 @@ function readDb() {
 }
 
 // Helper function to write to the database
-function writeDb(data: any) {
+interface Post {
+  id: string;
+  [key: string]: unknown;
+}
+
+interface Db {
+  posts: Post[];
+}
+
+function writeDb(data: Db) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf8");
 }
 
@@ -22,7 +31,7 @@ export async function GET(
 ) {
   try {
     const db = readDb();
-    const post = db.posts.find((p: any) => p.id.toString() === params.id);
+    const post = db.posts.find((p: Post) => p.id.toString() === params.id);
 
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -45,19 +54,21 @@ export async function PUT(
   try {
     const body = await request.json();
     const db = readDb();
-    
-    const postIndex = db.posts.findIndex((p: any) => p.id.toString() === params.id);
-    
+
+    const postIndex = db.posts.findIndex(
+      (p: Post) => p.id.toString() === params.id
+    );
+
     if (postIndex === -1) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
-    
+
     // Update the post
     db.posts[postIndex] = { ...db.posts[postIndex], ...body };
-    
+
     // Write back to the database
     writeDb(db);
-    
+
     return NextResponse.json(db.posts[postIndex]);
   } catch (error) {
     console.error("Error updating post:", error);
@@ -74,43 +85,45 @@ export async function DELETE(
 ) {
   try {
     // Kiểm tra xem request có phải từ Postman không
-    const userAgent = request.headers.get('user-agent') || '';
-    const isPostman = userAgent.includes('Postman');
-    
+    const userAgent = request.headers.get("user-agent") || "";
+    const isPostman = userAgent.includes("Postman");
+
     // Nếu là request từ Postman, chỉ trả về response thành công
     if (isPostman) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         success: true,
         message: "Xóa bài viết thành công",
         deletedPost: {
           id: params.id,
-          title: "Bài viết đã được xóa (Postman request)"
-        }
+          title: "Bài viết đã được xóa (Postman request)",
+        },
       });
     }
-    
+
     // Nếu không phải Postman, thực hiện xóa thật từ db.json
     const db = readDb();
-    const postIndex = db.posts.findIndex((p: any) => p.id.toString() === params.id);
-    
+    const postIndex = db.posts.findIndex(
+      (p: Post) => p.id.toString() === params.id
+    );
+
     if (postIndex === -1) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
-    
+
     // Lưu lại post trước khi xóa để trả về trong response
     const deletedPost = db.posts[postIndex];
-    
+
     // Remove the post
     db.posts.splice(postIndex, 1);
-    
+
     // Write back to the database
     writeDb(db);
-    
+
     // Trả về post đã xóa và thông báo thành công
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: "Xóa bài viết thành công",
-      deletedPost 
+      deletedPost,
     });
   } catch (error) {
     console.error("Error deleting post:", error);

@@ -3,13 +3,7 @@ import { Information } from "@/types/information.types";
 import fs from "fs";
 import path from "path";
 
-const personalFilePath = path.join(
-  process.cwd(),
-  "src",
-  "app",
-  "data",
-  "information.json"
-);
+const personalFilePath = path.join(process.cwd(), "db.json");
 
 const readPersonalFromFile = (): Information[] => {
   try {
@@ -19,7 +13,7 @@ const readPersonalFromFile = (): Information[] => {
       fs.writeFileSync(personalFilePath, JSON.stringify([], null, 2), "utf-8");
       return [];
     }
-    
+
     const fileContent = fs.readFileSync(personalFilePath, "utf-8");
     // Nếu file rỗng, trả về mảng rỗng
     if (!fileContent.trim()) {
@@ -55,30 +49,33 @@ export async function POST(request: NextRequest) {
   try {
     // Lấy dữ liệu từ request
     const newInformation: Information = await request.json();
-    
+
     // Đọc dữ liệu hiện tại
     const informations = readPersonalFromFile();
-    
+
     // Thêm thông tin mới vào mảng
     informations.push(newInformation);
-    
+
     // Lưu lại vào file
     savePersonalToFile(informations);
-    
+
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         message: "Lưu thông tin cá nhân thành công",
-        data: newInformation
+        data: newInformation,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Lỗi khi lưu thông tin cá nhân:", error);
     return NextResponse.json(
-      { 
+      {
         success: false,
-        message: error instanceof Error ? error.message : "Lỗi khi lưu thông tin cá nhân" 
+        message:
+          error instanceof Error
+            ? error.message
+            : "Lỗi khi lưu thông tin cá nhân",
       },
       { status: 500 }
     );

@@ -1,9 +1,10 @@
 import { BlogPost } from "@/types/blog.types";
 
+export const SAVED_API_URL = "/api/saved";
 export class SavedService {
   static async getAll(): Promise<BlogPost[]> {
     try {
-      const res = await fetch("/api/saved", { cache: "no-store" });
+      const res = await fetch(`${SAVED_API_URL}`, { cache: "no-store" });
       if (!res.ok) {
         const errorText = await res.text();
         console.error(
@@ -20,11 +21,21 @@ export class SavedService {
 
   static async save(post: BlogPost): Promise<void> {
     try {
-      const res = await fetch("/api/saved", {
+      const existingPosts = await this.getAll();
+      if (existingPosts.some((p) => Number(p.id) === Number(post.id))) {
+        console.warn(`Post with id ${post.id} is already saved.`);
+        return;
+      }
+
+      // Giữ nguyên id thay vì đổi thành postId
+      const savedPost = { ...post };
+
+      const res = await fetch(`${SAVED_API_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(post),
+        body: JSON.stringify(savedPost),
       });
+
       if (!res.ok) {
         const errorText = await res.text();
         console.error(
@@ -40,9 +51,10 @@ export class SavedService {
 
   static async delete(id: number): Promise<void> {
     try {
-      // Sửa lại đây: Gọi đến API động /api/saved/[id]
-      const res = await fetch(`/api/saved/${id}`, {
+      console.log(`Đang xóa bài viết với ID: ${id}`);
+      const res = await fetch(`${SAVED_API_URL}/${id}`, {
         method: "DELETE",
+        cache: "no-store",
       });
       if (!res.ok) {
         const errorText = await res.text();

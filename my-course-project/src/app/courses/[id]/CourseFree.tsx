@@ -49,10 +49,7 @@ export default function CourseFree() {
 
             <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
               <span className="text-orange-600 font-bold text-lg">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(course.price)}
+                {course.free}
               </span>{" "}
             </div>
 

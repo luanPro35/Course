@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { users } from "@/app/data/users";
 import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
 

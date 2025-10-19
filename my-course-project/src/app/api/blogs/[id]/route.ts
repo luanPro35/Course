@@ -4,13 +4,7 @@ import fs from "fs";
 import path from "path";
 
 // Path to the data file
-const postsFilePath = path.join(
-  process.cwd(),
-  "src",
-  "app",
-  "data",
-  "posts.json"
-);
+const postsFilePath = path.join(process.cwd(), "db.json");
 
 // Function to read data from the file
 const readPostsFromFile = (): BlogPost[] => {
