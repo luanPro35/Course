@@ -4,10 +4,10 @@ import { CoursePro } from "@/types/coursePro";
 import { CardTrending } from "@/types/trending";
 import { TopVideo } from "@/types/topVideo";
 import { Post } from "@/types/post";
-import { FREE_API_URL } from "@/services/coursesFree";
-import { PRO_API_URL } from "@/services/coursesPro";
-import { TRENDING_API_URL } from "@/services/postTrending";
-import { TOP_VIDEO_API_URL } from "@/services/topVideo";
+import { FREE_API_URL } from "@/services/coursesFree.service";
+import { PRO_API_URL } from "@/services/coursesPro.service";
+import { TRENDING_API_URL } from "@/services/postTrending.service";
+import { TOP_VIDEO_API_URL } from "@/services/topVideo.service";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

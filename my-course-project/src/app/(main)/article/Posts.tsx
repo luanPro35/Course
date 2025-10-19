@@ -6,7 +6,7 @@ import Loading from "../../../components/ui/Loading";
 import { FiBookmark } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
 import { SavedService } from "@/services/saved.service";
-
+import { ARTICLE_API_URL } from "@/services/article.service";
 const POSTS_PER_PAGE = 10;
 
 export default function Posts() {
@@ -17,7 +17,7 @@ export default function Posts() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:3001/article")
+    fetch(ARTICLE_API_URL)
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);

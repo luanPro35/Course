@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import type { CoursePro } from "@/types/coursePro";
 import Loading from "@/components/ui/Loading";
-import { getCourses } from "@/services/coursesPro";
+import { getCourses } from "@/services/coursesPro.service";
 
 export default function CoursePro() {
   const [courses, setCourses] = useState<CoursePro[]>([]);

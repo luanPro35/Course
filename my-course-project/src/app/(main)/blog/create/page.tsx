@@ -121,10 +121,15 @@ export default function CreateBlogPost() {
 
   useEffect(() => {
     if (postId) {
-      BlogService.getById(Number(postId))
+      BlogService.getById(postId)
         .then((post) => {
-          setFormData(post);
-          setImagePreview(post.image);
+          if (post) {
+            setFormData(post);
+            setImagePreview(post.image);
+          } else {
+            console.error("Post not found for ID:", postId);
+            router.push("/blog/create"); // Redirect if post not found
+          }
         })
         .catch((err) => {
           console.error("Error fetching post for editing:", err);
@@ -189,7 +194,7 @@ export default function CreateBlogPost() {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     handleChange(e, "title")
                   }
-                  placeholder="VD: TRẢI NGHIỆM HỌC THỬ REACT NATIVE"
+                  placeholder="VD: TRẢ NGHIỆM HỌC THỬ REACT NATIVE"
                 />
 
                 <FormSelect
@@ -244,7 +249,10 @@ export default function CreateBlogPost() {
                   <button
                     type="button"
                     onClick={() =>
-                      handleSubmit("draft", postId ? Number(postId) : undefined)
+                      handleSubmit(
+                        "draft",
+                        postId ? parseInt(postId) ?? undefined : undefined
+                      )
                     }
                     disabled={isSubmitting || isUploading}
                     className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200 border-2 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -256,7 +264,7 @@ export default function CreateBlogPost() {
                     onClick={() =>
                       handleSubmit(
                         "published",
-                        postId ? Number(postId) : undefined
+                        postId ? parseInt(postId) ?? undefined : undefined
                       )
                     }
                     disabled={isSubmitting || isUploading}

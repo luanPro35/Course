@@ -1,6 +1,6 @@
 import { BlogPost } from "@/types/blog.types";
 
-export const SAVED_API_URL = "/api/saved";
+export const SAVED_API_URL = "http://localhost:3001/saved";
 export class SavedService {
   static async getAll(): Promise<BlogPost[]> {
     try {
@@ -49,13 +49,12 @@ export class SavedService {
     }
   }
 
-  static async delete(id: number): Promise<void> {
+  static async delete(postId: string | number): Promise<void> {
     try {
-      console.log(`Đang xóa bài viết với ID: ${id}`);
-      const res = await fetch(`${SAVED_API_URL}/${id}`, {
+      const res = await fetch(`${SAVED_API_URL}/${postId}`, {
         method: "DELETE",
-        cache: "no-store",
       });
+
       if (!res.ok) {
         const errorText = await res.text();
         console.error(

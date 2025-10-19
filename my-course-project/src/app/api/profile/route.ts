@@ -3,12 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { User } from "@/types/user";
 
-const jsonFilePath = path.join(
-  process.cwd(),
-  "src",
-  "data",
-  "information.json"
-);
+const jsonFilePath = path.join(process.cwd(), "db.json");
 
 async function readData(): Promise<{ users: User[] }> {
   try {

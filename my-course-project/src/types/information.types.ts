@@ -1,6 +1,7 @@
 import { User } from "./user";
 
-export interface Information extends Pick<User, "fullName"> {
+export interface Information extends Pick<User, "fullName" | "email"> {
+  id: string | number;
   avatar?: string;
   username?: string;
   about?: string;

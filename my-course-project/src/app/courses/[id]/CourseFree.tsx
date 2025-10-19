@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import type { CourseFree } from "@/types/courseFree";
 import Loading from "@/components/ui/Loading";
-import { getCourses } from "@/services/coursesFree";
+import { getCourses } from "@/services/coursesFree.service";
 
 export default function CourseFree() {
   const [courses, setCourses] = useState<CourseFree[]>([]);

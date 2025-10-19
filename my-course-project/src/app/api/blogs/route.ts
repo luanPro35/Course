@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { BlogPost } from "@/types/blog.types";
-export async function GET() {
-  const res = await fetch("http://localhost:3001/posts", {
-    cache: "no-store",
-  });
+import { API_BASE_URL } from "@/services/blog.service";
+export async function GET(req: Request) {
+  const res = await fetch(API_BASE_URL, { cache: "no-store" });
   const blogPosts: BlogPost[] = await res.json();
   return NextResponse.json(blogPosts);
 }
@@ -19,8 +18,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const newPost: BlogPost = {
-      id: Date.now(),
+    const newPost: Omit<BlogPost, "id"> = {
       author: data.author || "Ẩn danh",
       title: data.title,
       content: data.content,
@@ -31,7 +29,7 @@ export async function POST(req: Request) {
       status: data.status || "draft",
     };
 
-    const res = await fetch("http://localhost:3001/posts", {
+    const res = await fetch(API_BASE_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,14 +51,14 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const url = new URL(req.url);
-    const id = url.pathname.split("/").pop();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
 
     if (!id) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    const res = await fetch(`http://localhost:3001/posts/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/${id}`, {
       method: "DELETE",
     });
 
@@ -69,6 +67,40 @@ export async function DELETE(req: Request) {
     }
 
     return new Response(null, { status: 204 }); // No Content
+  } catch (error) {
+    return NextResponse.json(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { error: (error as any).message || "An error occurred" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+    }
+
+    const updatedPost: Partial<BlogPost> = await req.json();
+
+    const res = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedPost),
+    });
+
+    if (res.status === 404) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    const returnedPost = await res.json();
+    return NextResponse.json(returnedPost);
   } catch (error) {
     return NextResponse.json(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

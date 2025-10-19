@@ -9,6 +9,26 @@
       "image": "/images/1760758300059-snapedit_1759301056404.jpeg",
       "status": "published",
       "createdAt": "2025-10-18T03:31:41.789Z"
+    },
+    {
+      "id": "4e38",
+      "author": "Lê Quang Luân",
+      "title": "dádasd",
+      "content": "dấdasdsada",
+      "category": "react-native",
+      "image": "/images/1760839602680-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-19T02:06:45.010Z"
+    },
+    {
+      "id": "b9d4",
+      "author": "Lê Quang Luân",
+      "title": "dád",
+      "content": "đâsdsads",
+      "category": "react-native",
+      "image": "/images/1760840436647-z7096507445146_f937bc7d96bdce0516742bf992e22f49.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-19T02:20:38.208Z"
     }
   ],
   "users": [
@@ -36,6 +56,52 @@
       "password": "$2b$10$ndLiN00hriQlWtqGGacbne0/.KdtXXUS91PG5GmNscv4rR4UaFttS",
       "createdAt": "2025-10-19T00:28:54.458Z",
       "updatedAt": "2025-10-19T00:28:54.458Z"
+    },
+    {
+      "id": "f0c4",
+      "fullName": "LuanCR7",
+      "email": "quang03052000@gmail.com",
+      "phone": "0123451231",
+      "password": "$2b$10$fyVZb4/y4wvPq6F6f.aZ9uZw4h.IWT/SA8FgOfma2cBMNzmEVr6uG",
+      "createdAt": "2025-10-19T02:01:05.888Z",
+      "updatedAt": "2025-10-19T02:01:05.888Z"
+    },
+    {
+      "id": "1760862728434",
+      "name": "luannnnn",
+      "fullName": "luannnnn",
+      "email": "quangl0305@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$tkgChoWlmeaq72Lb58VLRO.ZvQvZZOacuCjLesh4hHVVv/fWpG3jO",
+      "createdAt": "2025-10-19T08:32:08.434Z",
+      "updatedAt": "2025-10-19T08:32:08.434Z"
+    },
+    {
+      "id": "1760863012854",
+      "name": "hetbug ",
+      "fullName": "hetbug ",
+      "email": "quangll0305@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$pm/OJ4iGI1Jjx2VRrRhGtunwZaHbBc.qbX5/lOFeZhOTl7BLpSq7S",
+      "createdAt": "2025-10-19T08:36:52.854Z",
+      "updatedAt": "2025-10-19T08:36:52.854Z"
+    },
+    {
+      "id": "1760865031175",
+      "name": "luanlequang",
+      "fullName": "luanlequang",
+      "email": "quangllllll0305@gmail.com",
+      "phone": "0905622341",
+      "password": "$2b$10$YRk.s42m7g3a/U02BKE7t.Hjq5LKeYQDvG7gJwUCI13YssWGWuBwe",
+      "createdAt": "2025-10-19T09:10:31.175Z",
+      "updatedAt": "2025-10-19T09:10:31.175Z",
+      "about": "fullstack",
+      "avatar": "/images/1760865060120-z7025841445382_a87db1fb599081ae220352139ef43536.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     }
   ],
   "informations": [
@@ -100,14 +166,15 @@
     },
     {
       "id": "e783",
-      "fullName": "Lê Quang Luânn",
-      "about": "Tôi có ước mơ là trở thành FullStack",
+      "fullName": "Lê Quang Luânnnnn",
+      "about": "Tôi có ước mơ là trở thành FullStackkkk",
       "avatar": "/images/1760833765784-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
       "personalWebsite": "Cá nhân",
       "github": "Github",
       "linkedin": "Link",
       "facebook": "",
-      "youtube": ""
+      "youtube": "",
+      "name": ""
     },
     {
       "id": "fe84",
@@ -141,53 +208,86 @@
       "linkedin": "Link",
       "facebook": "",
       "youtube": ""
+    },
+    {
+      "id": "f0c4",
+      "fullName": "LuanCR71000077710",
+      "about": "ffafafaf",
+      "avatar": "/images/1760839288606-z7025751621904_35284c6a45e063fe520091a871aef8fe.jpg",
+      "personalWebsite": "Cá nhân",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "1760862728434",
+      "name": "luannnnn",
+      "fullName": "luannnnn",
+      "about": "",
+      "avatar": "/images/1760862889924-dscn4570.jpg",
+      "personalWebsite": "đá",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "1760863012854",
+      "name": "hetbug ",
+      "fullName": "hetbug ",
+      "about": "",
+      "avatar": "/images/1760863039438-z6942068715036_c340cfc1197fff47a50406a24f365f50.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
+    },
+    {
+      "id": "1760865031175",
+      "name": "luanlequang",
+      "fullName": "luanlequang",
+      "about": "",
+      "avatar": "/images/1760865060120-z7025841445382_a87db1fb599081ae220352139ef43536.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     }
   ],
-  "saved": [
+  "saved": [],
+  "blogs": [
     {
-      "id": 4,
-      "title": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
-      "content": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
-      "author": "Hải Đoàn",
-      "category": "Javascript",
-      "image": "/images/posts-4.png",
-      "createdAt": "2025-10-18T23:01:22.792Z"
+      "id": "028d",
+      "author": "đâsdsa",
+      "title": "adadads",
+      "content": "adadadds",
+      "category": "devops",
+      "image": "/images/1760840653118-snapedit_1759301056404.jpeg",
+      "status": "draft",
+      "createdAt": "2025-10-19T02:24:18.152Z"
     },
     {
-      "id": 3,
-      "title": "SOLID – 5 nguyên lý \"vàng\" giúp viết code sạch và dễ bảo trì",
-      "content": "Trong hành trình phát triển phần mềm, chắc hẳn bạn đã từng gặp phải những đoạn code dài, khó hiểu và rất khó mở rộng hay sửa chữa....",
-      "author": "Hoàng Tuấn 12A1 40.Võ",
-      "category": "OOP",
-      "image": "/images/posts-3.png",
-      "createdAt": "2025-10-18T23:15:54.382Z"
+      "id": "4722",
+      "author": "dádsad",
+      "title": "dádadasđs",
+      "content": "đasafasfadsf",
+      "category": "cpp",
+      "image": "/images/1760841237220-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "status": "published",
+      "createdAt": "2025-10-19T02:33:58.641Z"
     },
     {
-      "id": 7,
-      "title": "Thư cảm ơn gửi đến anh Sơn",
-      "content": "Xin chào mọi người và anh Sơn. Em tên là Lý Cao Nguyên Vào năm 2022 em có vô tình lướt thấy những video dạy học của anh trên...",
-      "author": "Lý Cao Nguyên",
-      "category": "",
-      "image": "/images/posts-7.png",
-      "createdAt": "2025-10-18T23:16:19.305Z"
-    },
-    {
-      "id": 2,
-      "title": "Giới thiệu về ngành Công Nghệ Thông Tin và Những Kiến Thức Cơ Bản Bắt Buộc Phải Học",
-      "content": "Ngành Công Nghệ Thông Tin (CNTT) là một lĩnh vực đang phát triển mạnh mẽ và có vai trò quan trọng trong hầu hết mọi mặt của đời...",
-      "author": "Hoàng Tuấn 12A1 40.Võ",
-      "category": "hoc-lap-trinh",
-      "image": "/images/posts-2.png",
-      "createdAt": "2025-10-18T23:50:04.749Z"
-    },
-    {
-      "id": 5,
-      "title": "Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án \"AI Powered Learning\"",
-      "content": "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
-      "author": "Sơn Đặng",
-      "category": "ReactJS",
-      "image": "/images/posts-5.png",
-      "createdAt": "2025-10-18T23:50:35.515Z"
+      "id": "97fa",
+      "author": "Lê Quang Luân",
+      "title": "đàng hoàng coi",
+      "content": "dádsadasds",
+      "category": "devops",
+      "image": "/images/1760862916544-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-19T08:35:42.909Z"
     }
   ],
   "upload": [],
@@ -299,7 +399,7 @@
   ],
   "article": [
     {
-      "id": 1,
+      "id": "1",
       "author": "Huyền Lê Ngọc",
       "title": "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
       "content": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
@@ -309,7 +409,7 @@
       "image": "/images/posts-1.png"
     },
     {
-      "id": 2,
+      "id": "2",
       "author": "Hoàng Tuấn 12A1 40.Võ",
       "title": "Giới thiệu về ngành Công Nghệ Thông Tin và Những Kiến Thức Cơ Bản Bắt Buộc Phải Học",
       "content": "Ngành Công Nghệ Thông Tin (CNTT) là một lĩnh vực đang phát triển mạnh mẽ và có vai trò quan trọng trong hầu hết mọi mặt của đời...",
@@ -319,7 +419,7 @@
       "image": "/images/posts-2.png"
     },
     {
-      "id": 3,
+      "id": "3",
       "author": "Hoàng Tuấn 12A1 40.Võ",
       "title": "SOLID – 5 nguyên lý \"vàng\" giúp viết code sạch và dễ bảo trì",
       "content": "Trong hành trình phát triển phần mềm, chắc hẳn bạn đã từng gặp phải những đoạn code dài, khó hiểu và rất khó mở rộng hay sửa chữa....",
@@ -329,7 +429,7 @@
       "image": "/images/posts-3.png"
     },
     {
-      "id": 4,
+      "id": "4",
       "author": "Hải Đoàn",
       "title": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
       "content": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
@@ -339,7 +439,7 @@
       "image": "/images/posts-4.png"
     },
     {
-      "id": 5,
+      "id": "5",
       "author": "Sơn Đặng",
       "title": "Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án \"AI Powered Learning\"",
       "content": "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
@@ -349,7 +449,7 @@
       "image": "/images/posts-5.png"
     },
     {
-      "id": 6,
+      "id": "6",
       "author": "Lý Cao Nguyên",
       "title": "Mình đã làm thế nào để hoàn thành một dự án website chỉ trong 15 ngày",
       "content": "Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài học và 200 bài viết. Bài viết này...",
@@ -359,7 +459,7 @@
       "image": "/images/posts-6.png"
     },
     {
-      "id": 7,
+      "id": "7",
       "author": "Lý Cao Nguyên",
       "title": "Thư cảm ơn gửi đến anh Sơn",
       "content": "Xin chào mọi người và anh Sơn. Em tên là Lý Cao Nguyên Vào năm 2022 em có vô tình lướt thấy những video dạy học của anh trên...",
@@ -369,7 +469,7 @@
       "image": "/images/posts-7.png"
     },
     {
-      "id": 8,
+      "id": "8",
       "author": "Evich Tran",
       "title": "Config Zsh bằng Oh-my-zsh và P10k trên WSL cực ngầu ✨",
       "content": "Hello anh em , thì như blog trước mình có nói rằng mình ko có dùng Ubuntu, nhưng sao lại có...",
@@ -379,7 +479,7 @@
       "image": "/images/posts-8.png"
     },
     {
-      "id": 9,
+      "id": "9",
       "author": "Hòa Nguyễn Thanh",
       "title": "LÀ THÀNH VIÊN CỦA F8. BẠN ĐÃ THỰC SỰ SỬ DỤNG \"F8\" HIỆU QUẢ CHƯA?",
       "content": "F8 sẽ đưa bạn đến chính xác từng vị trí xảy ra vấn đề. F8 là phím tắt mặc định trong VScode các bạn nhé (không phải cài thêm bất cứ Extensions nào)",
@@ -389,7 +489,7 @@
       "image": "/images/posts-9.png"
     },
     {
-      "id": 10,
+      "id": "10",
       "author": "Trọng Nam Đoàn",
       "title": "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
       "content": "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
@@ -399,7 +499,7 @@
       "image": "/images/posts-10.png"
     },
     {
-      "id": 11,
+      "id": "11",
       "author": "Trọng Nam Đoàn",
       "title": "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
       "content": "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
@@ -502,6 +602,7 @@
       "youtube": ""
     }
   ],
+  "register": [],
   "topVideos": [
     {
       "id": "1",

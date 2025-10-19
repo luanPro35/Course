@@ -38,7 +38,7 @@ export default function PersonalPage() {
         <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200">
           <Image
             src={user.avatar || "/images/avatar.png"}
-            alt={user.fullName}
+            alt={user.fullName || ""}
             layout="fill"
             objectFit="cover"
           />
@@ -48,6 +48,7 @@ export default function PersonalPage() {
           {user.username && (
             <p className="text-lg text-gray-500">@{user.username}</p>
           )}
+          {user.email && <p className="text-lg text-gray-500">{user.email}</p>}
           {user.about && <p className="mt-4 text-gray-700">{user.about}</p>}
         </div>
       </div>

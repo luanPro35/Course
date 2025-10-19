@@ -30,14 +30,11 @@ export async function POST(req: Request) {
     const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
     const filePath = path.join(uploadDir, filename);
 
-    // Đảm bảo thư mục tồn tại
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     await writeFile(filePath, buffer);
-
-    // *** THAY ĐỔI: Trả về đường dẫn công khai tới /images ***
     const publicPath = `/images/${filename}`;
 
     return NextResponse.json({ success: true, path: publicPath });

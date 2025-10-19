@@ -8,7 +8,7 @@ import { AuthService } from "@/services/auth.service";
 
 export const useRegisterForm = (onSuccess: () => void) => {
   const [formData, setFormData] = useState<RegisterFormData>({
-    fullName: "",
+    name: "", // Khớp với kiểu dữ liệu mới
     phone: "",
     email: "",
     password: "",
@@ -42,9 +42,17 @@ export const useRegisterForm = (onSuccess: () => void) => {
     setIsLoading(true);
 
     try {
+      // Loại bỏ đoạn mã chuyển đổi không cần thiết
+      // Dữ liệu đã ở đúng định dạng
       const data = await AuthService.register(formData);
-      toast.success(data.mess || "Đăng ký thành công");
-      setShowSuccessAnimation(true);
+      if (data.success) {
+        toast.success(data.mess || "Đăng ký thành công");
+        setShowSuccessAnimation(true);
+      } else {
+        toast.error(data.mess || "Đăng ký thất bại");
+        setErrorMessage(data.mess || "Đăng ký thất bại");
+        setShowErrorAnimation(true);
+      }
     } catch (error) {
       const message =
         error instanceof Error

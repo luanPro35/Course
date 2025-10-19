@@ -10,6 +10,12 @@ export const useBlogForm = (initialState: BlogFormData) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false); // State for image upload
 
+  const resetForm = () => {
+    setFormData(initialState);
+    setImagePreview(null);
+    setErrors({});
+  };
+
   useEffect(() => {
     if (formData.image) {
       setImagePreview(formData.image);
@@ -92,6 +98,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
         // Create new post
         await BlogService.create(formData, status);
         alert(`Bài viết đã được lưu dưới dạng ${status}`);
+        resetForm(); // Reset the form after successful creation
       }
       // Optionally reset form or redirect
       // setFormData(initialState);
@@ -114,5 +121,6 @@ export const useBlogForm = (initialState: BlogFormData) => {
     handleChange,
     handleImageChange, // Use this new handler for the file input
     handleSubmit,
+    resetForm, // Expose the reset function
   };
 };

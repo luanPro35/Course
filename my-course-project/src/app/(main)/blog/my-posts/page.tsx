@@ -4,7 +4,6 @@ import { BlogService } from "@/services/blog.service"; // Force re-import
 import { BlogPost } from "@/types/blog.types";
 import { PostItem } from "./PostItem";
 import { useRouter } from "next/navigation";
-
 export default function MyPosts() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);

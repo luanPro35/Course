@@ -1,25 +1,15 @@
-// ... existing code ...
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { User } from "@/types/user";
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const { fullName, phone, email, password, confirmPassword } = body;
+    const formData = await request.json();
+    const { email, password, name, phone } = formData;
 
-    // Basic validation
-    if (!fullName || !phone || !email || !password || !confirmPassword) {
+    if (!email || !password || !name) {
       return NextResponse.json(
-        { message: "Vui lòng điền đầy đủ thông tin." },
-        { status: 400 }
-      );
-    }
-
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      return NextResponse.json(
-        { message: "Mật khẩu xác nhận không khớp." },
+        { mess: "Tên, email và mật khẩu là bắt buộc", success: false },
         { status: 400 }
       );
     }
@@ -32,30 +22,21 @@ export async function POST(req: NextRequest) {
 
     if (existingUsers.length > 0) {
       return NextResponse.json(
-        { message: "Email này đã được sử dụng." },
-        { status: 409 }
+        { mess: "Email đã được sử dụng", success: false },
+        { status: 409 } // 409 Conflict
       );
     }
 
-    // Validate phone number format
-    if (!/^0\d{9}$/.test(phone)) {
-      return NextResponse.json(
-        {
-          message:
-            "Số điện thoại không hợp lệ. Vui lòng sử dụng định dạng 10 chữ số bắt đầu bằng 0.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Hash the password
+    // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user object for json-server
+    // Create new user object
     const newUser = {
-      fullName,
+      id: Date.now(), // Generate a numeric ID
+      name: name,
+      fullName: name,
       email,
-      phone,
+      phone: phone || "",
       password: hashedPassword,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -71,38 +52,23 @@ export async function POST(req: NextRequest) {
     });
 
     if (!createUserResponse.ok) {
-      throw new Error("Không thể tạo người dùng trên máy chủ JSON.");
+      throw new Error("Không thể đăng ký người dùng trên máy chủ JSON.");
     }
 
     const createdUser = await createUserResponse.json();
 
-    // Remove password from the returned user object
+    // Remove password from the returned user object for security
     const { password: _password, ...userWithoutPassword } = createdUser;
 
     return NextResponse.json(
-      {
-        message: "Đăng ký thành công!",
-        user: userWithoutPassword,
-      },
+      { mess: "Đăng ký thành công!", success: true, user: userWithoutPassword },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Register API error:", error);
     return NextResponse.json(
-      { message: "Đã xảy ra lỗi phía máy chủ." },
+      { mess: "Lỗi máy chủ nội bộ", success: false },
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  // Fetch users from json-server
-  const res = await fetch("http://localhost:3001/users");
-  const users = await res.json();
-  // Return users without their passwords
-  const usersWithoutPasswords = users.map((user: User) => {
-    const { password, ...rest } = user;
-    return rest;
-  });
-  return NextResponse.json(usersWithoutPasswords);
 }

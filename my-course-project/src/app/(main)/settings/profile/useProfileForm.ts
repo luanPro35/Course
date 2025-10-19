@@ -1,11 +1,10 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useAuth } from "@/content/AuthContent";
-import { profileService } from "@/services/profileService";
-import { savePersonalInfo } from "@/services/personal.service";
+import { profileService } from "@/services/profileService/service";
 import { User } from "@/types/user";
-import { Information } from "@/types/information.types";
 
 export interface ProfileFormData {
+  name: string;
   fullName: string;
   about: string;
   avatar: string;
@@ -19,6 +18,7 @@ export interface ProfileFormData {
 export function useProfileForm() {
   const { user, setUser } = useAuth();
   const [form, setForm] = useState<ProfileFormData>({
+    name: "",
     fullName: "",
     about: "",
     avatar: "",
@@ -45,6 +45,7 @@ export function useProfileForm() {
           if (profileData.success && profileData.data) {
             setUser(profileData.data);
             setForm({
+              name: profileData.data.name || "",
               fullName: profileData.data.fullName || "",
               about: profileData.data.about || "",
               avatar: profileData.data.avatar || "",
@@ -155,6 +156,7 @@ export function useProfileForm() {
 
       // Cập nhật form với toàn bộ dữ liệu từ kết quả API
       setForm({
+        name: result.data.name || "",
         fullName: result.data.fullName || "",
         about: result.data.about || "",
         avatar: result.data.avatar || "",
@@ -202,36 +204,11 @@ export function useProfileForm() {
         throw new Error(result.message || "Cập nhật hồ sơ thất bại.");
       }
 
-      // 2. Lưu thông tin vào Data Information
-      const personalInfo: Information = {
-        fullName: form.fullName,
-        avatar: form.avatar,
-        about: form.about,
-        personalWebsite: form.personalWebsite,
-        github: form.github,
-        linkedin: form.linkedin,
-        facebook: form.facebook,
-        youtube: form.youtube,
-      };
-
-      // Gọi API để lưu thông tin cá nhân (không block nếu thất bại)
-      try {
-        const personalResult = await savePersonalInfo(personalInfo);
-        if (!personalResult.success) {
-          console.warn(
-            "Lưu thông tin cá nhân thất bại:",
-            personalResult.message
-          );
-        }
-      } catch (personalErr) {
-        console.warn("Lỗi khi lưu thông tin cá nhân:", personalErr);
-      }
-
-      // Cập nhật dữ liệu người dùng trong context
       setUser(result.data);
 
       // Cập nhật form với toàn bộ dữ liệu từ kết quả API
       setForm({
+        name: result.data.name || "",
         fullName: result.data.fullName || "",
         about: result.data.about || "",
         avatar: form.avatar || "",
