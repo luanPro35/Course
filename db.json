@@ -74,7 +74,14 @@
       "phone": "0909090909",
       "password": "$2b$10$tkgChoWlmeaq72Lb58VLRO.ZvQvZZOacuCjLesh4hHVVv/fWpG3jO",
       "createdAt": "2025-10-19T08:32:08.434Z",
-      "updatedAt": "2025-10-19T08:32:08.434Z"
+      "updatedAt": "2025-10-19T08:32:08.434Z",
+      "about": "đâsdasdsad",
+      "avatar": "/images/1760862889924-dscn4570.jpg",
+      "personalWebsite": "đá",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     },
     {
       "id": "1760863012854",
@@ -257,7 +264,17 @@
       "youtube": ""
     }
   ],
-  "saved": [],
+  "saved": [
+    {
+      "id": "1",
+      "title": "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
+      "content": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
+      "author": "Huyền Lê Ngọc",
+      "category": "React Native",
+      "image": "/images/posts-1.png",
+      "createdAt": "2025-10-20T11:52:40.944Z"
+    }
+  ],
   "blogs": [
     {
       "id": "028d",
@@ -288,6 +305,16 @@
       "image": "/images/1760862916544-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
       "status": "draft",
       "createdAt": "2025-10-19T08:35:42.909Z"
+    },
+    {
+      "author": "cao",
+      "title": "adsadas",
+      "content": "adadsdadđấdấdadsadad",
+      "category": "react-native",
+      "image": "/images/1760962756908-DSC01064.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-20T12:19:22.019Z",
+      "id": "37ea"
     }
   ],
   "upload": [],

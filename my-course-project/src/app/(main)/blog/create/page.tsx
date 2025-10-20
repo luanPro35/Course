@@ -248,12 +248,7 @@ export default function CreateBlogPost() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     type="button"
-                    onClick={() =>
-                      handleSubmit(
-                        "draft",
-                        postId ? parseInt(postId) ?? undefined : undefined
-                      )
-                    }
+                    onClick={() => handleSubmit("draft", postId ?? undefined)}
                     disabled={isSubmitting || isUploading}
                     className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-all duration-200 border-2 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -262,10 +257,7 @@ export default function CreateBlogPost() {
                   <button
                     type="button"
                     onClick={() =>
-                      handleSubmit(
-                        "published",
-                        postId ? parseInt(postId) ?? undefined : undefined
-                      )
+                      handleSubmit("published", postId ?? undefined)
                     }
                     disabled={isSubmitting || isUploading}
                     className="flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"

@@ -71,7 +71,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
   const handleSubmit = async (
     status: "draft" | "published",
-    postId?: number
+    postId?: number | string
   ) => {
     setErrors({});
     const newErrors: Record<string, string> = {};

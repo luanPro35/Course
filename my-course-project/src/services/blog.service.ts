@@ -1,4 +1,4 @@
-import { BlogFormData, BlogPost, BlogStatus } from "@/types/blog.types";
+import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
 
 // Sử dụng json-server API endpoint
 export const API_BASE_URL = "http://localhost:3001/blogs";
@@ -28,10 +28,12 @@ export class BlogService {
     data: BlogFormData,
     status?: BlogStatus
   ): Promise<BlogPost> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _, ...restData } = data;
     const res = await fetch(`${API_BASE_URL}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, status }),
+      body: JSON.stringify({ ...restData, status }),
     });
 
     if (!res.ok) {
