@@ -30,6 +30,7 @@ export default function CreateBlogPost() {
     author: "",
     title: "",
     content: "",
+    fullContent: "",
     category: "",
     image: "",
   });
@@ -103,6 +104,19 @@ export default function CreateBlogPost() {
                   handleChange(e, "content")
                 }
                 placeholder="Nhập nội dung bài viết của bạn tại đây..."
+              />
+
+              <FormTextarea
+                label="Nội dung đầy đủ"
+                name="fullContent"
+                icon={FileText}
+                required
+                rows={15}
+                value={formData.fullContent}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  handleChange(e, "fullContent")
+                }
+                placeholder="Nhập nội dung đầy đủ của bài viết..."
               />
 
               <FormActions

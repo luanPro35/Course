@@ -13,6 +13,14 @@ export interface LinkPosts {
   title: string;
 }
 
+export interface PostDetail extends Post {
+  fullContent: string;
+  author: string;
+  title: string;
+  content: string;
+  image: string;
+}
+
 export const linkPosts: LinkPosts[] = [
   {
     id: 1,

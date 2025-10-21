@@ -117,6 +117,7 @@ export default function CreateBlogPost() {
     content: "",
     category: "",
     image: "",
+    fullContent: "",
   });
 
   useEffect(() => {
@@ -243,6 +244,19 @@ export default function CreateBlogPost() {
                     handleChange(e, "content")
                   }
                   placeholder="Nhập nội dung bài viết của bạn tại đây..."
+                />
+
+                <FormTextarea
+                  label="Nội dung đầy đủ"
+                  name="fullContent"
+                  icon={FileText}
+                  required
+                  rows={10}
+                  value={formData.content}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    handleChange(e, "fullContent")
+                  }
+                  placeholder="Nhập nội dung đầy đủ của bạn tại đây..."
                 />
 
                 <div className="flex flex-col sm:flex-row gap-4">

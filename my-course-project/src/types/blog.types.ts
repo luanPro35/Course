@@ -3,6 +3,7 @@ export interface BlogPost {
   author: string;
   title: string;
   content: string;
+  fullContent: string;
   category: string;
   image: string;
   createdAt?: string;
@@ -15,6 +16,7 @@ export interface BlogFormData {
   author: string;
   title: string;
   content: string;
+  fullContent: string;
   category: string;
   image: string;
   updatedAt?: string;

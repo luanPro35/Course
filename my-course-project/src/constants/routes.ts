@@ -7,10 +7,4 @@
  * and a "Back" button should be displayed instead.
  * The check is performed using `pathname.startsWith(route)`.
  */
-export const ROUTES_WITH_BACK_BUTTON = [
-  "/profile",
-  "/blog/create",
-  "/blog/my-posts",
-  "/blog/saved",
-  "/settings",
-];
+export const ROUTES_WITH_BACK_BUTTON = ["/profile", "/blog", "/settings"];

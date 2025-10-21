@@ -5,6 +5,7 @@ interface BlogPreviewProps {
     author: string;
     title: string;
     content: string;
+    fullContent: string;
     category: string;
     image: string;
   };
@@ -12,7 +13,11 @@ interface BlogPreviewProps {
 }
 
 export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
-  const hasContent = formData.title || formData.content || formData.author;
+  const hasContent =
+    formData.title ||
+    formData.content ||
+    formData.author ||
+    formData.fullContent;
 
   if (!hasContent) {
     return (
@@ -41,6 +46,10 @@ export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
             {formData.content || "Nội dung bài viết sẽ hiển thị ở đây..."}
+          </p>
+          <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+            {formData.fullContent ||
+              "Nội dung đầy đủ của bài viết sẽ hiển thị ở đây..."}
           </p>
 
           {/* Tags và thông tin */}

@@ -79,6 +79,8 @@ export const useBlogForm = (initialState: BlogFormData) => {
     if (!formData.author) newErrors.author = "Tên tác giả là bắt buộc";
     if (!formData.title) newErrors.title = "Tiêu đề là bắt buộc";
     if (!formData.content) newErrors.content = "Nội dung là bắt buộc";
+    if (!formData.fullContent)
+      newErrors.fullContent = "Nội dung đầy đủ là bắt buộc";
     if (!formData.category) newErrors.category = "Danh mục là bắt buộc";
     if (!formData.image) newErrors.image = "Ảnh đại diện là bắt buộc";
 
