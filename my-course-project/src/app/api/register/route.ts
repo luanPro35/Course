@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     // Create new user object
     const newUser = {
-      id: Date.now(), // Generate a numeric ID
+      id: Date.now().toString(), // Generate a string ID
       name: name,
       fullName: name,
       email,

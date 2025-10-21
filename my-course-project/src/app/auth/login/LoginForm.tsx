@@ -39,12 +39,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <SuccessAnimation onComplete={onClose} />
         </div>
       )}
-      {isError && (
+      {isError && !isSuccess && (
         <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
           <ErrorAnimation
             mess={errorMessage || "Đăng nhập thất bại!"}
             onComplete={() => {
-              /* You might want to reset the error state here */
+              /* Reset error state */
             }}
           />
         </div>

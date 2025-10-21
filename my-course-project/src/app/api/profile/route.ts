@@ -32,7 +32,9 @@ export async function GET(request: Request) {
 
   try {
     const data = await readData();
-    const user = data.users.find((u) => u.id === parseInt(userId, 10));
+    const user = data.users.find(
+      (u) => parseInt(u.id.toString(), 10) === parseInt(userId, 10)
+    );
 
     if (!user) {
       return NextResponse.json(

@@ -1,7 +1,7 @@
 import { User } from "../../types/user";
 
 export interface UpdateProfileData {
-  id: number;
+  id: string;
   fullName: string;
   about: string;
   avatar: string;

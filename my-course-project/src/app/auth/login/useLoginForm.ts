@@ -48,8 +48,10 @@ export const useLoginForm = (onClose: () => void) => {
 
     try {
       const data = await AuthService.login(formData);
-      login(data.token!, data.user!);
+      // Đăng nhập thành công, đặt trạng thái thành công và tắt trạng thái lỗi
+      login(formData.email, formData.password);
       setIsSuccess(true);
+      setIsError(false); // Đảm bảo không hiển thị lỗi
 
       // Redirect after success animation
       setTimeout(() => {
@@ -68,6 +70,7 @@ export const useLoginForm = (onClose: () => void) => {
       console.error("Login error:", error);
       setErrorMessage(message);
       setIsError(true);
+      setIsSuccess(false); // Đảm bảo không hiển thị thành công khi có lỗi
       setTimeout(() => setIsError(false), 2000);
     } finally {
       setIsLoading(false);

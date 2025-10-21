@@ -102,13 +102,30 @@
       "password": "$2b$10$YRk.s42m7g3a/U02BKE7t.Hjq5LKeYQDvG7gJwUCI13YssWGWuBwe",
       "createdAt": "2025-10-19T09:10:31.175Z",
       "updatedAt": "2025-10-19T09:10:31.175Z",
-      "about": "fullstack",
+      "about": "dấdsdad",
       "avatar": "/images/1760865060120-z7025841445382_a87db1fb599081ae220352139ef43536.jpg",
-      "personalWebsite": "",
+      "personalWebsite": "dấdsdad",
       "github": "",
       "linkedin": "",
       "facebook": "",
       "youtube": ""
+    },
+    {
+      "id": "1761055374132",
+      "name": "mtlam",
+      "fullName": "Lê Quang Luân",
+      "email": "luanlee03052000@gmail.com",
+      "phone": "0123123123",
+      "password": "$2b$10$PKMedkJ6KJ4/WKDIlGSE8u4m8zAKR50yH3giIpO.pXXyrQlpShNhS",
+      "createdAt": "2025-10-21T14:02:54.132Z",
+      "updatedAt": "2025-10-21T14:02:54.132Z",
+      "about": "",
+      "avatar": "/images/1761059339527-z6897744282001_620ae10805adbc7bf710758177dd127f.jpg",
+      "personalWebsite": "Cá nhân",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "adsdad",
+      "youtube": "dấdasd"
     }
   ],
   "informations": [
