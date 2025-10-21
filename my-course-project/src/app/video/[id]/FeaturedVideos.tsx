@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Play, Eye, ThumbsUp, MessageCircle } from "lucide-react";
 import Loading from "@/components/ui/Loading";
-import { getTopVideos } from "@/services/topVideo";
+import { getTopVideos } from "@/services/topVideo.service";
 
 export default function FeaturedVideos() {
   const [videoTop, setVideoTop] = useState<TopVideo[]>([]);

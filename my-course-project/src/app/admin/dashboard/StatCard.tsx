@@ -22,7 +22,7 @@ export default function StatCard({
   iconColor = "text-gray-700",
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col h-full">
       <div
         className={`flex items-center justify-center w-12 h-12 ${iconBgColor} rounded-xl mb-4`}
       >
@@ -31,7 +31,7 @@ export default function StatCard({
 
       <p className="text-sm text-gray-600 mb-2">{title}</p>
 
-      <div className="flex items-end justify-between">
+      <div className="flex items-end justify-between mt-auto">
         <h2 className="text-4xl font-bold text-gray-900">
           {typeof value === "number" ? value.toLocaleString() : value}
         </h2>

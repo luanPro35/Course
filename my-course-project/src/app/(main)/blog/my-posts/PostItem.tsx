@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 
 interface PostItemProps {
   post: BlogPost;
-  handleDelete: (id: number) => void;
-  handleEdit: (id: number) => void;
+  handleDelete: (id: number | string) => void;
+  handleEdit: (id: number | string) => void;
 }
 
 export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {

@@ -1,90 +1,97 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 import { User } from "@/types/user";
 
-const informationsFilePath = path.join(
-  process.cwd(),
-  "src",
-  "app",
-  "data",
-  "information.json"
-);
+const jsonFilePath = path.join(process.cwd(), "db.json");
 
-function readInformations(): User[] {
+async function readData(): Promise<{ users: User[] }> {
   try {
-    const data = fs.readFileSync(informationsFilePath, "utf-8");
-    return JSON.parse(data) as User[];
+    const fileContent = await fs.readFile(jsonFilePath, "utf-8");
+    return JSON.parse(fileContent);
   } catch (error) {
-    return [];
+    console.error("Error reading information.json:", error);
+    return { users: [] };
   }
 }
 
-function writeInformations(data: User[]) {
-  fs.writeFileSync(informationsFilePath, JSON.stringify(data, null, 2));
+async function writeData(data: { users: User[] }): Promise<void> {
+  await fs.writeFile(jsonFilePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
-export async function PUT(req: Request) {
-  try {
-    const body = await req.json();
-    const { id: idString, ...userData } = body;
-    const id = parseInt(idString, 10);
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get("userId");
 
-    if (isNaN(id)) {
+  if (!userId) {
+    return NextResponse.json(
+      { success: false, message: "User ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const data = await readData();
+    const user = data.users.find((u) => u.id === parseInt(userId, 10));
+
+    if (!user) {
       return NextResponse.json(
-        { message: "ID người dùng không hợp lệ" },
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: user });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "An error occurred while fetching the profile.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body: Partial<User> = await request.json();
+    const { id, ...updateData } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "User ID is required for update" },
         { status: 400 }
       );
     }
 
-    const informations = readInformations();
-    const userIndex = informations.findIndex((user) => user.id === id);
+    const data = await readData();
+    const userIndex = data.users.findIndex((u) => u.id === id);
 
-    // Nếu không tìm thấy user, tạo mới
     if (userIndex === -1) {
-      const newUser: User = {
-        id,
-        fullName: userData.fullName || "",
-        avatar: userData.avatar || "",
-        about: userData.about || "",
-        personalWebsite: userData.personalWebsite || "",
-        github: userData.github || "",
-        linkedin: userData.linkedin || "",
-        facebook: userData.facebook || "",
-        youtube: userData.youtube || "",
-        email: userData.email || "", // Add default or provided email
-        phone: userData.phone || "", // Add default or provided phone
-        createdAt: new Date(), // Add current timestamp
-        updatedAt: new Date(), // Add current timestamp
-      };
-
-      informations.push(newUser);
-      writeInformations(informations);
-
       return NextResponse.json(
-        { message: "Tạo hồ sơ thành công", data: newUser },
-        { status: 201 }
+        { success: false, message: "User not found" },
+        { status: 404 }
       );
     }
 
-    // Cập nhật user hiện có
-    const updatedUser: User = {
-      ...informations[userIndex],
-      ...userData,
-      id, // Đảm bảo id không bị thay đổi
-    };
+    const updatedUser = { ...data.users[userIndex], ...updateData };
+    data.users[userIndex] = updatedUser;
 
-    informations[userIndex] = updatedUser;
-    writeInformations(informations);
+    await writeData(data);
 
-    return NextResponse.json(
-      { message: "Cập nhật hồ sơ thành công", data: updatedUser },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser,
+    });
   } catch (error) {
-    console.error("Lỗi khi cập nhật hồ sơ:", error);
+    console.error("Error updating profile:", error);
     return NextResponse.json(
-      { message: "Lỗi máy chủ nội bộ" },
+      {
+        success: false,
+        message: "An error occurred while updating the profile.",
+      },
       { status: 500 }
     );
   }

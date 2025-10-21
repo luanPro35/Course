@@ -1,5 +1,3 @@
-// services/auth.service.ts
-
 import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
 
@@ -7,30 +5,42 @@ export class AuthService {
   // Register method
   static async register(formData: RegisterFormData): Promise<RegisterResponse> {
     try {
+      // Trở lại sử dụng API route của Next.js
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      let data: RegisterResponse;
-      try {
-        data = await res.json();
-      } catch (jsonError) {
-        console.error("Failed to parse JSON response:", jsonError);
-        throw new Error("Đăng ký thất bại: Phản hồi không hợp lệ từ máy chủ.");
+      // Xử lý trường hợp không thể kết nối đến server
+      if (!res) {
+        return {
+          mess: "Không thể kết nối đến server, vui lòng thử lại sau!",
+          success: false,
+        };
       }
+
+      const responseData = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.mess || "Có lỗi xảy ra");
+        return responseData;
       }
 
-      return data;
+      // Trả về kết quả thành công
+      return {
+        mess: "Đăng ký thành công!",
+        success: true,
+      };
     } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error("Đăng ký thất bại, thử lại sau!");
+      // Xử lý lỗi và trả về thông báo lỗi
+      console.error("Registration error:", error);
+      return {
+        mess:
+          error instanceof Error
+            ? error.message
+            : "Đăng ký thất bại, thử lại sau!",
+        success: false,
+      };
     }
   }
 

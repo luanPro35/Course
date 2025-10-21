@@ -4,7 +4,6 @@ import { BlogService } from "@/services/blog.service"; // Force re-import
 import { BlogPost } from "@/types/blog.types";
 import { PostItem } from "./PostItem";
 import { useRouter } from "next/navigation";
-
 export default function MyPosts() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -12,13 +11,20 @@ export default function MyPosts() {
     "draft"
   );
 
-  const handleDelete = (id: number) => {
-    BlogService.delete(id).then(() => {
-      setPosts(posts.filter((p) => p.id !== id));
-    });
+  const handleDelete = (id: number | string) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+      BlogService.delete(id)
+        .then(() => {
+          setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
+        })
+        .catch((error) => {
+          console.error("Lỗi khi xóa bài viết:", error);
+          alert(`Lỗi khi xóa bài viết: ${error.message}`);
+        });
+    }
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: number | string) => {
     router.push(`/blog/create?id=${id}`);
   };
 

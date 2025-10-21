@@ -20,8 +20,8 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = ({
       <InputField
         type="text"
         placeholder="Họ và tên"
-        value={formData.fullName}
-        onChange={(e) => onInputChange("fullName", e.target.value)}
+        value={formData.name}
+        onChange={(e) => onInputChange("name", e.target.value)}
         icon={<User size={20} className="text-gray-400" />}
         required
       />
@@ -47,7 +47,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = ({
       <InputField
         type="password"
         placeholder="Mật khẩu"
-        value={formData.password}
+        value={formData.password || ""}
         onChange={(e) => onInputChange("password", e.target.value)}
         icon={<Lock size={20} className="text-gray-400" />}
         required
@@ -56,7 +56,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = ({
       <InputField
         type="password"
         placeholder="Xác nhận mật khẩu"
-        value={formData.confirmPassword}
+        value={formData.confirmPassword || ""}
         onChange={(e) => onInputChange("confirmPassword", e.target.value)}
         icon={<Lock size={20} className="text-gray-400" />}
         required

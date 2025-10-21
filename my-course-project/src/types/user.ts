@@ -1,6 +1,7 @@
 export interface User {
   id: number;
-  fullName: string;
+  name: string;
+  fullName?: string;
   email: string;
   phone: string;
   password?: string; // Password can be optional for returned user objects

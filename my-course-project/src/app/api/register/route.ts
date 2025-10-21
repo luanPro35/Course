@@ -1,113 +1,74 @@
-import { NextResponse, NextRequest } from "next/server";
-import { users } from "@/app/data/users";
+import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { User } from "@/types/user";
-import fs from "fs";
-import path from "path";
 
-// Path to the users data file
-const usersFilePath = path.join(process.cwd(), "src/app/data/users.ts");
-
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const { fullName, phone, email, password, confirmPassword } = body;
+    const formData = await request.json();
+    const { email, password, name, phone } = formData;
 
-    // Basic validation
-    if (!fullName || !phone || !email || !password || !confirmPassword) {
+    if (!email || !password || !name) {
       return NextResponse.json(
-        { message: "Vui lòng điền đầy đủ thông tin." },
+        { mess: "Tên, email và mật khẩu là bắt buộc", success: false },
         { status: 400 }
       );
     }
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
+    // Check if email already exists in json-server
+    const userExistsResponse = await fetch(
+      `http://localhost:3001/users?email=${email}`
+    );
+    const existingUsers = await userExistsResponse.json();
+
+    if (existingUsers.length > 0) {
       return NextResponse.json(
-        { message: "Mật khẩu xác nhận không khớp." },
-        { status: 400 }
+        { mess: "Email đã được sử dụng", success: false },
+        { status: 409 } // 409 Conflict
       );
     }
 
-    // Check if email already exists
-    if (users.some((user) => user.email === email)) {
-      return NextResponse.json(
-        { message: "Email này đã được sử dụng." },
-        { status: 409 }
-      );
-    }
-
-    // Validate phone number format
-    if (!/^0\d{9}$/.test(phone)) {
-      return NextResponse.json(
-        {
-          message:
-            "Số điện thoại không hợp lệ. Vui lòng sử dụng định dạng 10 chữ số bắt đầu bằng 0.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Hash the password
+    // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
-    const newUser: User = {
-      id: Date.now(),
-      fullName,
+    // Create new user object
+    const newUser = {
+      id: Date.now(), // Generate a numeric ID
+      name: name,
+      fullName: name,
       email,
-      phone,
+      phone: phone || "",
       password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
-    // Add user to the in-memory array
-    users.push(newUser);
+    // POST new user to json-server
+    const createUserResponse = await fetch("http://localhost:3001/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
 
-    // --- Persist users to file ---
-    const fileContent = `import { User } from "../../types/user";\n\nexport const users: User[] = ${JSON.stringify(
-      users,
-      null,
-      2
-    )};\n`;
-
-    try {
-      fs.writeFileSync(usersFilePath, fileContent, "utf-8");
-    } catch (writeError) {
-      console.error("Failed to write to users file:", writeError);
-      // In a real app, you might want to handle this more gracefully
-      return NextResponse.json(
-        {
-          message: "Đăng ký thành công nhưng không thể lưu dữ liệu người dùng.",
-        },
-        { status: 500 }
-      );
+    if (!createUserResponse.ok) {
+      throw new Error("Không thể đăng ký người dùng trên máy chủ JSON.");
     }
-    // -----------------------------
 
-    // Remove password from the returned user object
-    const userWithoutPassword = { ...newUser };
-    delete userWithoutPassword.password;
+    const createdUser = await createUserResponse.json();
+
+    // Remove password from the returned user object for security
+    const { password: _password, ...userWithoutPassword } = createdUser;
 
     return NextResponse.json(
-      {
-        message: "Đăng ký thành công!",
-        user: userWithoutPassword,
-      },
+      { mess: "Đăng ký thành công!", success: true, user: userWithoutPassword },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Register API error:", error);
     return NextResponse.json(
-      { message: "Đã xảy ra lỗi phía máy chủ." },
+      { mess: "Lỗi máy chủ nội bộ", success: false },
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  // Return users without their passwords
-  const usersWithoutPasswords = users.map(({ ...rest }) => rest);
-  return NextResponse.json(usersWithoutPasswords);
 }

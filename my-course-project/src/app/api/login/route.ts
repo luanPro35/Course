@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { users } from "@/app/data/users";
 import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
 
@@ -34,10 +33,26 @@ export async function POST(req: Request) {
       });
     }
 
-    // Regular user login
-    const user = users.find((user) => user.email === email);
+    const userResponse = await fetch(
+      `http://localhost:3001/users?email=${email}`
+    );
+    const users = await userResponse.json();
+    const user = users[0];
 
     if (!user || !(await bcrypt.compare(password, user.password!))) {
+      return NextResponse.json(
+        { mess: "Email hoặc mật khẩu không đúng!" },
+        { status: 401 }
+      );
+    }
+
+    // Regular user login
+
+    if (
+      !user ||
+      !user.password ||
+      !(await bcrypt.compare(password, user.password))
+    ) {
       return NextResponse.json(
         { mess: "Email hoặc mật khẩu không đúng!" },
         { status: 401 }

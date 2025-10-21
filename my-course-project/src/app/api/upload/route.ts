@@ -6,7 +6,8 @@ import fs from "fs";
 export async function POST(req: Request) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get("avatar") as unknown as File;
+    // *** SỬA LỖI: Thay "avatar" thành "file" để khớp với client ***
+    const file: File | null = data.get("file") as unknown as File;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided." }, { status: 400 });
@@ -29,14 +30,11 @@ export async function POST(req: Request) {
     const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
     const filePath = path.join(uploadDir, filename);
 
-    // Đảm bảo thư mục tồn tại
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     await writeFile(filePath, buffer);
-
-    // *** THAY ĐỔI: Trả về đường dẫn công khai tới /images ***
     const publicPath = `/images/${filename}`;
 
     return NextResponse.json({ success: true, path: publicPath });

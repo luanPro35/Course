@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import type { CourseFree } from "@/types/courseFree";
 import Loading from "@/components/ui/Loading";
+import { getCourses } from "@/services/coursesFree.service";
 
 export default function CourseFree() {
   const [courses, setCourses] = useState<CourseFree[]>([]);
@@ -10,11 +11,7 @@ export default function CourseFree() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch("/api/coursesFree");
-        if (!res.ok) {
-          throw new Error("Failed to fetch courses");
-        }
-        const data: CourseFree[] = await res.json();
+        const data = await getCourses();
         setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);

@@ -1,136 +1,196 @@
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
-export async function GET() {
-  const posts = [
-    {
-      id: 1,
-      author: "Huyền Lê Ngọc",
-      title:
-        "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
-      content:
-        "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
-      category: "React Native",
-      timeAgo: "một tháng trước",
-      readTime: "2 phút đọc",
-      image: "/images/posts-1.png",
-    },
-    {
-      id: 2,
-      author: "Hoàng Tuấn 12A1 40.Võ",
-      title:
-        "Giới thiệu về ngành Công Nghệ Thông Tin và Những Kiến Thức Cơ Bản Bắt Buộc Phải Học",
-      content:
-        "Ngành Công Nghệ Thông Tin (CNTT) là một lĩnh vực đang phát triển mạnh mẽ và có vai trò quan trọng trong hầu hết mọi mặt của đời...",
-      category: "hoc-lap-trinh",
-      timeAgo: "3 tháng trước",
-      readTime: "3 phút đọc",
-      image: "/images/posts-2.png",
-    },
-    {
-      id: 3,
-      author: "Hoàng Tuấn 12A1 40.Võ",
-      title: 'SOLID – 5 nguyên lý "vàng" giúp viết code sạch và dễ bảo trì',
-      content:
-        "Trong hành trình phát triển phần mềm, chắc hẳn bạn đã từng gặp phải những đoạn code dài, khó hiểu và rất khó mở rộng hay sửa chữa....",
-      category: "OOP",
-      timeAgo: "3 tháng trước",
-      readTime: "3 phút đọc",
-      image: "/images/posts-3.png",
-    },
-    {
-      id: 4,
-      author: "Hải Đoàn",
-      title:
-        "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
-      content:
-        "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
-      category: "Javascript",
-      timeAgo: "5 tháng trước",
-      readTime: "2 phút đọc",
-      image: "/images/posts-4.png",
-    },
-    {
-      id: 5,
-      author: "Sơn Đặng",
-      title:
-        'Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án "AI Powered Learning"',
-      content:
-        "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
-      category: "ReactJS",
-      timeAgo: "một năm trước",
-      readTime: "6 phút đọc",
-      image: "/images/posts-5.png",
-    },
-    {
-      id: 6,
-      author: "Lý Cao Nguyên",
-      title:
-        "Mình đã làm thế nào để hoàn thành một dự án website chỉ trong 15 ngày",
-      content:
-        "Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài học và 200 bài viết. Bài viết này...",
-      category: "Front-end",
-      timeAgo: "một năm trước",
-      readTime: "4 phút đọc",
-      image: "/images/posts-6.png",
-    },
-    {
-      id: 7,
-      author: "Lý Cao Nguyên",
-      title: "Thư cảm ơn gửi đến anh Sơn",
-      content:
-        "Xin chào mọi người và anh Sơn. Em tên là Lý Cao Nguyên Vào năm 2022 em có vô tình lướt thấy những video dạy học của anh trên...",
-      category: "",
-      timeAgo: "một năm trước",
-      readTime: "2 phút đọc",
-      image: "/images/posts-7.png",
-    },
-    {
-      id: 8,
-      author: "Evich Tran",
-      title: "Config Zsh bằng Oh-my-zsh và P10k trên WSL cực ngầu ✨",
-      content:
-        "Hello anh em , thì như blog trước mình có nói rằng mình ko có dùng Ubuntu, nhưng sao lại có...",
-      category: "Ubuntu",
-      timeAgo: "một năm trước",
-      readTime: "4 phút đọc",
-      image: "/images/posts-8.png",
-    },
-    {
-      id: 9,
-      author: "Hòa Nguyễn Thanh",
-      title: 'LÀ THÀNH VIÊN CỦA F8. BẠN ĐÃ THỰC SỰ SỬ DỤNG "F8" HIỆU QUẢ CHƯA?',
-      content:
-        "F8 sẽ đưa bạn đến chính xác từng vị trí xảy ra vấn đề. F8 là phím tắt mặc định trong VScode các bạn nhé (không phải cài thêm bất cứ Extensions nào)",
-      category: "",
-      timeAgo: "2 năm trước",
-      readTime: "12 phút đọc",
-      image: "/images/posts-9.png",
-    },
-    {
-      id: 10,
-      author: "Trọng Nam Đoàn",
-      title:
-        "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
-      content:
-        "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
-      category: "Javascript",
-      timeAgo: "2 năm trước",
-      readTime: "5 phút đọc",
-      image: "/images/posts-10.png",
-    },
-    {
-      id: 11,
-      author: "Trọng Nam Đoàn",
-      title:
-        "Tôi đã viết Chrome extension đầu tiên của mình bằng Github Copilot như thế nào?",
-      content:
-        "Câu chuyện của tôi là Tôi đang học tiếng Nhật trên một trang web là Dungmori.com, và tôi học từ mới trên trang web Quizlet. Và tôi...",
-      category: "Javascript",
-      timeAgo: "2 năm trước",
-      readTime: "5 phút đọc",
-      image: "/images/posts-10.png",
-    },
-  ];
+// Unified interfaces
+interface Post {
+  id: number;
+  author?: string;
+  title?: string;
+  content?: string;
+  category?: string;
+  timeAgo?: string;
+  readTime?: string;
+  image?: string;
+}
 
-  return NextResponse.json(posts);
+interface Db {
+  posts: Post[];
+}
+
+// Unified DB helpers
+const dbPath = path.join(process.cwd(), "db.json");
+
+const readDb = (): Db => {
+  try {
+    // Check if db.json exists before reading
+    if (fs.existsSync(dbPath)) {
+      const data = fs.readFileSync(dbPath, "utf8");
+      // Handle empty file case
+      if (data) {
+        return JSON.parse(data);
+      }
+    }
+    // If file doesn't exist or is empty, return a default structure
+    return { posts: [] };
+  } catch (error) {
+    console.error("Error reading db.json:", error);
+    return { posts: [] };
+  }
+};
+
+const writeDb = (data: Db): boolean => {
+  try {
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), "utf8");
+    return true;
+  } catch (error) {
+    console.error("Error writing to db.json:", error);
+    return false;
+  }
+};
+
+// Combined GET handler
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  try {
+    const db = readDb();
+    if (id) {
+      // Get single post by ID
+      const post = db.posts.find((p) => p.id.toString() === id);
+      if (!post) {
+        return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      }
+      return NextResponse.json(post);
+    } else {
+      // Get all posts
+      return NextResponse.json(db.posts);
+    }
+  } catch (error) {
+    console.error("Error in GET method:", error);
+    return NextResponse.json(
+      { error: "Không thể tải bài viết" },
+      { status: 500 }
+    );
+  }
+}
+
+// POST handler to create a new post
+export async function POST(request: Request) {
+  try {
+    const postData = await request.json();
+    const db = readDb();
+
+    if (!db.posts) {
+      db.posts = [];
+    }
+
+    const newPost: Post = {
+      id: Date.now(),
+      ...postData,
+      createdAt: new Date().toISOString(), // More standard field name
+      updatedAt: new Date().toISOString(),
+    };
+
+    db.posts.unshift(newPost);
+
+    if (writeDb(db)) {
+      return NextResponse.json(newPost, { status: 201 });
+    } else {
+      return NextResponse.json(
+        { error: "Không thể lưu bài viết mới" },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    console.error("Error in POST method:", error);
+    return NextResponse.json(
+      { error: "Lỗi khi tạo bài viết" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT handler to update a post
+export async function PUT(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "Post ID is required" }, { status: 400 });
+  }
+
+  try {
+    const body = await request.json();
+    const db = readDb();
+
+    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
+
+    if (postIndex === -1) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    db.posts[postIndex] = {
+      ...db.posts[postIndex],
+      ...body,
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (writeDb(db)) {
+      return NextResponse.json(db.posts[postIndex]);
+    } else {
+      return NextResponse.json(
+        { error: "Không thể cập nhật bài viết" },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return NextResponse.json(
+      { error: "Failed to update post" },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE handler to remove a post
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "Post ID is required" }, { status: 400 });
+  }
+
+  try {
+    const db = readDb();
+    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
+
+    if (postIndex === -1) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    const deletedPost = db.posts[postIndex];
+    db.posts.splice(postIndex, 1);
+
+    if (writeDb(db)) {
+      return NextResponse.json({
+        success: true,
+        message: "Xóa bài viết thành công",
+        deletedPost,
+      });
+    } else {
+      return NextResponse.json(
+        { error: "Không thể xóa bài viết" },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return NextResponse.json(
+      { error: "Failed to delete post" },
+      { status: 500 }
+    );
+  }
 }
