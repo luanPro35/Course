@@ -7,12 +7,15 @@ interface BaseProps {
 }
 
 type FormTextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> &
-  BaseProps;
+  BaseProps & {
+    onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
+  };
 
 export const FormTextarea = ({
   label,
   icon: Icon,
   required,
+  onPaste,
   ...rest
 }: FormTextareaProps) => {
   return (
@@ -23,6 +26,7 @@ export const FormTextarea = ({
       </label>
       <textarea
         {...rest}
+        onPaste={onPaste}
         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-500 transition-all outline-none resize-none"
       />
     </div>

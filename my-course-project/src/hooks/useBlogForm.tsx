@@ -32,6 +32,46 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData.items;
+    for (const index in items) {
+      const item = items[index];
+      if (item.kind === "file") {
+        const file = item.getAsFile();
+        if (file) {
+          setIsUploading(true);
+          const uploadFormData = new FormData();
+          uploadFormData.append("file", file);
+
+          try {
+            const res = await fetch("/api/upload", {
+              method: "POST",
+              body: uploadFormData,
+            });
+            const result = await res.json();
+            if (!res.ok || !result.success) {
+              throw new Error(result.error || "Tải ảnh lên thất bại.");
+            }
+            const imageUrl = `\n![Image](${result.path})\n`;
+            const currentContent = formData.fullContent || "";
+            setFormData((prev) => ({
+              ...prev,
+              fullContent: currentContent + imageUrl,
+            }));
+          } catch (error) {
+            console.error(error);
+            setErrors((prev) => ({
+              ...prev,
+              image: "Lỗi khi tải ảnh lên. Vui lòng thử lại.",
+            }));
+          } finally {
+            setIsUploading(false);
+          }
+        }
+      }
+    }
+  };
+
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
@@ -122,6 +162,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setImagePreview, // Expose setImagePreview
     handleChange,
     handleImageChange, // Use this new handler for the file input
+    handlePaste,
     handleSubmit,
     resetForm, // Expose the reset function
   };

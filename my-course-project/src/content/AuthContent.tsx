@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Giả lập API login bằng cách fetch từ db.json
+  // ✅ Login
   const login = async (email: string, password: string) => {
     try {
       const res = await fetch(`http://localhost:3001/users?email=${email}`);
@@ -32,8 +32,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (data.length > 0) {
         const foundUser = data[0];
+
+        // ✅ Lưu thông tin user và token vào state + localStorage
         setUser(foundUser);
-        setToken(foundUser.token);
+        setToken(foundUser.token || "dummy-token");
+
+        localStorage.setItem("user", JSON.stringify(foundUser));
+        localStorage.setItem("token", foundUser.token || "dummy-token");
       } else {
         alert("Sai tài khoản hoặc mật khẩu");
       }
@@ -42,28 +47,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // ✅ Logout
   const logout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
-  // ✅ Lấy thông tin user từ db.json khi khởi động app
+  // ✅ Khôi phục user từ localStorage khi reload trang
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/users");
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setToken(data.token);
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
+    const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
+
+    if (savedUser && savedToken) {
+      setUser(JSON.parse(savedUser));
+      setToken(savedToken);
+    }
+
+    setLoading(false);
   }, []);
 
   const value = { user, token, loading, login, logout, setUser };

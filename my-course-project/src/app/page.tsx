@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -9,6 +9,8 @@ import CoursePro from "@/app/courses/[id]/CoursePro";
 import CourseFree from "./courses/[id]/CourseFree";
 import CourseTrending from "./articles/[id]/Trending";
 import FeaturedVideos from "./video/[id]/FeaturedVideos";
+import { CoursePro as CourseProType } from "@/types/coursePro";
+import { getCourses as getProCourses } from "@/services/coursesPro.service";
 
 interface SectionHeaderProps {
   title: string;
@@ -61,6 +63,21 @@ const ContentSection: React.FC<ContentSectionProps> = ({
 );
 
 export default function Home() {
+  const [proCourses, setProCourses] = useState<CourseProType[]>([]);
+
+  useEffect(() => {
+    const fetchProCourses = async () => {
+      try {
+        const data = await getProCourses();
+        setProCourses(data);
+      } catch (error) {
+        console.error("Failed to fetch pro courses:", error);
+      }
+    };
+
+    fetchProCourses();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
@@ -78,7 +95,9 @@ export default function Home() {
           <CourseLandingPage />
 
           <ContentSection title="Khóa học Pro" showNewBadge>
-            <CoursePro />
+            {proCourses.map((course) => (
+              <CoursePro key={course.id} course={course} />
+            ))}
           </ContentSection>
 
           <ContentSection

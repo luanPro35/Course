@@ -64,7 +64,10 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
           <div className="relative" ref={menuRef}>
             <button
               className="flex items-center gap-2 cursor-pointer"
-              onClick={() => setOpen(!open)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(!open);
+              }}
             >
               <FiMoreHorizontal color="gray" size={24} />
             </button>
@@ -79,7 +82,8 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
                 >
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleEdit(post.id);
                       setOpen(false);
                     }}
@@ -88,7 +92,8 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
                   </button>
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleDelete(post.id);
                       setOpen(false);
                     }}

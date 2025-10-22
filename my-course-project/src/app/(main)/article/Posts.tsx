@@ -46,13 +46,14 @@ export default function Posts() {
           id: post.id,
           title: post.title,
           content: post.content,
+          fullContent: post.content,
           author: post.author,
           category: post.category,
           image: post.image,
           createdAt: new Date().toISOString(), // Assuming you want to set the creation date on save
         };
         await SavedService.save(blogPostToSave);
-        setSavedPosts([...savedPosts, post.id]);
+        setSavedPosts([...savedPosts, blogPostToSave.id]);
       }
     } catch (err) {
       console.error("Lỗi khi lưu/bỏ lưu bài viết:", err);
