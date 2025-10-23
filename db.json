@@ -143,6 +143,23 @@
       "linkedin": "Link",
       "facebook": "đâsdas",
       "youtube": "dấdadsdasd"
+    },
+    {
+      "id": "1761236031144",
+      "name": "Lê Văn Tèo",
+      "fullName": "Lê Văn Tèo",
+      "email": "vanteo0305@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$eaYxBX7P8SJzVdx2bMe7s.8Grbo9XTsPOD9PjRRdGnHRykoSh6haC",
+      "createdAt": "2025-10-23T16:13:51.144Z",
+      "updatedAt": "2025-10-23T16:13:51.144Z",
+      "about": "Ba FullStack",
+      "avatar": "/images/1761236055259-z7025780809178_712ce0e4a1123968d62c01e69fef6a72.jpg",
+      "personalWebsite": "đá",
+      "github": "Github",
+      "linkedin": "Link",
+      "facebook": "adsdad",
+      "youtube": "dấdasd"
     }
   ],
   "informations": [
