@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import type { CourseFree } from "@/types/courseFree";
 import Loading from "@/components/ui/Loading";
-import { getCourses } from "@/services/coursesFree.service";
+import { getAllCourses } from "@/services/coursesFree.service";
+import { useRouter } from "next/navigation";
 
 export default function CourseFree() {
   const [courses, setCourses] = useState<CourseFree[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const data = await getCourses();
+        const data = await getAllCourses();
         setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -32,6 +34,7 @@ export default function CourseFree() {
       {courses.map((course) => (
         <div
           key={course.id}
+          onClick={() => router.push(`/courses/free/${course.id}`)}
           className="w-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
         >
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">

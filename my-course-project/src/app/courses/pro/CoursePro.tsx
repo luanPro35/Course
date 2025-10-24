@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import type { CoursePro } from "@/types/coursePro";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 interface CourseProProps {
   course: CoursePro;
@@ -11,6 +11,7 @@ interface CourseProProps {
 export default function CoursePro({ course }: CourseProProps) {
   return (
     <Link
+      href={`/courses/pro/${course.id}`}
       key={course.id}
       className="w-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -23,7 +25,7 @@ export default function RouteLayout({
         </header>
         <div className="flex flex-1 pt-16">
           {!hideSideBar && (
-            <aside className="w-28 flex-shrink-0">
+            <aside className="w-28 flex-shrink-0 mt-4">
               <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
                 <Sidebar />
               </div>

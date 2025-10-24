@@ -399,7 +399,99 @@
       "free": "Miễn phí",
       "people": 136848,
       "numberOfPosts": 9,
-      "totalTime": "3h12p"
+      "totalTime": "3h12p",
+      "contentSection": "Kiến thức nhập môn",
+      "titleSection": "Mô hình Client - Server là gì?",
+      "section": [
+        {
+          "id": "1",
+          "title": "Khái niệm, kĩ thuật cần biết",
+          "totalLesson": 3,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Mô hình Client - Server là gì?",
+              "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+            },
+            {
+              "id": "2",
+              "title": "Domain là gì? Tên miền là gì?",
+              "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+            },
+            {
+              "id": "3",
+              "title": "Mua áo F8 | Đăng ký học Offline",
+              "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "title": "Môi trường, con người IT",
+          "totalLesson": 3,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+              "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+            },
+            {
+              "id": "2",
+              "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            },
+            {
+              "id": "3",
+              "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Phương pháp, định hướng",
+          "totalLesson": 4,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Phương pháp học lập trình của Admin F8?",
+              "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+            },
+            {
+              "id": "2",
+              "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            },
+            {
+              "id": "3",
+              "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            },
+            {
+              "id": "4",
+              "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            }
+          ]
+        },
+        {
+          "id": "4",
+          "title": "Hoàn thành khóa học",
+          "totalLesson": 2,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Ứng tuyển xin việc làm",
+              "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+            },
+            {
+              "id": "2",
+              "title": "Hoàn thành khóa học",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "2",
@@ -408,7 +500,50 @@
       "free": "Miễn phí",
       "people": 37107,
       "numberOfPosts": 55,
-      "totalTime": "10h18p"
+      "totalTime": "10h18p",
+      "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+      "titleSection": "Lập trình C++ cơ bản, nâng cao",
+      "section": [
+        {
+          "id": "1",
+          "title": "Giới thiệu khóa học",
+          "totalLesson": 3,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+            },
+            {
+              "id": "2",
+              "title": "Cài đặt DevC",
+              "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+            },
+            {
+              "id": "3",
+              "title": "Hướng dẫn sử dụng DevC",
+              "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "title": "Làm quen với lập trình",
+          "totalLesson": 2,
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Biến và kiểu dữ liệu",
+              "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+            },
+            {
+              "id": "2",
+              "title": "Cấu trúc điều kiện if/else",
+              "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "3",
@@ -417,7 +552,13 @@
       "free": "Miễn phí",
       "people": 214957,
       "numberOfPosts": 117,
-      "totalTime": "29h5p"
+      "totalTime": "29h5p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     },
     {
       "id": "4",
@@ -426,7 +567,13 @@
       "free": "Miễn phí",
       "people": 47905,
       "numberOfPosts": 34,
-      "totalTime": "6h31p"
+      "totalTime": "6h31p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     },
     {
       "id": "5",
@@ -435,7 +582,13 @@
       "free": "Miễn phí",
       "people": 151347,
       "numberOfPosts": 112,
-      "totalTime": "24h15p"
+      "totalTime": "24h15p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     },
     {
       "id": "6",
@@ -444,7 +597,13 @@
       "free": "Miễn phí",
       "people": 41600,
       "numberOfPosts": 19,
-      "totalTime": "8h41p"
+      "totalTime": "8h41p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     },
     {
       "id": "7",
@@ -453,7 +612,13 @@
       "free": "Miễn phí",
       "people": 21296,
       "numberOfPosts": 28,
-      "totalTime": "4h59p"
+      "totalTime": "4h59p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     },
     {
       "id": "8",
@@ -462,7 +627,13 @@
       "free": "Miễn phí",
       "people": 78375,
       "numberOfPosts": 112,
-      "totalTime": "27h32p"
+      "totalTime": "27h32p",
+      "section": {
+        "id": "1",
+        "title": "Nội dung khóa học",
+        "totalLesson": 0,
+        "lessons": []
+      }
     }
   ],
   "coursesPro": [

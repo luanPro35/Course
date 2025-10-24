@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.json$/,
+      type: "asset/resource",
+    });
+    return config;
+  },
 };
 
 export default nextConfig;
