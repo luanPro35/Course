@@ -10,7 +10,7 @@ interface Props {
     id: string;
   }>;
 }
-//Note
+//Note function
 export default async function page({ params }: Props) {
   const { id } = await params;
   const course: CourseFree = await getCourseById(id);
