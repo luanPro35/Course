@@ -1,3 +1,5 @@
+import type { CourseFree } from "./courseFree";
+
 export interface User {
   id: string;
   name: string;
@@ -16,4 +18,5 @@ export interface User {
   facebook?: string;
   youtube?: string;
   role?: "admin" | "user";
+  courses?: CourseFree[];
 }
