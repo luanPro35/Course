@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/app/auth/login/types";
 import { validateLoginForm } from "@/lib/validations/login.validation";
 import { AuthService } from "@/services/auth.service";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 export const useLoginForm = (onClose: () => void) => {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -47,16 +47,17 @@ export const useLoginForm = (onClose: () => void) => {
     setIsLoading(true);
 
     try {
-      const data = await AuthService.login(formData);
+      await login(formData.email, formData.password);
       // Đăng nhập thành công, đặt trạng thái thành công và tắt trạng thái lỗi
-      login(formData.email, formData.password);
       setIsSuccess(true);
       setIsError(false); // Đảm bảo không hiển thị lỗi
 
       // Redirect after success animation
       setTimeout(() => {
         onClose();
-        if (data.user?.role === "admin") {
+        // After successful login, the user state in useAuth should be updated.
+        // We can access the user directly from the useAuth hook.
+        if (user?.role === "admin") {
           router.push("/admin");
         } else {
           router.push("/");

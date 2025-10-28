@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 import { profileService } from "@/services/profileService/service";
 import { User } from "@/types/user";
 

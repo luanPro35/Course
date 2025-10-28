@@ -33,6 +33,170 @@
   ],
   "users": [
     {
+      "id": "1",
+      "fullName": "Test User 1",
+      "email": "test1@example.com",
+      "phone": "1112223333",
+      "password": "password123",
+      "createdAt": "2025-10-27T00:00:00.000Z",
+      "updatedAt": "2025-10-27T00:00:00.000Z",
+      "courses": [
+        {
+          "id": "1",
+          "image": "/images/Introductory.png",
+          "title": "Kiến Thức Nhập Môn IT",
+          "free": "Miễn phí",
+          "people": 136848,
+          "numberOfPosts": 9,
+          "totalTime": "3h12p",
+          "contentSection": "Kiến thức nhập môn",
+          "titleSection": "Mô hình Client - Server là gì?",
+          "section": [
+            {
+              "id": "1",
+              "title": "Khái niệm, kĩ thuật cần biết",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Mô hình Client - Server là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Domain là gì? Tên miền là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Mua áo F8 | Đăng ký học Offline",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Môi trường, con người IT",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "3",
+              "title": "Phương pháp, định hướng",
+              "totalLesson": 4,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Phương pháp học lập trình của Admin F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "4",
+                  "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "4",
+              "title": "Hoàn thành khóa học",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Ứng tuyển xin việc làm",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Hoàn thành khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "image": "/images/Cpp.png",
+          "title": "Lập trình C++ cơ bản, nâng cao",
+          "free": "Miễn phí",
+          "people": 37107,
+          "numberOfPosts": 55,
+          "totalTime": "10h18p",
+          "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+          "titleSection": "Lập trình C++ cơ bản, nâng cao",
+          "section": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Giới thiệu khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Cài đặt DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Hướng dẫn sử dụng DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Làm quen với lập trình",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Biến và kiểu dữ liệu",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Cấu trúc điều kiện if/else",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "5866",
       "fullName": "Test User",
       "phone": "0123456789",
@@ -136,13 +300,168 @@
       "password": "$2b$10$qCq3dP4VSH2q5AuA6BcFO.RlaJhK9rTacVrXFIrSDxbYOXeRTRO4m",
       "createdAt": "2025-10-21T16:23:07.043Z",
       "updatedAt": "2025-10-21T16:23:07.043Z",
-      "about": "fullstack",
+      "about": "fullstackkkk",
       "avatar": "/images/1761063803830-z7025841445382_a87db1fb599081ae220352139ef43536.jpg",
       "personalWebsite": "Cá nhân",
       "github": "Github",
       "linkedin": "Link",
       "facebook": "đâsdas",
-      "youtube": "dấdadsdasd"
+      "youtube": "dấdadsdasd",
+      "courses": [
+        {
+          "id": "1",
+          "image": "/images/Introductory.png",
+          "title": "Kiến Thức Nhập Môn IT",
+          "free": "Miễn phí",
+          "people": 136848,
+          "numberOfPosts": 9,
+          "totalTime": "3h12p",
+          "contentSection": "Kiến thức nhập môn",
+          "titleSection": "Mô hình Client - Server là gì?",
+          "section": [
+            {
+              "id": "1",
+              "title": "Khái niệm, kĩ thuật cần biết",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Mô hình Client - Server là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Domain là gì? Tên miền là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Mua áo F8 | Đăng ký học Offline",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Môi trường, con người IT",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "3",
+              "title": "Phương pháp, định hướng",
+              "totalLesson": 4,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Phương pháp học lập trình của Admin F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "4",
+                  "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "4",
+              "title": "Hoàn thành khóa học",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Ứng tuyển xin việc làm",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Hoàn thành khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "image": "/images/Cpp.png",
+          "title": "Lập trình C++ cơ bản, nâng cao",
+          "free": "Miễn phí",
+          "people": 37107,
+          "numberOfPosts": 55,
+          "totalTime": "10h18p",
+          "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+          "titleSection": "Lập trình C++ cơ bản, nâng cao",
+          "section": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Giới thiệu khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Cài đặt DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Hướng dẫn sử dụng DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Làm quen với lập trình",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Biến và kiểu dữ liệu",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Cấu trúc điều kiện if/else",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "1761236031144",
@@ -153,13 +472,273 @@
       "password": "$2b$10$eaYxBX7P8SJzVdx2bMe7s.8Grbo9XTsPOD9PjRRdGnHRykoSh6haC",
       "createdAt": "2025-10-23T16:13:51.144Z",
       "updatedAt": "2025-10-23T16:13:51.144Z",
-      "about": "Ba FullStack",
+      "about": "Ba FullStackkkk",
       "avatar": "/images/1761236055259-z7025780809178_712ce0e4a1123968d62c01e69fef6a72.jpg",
       "personalWebsite": "đá",
       "github": "Github",
       "linkedin": "Link",
       "facebook": "adsdad",
-      "youtube": "dấdasd"
+      "youtube": "dấdasd",
+      "courses": [
+        {
+          "id": "2",
+          "image": "/images/Cpp.png",
+          "title": "Lập trình C++ cơ bản, nâng cao",
+          "free": "Miễn phí",
+          "people": 37107,
+          "numberOfPosts": 55,
+          "totalTime": "10h18p",
+          "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+          "titleSection": "Lập trình C++ cơ bản, nâng cao",
+          "section": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Giới thiệu khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Cài đặt DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Hướng dẫn sử dụng DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Làm quen với lập trình",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Biến và kiểu dữ liệu",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Cấu trúc điều kiện if/else",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "1",
+          "image": "/images/Introductory.png",
+          "title": "Kiến Thức Nhập Môn IT",
+          "free": "Miễn phí",
+          "people": 136848,
+          "numberOfPosts": 9,
+          "totalTime": "3h12p",
+          "contentSection": "Kiến thức nhập môn",
+          "titleSection": "Mô hình Client - Server là gì?",
+          "section": [
+            {
+              "id": "1",
+              "title": "Khái niệm, kĩ thuật cần biết",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Mô hình Client - Server là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Domain là gì? Tên miền là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Mua áo F8 | Đăng ký học Offline",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Môi trường, con người IT",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "3",
+              "title": "Phương pháp, định hướng",
+              "totalLesson": 4,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Phương pháp học lập trình của Admin F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "4",
+                  "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "4",
+              "title": "Hoàn thành khóa học",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Ứng tuyển xin việc làm",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Hoàn thành khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b3c1",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "informations": [
@@ -388,9 +967,707 @@
       "createdAt": "2025-10-22T01:00:25.890Z",
       "fullContent": "dầdasdasdsadasdadsfasdadsadaddsdadsaadasdaddasdasasdsdasd\n![Image](/images/1761095385370-z7100203611742_e8056f75c2e927432316c56a17733163.jpg)\n",
       "id": "6b99"
+    },
+    {
+      "id": "6db6",
+      "author": "Lê Quang Luân",
+      "title": "dấdsdasda",
+      "content": "xin chào nha",
+      "category": "ui-ux",
+      "image": "/images/1761619578501-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-28T02:46:29.370Z"
     }
   ],
   "upload": [],
+  "my-courses": [
+    {
+      "id": "3169",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "73e0",
+      "userId": "2",
+      "course": {
+        "id": "2",
+        "image": "/images/Cpp.png",
+        "title": "Lập trình C++ cơ bản, nâng cao",
+        "free": "Miễn phí",
+        "people": 37107,
+        "numberOfPosts": 55,
+        "totalTime": "10h18p",
+        "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+        "titleSection": "Lập trình C++ cơ bản, nâng cao",
+        "section": [
+          {
+            "id": "1",
+            "title": "Giới thiệu khóa học",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Giới thiệu khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Cài đặt DevC",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Hướng dẫn sử dụng DevC",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Làm quen với lập trình",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Biến và kiểu dữ liệu",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Cấu trúc điều kiện if/else",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "3eba",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "3116",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "5f14",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "3f68",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "4cf3",
+      "userId": "1",
+      "course": {
+        "id": "1",
+        "image": "/images/Introductory.png",
+        "title": "Kiến Thức Nhập Môn IT",
+        "free": "Miễn phí",
+        "people": 136848,
+        "numberOfPosts": 9,
+        "totalTime": "3h12p",
+        "contentSection": "Kiến thức nhập môn",
+        "titleSection": "Mô hình Client - Server là gì?",
+        "section": [
+          {
+            "id": "1",
+            "title": "Khái niệm, kĩ thuật cần biết",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Mô hình Client - Server là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "2",
+                "title": "Domain là gì? Tên miền là gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+              },
+              {
+                "id": "3",
+                "title": "Mua áo F8 | Đăng ký học Offline",
+                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Môi trường, con người IT",
+            "totalLesson": 3,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "title": "Phương pháp, định hướng",
+            "totalLesson": 4,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Phương pháp học lập trình của Admin F8?",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "3",
+                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              },
+              {
+                "id": "4",
+                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "title": "Hoàn thành khóa học",
+            "totalLesson": 2,
+            "lessons": [
+              {
+                "id": "1",
+                "title": "Ứng tuyển xin việc làm",
+                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+              },
+              {
+                "id": "2",
+                "title": "Hoàn thành khóa học",
+                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
   "coursesFree": [
     {
       "id": "1",

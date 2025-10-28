@@ -4,12 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import CourseSearch from "../course/CourseSearch";
 import AuthModal from "@/app/auth/AuthModal";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 import ProfileMenu from "@/components/profile/ProfileMenu";
+import MyCoursesDropdown from "@/components/course/MyCoursesDropdown"; // Import MyCoursesDropdown
 import { FiArrowLeft as ArrowLeft } from "react-icons/fi";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { ROUTES_WITH_BACK_BUTTON } from "@/constants/routes";
+import { courseService } from "@/services/course.service"; // Import courseService
+import { CourseFree } from "@/types/courseFree"; // Import CourseFree type
 
 interface NavbarProps {
   onLoginClick?: () => void;
@@ -27,7 +30,10 @@ export default function Navbar({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
   const [showProfile, setShowProfile] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [showMyCoursesDropdown, setShowMyCoursesDropdown] = useState(false); // New state for my courses dropdown
+  const [myCourses, setMyCourses] = useState<CourseFree[]>([]); // State to store user's courses
+  const profileMenuRef = useRef<HTMLDivElement>(null); // Renamed for clarity
+  const myCoursesMenuRef = useRef<HTMLDivElement>(null); // New ref for my courses dropdown
 
   // Check if the current route should have a back button
   const showBackButton = ROUTES_WITH_BACK_BUTTON.some((route) =>
@@ -36,13 +42,33 @@ export default function Navbar({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
         setShowProfile(false);
+      }
+      if (
+        myCoursesMenuRef.current &&
+        !myCoursesMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowMyCoursesDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (user?.id && showMyCoursesDropdown) {
+      console.log("Fetching courses for userId:", user.id); // Log the user ID
+      const fetchCourses = async () => {
+        const courses = await courseService.getMyCourses(user.id);
+        setMyCourses(courses);
+      };
+      fetchCourses();
+    }
+  }, [user?.id, showMyCoursesDropdown]);
 
   const handleRegisterClick =
     propOnRegisterClick ||
@@ -98,36 +124,50 @@ export default function Navbar({
 
       {/* USER SECTION */}
       {user ? (
-        <div className="relative flex items-center gap-3" ref={menuRef}>
-          <Link
-            href="/user/courses"
-            className="text-gray-700 font-medium hover:text-orange-600 transition"
-          >
-            Khóa học của tôi
-          </Link>
-
-          <div
-            className="rounded-full overflow-hidden cursor-pointer border-2 border-transparent hover:border-orange-500 transition"
-            onClick={() => setShowProfile(!showProfile)}
-          >
-            <Image
-              src={user.avatar || "/images/avatar.png"}
-              alt={user.fullName || "User"}
-              width={40}
-              height={40}
-              className="object-cover"
-            />
+        <div className="relative flex items-center gap-3">
+          {/* Khóa học của tôi dropdown */}
+          <div className="relative" ref={myCoursesMenuRef}>
+            <button
+              onClick={() => setShowMyCoursesDropdown(!showMyCoursesDropdown)}
+              className="text-gray-700 font-medium hover:text-orange-600 transition px-3 py-2 rounded-md"
+            >
+              Khóa học của tôi
+            </button>
+            <div
+              className={`absolute left-1/2 -translate-x-1/2 top-14 pr-20 transition-all duration-300 ease-out transform origin-top ${
+                showMyCoursesDropdown
+                  ? "opacity-100 scale-100 pointer-events-auto"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
+            >
+              <MyCoursesDropdown courses={myCourses} />
+            </div>
           </div>
 
-          {/* Profile menu thả xuống */}
-          <div
-            className={`absolute right-0 top-14 transition-all duration-300 ease-out transform origin-top-right ${
-              showProfile
-                ? "opacity-100 scale-100 pointer-events-auto"
-                : "opacity-0 scale-95 pointer-events-none"
-            }`}
-          >
-            <ProfileMenu />
+          <div className="relative" ref={profileMenuRef}>
+            <div
+              className="rounded-full overflow-hidden cursor-pointer border-2 border-transparent hover:border-orange-500 transition"
+              onClick={() => setShowProfile(!showProfile)}
+            >
+              <Image
+                src={user.avatar || "/images/avatar.png"}
+                alt={user.fullName || "User"}
+                width={40}
+                height={40}
+                className="object-cover"
+              />
+            </div>
+
+            {/* Profile menu thả xuống */}
+            <div
+              className={`absolute right-0 top-14 transition-all duration-300 ease-out transform origin-top-right z-20 ${
+                showProfile
+                  ? "opacity-100 scale-100 pointer-events-auto"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
+            >
+              <ProfileMenu />
+            </div>
           </div>
         </div>
       ) : (

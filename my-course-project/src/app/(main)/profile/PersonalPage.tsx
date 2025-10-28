@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import { User } from "@/types/user";
 import Loading from "@/components/ui/Loading";

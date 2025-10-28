@@ -5,12 +5,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import CourseImageDisplay from "./CourseImageDisplay";
 import Loading from "@/components/ui/Loading";
-
-interface Props {
+import FreeCourseBtn from "./FreeCourseBtn";
+export interface CourseDetailClientProps {
   course: CourseFree;
 }
 
-export function CourseDetailClient({ course }: Props) {
+export function CourseDetailClient({ course }: CourseDetailClientProps) {
   const [openSections, setOpenSections] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -38,9 +38,7 @@ export function CourseDetailClient({ course }: Props) {
           Miễn phí
         </h1>
         <div className="flex justify-center">
-          <button className="relative inline-block px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-xl shadow-blue-500/70 hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-400">
-            <span className="relative z-10 drop-shadow-lg">Đăng kí học</span>
-          </button>
+          <FreeCourseBtn course={course} />
         </div>
       </div>
 

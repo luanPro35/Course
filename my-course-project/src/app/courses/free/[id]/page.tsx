@@ -1,9 +1,9 @@
 import { CourseFree } from "@/types/courseFree";
 import React from "react";
 import { getCourseById } from "@/services/coursesFree.service";
-import { CourseDetailClient } from "../CourseDetailClient";
-import Loading from "@/components/ui/Loading";
 import RouteLayout from "@/components/layout/RouteLayout";
+import Loading from "@/components/ui/Loading"; // Keep one import for Loading
+import CourseDetailDynamicWrapper from "../CourseDetailDynamicWrapper";
 
 interface Props {
   params: Promise<{
@@ -25,7 +25,7 @@ export default async function page({ params }: Props) {
 
   return (
     <RouteLayout>
-      <CourseDetailClient course={course} />
+      <CourseDetailDynamicWrapper course={course} />
     </RouteLayout>
   );
 }

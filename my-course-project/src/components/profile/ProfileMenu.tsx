@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -21,7 +21,7 @@ export default function ProfileMenu() {
   };
 
   const menuItems = [
-    { label: "Trang cá nhân", icon: <FiUser />, href: "/profile " },
+    { label: "Trang cá nhân", icon: <FiUser />, href: "/profile" },
     { label: "Viết blog", icon: <FiEdit />, href: "/blog/create" },
     { label: "Bài viết của tôi", icon: <FiBookOpen />, href: "/blog/my-posts" },
     { label: "Bài viết đã lưu", icon: <FiBookmark />, href: "/blog/saved" },
@@ -50,7 +50,7 @@ export default function ProfileMenu() {
             onClick={() => router.push(item.href)}
             className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
           >
-            <span className="text-gray-500">{item.icon}</span>
+            <span className="text-gray-500 cursor-pointer">{item.icon}</span>
             {item.label}
           </li>
         ))}

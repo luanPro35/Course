@@ -1,30 +1,33 @@
 "use client";
-import React, {
+
+import {
   createContext,
-  useState,
-  ReactNode,
   useContext,
+  useState,
   useEffect,
+  ReactNode,
 } from "react";
-import { User } from "../types/user";
+import { User } from "@/types/user";
+// Removed getUserById as login logic will be updated to use email/password fetch
+// import { getUserById } from "@/services/user.service";
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
+  token: string | null; // Added token
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>; // Updated login signature
   logout: () => void;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>; // Added setUser
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null); // Added token state
   const [loading, setLoading] = useState(true);
 
-  // ✅ Login
+  // Login logic from AuthContent.tsx
   const login = async (email: string, password: string) => {
     try {
       const res = await fetch(`http://localhost:3001/users?email=${email}`);
@@ -33,7 +36,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (data.length > 0) {
         const foundUser = data[0];
 
-        // ✅ Lưu thông tin user và token vào state + localStorage
         setUser(foundUser);
         setToken(foundUser.token || "dummy-token");
 
@@ -47,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // ✅ Logout
+  // Logout logic from AuthContent.tsx
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("token");
   };
 
-  // ✅ Khôi phục user từ localStorage khi reload trang
+  // useEffect for restoring user from localStorage from AuthContent.tsx
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
@@ -68,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
-  const value = { user, token, loading, login, logout, setUser };
+  const value = { user, token, loading, login, logout, setUser }; // Updated value
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

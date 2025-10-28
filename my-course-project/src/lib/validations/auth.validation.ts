@@ -5,6 +5,14 @@ import { RegisterFormData } from "@/app/auth/register/type";
 export const validateRegisterForm = (
   formData: RegisterFormData
 ): { isValid: boolean; message?: string } => {
+  // Check if password and confirmPassword are provided
+  if (!formData.password || !formData.confirmPassword) {
+    return {
+      isValid: false,
+      message: "Mật khẩu và xác nhận mật khẩu không được để trống!",
+    };
+  }
+
   // Check password match
   if (formData.password !== formData.confirmPassword) {
     return {

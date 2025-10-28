@@ -10,6 +10,7 @@ export interface CourseFree {
   section?: Section[];
   contentSection: string;
   titleSection: string;
+  isCompleted?: boolean; // Add isCompleted property
 }
 
 export interface Lesson {
