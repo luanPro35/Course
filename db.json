@@ -258,23 +258,6 @@
       "updatedAt": "2025-10-19T08:36:52.854Z"
     },
     {
-      "id": "1760865031175",
-      "name": "luanlequang",
-      "fullName": "luanlequang",
-      "email": "quangllllll0305@gmail.com",
-      "phone": "0905622341",
-      "password": "$2b$10$YRk.s42m7g3a/U02BKE7t.Hjq5LKeYQDvG7gJwUCI13YssWGWuBwe",
-      "createdAt": "2025-10-19T09:10:31.175Z",
-      "updatedAt": "2025-10-19T09:10:31.175Z",
-      "about": "dấdsdad",
-      "avatar": "/images/1760865060120-z7025841445382_a87db1fb599081ae220352139ef43536.jpg",
-      "personalWebsite": "dấdsdad",
-      "github": "",
-      "linkedin": "",
-      "facebook": "",
-      "youtube": ""
-    },
-    {
       "id": "1761055374132",
       "name": "mtlam",
       "fullName": "Lê Quang Luân",
@@ -636,109 +619,122 @@
       ]
     },
     {
-      "id": "b3c1",
-      "userId": "1",
-      "course": {
-        "id": "1",
-        "image": "/images/Introductory.png",
-        "title": "Kiến Thức Nhập Môn IT",
-        "free": "Miễn phí",
-        "people": 136848,
-        "numberOfPosts": 9,
-        "totalTime": "3h12p",
-        "contentSection": "Kiến thức nhập môn",
-        "titleSection": "Mô hình Client - Server là gì?",
-        "section": [
-          {
-            "id": "1",
-            "title": "Khái niệm, kĩ thuật cần biết",
-            "totalLesson": 3,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Mô hình Client - Server là gì?",
-                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-              },
-              {
-                "id": "2",
-                "title": "Domain là gì? Tên miền là gì?",
-                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-              },
-              {
-                "id": "3",
-                "title": "Mua áo F8 | Đăng ký học Offline",
-                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
-              }
-            ]
-          },
-          {
-            "id": "2",
-            "title": "Môi trường, con người IT",
-            "totalLesson": 3,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
-                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-              },
-              {
-                "id": "2",
-                "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              },
-              {
-                "id": "3",
-                "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              }
-            ]
-          },
-          {
-            "id": "3",
-            "title": "Phương pháp, định hướng",
-            "totalLesson": 4,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Phương pháp học lập trình của Admin F8?",
-                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-              },
-              {
-                "id": "2",
-                "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              },
-              {
-                "id": "3",
-                "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              },
-              {
-                "id": "4",
-                "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              }
-            ]
-          },
-          {
-            "id": "4",
-            "title": "Hoàn thành khóa học",
-            "totalLesson": 2,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Ứng tuyển xin việc làm",
-                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-              },
-              {
-                "id": "2",
-                "title": "Hoàn thành khóa học",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              }
-            ]
-          }
-        ]
-      }
+      "id": "1761641181425",
+      "name": "adasda",
+      "fullName": "adasda",
+      "email": "quangllllll0305@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$cubEbRy4NgxcEry7p4eBsOG.VOzykHR7IgRx/j2Ap7jmKUKitsYIC",
+      "createdAt": "2025-10-28T08:46:21.425Z",
+      "updatedAt": "2025-10-28T08:46:21.425Z"
+    },
+    {
+      "id": "1761641954344",
+      "name": "LeQuytt",
+      "fullName": "LeQuytt",
+      "email": "LeQuyt@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$G45T08PhMcz3pxVP03lZ4u2yuoakQBua5cHHCNdrKLPfeQW4Km6.K",
+      "createdAt": "2025-10-28T08:59:14.344Z",
+      "updatedAt": "2025-10-28T08:59:14.344Z"
+    },
+    {
+      "id": "1761642219688",
+      "name": "QuytQuang",
+      "fullName": "QuytQuang",
+      "email": "LeQuyttt@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$oNeYYw/qWk9TFdmEcyM6I.R3CGobcNiKrsNgEk/25MCHK0WYl2pYe",
+      "createdAt": "2025-10-28T09:03:39.688Z",
+      "updatedAt": "2025-10-28T09:03:39.688Z",
+      "about": "Luân chào",
+      "avatar": "/images/1761660033740-z6897744282001_620ae10805adbc7bf710758177dd127f.jpg",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": "s",
+      "courses": [
+        {
+          "id": "2",
+          "image": "/images/Cpp.png",
+          "title": "Lập trình C++ cơ bản, nâng cao",
+          "free": "Miễn phí",
+          "people": 37107,
+          "numberOfPosts": 55,
+          "totalTime": "10h18p",
+          "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+          "titleSection": "Lập trình C++ cơ bản, nâng cao",
+          "section": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Giới thiệu khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Cài đặt DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Hướng dẫn sử dụng DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Làm quen với lập trình",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Biến và kiểu dữ liệu",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Cấu trúc điều kiện if/else",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1761659620867",
+      "name": "chaoban",
+      "fullName": "chaoban",
+      "email": "chaoban@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$xHSVgtTEkx55I.cET87HzORWCvBAqFqgSrlqKsc8BG9Ea2SIeYsk6",
+      "createdAt": "2025-10-28T13:53:40.867Z",
+      "updatedAt": "2025-10-28T13:53:40.867Z"
+    },
+    {
+      "id": "1761712271138",
+      "name": "chanhcity",
+      "fullName": "chanhcity",
+      "email": "chanhcity@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$Rx.if0g9sBYB80WQnItTl.DxoBk5lOPH8AD968H9W1Tz5j6Durrme",
+      "createdAt": "2025-10-29T04:31:11.138Z",
+      "updatedAt": "2025-10-29T04:31:11.138Z",
+      "about": "",
+      "avatar": "/images/1761712315340-pngtree-purple-camera-neon-cinema-logo-png-image_3149754-removebg-preview.png",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     }
   ],
   "informations": [
@@ -894,89 +890,57 @@
       "youtube": ""
     }
   ],
-  "saved": [
-    {
-      "id": "1",
-      "title": "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
-      "content": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
-      "author": "Huyền Lê Ngọc",
-      "category": "React Native",
-      "image": "/images/posts-1.png",
-      "createdAt": "2025-10-20T11:52:40.944Z"
-    }
-  ],
+  "saved": [],
   "blogs": [
     {
-      "id": "028d",
-      "author": "đâsdsa",
-      "title": "adadads",
-      "content": "adadadds",
-      "category": "devops",
-      "image": "/images/1760840653118-snapedit_1759301056404.jpeg",
-      "status": "draft",
-      "createdAt": "2025-10-19T02:24:18.152Z"
-    },
-    {
-      "id": "4722",
-      "author": "dádsad",
-      "title": "dádadasđs",
-      "content": "đasafasfadsf",
+      "id": "36a7",
+      "author": "Lê Quang Luân",
+      "title": "Luân",
+      "content": "chào",
       "category": "cpp",
-      "image": "/images/1760841237220-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
-      "status": "published",
-      "createdAt": "2025-10-19T02:33:58.641Z"
-    },
-    {
-      "id": "97fa",
-      "author": "Lê Quang Luân",
-      "title": "đàng hoàng coi",
-      "content": "dádsadasds",
-      "category": "devops",
-      "image": "/images/1760862916544-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "image": "/images/1761655051646-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
       "status": "draft",
-      "createdAt": "2025-10-19T08:35:42.909Z"
+      "createdAt": "2025-10-28T12:37:41.729Z"
     },
     {
-      "author": "cao",
-      "title": "adsadas",
-      "content": "adadsdadđấdấdadsadad",
-      "category": "react-native",
-      "image": "/images/1760962756908-DSC01064.jpg",
-      "status": "draft",
-      "createdAt": "2025-10-20T12:19:22.019Z",
-      "id": "37ea"
-    },
-    {
+      "id": "bdb2",
       "author": "Lê Quang Luân",
-      "title": "dáda",
-      "content": "đáadafdaf",
-      "category": "react-native",
-      "image": "/images/1761061761459-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "title": "d",
+      "content": "d",
+      "category": "business",
+      "image": "/images/1761655447578-z7096507445146_f937bc7d96bdce0516742bf992e22f49.jpg",
       "status": "draft",
-      "createdAt": "2025-10-21T15:49:59.416Z",
-      "fullContent": "dsadasdsfafasdfadfdfdasfasdfdasfasdfdasfads",
-      "id": "e0ca"
+      "createdAt": "2025-10-28T12:44:14.665Z"
     },
     {
-      "author": "Lê Quang Luân",
-      "title": "dsdadsadad",
-      "content": "đâsdadsadsadasdsadfsadsadasfasfadsfasfasdfasfsafdasfdasdasdasdasdasdsad",
-      "category": "react-native",
-      "image": "/images/1761094795293-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
-      "status": "draft",
-      "createdAt": "2025-10-22T01:00:25.890Z",
-      "fullContent": "dầdasdasdsadasdadsfasdadsadaddsdadsaadasdaddasdasasdsdasd\n![Image](/images/1761095385370-z7100203611742_e8056f75c2e927432316c56a17733163.jpg)\n",
-      "id": "6b99"
-    },
-    {
-      "id": "6db6",
-      "author": "Lê Quang Luân",
-      "title": "dấdsdasda",
-      "content": "xin chào nha",
+      "id": "b80f",
+      "author": "Lê Quang",
+      "title": "chào",
+      "content": "das",
       "category": "ui-ux",
-      "image": "/images/1761619578501-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "image": "/images/1761655789367-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
       "status": "draft",
-      "createdAt": "2025-10-28T02:46:29.370Z"
+      "createdAt": "2025-10-28T12:49:56.563Z"
+    },
+    {
+      "id": "abe7",
+      "author": "Lê Quang Luân L",
+      "title": "cjapf",
+      "content": "đấ",
+      "category": "cpp",
+      "image": "/images/1761656075923-z7096507445146_f937bc7d96bdce0516742bf992e22f49.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-28T12:54:41.949Z"
+    },
+    {
+      "id": "0c8c",
+      "author": "Lê Quang Luân",
+      "title": "dá",
+      "content": "dá",
+      "category": "business",
+      "image": "/images/1761656437142-z7096507445146_f937bc7d96bdce0516742bf992e22f49.jpg",
+      "status": "draft",
+      "createdAt": "2025-10-28T13:00:44.061Z"
     }
   ],
   "upload": [],
@@ -2055,6 +2019,36 @@
       "timeAgo": "2 năm trước",
       "readTime": "5 phút đọc",
       "image": "/images/posts-10.png"
+    },
+    {
+      "id": "12",
+      "author": "Hải Đoàn",
+      "title": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "content": "[HTML - CSS - JS tại F8] Một thời mày mò học, lục lại được trang web cũ – chia sẻ cùng anh em",
+      "category": "Front-end",
+      "timeAgo": "5 tháng trước",
+      "readTime": "2 phút đọc",
+      "image": "/images/posts-4.png"
+    },
+    {
+      "id": "13",
+      "author": "Sơn Đặng",
+      "title": "Hoàng Bảo Trung - Học viên tiêu biểu của F8 tỏa sáng với dự án \"AI Powered Learning\"",
+      "content": "Trong thời đại công nghệ số 4.0, việc học không còn bó buộc trong những cuốn sách truyền thống. Giờ đây, trí tuệ nhân tạo (AI) đang...",
+      "category": "Front-end",
+      "timeAgo": "một năm trước",
+      "readTime": "6 phút đọc",
+      "image": "/images/posts-5.png"
+    },
+    {
+      "id": "14",
+      "author": "Lý Cao Nguyên",
+      "title": "Mình đã làm thế nào để hoàn thành một dự án website chỉ trong 15 ngày",
+      "content": "Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài học và 200 bài vi��t. Bài viết này...",
+      "category": "Front-end",
+      "timeAgo": "một năm trước",
+      "readTime": "4 phút đọc",
+      "image": "/images/posts-6.png"
     }
   ],
   "trending": [

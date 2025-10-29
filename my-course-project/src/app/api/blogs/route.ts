@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       status: data.status || "draft",
+      fullContent: data.fullContent || "",
     };
 
     const res = await fetch(API_BASE_URL, {

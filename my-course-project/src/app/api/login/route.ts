@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    // Admin login check
+    // Admin login check (plaintext comparison for admin)
     if (
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PASSWORD
@@ -38,15 +38,6 @@ export async function POST(req: Request) {
     );
     const users = await userResponse.json();
     const user = users[0];
-
-    if (!user || !(await bcrypt.compare(password, user.password!))) {
-      return NextResponse.json(
-        { mess: "Email hoặc mật khẩu không đúng!" },
-        { status: 401 }
-      );
-    }
-
-    // Regular user login
 
     if (
       !user ||

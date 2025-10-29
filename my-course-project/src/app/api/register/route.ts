@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { User } from "@/types/user";
 
 export async function POST(request: Request) {
   try {
@@ -21,9 +20,15 @@ export async function POST(request: Request) {
     const existingUsers = await userExistsResponse.json();
 
     if (existingUsers.length > 0) {
+      //  const existingUser = existingUsers[0];
+      // await fetch(`http://localhost:3001/users/${existingUser.id}`, {
+      //   method: "DELETE",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
       return NextResponse.json(
         { mess: "Email đã được sử dụng", success: false },
-        { status: 409 } // 409 Conflict
+        { status: 409 }
       );
     }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useAuth } from "@/content/AuthContent";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/ui/Loading";
 import Navbar from "./Navbar";
@@ -17,14 +17,20 @@ export default function AdminLayout({
   useEffect(() => {
     // Wait until loading is false before checking auth state
     if (!loading) {
+      console.log("Admin layout check - user:", user, "token:", token, "role:", user?.role);
       if (!token || user?.role !== "admin") {
+        console.log("Not admin, redirecting to login");
         router.push("/auth/login");
       }
     }
   }, [user, token, loading, router]);
 
   // Show loading indicator while checking auth state
-  if (loading || !token || user?.role !== "admin") {
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!token || user?.role !== "admin") {
     return <Loading />;
   }
 

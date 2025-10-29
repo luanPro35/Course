@@ -7,24 +7,45 @@ import { FiBookmark } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
 import { SavedService } from "@/services/saved.service";
 import { ARTICLE_API_URL } from "@/services/article.service";
+
 const POSTS_PER_PAGE = 10;
 
-export default function Posts() {
-  const [posts, setPosts] = useState<Post[]>([]);
+interface PostsProps {
+  filterCategories?: string[]; // Nhận categories để lọc
+}
+
+export default function Posts({ filterCategories }: PostsProps) {
+  const [allPosts, setAllPosts] = useState<Post[]>([]); // Lưu tất cả bài viết
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]); // Bài viết sau khi lọc
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState<number[]>([]);
 
+  // Load dữ liệu ban đầu
   useEffect(() => {
     setLoading(true);
     fetch(ARTICLE_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        setPosts(data);
+        setAllPosts(data);
+        setFilteredPosts(data); // Mặc định hiển thị tất cả
         setLoading(false);
       });
     loadSaved();
   }, []);
+
+  // Lọc bài viết khi filterCategories thay đổi
+  useEffect(() => {
+    if (!filterCategories || filterCategories.length === 0) {
+      setFilteredPosts(allPosts);
+    } else {
+      const filtered = allPosts.filter((post) =>
+        filterCategories.includes(post.category)
+      );
+      setFilteredPosts(filtered);
+    }
+    setCurrentPage(1); // Reset về trang 1 khi filter
+  }, [filterCategories, allPosts]);
 
   const loadSaved = async () => {
     try {
@@ -41,7 +62,6 @@ export default function Posts() {
         await SavedService.delete(post.id);
         setSavedPosts(savedPosts.filter((id) => id !== post.id));
       } else {
-        // Ensure the object sent to the save service matches the BlogPost type
         const blogPostToSave = {
           id: post.id,
           title: post.title,
@@ -50,7 +70,7 @@ export default function Posts() {
           author: post.author,
           category: post.category,
           image: post.image,
-          createdAt: new Date().toISOString(), // Assuming you want to set the creation date on save
+          createdAt: new Date().toISOString(),
         };
         await SavedService.save(blogPostToSave);
         setSavedPosts([...savedPosts, blogPostToSave.id]);
@@ -60,10 +80,10 @@ export default function Posts() {
     }
   };
 
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
   const endIndex = startIndex + POSTS_PER_PAGE;
-  const currentPosts = posts.slice(startIndex, endIndex);
+  const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
   return (
     <div className="max-w-5xl pl-13">
@@ -75,10 +95,19 @@ export default function Posts() {
           Tổng hợp các bài viết chia sẻ về kinh nghiệm tự học lập trình online
           và các kỹ thuật lập trình web.
         </p>
+        {filterCategories && filterCategories.length > 0 && (
+          <p className="text-sm text-blue-600 mt-2">
+            Đang hiển thị {filteredPosts.length} bài viết được lọc
+          </p>
+        )}
       </div>
 
       {loading ? (
         <Loading />
+      ) : currentPosts.length === 0 ? (
+        <div className="text-center py-12 text-gray-500">
+          Không tìm thấy bài viết nào
+        </div>
       ) : (
         currentPosts.map((post) => {
           const isSaved = savedPosts.includes(post.id);
@@ -87,7 +116,6 @@ export default function Posts() {
               key={post.id}
               className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow min-h-64"
             >
-              {/* Header với tên tác giả */}
               <div className="flex items-center justify-between mb-4">
                 <span className="font-medium text-gray-800">{post.author}</span>
                 <button
@@ -102,9 +130,7 @@ export default function Posts() {
                 </button>
               </div>
 
-              {/* Nội dung chính */}
               <div className="flex gap-6">
-                {/* Text bên trái */}
                 <div className="flex-1">
                   <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
                     {post.title}
@@ -113,7 +139,6 @@ export default function Posts() {
                     {post.content}
                   </p>
 
-                  {/* Tags và thông tin */}
                   <div className="flex items-center gap-3 text-sm text-gray-500">
                     <span className="bg-gray-100 px-3 py-1 rounded-full">
                       {post.category}
@@ -121,7 +146,6 @@ export default function Posts() {
                   </div>
                 </div>
 
-                {/* Hình ảnh bên phải */}
                 <div className="flex-shrink-0">
                   <div className="relative w-52 h-36 rounded-xl overflow-hidden">
                     <Image
@@ -139,21 +163,23 @@ export default function Posts() {
       )}
 
       {/* Pagination */}
-      <div className="flex justify-center mt-8">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            className={`mx-1 px-3 py-1 rounded-md ${
-              currentPage === page
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-            onClick={() => setCurrentPage(page)}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              className={`mx-1 px-3 py-1 rounded-md ${
+                currentPage === page
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

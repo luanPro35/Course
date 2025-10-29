@@ -47,19 +47,35 @@ export const useLoginForm = (onClose: () => void) => {
     setIsLoading(true);
 
     try {
+      // Call login and get the response to check user role
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.mess || "Đăng nhập thất bại");
+      }
+
+      // Now call the hook's login to update context state
       await login(formData.email, formData.password);
-      // Đăng nhập thành công, đặt trạng thái thành công và tắt trạng thái lỗi
+
+      // Đăng nh��p thành công, đặt trạng thái thành công và tắt trạng thái lỗi
       setIsSuccess(true);
       setIsError(false); // Đảm bảo không hiển thị lỗi
 
-      // Redirect after success animation
+      // Redirect after success animation - use response data to determine route
       setTimeout(() => {
         onClose();
-        // After successful login, the user state in useAuth should be updated.
-        // We can access the user directly from the useAuth hook.
-        if (user?.role === "admin") {
+        // Use the response data to determine redirect path
+        if (data.user?.role === "admin") {
+          console.log("Redirecting to admin page");
           router.push("/admin");
         } else {
+          console.log("Redirecting to home page");
           router.push("/");
         }
       }, 1500);

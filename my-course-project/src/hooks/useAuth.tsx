@@ -27,25 +27,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null); // Added token state
   const [loading, setLoading] = useState(true);
 
-  // Login logic from AuthContent.tsx
+  // Login logic - call /api/login endpoint
   const login = async (email: string, password: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/users?email=${email}`);
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
       const data = await res.json();
 
-      if (data.length > 0) {
-        const foundUser = data[0];
-
-        setUser(foundUser);
-        setToken(foundUser.token || "dummy-token");
-
-        localStorage.setItem("user", JSON.stringify(foundUser));
-        localStorage.setItem("token", foundUser.token || "dummy-token");
-      } else {
-        alert("Sai tài khoản hoặc mật khẩu");
+      if (!res.ok) {
+        throw new Error(data.mess || "Đăng nhập thất bại");
       }
+
+      // Login successful
+      setUser(data.user);
+      setToken(data.token);
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
     } catch (error) {
       console.error("Lỗi khi đăng nhập:", error);
+      throw error;
     }
   };
 

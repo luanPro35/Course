@@ -91,7 +91,7 @@ export class BlogService {
   }
 }
 
-export const getBlogPosts = async (): Promise<BlogPost[]> => {
+export const getBlogs = async (): Promise<BlogPost[]> => {
   const res = await fetch(API_BASE_URL, { cache: "no-store" });
   return res.json();
 };
