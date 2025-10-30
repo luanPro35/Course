@@ -11,7 +11,7 @@ interface DynamicCoursePageProps {
   courseId: string;
   course: CoursePro;
 }
-
+//note
 export default function DynamicCoursePage({ course }: DynamicCoursePageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

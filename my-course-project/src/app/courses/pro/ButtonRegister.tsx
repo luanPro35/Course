@@ -20,7 +20,6 @@ export default function ButtonRegister({ onClick }: ButtonRegisterProps) {
           }}
         />
 
-        {/* Button content */}
         <span className="relative block px-6 py-4 text-lg bg-black rounded-[3px] h-full z-10">
           Đăng kí ngay
         </span>
