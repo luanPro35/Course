@@ -312,7 +312,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
   }, []);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-slate-900">
+    <div className="relative w-full min-h-screen bg-slate-900">
       <canvas ref={canvasRef} className="absolute inset-0" />
 
       <div className="absolute top-1/2 right-12 md:right-32 -translate-y-1/2 opacity-50">

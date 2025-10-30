@@ -735,6 +735,23 @@
       "linkedin": "",
       "facebook": "",
       "youtube": ""
+    },
+    {
+      "id": "1761834256861",
+      "name": "lutcity",
+      "fullName": "lutcity",
+      "email": "lutcity@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$OZeiuujrMQa3L1TABuoc.uWSGbuqxSWFy6oATAJjUHm6iUN/ayO/O",
+      "createdAt": "2025-10-30T14:24:16.861Z",
+      "updatedAt": "2025-10-30T14:24:16.861Z",
+      "about": "kaka",
+      "avatar": "",
+      "personalWebsite": "",
+      "github": "",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     }
   ],
   "informations": [
@@ -1886,7 +1903,78 @@
       "discountPrice": 2500000,
       "author": "Sơn Đặng",
       "numberOfPosts": 590,
-      "totalTime": "116h50p"
+      "totalTime": "116h50p",
+      "badge": "⭐ Khóa học bán chạy nhất 2024",
+      "heroTitle": "Cách dễ nhất để học",
+      "titleHighlight": "HTML/CSS",
+      "subtitle": "cho người mới bắt đầu!",
+      "subtitleHighlights": [
+        {
+          "text": "Thực hành ",
+          "isHighlight": false
+        },
+        {
+          "text": "8 dự án",
+          "isHighlight": true
+        },
+        {
+          "text": " trên Figma, ",
+          "isHighlight": false
+        },
+        {
+          "text": "300+ bài tập",
+          "isHighlight": true
+        },
+        {
+          "text": " và thử thách, mua một lần học mãi mãi, được thiết kế và hướng dẫn bởi chuyên gia",
+          "isHighlight": false
+        }
+      ],
+      "codePreview": {
+        "lines": [
+          {
+            "text": "<html>",
+            "color": "text-purple-600",
+            "indent": 0
+          },
+          {
+            "text": "<body>",
+            "color": "text-blue-600",
+            "indent": 1
+          },
+          {
+            "text": "<h1>Hello World!</h1>",
+            "color": "text-green-600",
+            "indent": 2
+          },
+          {
+            "text": "</body>",
+            "color": "text-blue-600",
+            "indent": 1
+          },
+          {
+            "text": "</html>",
+            "color": "text-purple-600",
+            "indent": 0
+          }
+        ]
+      },
+      "stats": {
+        "projects": "8",
+        "exercises": "300+",
+        "access": "∞",
+        "support": "24/7"
+      },
+      "learningOutcomes": [
+        "Nắm vững cú pháp HTML5 và cấu trúc semantic",
+        "Styling chuyên nghiệp với CSS3",
+        "Responsive design cho mọi thiết bị",
+        "Flexbox và CSS Grid layouts",
+        "Animation và transitions",
+        "Best practices trong web development",
+        "8 dự án thực tế từ cơ bản đến nâng cao",
+        "Kỹ năng debug và tối ưu hóa code"
+      ]
     },
     {
       "id": "2",
@@ -1896,7 +1984,73 @@
       "discountPrice": 3299000,
       "author": "Sơn Đặng",
       "numberOfPosts": 254,
-      "totalTime": "49h34p"
+      "totalTime": "49h34p",
+      "badge": "⭐ Khóa học bán chạy nhất 2024",
+      "heroTitle": "Làm chủ",
+      "titleHighlight": "JavaScript",
+      "subtitle": "từ cơ bản đến nâng cao!",
+      "subtitleHighlights": [
+        {
+          "text": "Thực hành ",
+          "isHighlight": false
+        },
+        {
+          "text": "15 dự án",
+          "isHighlight": true
+        },
+        {
+          "text": " thực tế, ",
+          "isHighlight": false
+        },
+        {
+          "text": "500+ bài tập",
+          "isHighlight": true
+        },
+        {
+          "text": " và thử thách, mua một lần học mãi mãi, được thiết kế và hướng dẫn bởi chuyên gia",
+          "isHighlight": false
+        }
+      ],
+      "codePreview": {
+        "lines": [
+          {
+            "text": "const greeting = () => {",
+            "color": "text-purple-600",
+            "indent": 0
+          },
+          {
+            "text": "console.log('Hello World!');",
+            "color": "text-blue-600",
+            "indent": 1
+          },
+          {
+            "text": "return 'Welcome to JS Pro!';",
+            "color": "text-green-600",
+            "indent": 1
+          },
+          {
+            "text": "};",
+            "color": "text-purple-600",
+            "indent": 0
+          }
+        ]
+      },
+      "stats": {
+        "projects": "15",
+        "exercises": "500+",
+        "access": "∞",
+        "support": "24/7"
+      },
+      "learningOutcomes": [
+        "Nắm vững ES6+ và các tính năng hiện đại",
+        "DOM Manipulation và Event Handling",
+        "Async/Await, Promises và AJAX",
+        "OOP và Functional Programming",
+        "React, Vue hoặc framework phổ biến",
+        "API Integration và RESTful services",
+        "15 dự án thực tế từ cơ bản đến nâng cao",
+        "Best practices và Clean Code principles"
+      ]
     },
     {
       "id": "3",
@@ -1906,7 +2060,83 @@
       "discountPrice": 400000,
       "author": "Sơn Đặng",
       "numberOfPosts": 27,
-      "totalTime": "6h18p"
+      "totalTime": "6h18p",
+      "badge": "⭐ Khóa học bán chạy nhất 2024",
+      "heroTitle": "Làm chủ",
+      "titleHighlight": "Sass/SCSS",
+      "subtitle": "cho CSS chuyên nghiệp!",
+      "subtitleHighlights": [
+        {
+          "text": "Thực hành ",
+          "isHighlight": false
+        },
+        {
+          "text": "10 dự án",
+          "isHighlight": true
+        },
+        {
+          "text": " thực tế, ",
+          "isHighlight": false
+        },
+        {
+          "text": "200+ bài tập",
+          "isHighlight": true
+        },
+        {
+          "text": " và thử thách, mua một lần học mãi mãi, được thiết kế và hướng dẫn bởi chuyên gia",
+          "isHighlight": false
+        }
+      ],
+      "codePreview": {
+        "lines": [
+          {
+            "text": "$primary-color: #ff6b6b;",
+            "color": "text-purple-600",
+            "indent": 0
+          },
+          {
+            "text": "",
+            "color": "text-gray-400",
+            "indent": 0
+          },
+          {
+            "text": ".button {",
+            "color": "text-blue-600",
+            "indent": 0
+          },
+          {
+            "text": "background: $primary-color;",
+            "color": "text-green-600",
+            "indent": 1
+          },
+          {
+            "text": "&:hover { opacity: 0.8; }",
+            "color": "text-orange-600",
+            "indent": 1
+          },
+          {
+            "text": "}",
+            "color": "text-blue-600",
+            "indent": 0
+          }
+        ]
+      },
+      "stats": {
+        "projects": "10",
+        "exercises": "200+",
+        "access": "∞",
+        "support": "24/7"
+      },
+      "learningOutcomes": [
+        "Nắm vững cú pháp Sass/SCSS và biến",
+        "Nesting, Mixins và Functions",
+        "Partials và Import cho dự án lớn",
+        "Extend/Inheritance và Placeholder",
+        "Control Directives (@if, @for, @each)",
+        "Tích hợp Sass vào workflow hiện đại",
+        "10 dự án thực tế với Sass",
+        "Best practices và architecture patterns"
+      ]
     }
   ],
   "article": [
