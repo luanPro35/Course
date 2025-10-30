@@ -11,7 +11,6 @@ export default function ButtonRegister({ onClick }: ButtonRegisterProps) {
         onClick={onClick}
         className="relative block cursor-pointer text-white no-underline font-semibold rounded-md overflow-hidden p-[3px] isolate group"
       >
-        {/* Animated gradient border - Always animating */}
         <div
           className="absolute top-0 left-0 w-[400%] h-full -translate-x-[5%] transition-transform duration-300 ease-out group-hover:translate-x-0 group-hover:duration-[750ms]"
           style={{
