@@ -1,5 +1,6 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { BlogService } from "@/services/blog.service";
 import { BlogFormData } from "@/types/blog.types";
 
@@ -113,7 +114,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
     status: "draft" | "published",
     userId: string | null,
     postId?: number | string,
-    router?: ReturnType<typeof import("next/navigation").useRouter>
+    router?: AppRouterInstance
   ) => {
     setErrors({});
     const newErrors: Record<string, string> = {};

@@ -158,7 +158,12 @@ export default function CreateBlogPost() {
 
                 <FormActions
                   onDraft={() =>
-                    handleSubmit("draft", user?.id ?? null, postId ?? undefined, router)
+                    handleSubmit(
+                      "draft",
+                      user?.id ?? null,
+                      postId ?? undefined,
+                      router
+                    )
                   }
                   onPublish={() =>
                     handleSubmit(

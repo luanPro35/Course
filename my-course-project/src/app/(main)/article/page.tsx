@@ -5,7 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Posts from "./Posts";
 import LinkPosts from "./LinkPosts";
-import { linkPosts } from "@/types/post";
+const linkPosts = [
+  { id: 1, title: "Frontend", categories: ["Frontend"] },
+  { id: 2, title: "Backend", categories: ["Backend"] },
+  { id: 3, title: "DevOps", categories: ["DevOps"] },
+  { id: 4, title: "Mobile", categories: ["Mobile"] },
+  { id: 5, title: "Database", categories: ["Database"] },
+];
 
 export default function RoutePage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Post } from "@/types/post";
+import { BlogPost } from "@/types/blog.types";
 import Image from "next/image";
 import Loading from "../../../components/ui/Loading";
 import { FiBookmark } from "react-icons/fi";
@@ -58,12 +59,12 @@ export default function Posts({ filterCategories }: PostsProps) {
 
   const handleToggle = async (post: Post) => {
     try {
-      if (savedPosts.includes(post.id)) {
-        await SavedService.delete(post.id);
-        setSavedPosts(savedPosts.filter((id) => id !== post.id));
+      if (savedPosts.includes(Number(post.id))) {
+        await SavedService.delete(Number(post.id));
+        setSavedPosts(savedPosts.filter((id) => id !== Number(post.id)));
       } else {
         const blogPostToSave = {
-          id: post.id,
+          id: Number(post.id),
           title: post.title,
           content: post.content,
           fullContent: post.content,
@@ -71,9 +72,9 @@ export default function Posts({ filterCategories }: PostsProps) {
           category: post.category,
           image: post.image,
           createdAt: new Date().toISOString(),
-        };
+        } as BlogPost;
         await SavedService.save(blogPostToSave);
-        setSavedPosts([...savedPosts, blogPostToSave.id]);
+        setSavedPosts([...savedPosts, Number(post.id)]);
       }
     } catch (err) {
       console.error("Lỗi khi lưu/bỏ lưu bài viết:", err);
@@ -110,7 +111,7 @@ export default function Posts({ filterCategories }: PostsProps) {
         </div>
       ) : (
         currentPosts.map((post) => {
-          const isSaved = savedPosts.includes(post.id);
+          const isSaved = savedPosts.includes(Number(post.id));
           return (
             <div
               key={post.id}
