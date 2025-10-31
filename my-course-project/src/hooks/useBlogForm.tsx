@@ -141,17 +141,17 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
     try {
       if (postId) {
-        // Update existing post
+        // Update existing post with status
         await BlogService.update(
           userId,
           parseInt(postId.toString(), 10),
-          formData
+          { ...formData, status }
         );
-        alert(`Bài viết đã được cập nhật dưới dạng ${status}`);
+        alert(`Bài viết đã được cập nhật dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
       } else {
         // Create new post
         await BlogService.create(formData, userId, status);
-        alert(`Bài viết đã được lưu dưới dạng ${status}`);
+        alert(`Bài viết đã được lưu dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
         resetForm(); // Reset the form after successful creation
       }
 

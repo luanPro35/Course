@@ -6,12 +6,35 @@ import Link from "next/link";
 import Posts from "./Posts";
 import LinkPosts from "./LinkPosts";
 const linkPosts = [
-  { id: 1, title: "Frontend", categories: ["Frontend"] },
-  { id: 2, title: "Backend", categories: ["Backend"] },
-  { id: 3, title: "DevOps", categories: ["DevOps"] },
-  { id: 4, title: "Mobile", categories: ["Mobile"] },
-  { id: 5, title: "Database", categories: ["Database"] },
+  {
+    id: 1,
+    title: "Frontend",
+    categories: [
+      "Front-end",
+      "ReactJS",
+      "Javascript",
+      "hoc-lap-trinh",
+      "javascript",
+    ],
+  },
+  {
+    id: 2,
+    title: "Backend",
+    categories: ["Backend", "OOP", "python", "cpp"],
+  },
+  {
+    id: 3,
+    title: "DevOps",
+    categories: ["DevOps", "Ubuntu", "devops"],
+  },
+  {
+    id: 4,
+    title: "Mobile",
+    categories: ["Mobile", "React Native", "react-native"],
+  },
 ];
+
+export { linkPosts };
 
 export default function RoutePage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

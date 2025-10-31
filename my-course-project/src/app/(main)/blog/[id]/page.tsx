@@ -10,8 +10,6 @@ const BlogPostPage = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -38,11 +36,6 @@ const BlogPostPage = () => {
       fetchPost();
     }
   }, [id]);
-
-  const handleLike = () => {
-    setLiked(!liked);
-    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-  };
 
   if (loading) {
     return <div className="text-center py-20">Đang tải...</div>;
@@ -81,26 +74,6 @@ const BlogPostPage = () => {
                 </span>
               </div>
             </div>
-          </div>
-          <div className="flex items-center gap-4 text-gray-500">
-            <button
-              onClick={handleLike}
-              className="flex items-center gap-2 text-sm hover:text-red-500 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill={liked ? "currentColor" : "none"}
-                stroke="currentColor"
-                strokeWidth="2"
-                className={`w-5 h-5 ${
-                  liked ? "text-red-500" : "text-gray-400"
-                }`}
-              >
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-              <span className={liked ? "text-red-500" : ""}>{likeCount}</span>
-            </button>
           </div>
         </div>
 

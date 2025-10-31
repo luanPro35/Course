@@ -19,7 +19,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <div className="mb-6">
       <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3">
-        <img className="w-5 h-5 text-gray-600" alt="" />
+        <Image className="w-5 h-5 text-gray-600" alt="" />
         Chọn ảnh đại diện <span className="text-red-500">*</span>
       </label>
       <div className="relative">

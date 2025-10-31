@@ -60,7 +60,9 @@ export default function PersonalPage() {
             {socialLinks.map((link) => (
               <a
                 key={link.label}
-                href={link.href}
+                href={`https://www.google.com/search?q=${encodeURIComponent(
+                  link.href || ""
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"

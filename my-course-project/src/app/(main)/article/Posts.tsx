@@ -8,6 +8,7 @@ import { FiBookmark } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
 import { SavedService } from "@/services/saved.service";
 import { ARTICLE_API_URL } from "@/services/article.service";
+import { useRouter } from "next/navigation";
 
 const POSTS_PER_PAGE = 10;
 
@@ -16,6 +17,7 @@ interface PostsProps {
 }
 
 export default function Posts({ filterCategories }: PostsProps) {
+  const router = useRouter();
   const [allPosts, setAllPosts] = useState<Post[]>([]); // Lưu tất cả bài viết
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]); // Bài viết sau khi lọc
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,8 +30,14 @@ export default function Posts({ filterCategories }: PostsProps) {
     fetch(ARTICLE_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        setAllPosts(data);
-        setFilteredPosts(data); // Mặc định hiển thị tất cả
+        // Sắp xếp bài viết theo thời gian tạo, mới nhất ở đầu
+        const sortedData = data.sort((a: Post, b: Post) => {
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          return dateB - dateA; // Bài mới lên đầu, bài cũ ở cuối
+        });
+        setAllPosts(sortedData);
+        setFilteredPosts(sortedData); // Mặc định hiển thị tất cả
         setLoading(false);
       });
     loadSaved();
@@ -57,7 +65,12 @@ export default function Posts({ filterCategories }: PostsProps) {
     }
   };
 
-  const handleToggle = async (post: Post) => {
+  const handleNavigate = (postId: string) => {
+    router.push(`/blog/${postId}`);
+  };
+
+  const handleToggle = async (post: Post, e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       if (savedPosts.includes(Number(post.id))) {
         await SavedService.delete(Number(post.id));
@@ -115,12 +128,13 @@ export default function Posts({ filterCategories }: PostsProps) {
           return (
             <div
               key={post.id}
-              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow min-h-64"
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow min-h-64 cursor-pointer"
+              onClick={() => handleNavigate(post.id)}
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="font-medium text-gray-800">{post.author}</span>
                 <button
-                  onClick={() => handleToggle(post)}
+                  onClick={(e) => handleToggle(post, e)}
                   className="bg-gray-100 hover:bg-gray-200 rounded-full p-1 transition-colors cursor-pointer"
                 >
                   {isSaved ? (

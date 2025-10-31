@@ -4,9 +4,6 @@ export const BLOG_CATEGORIES = [
   { value: "cpp", label: "C++" },
   { value: "javascript", label: "JavaScript" },
   { value: "python", label: "Python" },
-  { value: "ui-ux", label: "UI/UX Design" },
-  { value: "marketing", label: "Marketing" },
-  { value: "business", label: "Kinh doanh" },
 ];
 
 export const FORM_VALIDATION = {

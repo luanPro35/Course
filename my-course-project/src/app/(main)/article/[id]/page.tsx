@@ -1,15 +1,19 @@
 "use client";
 
 import React from "react";
-import type { Post } from "@/types/post"; // Assuming Post is also in types/post
-import { linkPosts } from "@/types/post"; // Corrected path
+import type { Post, LinkPost } from "@/types/post";
+import { linkPosts } from "@/app/(main)/article/page";
+import Image from "next/image";
 
 // Helper functions
 export const getPostsByGroup = (
   articles: Post[],
   groupLink: string
 ): Post[] => {
-  const group = linkPosts.find((link) => link.link === groupLink);
+  const group = linkPosts.find(
+    (link: { id: number; title: string; categories: string[] }) =>
+      link.title === groupLink
+  );
 
   if (!group) return [];
 
@@ -44,11 +48,18 @@ export const ArticleList = ({
 
   return (
     <div>
-      <h2>{linkPosts.find((link) => link.link === groupLink)?.title}</h2>
+      <h2>
+        {
+          linkPosts.find(
+            (link: { id: number; title: string; categories: string[] }) =>
+              link.title === groupLink
+          )?.title
+        }
+      </h2>
       <div className="posts-grid">
         {filteredPosts.map((post) => (
           <div key={post.id} className="post-card">
-            <img src={post.image} alt={post.title} />
+            <Image src={post.image} alt={post.title} width={300} height={200} />
             <span className="category">{post.category}</span>
             <h3>{post.title}</h3>
             <p>{post.content}</p>
@@ -65,14 +76,11 @@ export const ArticleList = ({
 };
 
 // Page component
-export default function Page() {
-  // The Page component itself is not defined in the provided snippet.
-  // For now, I'll leave it empty as the task is to fix the provided code.
-  // If it's meant to render ArticleList, that would be added here.
+export default function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
   return (
     <div>
-      {/* Example: Render ArticleList if needed */}
-      {/* <ArticleList articles={[]} groupLink="some-link" /> */}
+      <ArticleList articles={[]} groupLink={id} />
     </div>
   );
 }

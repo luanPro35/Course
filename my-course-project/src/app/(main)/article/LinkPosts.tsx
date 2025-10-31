@@ -1,9 +1,9 @@
 import React from "react";
 import LinkPost from "next/link";
-import type { LinkPosts } from "../../../types/post";
+import type { Post } from "../../../types/post";
 
 interface LinkPostsProps {
-  prop: LinkPosts;
+  prop: Post;
 }
 export default function LinkPosts({ prop }: LinkPostsProps) {
   return (

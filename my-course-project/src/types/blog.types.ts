@@ -23,6 +23,7 @@ export interface BlogFormData {
   category: string;
   image: string;
   updatedAt?: string;
+  status?: "draft" | "published";
 }
 
 export type BlogStatus = "draft" | "published";

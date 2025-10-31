@@ -3,28 +3,34 @@ import React, { useState, useEffect } from "react";
 import { SavedService } from "@/services/saved.service";
 import { BlogPost } from "@/types/blog.types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SavedPostsPage() {
+  const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     SavedService.getAll().then((data) => setPosts(data));
   }, []);
 
-  const handleToggle = async (post: BlogPost) => {
-    try {
-      const savedPosts = await SavedService.getAll();
-      const postToDelete = savedPosts.find((p) => p.id === post.id);
+  const handleNavigate = (postId: number) => {
+    router.push(`/blog/${postId}`);
+  };
 
-      if (postToDelete) {
-        await SavedService.delete(postToDelete.id);
-        setPosts((prevPosts) =>
-          prevPosts.filter((p) => p.id !== postToDelete.id)
-        );
-        console.log("Post deleted successfully, UI updated.");
-      } else {
-        console.warn("Post not found in saved list.");
-      }
+  const handleToggle = async (post: BlogPost, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      console.log("Attempting to delete post with id:", post.id, "type:", typeof post.id);
+      
+      // Directly delete using the post id
+      await SavedService.delete(post.id);
+      
+      // Update UI by filtering out the deleted post
+      setPosts((prevPosts) =>
+        prevPosts.filter((p) => Number(p.id) !== Number(post.id))
+      );
+      
+      console.log("Post deleted successfully, UI updated.");
     } catch (error) {
       console.error("Failed to delete post:", error);
     }
@@ -40,13 +46,14 @@ export default function SavedPostsPage() {
           posts.map((p) => (
             <div
               key={p.id}
-              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow min-h-64 max-w-3xl"
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow min-h-64 max-w-3xl cursor-pointer"
+              onClick={() => handleNavigate(p.id)}
             >
               {/* Header với tên tác giả */}
               <div className="flex items-center justify-between mb-4">
                 <span className="font-medium text-gray-800">{p.author}</span>
                 <button
-                  onClick={() => handleToggle(p)}
+                  onClick={(e) => handleToggle(p, e)}
                   className="bg-gray-100 hover:bg-gray-200 rounded-full p-1 transition-colors cursor-pointer"
                 >
                   ❌

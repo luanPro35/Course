@@ -686,7 +686,33 @@
       "phone": "0909090909",
       "password": "$2b$10$G45T08PhMcz3pxVP03lZ4u2yuoakQBua5cHHCNdrKLPfeQW4Km6.K",
       "createdAt": "2025-10-28T08:59:14.344Z",
-      "updatedAt": "2025-10-28T08:59:14.344Z"
+      "updatedAt": "2025-10-28T08:59:14.344Z",
+      "blogs": [
+        {
+          "id": 1761914290251,
+          "author": "Lê Quang",
+          "title": "fđgfgf",
+          "content": "gdgfgh",
+          "category": "react-native",
+          "image": "/images/1761914286823-Screenshot-2025-07-04-205228.png",
+          "fullContent": "hghfghfgh",
+          "status": "published",
+          "createdAt": "2025-10-31T12:38:10.251Z",
+          "updatedAt": "2025-10-31T12:38:10.251Z"
+        },
+        {
+          "id": 1761914726063,
+          "author": "gfgfgdsg",
+          "title": "hdghdfgdfg",
+          "content": "gdfgdfgdfg",
+          "category": "react-native",
+          "image": "/images/1761914716837-Screenshot-2025-07-04-205228.png",
+          "fullContent": "gdfgdfgfdgdfgfgdg",
+          "status": "published",
+          "createdAt": "2025-10-31T12:45:26.063Z",
+          "updatedAt": "2025-10-31T12:45:26.063Z"
+        }
+      ]
     },
     {
       "id": "1761642219688",
@@ -808,174 +834,28 @@
       "youtube": "",
       "blogs": [
         {
-          "id": 1761899613444,
-          "author": "Lê Quang Luân L",
-          "title": "dsdads",
-          "content": "dsadsafadsads",
-          "category": "cpp",
-          "image": "/images/1761899609195-Screenshot-2025-07-04-205328.png",
-          "fullContent": "sadasdffadsfd",
-          "status": "draft",
-          "createdAt": "2025-10-31T08:33:33.444Z",
-          "updatedAt": "2025-10-31T08:33:46.207Z",
-          "user": {
-            "id": "1761712271138",
-            "name": "chanhcity",
-            "fullName": "chanhcity",
-            "email": "chanhcity@gmail.com",
-            "phone": "0909090909",
-            "password": "$2b$10$Rx.if0g9sBYB80WQnItTl.DxoBk5lOPH8AD968H9W1Tz5j6Durrme",
-            "createdAt": "2025-10-29T04:31:11.138Z",
-            "updatedAt": "2025-10-29T04:31:11.138Z",
-            "about": "",
-            "avatar": "/images/1761712315340-pngtree-purple-camera-neon-cinema-logo-png-image_3149754-removebg-preview.png",
-            "personalWebsite": "",
-            "github": "",
-            "linkedin": "",
-            "facebook": "",
-            "youtube": "",
-            "blogs": [
-              {
-                "id": 1761899613444,
-                "author": "Lê Quang",
-                "title": "dsdads",
-                "content": "dsadsafadsads",
-                "category": "cpp",
-                "image": "/images/1761899609195-Screenshot-2025-07-04-205328.png",
-                "fullContent": "sadasdffadsfd",
-                "status": "draft",
-                "createdAt": "2025-10-31T08:33:33.444Z",
-                "updatedAt": "2025-10-31T08:33:33.444Z"
-              }
-            ],
-            "courses": [
-              {
-                "id": "1",
-                "image": "/images/Introductory.png",
-                "title": "Kiến Thức Nhập Môn IT",
-                "free": "Miễn phí",
-                "people": 136848,
-                "numberOfPosts": 9,
-                "totalTime": "3h12p",
-                "contentSection": "Kiến thức nhập môn",
-                "titleSection": "Mô hình Client - Server là gì?",
-                "section": [
-                  {
-                    "id": "1",
-                    "title": "Khái niệm, kĩ thuật cần biết",
-                    "totalLesson": 3,
-                    "lessons": [
-                      {
-                        "id": "1",
-                        "title": "Mô hình Client - Server là gì?",
-                        "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-                      },
-                      {
-                        "id": "2",
-                        "title": "Domain là gì? Tên miền là gì?",
-                        "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-                      },
-                      {
-                        "id": "3",
-                        "title": "Mua áo F8 | Đăng ký học Offline",
-                        "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "2",
-                    "title": "Môi trường, con người IT",
-                    "totalLesson": 3,
-                    "lessons": [
-                      {
-                        "id": "1",
-                        "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
-                        "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-                      },
-                      {
-                        "id": "2",
-                        "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      },
-                      {
-                        "id": "3",
-                        "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "3",
-                    "title": "Phương pháp, định hướng",
-                    "totalLesson": 4,
-                    "lessons": [
-                      {
-                        "id": "1",
-                        "title": "Phương pháp học lập trình của Admin F8?",
-                        "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-                      },
-                      {
-                        "id": "2",
-                        "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      },
-                      {
-                        "id": "3",
-                        "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      },
-                      {
-                        "id": "4",
-                        "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "4",
-                    "title": "Hoàn thành khóa học",
-                    "totalLesson": 2,
-                    "lessons": [
-                      {
-                        "id": "1",
-                        "title": "Ứng tuyển xin việc làm",
-                        "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-                      },
-                      {
-                        "id": "2",
-                        "title": "Hoàn thành khóa học",
-                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": 1761899648306,
-          "author": "Lê Quang",
-          "title": "sadasfdsf",
-          "content": "sdsafgdagfg",
-          "category": "cpp",
-          "image": "/images/1761899642244-Screenshot-2025-09-30-151053.png",
-          "fullContent": "fdgfdhgdhgfhg",
+          "id": 1761911645011,
+          "author": "Lê Quang Luân",
+          "title": "hghfgh",
+          "content": "jghjghjhjh",
+          "category": "react-native",
+          "image": "/images/1761911639232-Screenshot-2025-10-01-200625.png",
+          "fullContent": "hdfghfhd",
           "status": "published",
-          "createdAt": "2025-10-31T08:34:08.306Z",
-          "updatedAt": "2025-10-31T08:34:08.306Z"
+          "createdAt": "2025-10-31T11:54:05.011Z",
+          "updatedAt": "2025-10-31T11:54:05.011Z"
         },
         {
-          "id": 1761902140351,
-          "author": "Son",
-          "title": "luan",
-          "content": "đàgfgfgdf",
-          "category": "devops",
-          "image": "/images/1761902136016-Screenshot-2025-09-27-212127.png",
-          "fullContent": "fgdfhdfhdfghdf",
-          "status": "draft",
-          "createdAt": "2025-10-31T09:15:40.351Z",
-          "updatedAt": "2025-10-31T09:15:40.351Z"
+          "id": 1761917397487,
+          "author": "Lê Quang Luân",
+          "title": "hgfhfghjf",
+          "content": "hfghgfhh",
+          "category": "react-native",
+          "image": "/images/1761917394147-Screenshot-2025-07-04-205228.png",
+          "fullContent": "hfghfghfgfgh",
+          "status": "published",
+          "createdAt": "2025-10-31T13:29:57.487Z",
+          "updatedAt": "2025-10-31T13:29:57.487Z"
         }
       ],
       "courses": [
@@ -1152,6 +1032,219 @@
       "password": "$2b$10$ysz15Oy72hBsKMhrk31OpOl.WY6nu93qzIscgseTOsf9keiIvX4eS",
       "createdAt": "2025-10-31T09:25:09.805Z",
       "updatedAt": "2025-10-31T09:25:09.805Z"
+    },
+    {
+      "id": "1761904661955",
+      "name": "quyyyy",
+      "fullName": "quyyyy",
+      "email": "LeQuyttttttttt@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$cvNw7Jbq0ToD2IlTaBKW8Om3j9xViAPqcpyw1BY61uNWCJ/nmrzbi",
+      "createdAt": "2025-10-31T09:57:41.955Z",
+      "updatedAt": "2025-10-31T09:57:41.955Z",
+      "about": "dadsa",
+      "avatar": "",
+      "personalWebsite": "đâsd",
+      "github": "https://github.com/luanPro35/Course",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": "",
+      "blogs": [
+        {
+          "id": 1761918989826,
+          "author": "Huyền Ngọc",
+          "title": "gdfgfgfdfdgd",
+          "content": "jhjghjghj",
+          "category": "devops",
+          "image": "/images/1761918985600-snapedit_1759301056404.jpeg",
+          "fullContent": "ghjghjhjghjj",
+          "status": "published",
+          "createdAt": "2025-10-31T13:56:29.826Z",
+          "updatedAt": "2025-10-31T13:56:29.826Z"
+        }
+      ]
+    },
+    {
+      "id": "1761918354880",
+      "name": "LeLuan",
+      "fullName": "LeLuan",
+      "email": "LeQu@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$rxw51E5rQcH5gfxiZH8kw.qSEZrBTFlEbjVNGO6p8kopx5XBYZ/3i",
+      "createdAt": "2025-10-31T13:45:54.880Z",
+      "updatedAt": "2025-10-31T13:45:54.880Z",
+      "about": "chàobanj",
+      "avatar": "/images/1761918373834-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+      "personalWebsite": "Cá nhân",
+      "github": "https://github.com/luanPro35/Course",
+      "linkedin": "Link",
+      "facebook": "adsdad",
+      "youtube": "đâsđa",
+      "courses": [
+        {
+          "id": "2",
+          "image": "/images/Cpp.png",
+          "title": "Lập trình C++ cơ bản, nâng cao",
+          "free": "Miễn phí",
+          "people": 37107,
+          "numberOfPosts": 55,
+          "totalTime": "10h18p",
+          "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+          "titleSection": "Lập trình C++ cơ bản, nâng cao",
+          "section": [
+            {
+              "id": "1",
+              "title": "Giới thiệu khóa học",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Giới thiệu khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Cài đặt DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Hướng dẫn sử dụng DevC",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Làm quen với lập trình",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Biến và kiểu dữ liệu",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Cấu trúc điều kiện if/else",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "blogs": [
+        {
+          "id": 1761918454459,
+          "author": "Lê Quang Luân",
+          "title": "fgfghfgh",
+          "content": "hfhfghfhgfhgf",
+          "category": "react-native",
+          "image": "/images/1761918450907-dscn4570.jpg",
+          "fullContent": "jghjghghj",
+          "status": "draft",
+          "createdAt": "2025-10-31T13:47:34.459Z",
+          "updatedAt": "2025-10-31T13:47:50.304Z",
+          "user": {
+            "id": "1761918354880",
+            "name": "LeLuan",
+            "fullName": "LeLuan",
+            "email": "LeQu@gmail.com",
+            "phone": "0909090909",
+            "password": "$2b$10$rxw51E5rQcH5gfxiZH8kw.qSEZrBTFlEbjVNGO6p8kopx5XBYZ/3i",
+            "createdAt": "2025-10-31T13:45:54.880Z",
+            "updatedAt": "2025-10-31T13:45:54.880Z",
+            "about": "chàobanj",
+            "avatar": "/images/1761918373834-z7100203611742_e8056f75c2e927432316c56a17733163.jpg",
+            "personalWebsite": "Cá nhân",
+            "github": "https://github.com/luanPro35/Course",
+            "linkedin": "Link",
+            "facebook": "adsdad",
+            "youtube": "đâsđa",
+            "courses": [
+              {
+                "id": "2",
+                "image": "/images/Cpp.png",
+                "title": "Lập trình C++ cơ bản, nâng cao",
+                "free": "Miễn phí",
+                "people": 37107,
+                "numberOfPosts": 55,
+                "totalTime": "10h18p",
+                "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
+                "titleSection": "Lập trình C++ cơ bản, nâng cao",
+                "section": [
+                  {
+                    "id": "1",
+                    "title": "Giới thiệu khóa học",
+                    "totalLesson": 3,
+                    "lessons": [
+                      {
+                        "id": "1",
+                        "title": "Giới thiệu khóa học",
+                        "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                      },
+                      {
+                        "id": "2",
+                        "title": "Cài đặt DevC",
+                        "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                      },
+                      {
+                        "id": "3",
+                        "title": "Hướng dẫn sử dụng DevC",
+                        "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "2",
+                    "title": "Làm quen với lập trình",
+                    "totalLesson": 2,
+                    "lessons": [
+                      {
+                        "id": "1",
+                        "title": "Biến và kiểu dữ liệu",
+                        "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                      },
+                      {
+                        "id": "2",
+                        "title": "Cấu trúc điều kiện if/else",
+                        "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "blogs": [
+              {
+                "id": 1761918454459,
+                "author": "Lê Quang Luân",
+                "title": "fgfghfgh",
+                "content": "hfhfgh",
+                "category": "react-native",
+                "image": "/images/1761918450907-dscn4570.jpg",
+                "fullContent": "jghjghghj",
+                "status": "draft",
+                "createdAt": "2025-10-31T13:47:34.459Z",
+                "updatedAt": "2025-10-31T13:47:34.459Z"
+              }
+            ]
+          }
+        },
+        {
+          "id": 1761918501935,
+          "author": "Huyền Ngọc",
+          "title": "ghjghjghjh",
+          "content": "jghjgjh",
+          "category": "react-native",
+          "image": "/images/1761918498535-redux-workflows.gif",
+          "fullContent": "jghjghjh",
+          "status": "published",
+          "createdAt": "2025-10-31T13:48:21.935Z",
+          "updatedAt": "2025-10-31T13:48:21.935Z"
+        }
+      ]
     }
   ],
   "informations": [
@@ -1307,18 +1400,7 @@
       "youtube": ""
     }
   ],
-  "saved": [
-    {
-      "id": 1,
-      "title": "TRẢI NGHIỆM HỌC THỬ REACT NATIVE, DEVOPS, C++ VÔ CÙNG CHẤT LƯỢNG CÙNG F8",
-      "content": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
-      "fullContent": "Để giúp học viên mới cảm nhận rõ ràng chất lượng giảng dạy, F8 đã xây dựng 3 lớp học thử: C++, React Native và DevOps với lộ trình rõ ràng.",
-      "author": "Huyền Lê Ngọc",
-      "category": "React Native",
-      "image": "/images/posts-1.png",
-      "createdAt": "2025-10-31T09:38:43.894Z"
-    }
-  ],
+  "saved": [],
   "blogs": [
     {
       "id": "36a7",
@@ -1379,17 +1461,6 @@
       "image": "/images/1761894118969-Screenshot-2025-09-25-083941.png",
       "status": "draft",
       "createdAt": "2025-10-31T07:02:06.023Z"
-    },
-    {
-      "id": "ea23",
-      "author": "Lê Quang Luân",
-      "title": "đasad",
-      "content": "dấd",
-      "category": "react-native",
-      "image": "/images/1761895365132-Screenshot-2025-09-27-212055.png",
-      "status": "draft",
-      "createdAt": "2025-10-31T07:22:52.045Z",
-      "userId": "draft"
     },
     {
       "id": "98af",
@@ -1512,62 +1583,6 @@
               {
                 "id": "2",
                 "title": "Hoàn thành khóa học",
-                "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "73e0",
-      "userId": "2",
-      "course": {
-        "id": "2",
-        "image": "/images/Cpp.png",
-        "title": "Lập trình C++ cơ bản, nâng cao",
-        "free": "Miễn phí",
-        "people": 37107,
-        "numberOfPosts": 55,
-        "totalTime": "10h18p",
-        "contentSection": "Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.",
-        "titleSection": "Lập trình C++ cơ bản, nâng cao",
-        "section": [
-          {
-            "id": "1",
-            "title": "Giới thiệu khóa học",
-            "totalLesson": 3,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Giới thiệu khóa học",
-                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-              },
-              {
-                "id": "2",
-                "title": "Cài đặt DevC",
-                "videoUrl": "https://www.youtube.com/watch?v=1234567890"
-              },
-              {
-                "id": "3",
-                "title": "Hướng dẫn sử dụng DevC",
-                "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
-              }
-            ]
-          },
-          {
-            "id": "2",
-            "title": "Làm quen với lập trình",
-            "totalLesson": 2,
-            "lessons": [
-              {
-                "id": "1",
-                "title": "Biến và kiểu dữ liệu",
-                "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
-              },
-              {
-                "id": "2",
-                "title": "Cấu trúc điều kiện if/else",
                 "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
               }
             ]
@@ -2731,6 +2746,42 @@
       "timeAgo": "một năm trước",
       "readTime": "4 phút đọc",
       "image": "/images/posts-6.png"
+    },
+    {
+      "id": "1761914726063",
+      "title": "hdghdfgdfg",
+      "content": "gdfgdfgdfg",
+      "fullContent": "gdfgdfgfdgdfgfgdg",
+      "author": "gfgfgdsg",
+      "category": "react-native",
+      "image": "/images/1761914716837-Screenshot-2025-07-04-205228.png",
+      "createdAt": "2025-10-31T12:45:26.063Z",
+      "timeAgo": "0 phút trước",
+      "readTime": "1 phút đọc"
+    },
+    {
+      "id": "1761917397487",
+      "title": "hgfhfghjf",
+      "content": "hfghgfhh",
+      "fullContent": "hfghfghfgfgh",
+      "author": "Lê Quang Luân",
+      "category": "react-native",
+      "image": "/images/1761917394147-Screenshot-2025-07-04-205228.png",
+      "createdAt": "2025-10-31T13:29:57.487Z",
+      "timeAgo": "0 phút trước",
+      "readTime": "1 phút đọc"
+    },
+    {
+      "id": "1761918989826",
+      "title": "gdfgfgfdfdgd",
+      "content": "jhjghjghj",
+      "fullContent": "ghjghjhjghjj",
+      "author": "Huyền Ngọc",
+      "category": "devops",
+      "image": "/images/1761918985600-snapedit_1759301056404.jpeg",
+      "createdAt": "2025-10-31T13:56:29.826Z",
+      "timeAgo": "0 phút trước",
+      "readTime": "1 phút đọc"
     }
   ],
   "trending": [

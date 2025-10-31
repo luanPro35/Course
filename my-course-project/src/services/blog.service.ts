@@ -1,7 +1,10 @@
 import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
 import { User } from "@/types/user";
+import type { Post } from "@/types/post";
 
+export const API_BASE_URL = "http://localhost:3001/blogs";
 const USERS_API_URL = "http://localhost:3001/users";
+const ARTICLE_API_URL = "http://localhost:3001/article";
 
 export class BlogService {
   static async create(
@@ -33,6 +36,12 @@ export class BlogService {
 
     if (!updateUserResponse.ok) {
       throw new Error("Lỗi khi cập nhật bài viết cho người dùng.");
+    }
+
+    // If status is published, add to article collection
+    if (status === "published") {
+      console.log("📝 Adding blog to article collection:", newPost.title);
+      await this.addToArticle(newPost);
     }
 
     return newPost;
@@ -82,6 +91,9 @@ export class BlogService {
       throw new Error("Không tìm thấy bài viết để cập nhật.");
     }
 
+    const oldBlog = user.blogs ? user.blogs[blogIndex] : null;
+    const oldStatus = oldBlog?.status;
+
     const updatedBlog: BlogPost = {
       ...(user.blogs ? user.blogs[blogIndex] : {}),
       ...(user.blogs && user.blogs[blogIndex]
@@ -120,6 +132,20 @@ export class BlogService {
       throw new Error("Lỗi khi cập nhật bài viết.");
     }
 
+    // Handle article collection updates based on status change
+    const newStatus = updatedBlog.status;
+    
+    if (oldStatus === "draft" && newStatus === "published") {
+      // Changed from draft to published - add to article
+      await this.addToArticle(updatedBlog);
+    } else if (oldStatus === "published" && newStatus === "draft") {
+      // Changed from published to draft - remove from article
+      await this.removeFromArticle(blogId);
+    } else if (newStatus === "published") {
+      // Already published, just update the article
+      await this.updateArticle(updatedBlog);
+    }
+
     return updatedBlog;
   }
 
@@ -134,6 +160,7 @@ export class BlogService {
     }
     const user: User = await userResponse.json();
 
+    const blogToDelete = (user.blogs || []).find((b) => b.id === blogId);
     const updatedBlogs = (user.blogs || []).filter((b) => b.id !== blogId);
 
     if (updatedBlogs.length === (user.blogs || []).length) {
@@ -149,5 +176,115 @@ export class BlogService {
     if (!updateUserResponse.ok) {
       throw new Error("Lỗi khi xóa bài viết.");
     }
+
+    // If the deleted blog was published, remove it from article collection
+    if (blogToDelete?.status === "published") {
+      await this.removeFromArticle(blogId);
+    }
+  }
+
+  // Helper method to add a blog post to article collection
+  private static async addToArticle(blog: BlogPost): Promise<void> {
+    try {
+      const articlePost: Post = {
+        id: blog.id.toString(),
+        title: blog.title,
+        content: blog.content,
+        fullContent: blog.fullContent,
+        author: blog.author,
+        category: blog.category,
+        image: blog.image,
+        createdAt: blog.createdAt || new Date().toISOString(),
+        timeAgo: this.calculateTimeAgo(blog.createdAt || new Date().toISOString()),
+        readTime: this.calculateReadTime(blog.fullContent),
+      };
+
+      console.log("🚀 Posting to article API:", ARTICLE_API_URL);
+      console.log("📄 Article data:", articlePost);
+
+      const response = await fetch(ARTICLE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(articlePost),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("✅ Successfully added to article collection:", result);
+    } catch (error) {
+      console.error("❌ Lỗi khi thêm bài viết vào article:", error);
+    }
+  }
+
+  // Helper method to update an article
+  private static async updateArticle(blog: BlogPost): Promise<void> {
+    try {
+      const articlePost: Post = {
+        id: blog.id.toString(),
+        title: blog.title,
+        content: blog.content,
+        fullContent: blog.fullContent,
+        author: blog.author,
+        category: blog.category,
+        image: blog.image,
+        createdAt: blog.createdAt || new Date().toISOString(),
+        timeAgo: this.calculateTimeAgo(blog.createdAt || new Date().toISOString()),
+        readTime: this.calculateReadTime(blog.fullContent),
+      };
+
+      await fetch(`${ARTICLE_API_URL}/${blog.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(articlePost),
+      });
+    } catch (error) {
+      console.error("Lỗi khi cập nhật bài viết trong article:", error);
+    }
+  }
+
+  // Helper method to remove a blog post from article collection
+  private static async removeFromArticle(blogId: number): Promise<void> {
+    try {
+      await fetch(`${ARTICLE_API_URL}/${blogId}`, {
+        method: "DELETE",
+      });
+    } catch (error) {
+      console.error("Lỗi khi xóa bài viết khỏi article:", error);
+    }
+  }
+
+  // Helper function to calculate time ago
+  private static calculateTimeAgo(dateString: string): string {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diffInMs = now.getTime() - past.getTime();
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} phút trước`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} giờ trước`;
+    } else if (diffInDays < 30) {
+      return `${diffInDays} ngày trước`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths} tháng trước`;
+    } else {
+      return `${diffInYears} năm trước`;
+    }
+  }
+
+  // Helper function to calculate read time
+  private static calculateReadTime(content: string): string {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(/\s+/).length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return `${minutes} phút đọc`;
   }
 }

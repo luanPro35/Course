@@ -7,4 +7,11 @@ export interface Post {
   category: string;
   image: string;
   createdAt: string;
+  timeAgo: string;
+  readTime: string;
+}
+
+export interface LinkPost {
+  link: string;
+  categories: string[];
 }

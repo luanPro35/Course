@@ -60,8 +60,7 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
     >
       <div className="flex items-center justify-between mb-4">
         <span className="font-medium text-gray-800">{post.author}</span>
-        {post.status === "draft" && (
-          <div className="relative" ref={menuRef}>
+        <div className="relative" ref={menuRef}>
             <button
               className="flex items-center gap-2 cursor-pointer"
               onClick={(e) => {
@@ -104,7 +103,6 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
               )}
             </AnimatePresence>
           </div>
-        )}
       </div>
 
       {/* Nội dung chính */}

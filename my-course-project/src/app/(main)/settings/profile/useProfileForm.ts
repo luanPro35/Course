@@ -45,7 +45,7 @@ export function useProfileForm() {
           if (profileData.success && profileData.data) {
             setUser(profileData.data);
             setForm({
-              name: profileData.data.name || "",
+              name: profileData.data.fullName || "",
               fullName: profileData.data.fullName || "",
               about: profileData.data.about || "",
               avatar: profileData.data.avatar || "",
@@ -156,7 +156,7 @@ export function useProfileForm() {
 
       // Cập nhật form với toàn bộ dữ liệu từ kết quả API
       setForm({
-        name: result.data.name || "",
+        name: result.data.fullName || "",
         fullName: result.data.fullName || "",
         about: result.data.about || "",
         avatar: result.data.avatar || "",
@@ -208,7 +208,7 @@ export function useProfileForm() {
 
       // Cập nhật form với toàn bộ dữ liệu từ kết quả API
       setForm({
-        name: result.data.name || "",
+        name: result.data.fullName || "",
         fullName: result.data.fullName || "",
         about: result.data.about || "",
         avatar: form.avatar || "",

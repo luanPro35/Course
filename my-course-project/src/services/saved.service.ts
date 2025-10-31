@@ -22,13 +22,15 @@ export class SavedService {
   static async save(post: BlogPost): Promise<void> {
     try {
       const existingPosts = await this.getAll();
-      if (existingPosts.some((p) => Number(p.id) === Number(post.id))) {
+      const numericId = Number(post.id);
+      
+      if (existingPosts.some((p) => Number(p.id) === numericId)) {
         console.warn(`Post with id ${post.id} is already saved.`);
         return;
       }
 
-      // Giữ nguyên id thay vì đổi thành postId
-      const savedPost = { ...post };
+      // Ensure id is a number for consistency
+      const savedPost = { ...post, id: numericId };
 
       const res = await fetch(`${SAVED_API_URL}`, {
         method: "POST",
@@ -51,7 +53,17 @@ export class SavedService {
 
   static async delete(postId: string | number): Promise<void> {
     try {
-      const res = await fetch(`${SAVED_API_URL}/${postId}`, {
+      // Convert to number to ensure consistency
+      const numericId = Number(postId);
+      const deleteUrl = `${SAVED_API_URL}/${numericId}`;
+      
+      console.log("Deleting saved post:", {
+        originalId: postId,
+        numericId,
+        url: deleteUrl
+      });
+      
+      const res = await fetch(deleteUrl, {
         method: "DELETE",
       });
 
@@ -60,8 +72,11 @@ export class SavedService {
         console.error(
           `Failed to delete post: ${res.status} ${res.statusText} - ${errorText}`
         );
+        console.error("Delete URL was:", deleteUrl);
         throw new Error("Không thể xóa bài viết");
       }
+      
+      console.log("Successfully deleted post with id:", numericId);
     } catch (error) {
       console.error("Error in SavedService.delete:", error);
       throw error;
