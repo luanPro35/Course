@@ -51,12 +51,12 @@ const ContentSection: React.FC<ContentSectionProps> = ({
   children,
   link,
 }) => (
-  <section className="pt-14 px-6">
-    <div className="flex items-center justify-between mb-6">
+  <section className="pt-14 px-4 md:px-6">
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
       <SectionHeader title={title} showNewBadge={showNewBadge} />
-      {link && link}
+      {link && <div className="mt-4 md:mt-0">{link}</div>}
     </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
       {children}
     </div>
   </section>
@@ -85,13 +85,13 @@ export default function Home() {
       </header>
 
       <div className="flex flex-1 pt-16">
-        <aside className="w-28 flex-shrink-0">
+        <aside className="w-28 flex-shrink-0 hidden lg:block">
           <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
             <Sidebar />
           </div>
         </aside>
 
-        <main className="flex-1 px-6 md:px-12 py-8 pt-8">
+        <main className="flex-1 px-4 md:px-6 lg:px-12 py-8 pt-8">
           <CourseLandingPage />
 
           <ContentSection title="Khóa học Pro" showNewBadge>
