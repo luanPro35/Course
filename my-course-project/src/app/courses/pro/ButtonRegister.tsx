@@ -6,44 +6,41 @@ interface ButtonRegisterProps {
 
 export default function ButtonRegister({ onClick }: ButtonRegisterProps) {
   return (
-    <div className="flex items-center justify-center bg-gray-900">
-      <button
-        onClick={onClick}
-        className="relative block cursor-pointer text-white no-underline font-semibold rounded-md overflow-hidden p-[3px] isolate group"
-      >
-        <div
-          className="absolute top-0 left-0 w-[400%] h-full -translate-x-[5%] transition-transform duration-300 ease-out group-hover:translate-x-0 group-hover:duration-[750ms]"
-          style={{
-            background:
-              "linear-gradient(115deg, #4fcf70, #fad648, #a767e5, #12bcfe, #44ce7b)",
-            backgroundSize: "25% 100%",
-          }}
-        />
+    <button
+      onClick={onClick}
+      className="relative block cursor-pointer text-white no-underline font-semibold rounded-md overflow-hidden p-[3px] isolate group"
+    >
+      <div
+        className="absolute top-0 left-0 w-[400%] h-full animate-gradient-flow"
+        style={{
+          background:
+            "linear-gradient(115deg, #4fcf70, #fad648, #a767e5, #12bcfe, #44ce7b)",
+          backgroundSize: "25% 100%",
+        }}
+      />
 
-        <span className="relative block px-6 py-4 text-lg bg-black rounded-[3px] h-full z-10">
-          Đăng kí ngay
-        </span>
-      </button>
+      <span className="relative block px-6 py-4 text-lg bg-black rounded-[3px] h-full z-10">
+        Đăng kí ngay
+      </span>
 
       <style jsx>{`
-        @keyframes gradient-slide {
+        @keyframes gradient-flow {
           0% {
             transform: translateX(-5%);
           }
           100% {
-            transform: translateX(-30%);
+            transform: translateX(-75%);
           }
         }
 
-        a > div:first-child {
-          animation: gradient-slide 0.75s linear infinite;
-          animation-play-state: paused;
+        .animate-gradient-flow {
+          animation: gradient-flow 3s linear infinite;
         }
 
-        a:hover > div:first-child {
-          animation-play-state: running;
+        button:hover .animate-gradient-flow {
+          animation-duration: 1.5s;
         }
       `}</style>
-    </div>
+    </button>
   );
 }

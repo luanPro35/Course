@@ -78,7 +78,7 @@ export default function DynamicCoursePage({ course }: DynamicCoursePageProps) {
                   )}
                 </h2>
 
-                <div className="flex flex-wrap gap-4 mb-8">
+                <div className="flex flex-wrap gap-4 pt-4">
                   <ButtonRegister onClick={handleOpenModal} />
                 </div>
               </div>
