@@ -1,3 +1,5 @@
+import { User } from "@/types/user";
+
 export interface BlogPost {
   id: number;
   author: string;
@@ -9,6 +11,7 @@ export interface BlogPost {
   createdAt?: string;
   updatedAt?: string;
   status?: "draft" | "published";
+  user?: User;
 }
 
 export interface BlogFormData {

@@ -120,8 +120,8 @@ export default function CreateBlogPost() {
               />
 
               <FormActions
-                onDraft={() => handleSubmit("draft")}
-                onPublish={() => handleSubmit("published")}
+                onDraft={() => handleSubmit("draft", "1")}
+                onPublish={() => handleSubmit("published", "1")}
                 isSubmitting={isSubmitting}
                 isUploading={isUploading}
               />

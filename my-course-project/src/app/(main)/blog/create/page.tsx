@@ -1,12 +1,11 @@
 "use client";
 import { useBlogForm } from "@/hooks/useBlogForm";
 import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
-import { BookOpen, Eye, FileText, Loader2, Tag, User } from "lucide-react";
+import { FileText, Tag, User as UserIcon } from "lucide-react";
 import { BlogPreview } from "./BlogPreview";
-import React, { ComponentType, useEffect, Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BlogService } from "@/services/blog.service";
-import { BlogPost } from "@/types/blog.types";
 import { FormInput } from "./FormInput";
 import { FormTextarea } from "./FormTextarea";
 import { FormSelect } from "./FormSelect";
@@ -15,11 +14,13 @@ import { ErrorMessages } from "./ErrorMessages";
 import { FormHeader } from "./FormHeader";
 import { TipsSection } from "./TipsSection";
 import { FormActions } from "./FormActions";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function CreateBlogPost() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("id");
+  const { user } = useAuth();
 
   const {
     formData,
@@ -34,7 +35,7 @@ export default function CreateBlogPost() {
     setImagePreview,
     handlePaste,
   } = useBlogForm({
-    id: 0,
+    id: postId ? parseInt(postId, 10) : 0,
     author: "",
     title: "",
     content: "",
@@ -44,23 +45,23 @@ export default function CreateBlogPost() {
   });
 
   useEffect(() => {
-    if (postId) {
-      BlogService.getById(postId)
+    if (postId && user?.id) {
+      BlogService.getById(user.id, parseInt(postId, 10))
         .then((post) => {
           if (post) {
             setFormData(post);
             setImagePreview(post.image);
           } else {
             console.error("Post not found for ID:", postId);
-            router.push("/blog/create"); // Redirect if post not found
+            router.push("/blog/create");
           }
         })
         .catch((err) => {
           console.error("Error fetching post for editing:", err);
-          router.push("/blog/create"); // Redirect if post not found or error
+          router.push("/blog/create");
         });
     }
-  }, [postId, setFormData, setImagePreview, router]);
+  }, [postId, user?.id, setFormData, setImagePreview, router]);
 
   const pageTitle = postId ? "Chỉnh Sửa Bài Viết" : "Tạo Bài Viết Mới";
   const draftButtonText = postId ? "Cập nhật bản nháp" : "Lưu bản nháp";
@@ -85,7 +86,7 @@ export default function CreateBlogPost() {
                 <FormInput
                   label="Tác giả"
                   name="author"
-                  icon={User}
+                  icon={UserIcon}
                   required
                   value={formData.author}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -156,9 +157,16 @@ export default function CreateBlogPost() {
                 />
 
                 <FormActions
-                  onDraft={() => handleSubmit("draft", postId ?? undefined)}
+                  onDraft={() =>
+                    handleSubmit("draft", user?.id ?? null, postId ?? undefined, router)
+                  }
                   onPublish={() =>
-                    handleSubmit("published", postId ?? undefined)
+                    handleSubmit(
+                      "published",
+                      user?.id ?? null,
+                      postId ?? undefined,
+                      router
+                    )
                   }
                   isSubmitting={isSubmitting}
                   isUploading={isUploading}

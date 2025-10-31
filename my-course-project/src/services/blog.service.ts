@@ -1,138 +1,153 @@
 import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
+import { User } from "@/types/user";
 
-// Sử dụng json-server API endpoint
-export const API_BASE_URL = "http://localhost:3001/blogs";
+const USERS_API_URL = "http://localhost:3001/users";
+
 export class BlogService {
-  static async getAll(): Promise<BlogPost[]> {
-    const res = await fetch(API_BASE_URL, {
-      cache: "no-store",
+  static async create(
+    data: BlogFormData,
+    userId: number | string,
+    status: BlogStatus = "draft"
+  ): Promise<BlogPost> {
+    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    if (!userResponse.ok) {
+      throw new Error("Không tìm thấy người dùng để thêm bài viết.");
+    }
+    const user: User = await userResponse.json();
+
+    const newPost: BlogPost = {
+      ...data,
+      id: Date.now(),
+      status,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedBlogs = [...(user.blogs || []), newPost];
+
+    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ blogs: updatedBlogs }),
     });
-    if (!res.ok) throw new Error("Không thể tải được danh sách bài viết");
-    return res.json();
+
+    if (!updateUserResponse.ok) {
+      throw new Error("Lỗi khi cập nhật bài viết cho người dùng.");
+    }
+
+    return newPost;
   }
 
-  static async getById(id: number | string): Promise<BlogPost | null> {
-    const res = await fetch(`${API_BASE_URL}/${id}`, { cache: "no-store" });
-    if (!res.ok) {
-      if (res.status === 404) {
-        return null;
-      }
-      const errorText = await res.text();
-      throw new Error(errorText || "Không thể tải được bài viết");
+  static async getAll(): Promise<BlogPost[]> {
+    const response = await fetch(USERS_API_URL);
+    if (!response.ok) {
+      throw new Error("Lỗi khi tải danh sách người dùng.");
     }
-    return res.json();
+    const users: User[] = await response.json();
+    const allBlogs = users.flatMap((user) =>
+      (user.blogs || []).map((blog) => ({ ...blog, user: user }))
+    );
+    return allBlogs;
+  }
+
+  static async getById(
+    userId: number | string,
+    blogId: number
+  ): Promise<BlogPost | undefined> {
+    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    if (!userResponse.ok) {
+      throw new Error("Không tìm thấy người dùng.");
+    }
+    const user: User = await userResponse.json();
+    console.log("getById called with userId:", userId, "and blogId:", blogId);
+    const blog = user.blogs
+      ? user.blogs.find((b) => b.id === blogId)
+      : undefined;
+    return blog ? { ...blog, user: user } : undefined;
   }
 
   static async update(
-    id: number | string,
-    data: BlogFormData,
-    status?: BlogStatus
+    userId: number | string,
+    blogId: number,
+    data: Partial<BlogFormData>
   ): Promise<BlogPost> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id: _, ...restData } = data;
-    const res = await fetch(`${API_BASE_URL}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...restData, status }),
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || "Lỗi khi cập nhật bài viết");
+    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    if (!userResponse.ok) {
+      throw new Error("Không tìm thấy người dùng.");
     }
-    return await res.json();
-  }
+    const user: User = await userResponse.json();
 
-  static async create(
-    data: BlogFormData,
-    status: BlogStatus = "draft"
-  ): Promise<BlogPost> {
-    // Loại bỏ ID một cách tường minh để json-server tự tạo ID mới
-    const postData = {
-      author: data.author,
-      title: data.title,
-      content: data.content,
-      category: data.category,
-      image: data.image,
-      status,
-      createdAt: new Date().toISOString(),
+    const blogIndex = (user.blogs || []).findIndex((b) => b.id === blogId);
+    if (blogIndex === -1) {
+      throw new Error("Không tìm thấy bài viết để cập nhật.");
+    }
+
+    const updatedBlog: BlogPost = {
+      ...(user.blogs ? user.blogs[blogIndex] : {}),
+      ...(user.blogs && user.blogs[blogIndex]
+        ? {
+            id: user.blogs[blogIndex].id,
+            author: user.blogs[blogIndex].author || "",
+            title: user.blogs[blogIndex].title || "",
+            content: user.blogs[blogIndex].content || "",
+            fullContent: user.blogs[blogIndex].fullContent || "",
+            category: user.blogs[blogIndex].category || "",
+            image: user.blogs[blogIndex].image || "",
+          }
+        : {
+            id: 0,
+            author: "",
+            title: "",
+            content: "",
+            fullContent: "",
+            category: "",
+            image: "",
+          }),
+      ...data,
+      updatedAt: new Date().toISOString(),
     };
 
-    const res = await fetch(API_BASE_URL, {
-      method: "POST",
+    const updatedBlogs = user.blogs || [];
+    updatedBlogs[blogIndex] = updatedBlog;
+
+    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postData),
+      body: JSON.stringify({ blogs: updatedBlogs }),
     });
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || "Lỗi khi tạo bài viết");
+    if (!updateUserResponse.ok) {
+      throw new Error("Lỗi khi cập nhật bài viết.");
     }
-    return await res.json();
+
+    return updatedBlog;
   }
 
-  static async delete(id: number | string): Promise<void> {
-    // Đảm bảo id luôn là chuỗi để phù hợp với cách json-server xử lý
-    const res = await fetch(`${API_BASE_URL}/${id}`, {
-      method: "DELETE",
-      cache: "no-store",
+  static async delete(userId: number | string, blogId: number): Promise<void> {
+    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    if (!userResponse.ok) {
+      console.error(
+        "User not found in BlogService.delete with userId:",
+        userId
+      );
+      return;
+    }
+    const user: User = await userResponse.json();
+
+    const updatedBlogs = (user.blogs || []).filter((b) => b.id !== blogId);
+
+    if (updatedBlogs.length === (user.blogs || []).length) {
+      throw new Error("Không tìm thấy bài viết để xóa.");
+    }
+
+    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ blogs: updatedBlogs }),
     });
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error(
-        `Lỗi khi xóa bài viết: ${errorText} (status: ${res.status})`
-      );
-      throw new Error(
-        errorText || `Lỗi khi xóa bài viết (status: ${res.status})`
-      );
+    if (!updateUserResponse.ok) {
+      throw new Error("Lỗi khi xóa bài viết.");
     }
-    // Không cần trả về gì khi xóa thành công
   }
 }
-
-export const getBlogs = async (): Promise<BlogPost[]> => {
-  const res = await fetch(API_BASE_URL, { cache: "no-store" });
-  return res.json();
-};
-
-export const getBlogPost = async (id: string): Promise<BlogPost> => {
-  const res = await fetch(`${API_BASE_URL}/${id}`, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error("Failed to fetch post");
-  }
-  return res.json();
-};
-
-export const createBlogPost = async (
-  post: Omit<BlogPost, "id" | "createdAt" | "updatedAt">
-): Promise<BlogPost> => {
-  const res = await fetch(API_BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(post),
-  });
-  return res.json();
-};
-
-export const updateBlogPost = async (
-  id: string,
-  post: Partial<BlogPost>
-): Promise<BlogPost> => {
-  const res = await fetch(`${API_BASE_URL}/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(post),
-  });
-  return res.json();
-};
-
-export const deleteBlogPost = async (id: string): Promise<void> => {
-  await fetch(`${API_BASE_URL}/${id}`, {
-    method: "DELETE",
-  });
-};

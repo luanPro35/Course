@@ -1,7 +1,7 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
 import { BlogService } from "@/services/blog.service";
-import { BlogFormData, BlogPost } from "@/types/blog.types";
+import { BlogFormData } from "@/types/blog.types";
 
 export const useBlogForm = (initialState: BlogFormData) => {
   const [formData, setFormData] = useState<BlogFormData>(initialState);
@@ -111,7 +111,9 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
   const handleSubmit = async (
     status: "draft" | "published",
-    postId?: number | string
+    userId: string | null,
+    postId?: number | string,
+    router?: ReturnType<typeof import("next/navigation").useRouter>
   ) => {
     setErrors({});
     const newErrors: Record<string, string> = {};
@@ -129,21 +131,33 @@ export const useBlogForm = (initialState: BlogFormData) => {
       return;
     }
 
+    if (!userId) {
+      setErrors((prev) => ({ ...prev, userId: "User ID is required" }));
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       if (postId) {
         // Update existing post
-        await BlogService.update(postId, formData, status);
+        await BlogService.update(
+          userId,
+          parseInt(postId.toString(), 10),
+          formData
+        );
         alert(`Bài viết đã được cập nhật dưới dạng ${status}`);
       } else {
         // Create new post
-        await BlogService.create(formData, status);
+        await BlogService.create(formData, userId, status);
         alert(`Bài viết đã được lưu dưới dạng ${status}`);
         resetForm(); // Reset the form after successful creation
       }
-      // Optionally reset form or redirect
-      // setFormData(initialState);
+
+      // Redirect to my-posts page after successful save
+      if (router) {
+        router.push("/blog/my-posts");
+      }
     } catch (error) {
       console.error("Failed to save the post:", error);
       alert("Có lỗi xảy ra khi lưu bài viết.");

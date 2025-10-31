@@ -15,17 +15,18 @@ export async function POST(request: Request) {
 
     // Check if email already exists in json-server
     const userExistsResponse = await fetch(
-      `http://localhost:3001/users?email=${email}`
+      `http://localhost:3001/users?email=${encodeURIComponent(email)}`
     );
     const existingUsers = await userExistsResponse.json();
 
-    if (existingUsers.length > 0) {
-      //  const existingUser = existingUsers[0];
-      // await fetch(`http://localhost:3001/users/${existingUser.id}`, {
-      //   method: "DELETE",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
+    // Check if any user has the exact same email (case-insensitive)
+    const emailExists = existingUsers.some(
+      (user: { email: string }) =>
+        user.email.toLowerCase() === email.toLowerCase()
+    );
+
+    if (emailExists) {
+      console.log("Email already exists:", email);
       return NextResponse.json(
         { mess: "Email đã được sử dụng", success: false },
         { status: 409 }

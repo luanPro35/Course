@@ -1,4 +1,6 @@
 import { Course } from "./course";
+import { CourseFree } from "./courseFree";
+import { BlogPost } from "./blog.types";
 import { Post } from "./post";
 
 export interface User {
@@ -16,7 +18,8 @@ export interface User {
   linkedin?: string;
   facebook?: string;
   youtube?: string;
-  courses?: Course[]; // Courses directly associated with the user
+  courses?: CourseFree[]; // Courses directly associated with the user
+  blogs?: BlogPost[];
 }
 
 export interface Information {

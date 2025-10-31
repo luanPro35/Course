@@ -17,9 +17,19 @@ const BlogPostPage = () => {
     if (id) {
       const fetchPost = async () => {
         try {
-          const fetchedPost = await BlogService.getById(id as string);
-          setPost(fetchedPost);
+          // Get all posts and find the one with matching ID
+          const allPosts = await BlogService.getAll();
+          const fetchedPost = allPosts.find(
+            (p) => p.id.toString() === id.toString()
+          );
+
+          if (fetchedPost) {
+            setPost(fetchedPost);
+          } else {
+            setError("Không tìm thấy bài viết.");
+          }
         } catch (err) {
+          console.error("Error fetching post:", err);
           setError("Không thể tải được bài viết.");
         } finally {
           setLoading(false);
@@ -55,7 +65,7 @@ const BlogPostPage = () => {
             <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
               <Image
                 src={post.image}
-                alt={post.author}
+                alt={post.user?.fullName || "Author"}
                 layout="fill"
                 className="object-cover"
                 unoptimized
@@ -63,7 +73,7 @@ const BlogPostPage = () => {
             </div>
             <div>
               <h2 className="text-sm font-medium text-gray-900">
-                {post.author}
+                {post.user?.fullName || "Unknown Author"}
               </h2>
               <div className="text-sm text-gray-500 mt-0.5">
                 <span>

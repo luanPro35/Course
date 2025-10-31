@@ -4,16 +4,24 @@ import { BlogService } from "@/services/blog.service"; // Force re-import
 import { BlogPost } from "@/types/blog.types";
 import { PostItem } from "./PostItem";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+
 export default function MyPosts() {
   const router = useRouter();
+  const { user } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [activeContent, setActiveContent] = useState<"draft" | "published">(
     "draft"
   );
 
   const handleDelete = (id: number | string) => {
+    if (!user?.id) {
+      alert("Vui lòng đăng nhập để xóa bài viết");
+      return;
+    }
+
     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
-      BlogService.delete(id)
+      BlogService.delete(user.id, Number(id))
         .then(() => {
           setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
         })
@@ -29,10 +37,20 @@ export default function MyPosts() {
   };
 
   useEffect(() => {
+    if (!user?.id) {
+      return;
+    }
+
     BlogService.getAll()
-      .then(setPosts)
+      .then((allPosts) => {
+        // Filter posts to only show current user's posts
+        const userPosts = allPosts.filter(
+          (post) => post.user?.id === user.id
+        );
+        setPosts(userPosts);
+      })
       .catch((err) => console.error(err));
-  }, []);
+  }, [user?.id]);
 
   const drafts = posts.filter((p) => p.status === "draft");
   const published = posts.filter((p) => p.status === "published");
