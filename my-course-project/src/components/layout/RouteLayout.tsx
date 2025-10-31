@@ -25,14 +25,14 @@ export default function RouteLayout({
         </header>
         <div className="flex flex-1 pt-16">
           {!hideSideBar && (
-            <aside className="w-28 flex-shrink-0 mt-4">
+            <aside className="hidden lg:block w-28 flex-shrink-0 mt-4">
               <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
                 <Sidebar />
               </div>
             </aside>
           )}
 
-          <main className="flex-1 px-6 md:px-12 py-8 pt-8 justify-start">
+          <main className="flex-1 px-4 sm:px-6 md:px-12 py-8 pt-8 justify-start">
             {children}
           </main>
         </div>

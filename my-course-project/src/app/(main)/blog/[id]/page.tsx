@@ -51,7 +51,7 @@ const BlogPostPage = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="max-w-3xl mx-auto py-8 px-6">
+      <div className="max-w-3xl mx-auto py-6 px-4 md:py-8 md:px-6">
         {/* Author info and metadata */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -78,12 +78,12 @@ const BlogPostPage = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8 leading-tight">
+        <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8 leading-tight">
           {post.title}
         </h1>
-        <div className="prose prose-3xl max-w-none">
+        <div className="prose prose-base md:prose-lg lg:prose-xl max-w-none">
           <div
-            className="text-gray-700 leading-relaxed text-2xl"
+            className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl"
             dangerouslySetInnerHTML={{ __html: post.fullContent }}
           />
         </div>

@@ -44,9 +44,7 @@ export default function MyPosts() {
     BlogService.getAll()
       .then((allPosts) => {
         // Filter posts to only show current user's posts
-        const userPosts = allPosts.filter(
-          (post) => post.user?.id === user.id
-        );
+        const userPosts = allPosts.filter((post) => post.user?.id === user.id);
         setPosts(userPosts);
       })
       .catch((err) => console.error(err));
@@ -56,16 +54,18 @@ export default function MyPosts() {
   const published = posts.filter((p) => p.status === "published");
 
   return (
-    <div className="p-6 ml-10">
-      <h2 className="text-3xl font-bold mb-24">📝 Bài viết của tôi</h2>
+    <div className="p-4 md:p-6 lg:ml-10">
+      <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 lg:mb-24">
+        📝 Bài viết của tôi
+      </h2>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 border-b">
         <button
           onClick={() => setActiveContent("draft")}
-          className={`px-4 py-2 transition-all duration-200 ${
+          className={`px-3 sm:px-4 py-2 transition-all duration-200 text-base sm:text-lg ${
             activeContent === "draft"
-              ? "text-black text-lg font-bold bg-transparent underline underline-offset-6"
-              : "border-transparent text-black-400 text-lg hover:text-blue-400"
+              ? "text-black font-bold border-b-2 border-black"
+              : "text-gray-500 hover:text-black"
           }`}
         >
           Bản nháp ({drafts.length})
@@ -73,10 +73,10 @@ export default function MyPosts() {
 
         <button
           onClick={() => setActiveContent("published")}
-          className={`px-4 py-2 transition-all duration-200 ${
+          className={`px-3 sm:px-4 py-2 transition-all duration-200 text-base sm:text-lg ${
             activeContent === "published"
-              ? "text-black text-lg font-bold bg-transparent underline underline-offset-6"
-              : "border-transparent text-black-400 text-lg hover:text-blue-400"
+              ? "text-black font-bold border-b-2 border-black"
+              : "text-gray-500 hover:text-black"
           }`}
         >
           Đã xuất bản ({published.length})

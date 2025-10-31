@@ -61,52 +61,52 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
       <div className="flex items-center justify-between mb-4">
         <span className="font-medium text-gray-800">{post.author}</span>
         <div className="relative" ref={menuRef}>
-            <button
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpen(!open);
-              }}
-            >
-              <FiMoreHorizontal color="gray" size={24} />
-            </button>
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  variants={menuVariants}
-                  className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md z-10"
+          <button
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
+          >
+            <FiMoreHorizontal color="gray" size={24} />
+          </button>
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={menuVariants}
+                className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md z-10"
+              >
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(post.id);
+                    setOpen(false);
+                  }}
                 >
-                  <button
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEdit(post.id);
-                      setOpen(false);
-                    }}
-                  >
-                    ✏️ Chỉnh sửa
-                  </button>
-                  <button
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(post.id);
-                      setOpen(false);
-                    }}
-                  >
-                    🗑️ Xóa
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  ✏️ Chỉnh sửa
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(post.id);
+                    setOpen(false);
+                  }}
+                >
+                  🗑️ Xóa
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Nội dung chính */}
-      <div className="flex gap-6">
+      <div className="flex md:flex-row flex-col gap-6">
         {/* Text bên trái */}
         <div className="flex-1">
           <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
@@ -125,8 +125,8 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
         </div>
 
         {/* Hình ảnh bên phải */}
-        <div className="flex-shrink-0">
-          <div className="relative w-52 h-36 rounded-xl overflow-hidden">
+        <div className="md:flex-shrink-0 flex-shrink">
+          <div className="relative md:w-52 w-full md:h-36 h-48 rounded-xl overflow-hidden">
             <Image
               src={post.image}
               alt={post.title}

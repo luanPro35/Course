@@ -11,24 +11,51 @@ import {
   FiUser,
 } from "react-icons/fi";
 
-export default function ProfileMenu() {
+interface ProfileMenuProps {
+  onClose: () => void;
+}
+
+export default function ProfileMenu({ onClose }: ProfileMenuProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.push("/");
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Logout clicked");
+    try {
+      await logout();
+      await router.push("/");
+      onClose();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  const handleNavigate = async (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Menu item clicked, navigating to:", href);
+    try {
+      await router.push(href);
+      onClose();
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
   };
 
   const menuItems = [
     { label: "Trang cá nhân", icon: <FiUser />, href: "/profile" },
     { label: "Viết blog", icon: <FiEdit />, href: "/blog/create" },
     { label: "Bài viết của tôi", icon: <FiBookOpen />, href: "/blog/my-posts" },
-    { label: "Bài viết đã lưu", icon: <FiBookmark />, href: "/blog/saved" },
+    // { label: "Bài viết đã lưu", icon: <FiBookmark />, href: "/blog/saved" },
     { label: "Cài đặt", icon: <FiSettings />, href: "/settings" },
   ];
   return (
-    <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50">
+    <div
+      className="w-64 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="flex items-center gap-3 p-4 border-b border-gray-100">
         <Image
           src={user?.avatar || "/images/avatar.png"}
@@ -47,10 +74,10 @@ export default function ProfileMenu() {
         {menuItems.map((item) => (
           <li
             key={item.label}
-            onClick={() => router.push(item.href)}
-            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+            onClick={(e) => handleNavigate(e, item.href)}
+            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 transition-colors"
           >
-            <span className="text-gray-500 cursor-pointer">{item.icon}</span>
+            <span className="text-gray-500">{item.icon}</span>
             {item.label}
           </li>
         ))}
@@ -59,7 +86,7 @@ export default function ProfileMenu() {
       {/* Logout */}
       <button
         onClick={handleLogout}
-        className="flex items-center w-full gap-3 px-4 py-3 text-red-500 hover:bg-red-50 border-t border-gray-100 font-medium"
+        className="flex items-center w-full gap-3 px-4 py-3 text-red-500 hover:bg-red-50 border-t border-gray-100 font-medium transition-colors"
       >
         <FiLogOut /> Đăng xuất
       </button>

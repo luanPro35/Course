@@ -33,9 +33,9 @@ export default function PersonalPage() {
   ].filter((link) => link.href);
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm">
-      <div className="flex flex-col md:flex-row items-start gap-6">
-        <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200">
+    <div className="p-4 md:p-6 bg-white rounded-lg shadow-sm">
+      <div className="flex flex-col items-center md:flex-row md:items-start gap-6">
+        <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-gray-200">
           <Image
             src={user.avatar || "/images/avatar.png"}
             alt={user.fullName || ""}
@@ -43,20 +43,30 @@ export default function PersonalPage() {
             objectFit="cover"
           />
         </div>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">{user.fullName}</h1>
+        <div className="flex-1 text-center md:text-left">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            {user.fullName}
+          </h1>
           {user.username && (
-            <p className="text-lg text-gray-500">@{user.username}</p>
+            <p className="text-md md:text-lg text-gray-500">@{user.username}</p>
           )}
-          {user.email && <p className="text-lg text-gray-500">{user.email}</p>}
-          {user.about && <p className="mt-4 text-gray-700">{user.about}</p>}
+          {user.email && (
+            <p className="text-md md:text-lg text-gray-500">{user.email}</p>
+          )}
+          {user.about && (
+            <p className="mt-4 text-gray-700 text-center md:text-left">
+              {user.about}
+            </p>
+          )}
         </div>
       </div>
 
       {socialLinks.length > 0 && (
         <div className="mt-8 border-t pt-6">
-          <h2 className="text-xl font-semibold mb-4">Liên kết</h2>
-          <div className="flex flex-wrap gap-4">
+          <h2 className="text-xl font-semibold mb-4 text-center md:text-left">
+            Liên kết
+          </h2>
+          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
