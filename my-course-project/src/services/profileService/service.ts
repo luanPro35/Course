@@ -1,4 +1,5 @@
 import { User } from "../../types/user";
+import { USER_API_URL } from "@/services/api.service";
 
 export interface UpdateProfileData {
   id: string;
@@ -24,7 +25,7 @@ export const profileService = {
       return { success: false, message: "User ID is missing" };
     }
     try {
-      const response = await fetch(`http://localhost:3001/users/${data.id}`, {
+      const response = await fetch(`${USER_API_URL}/${data.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -55,15 +56,12 @@ export const profileService = {
   getProfile: async (userId: string): Promise<ProfileResponse> => {
     try {
       // First try to get the profile from the informations endpoint
-      let response = await fetch(
-        `http://localhost:3001/informations?id=${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      let response = await fetch(`${USER_API_URL}?id=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
         const profileData = await response.json();

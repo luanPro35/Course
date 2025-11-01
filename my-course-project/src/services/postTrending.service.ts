@@ -1,5 +1,6 @@
 import { CardTrending } from "@/types/trending";
-export const TRENDING_API_URL = "http://localhost:3001/trending";
+import { TRENDING_API_URL } from "@/services/api.service";
+
 export const getCourses = async (): Promise<CardTrending[]> => {
   const res = await fetch(TRENDING_API_URL);
 

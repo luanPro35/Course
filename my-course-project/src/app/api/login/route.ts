@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
-
+import { USER_API_URL } from "@/services/api.service";
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
@@ -33,9 +33,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const userResponse = await fetch(
-      `http://localhost:3001/users?email=${email}`
-    );
+    const userResponse = await fetch(`${USER_API_URL}?email=${email}`);
     const users = await userResponse.json();
     const user = users[0];
 

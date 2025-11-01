@@ -1,7 +1,6 @@
 import type { CourseFree } from "@/types/courseFree";
 import type { User } from "@/types/user";
-
-const USER_API_URL = "http://localhost:3001/users";
+import { USER_API_URL } from "@/services/api.service";
 
 export const addCoursesToUser = async (userId: string, course: CourseFree) => {
   // 1. Fetch the existing user

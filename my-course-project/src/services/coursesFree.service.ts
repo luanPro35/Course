@@ -1,6 +1,6 @@
 import type { CourseFree } from "@/types/courseFree";
 
-export const FREE_API_URL = "http://localhost:3001/coursesFree";
+import { FREE_API_URL } from "@/services/api.service";
 export const getCourseById = async (id: string): Promise<CourseFree> => {
   const res = await fetch(`${FREE_API_URL}/${id}`, {
     cache: "no-store",

@@ -896,20 +896,20 @@
     },
     {
       "id": "1761712271138",
-      "name": "chanhcity",
-      "fullName": "chanhcity",
+      "name": "LuanCity",
+      "fullName": "LuanCity",
       "email": "chanhcity@gmail.com",
       "phone": "0909090909",
       "password": "$2b$10$Rx.if0g9sBYB80WQnItTl.DxoBk5lOPH8AD968H9W1Tz5j6Durrme",
       "createdAt": "2025-10-29T04:31:11.138Z",
       "updatedAt": "2025-10-29T04:31:11.138Z",
-      "about": "",
-      "avatar": "/images/1761712315340-pngtree-purple-camera-neon-cinema-logo-png-image_3149754-removebg-preview.png",
-      "personalWebsite": "",
-      "github": "",
-      "linkedin": "",
-      "facebook": "",
-      "youtube": "",
+      "about": "được đi đừng bug nữa",
+      "avatar": "/images/1761965643662-Screenshot-2025-10-01-200548.png",
+      "personalWebsite": "Cá nhân",
+      "github": "dgfgdgdfg",
+      "linkedin": "ghfgh",
+      "facebook": "fgsdfgsfgfdfdfsdfs",
+      "youtube": "https://www.youtube.com/watch?v=99jkGbsgp3o",
       "blogs": [
         {
           "id": 1761911645011,
@@ -934,6 +934,18 @@
           "status": "published",
           "createdAt": "2025-10-31T13:29:57.487Z",
           "updatedAt": "2025-10-31T13:29:57.487Z"
+        },
+        {
+          "id": 1761964601079,
+          "author": "Huyền Ngọc",
+          "title": "gdhhfgh",
+          "content": "hfghfh",
+          "category": "react-native",
+          "image": "/images/1761964597718-Screenshot-2025-07-03-153637.png",
+          "fullContent": "hhfhgfhg",
+          "status": "published",
+          "createdAt": "2025-11-01T02:36:41.079Z",
+          "updatedAt": "2025-11-01T02:36:41.079Z"
         }
       ],
       "courses": [
@@ -1323,6 +1335,126 @@
           "updatedAt": "2025-10-31T13:48:21.935Z"
         }
       ]
+    },
+    {
+      "id": "1761965681974",
+      "name": "luancity",
+      "fullName": "luancity",
+      "email": "launcity@gmail.com",
+      "phone": "0909090909",
+      "password": "$2b$10$uoCkQ90fnyxi37sOwW2x8eDMntAqdjzs7jDFu4pWdz90goQNyrHGq",
+      "createdAt": "2025-11-01T02:54:41.974Z",
+      "updatedAt": "2025-11-01T02:54:41.974Z",
+      "courses": [
+        {
+          "id": "1",
+          "image": "/images/Introductory.png",
+          "title": "Kiến Thức Nhập Môn IT",
+          "free": "Miễn phí",
+          "people": 136848,
+          "numberOfPosts": 9,
+          "totalTime": "3h12p",
+          "contentSection": "Kiến thức nhập môn",
+          "titleSection": "Mô hình Client - Server là gì?",
+          "section": [
+            {
+              "id": "1",
+              "title": "Khái niệm, kĩ thuật cần biết",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Mô hình Client - Server là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "2",
+                  "title": "Domain là gì? Tên miền là gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=1234567890"
+                },
+                {
+                  "id": "3",
+                  "title": "Mua áo F8 | Đăng ký học Offline",
+                  "videoUrl": "https://www.youtube.com/watch?v=vFhKEYRBmVY"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "title": "Môi trường, con người IT",
+              "totalLesson": 3,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Học IT cần tố chất gì? Góc nhìn khác từ chuyên gia định hướng giáo dục",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Sinh viên IT đi thực tập tại doanh nghiệp cần biết những gì?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "Trải nghiệm thực tế sau 2 tháng làm việc tại doanh nghiệp của học viên F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "3",
+              "title": "Phương pháp, định hướng",
+              "totalLesson": 4,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Phương pháp học lập trình của Admin F8?",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Làm sao để có thu nhập cao và đi xa hơn trong ngành IT?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "3",
+                  "title": "8 lời khuyên giúp học lập trình tại F8 hiệu quả hơn!",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                },
+                {
+                  "id": "4",
+                  "title": "Tại sao nên học trên website này hơn là học trên Youtube?",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            },
+            {
+              "id": "4",
+              "title": "Hoàn thành khóa học",
+              "totalLesson": 2,
+              "lessons": [
+                {
+                  "id": "1",
+                  "title": "Ứng tuyển xin việc làm",
+                  "videoUrl": "https://www.youtube.com/watch?v=abcdefg"
+                },
+                {
+                  "id": "2",
+                  "title": "Hoàn thành khóa học",
+                  "videoUrl": "https://www.youtube.com/watch?v=hijklmn"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "about": "gfgdfg",
+      "avatar": "",
+      "personalWebsite": "gfd",
+      "github": "gd",
+      "linkedin": "",
+      "facebook": "",
+      "youtube": ""
     }
   ],
   "informations": [
@@ -2881,6 +3013,18 @@
       "category": "devops",
       "image": "/images/1761924455242-Screenshot-2025-10-19-164201.png",
       "createdAt": "2025-10-31T15:27:39.003Z",
+      "timeAgo": "0 phút trước",
+      "readTime": "1 phút đọc"
+    },
+    {
+      "id": "1761964601079",
+      "title": "gdhhfgh",
+      "content": "hfghfh",
+      "fullContent": "hhfhgfhg",
+      "author": "Huyền Ngọc",
+      "category": "react-native",
+      "image": "/images/1761964597718-Screenshot-2025-07-03-153637.png",
+      "createdAt": "2025-11-01T02:36:41.079Z",
       "timeAgo": "0 phút trước",
       "readTime": "1 phút đọc"
     }

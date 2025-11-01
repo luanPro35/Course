@@ -1,10 +1,10 @@
 import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
 import { User } from "@/types/user";
 import type { Post } from "@/types/post";
-
-export const API_BASE_URL = "http://localhost:3001/blogs";
-const USERS_API_URL = "http://localhost:3001/users";
-const ARTICLE_API_URL = "http://localhost:3001/article";
+import { USER_API_URL } from "@/services/api.service";
+// export const API_BASE_URL = "http://localhost:3001/blogs";
+import { BLOG_BASE_URL } from "@/services/api.service";
+import { ARTICLE_API_URL } from "@/services/api.service";
 
 export class BlogService {
   static async create(
@@ -12,7 +12,7 @@ export class BlogService {
     userId: number | string,
     status: BlogStatus = "draft"
   ): Promise<BlogPost> {
-    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
     if (!userResponse.ok) {
       throw new Error("Không tìm thấy người dùng để thêm bài viết.");
     }
@@ -28,7 +28,7 @@ export class BlogService {
 
     const updatedBlogs = [...(user.blogs || []), newPost];
 
-    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ blogs: updatedBlogs }),
@@ -48,7 +48,7 @@ export class BlogService {
   }
 
   static async getAll(): Promise<BlogPost[]> {
-    const response = await fetch(USERS_API_URL);
+    const response = await fetch(USER_API_URL);
     if (!response.ok) {
       throw new Error("Lỗi khi tải danh sách người dùng.");
     }
@@ -63,7 +63,7 @@ export class BlogService {
     userId: number | string,
     blogId: number
   ): Promise<BlogPost | undefined> {
-    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
     if (!userResponse.ok) {
       throw new Error("Không tìm thấy người dùng.");
     }
@@ -80,7 +80,7 @@ export class BlogService {
     blogId: number,
     data: Partial<BlogFormData>
   ): Promise<BlogPost> {
-    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
     if (!userResponse.ok) {
       throw new Error("Không tìm thấy người dùng.");
     }
@@ -122,7 +122,7 @@ export class BlogService {
     const updatedBlogs = user.blogs || [];
     updatedBlogs[blogIndex] = updatedBlog;
 
-    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ blogs: updatedBlogs }),
@@ -134,7 +134,7 @@ export class BlogService {
 
     // Handle article collection updates based on status change
     const newStatus = updatedBlog.status;
-    
+
     if (oldStatus === "draft" && newStatus === "published") {
       // Changed from draft to published - add to article
       await this.addToArticle(updatedBlog);
@@ -150,7 +150,7 @@ export class BlogService {
   }
 
   static async delete(userId: number | string, blogId: number): Promise<void> {
-    const userResponse = await fetch(`${USERS_API_URL}/${userId}`);
+    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
     if (!userResponse.ok) {
       console.error(
         "User not found in BlogService.delete with userId:",
@@ -167,7 +167,7 @@ export class BlogService {
       throw new Error("Không tìm thấy bài viết để xóa.");
     }
 
-    const updateUserResponse = await fetch(`${USERS_API_URL}/${userId}`, {
+    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ blogs: updatedBlogs }),
@@ -195,7 +195,9 @@ export class BlogService {
         category: blog.category,
         image: blog.image,
         createdAt: blog.createdAt || new Date().toISOString(),
-        timeAgo: this.calculateTimeAgo(blog.createdAt || new Date().toISOString()),
+        timeAgo: this.calculateTimeAgo(
+          blog.createdAt || new Date().toISOString()
+        ),
         readTime: this.calculateReadTime(blog.fullContent),
       };
 
@@ -231,7 +233,9 @@ export class BlogService {
         category: blog.category,
         image: blog.image,
         createdAt: blog.createdAt || new Date().toISOString(),
-        timeAgo: this.calculateTimeAgo(blog.createdAt || new Date().toISOString()),
+        timeAgo: this.calculateTimeAgo(
+          blog.createdAt || new Date().toISOString()
+        ),
         readTime: this.calculateReadTime(blog.fullContent),
       };
 

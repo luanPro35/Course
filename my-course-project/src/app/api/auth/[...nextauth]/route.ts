@@ -2,6 +2,12 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { AuthOptions } from "next-auth";
+import { USER_API_URL } from "@/services/api.service";
+
+interface Credentials {
+  email?: string | undefined;
+  password?: string | undefined;
+}
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -11,11 +17,14 @@ export const authOptions: AuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(
+        credentials: Record<"email" | "password", string> | undefined
+      ) {
         if (!credentials) {
           return null;
         }
-        const { email, password } = credentials;
+        const { email, password } = credentials as Record<"email", string> &
+          Record<"password", string>;
 
         // Admin login
         if (
@@ -33,12 +42,16 @@ export const authOptions: AuthOptions = {
         // Regular user login
         try {
           const userResponse = await fetch(
-            `http://localhost:3001/users?email=${email}`
+            `${USER_API_URL}/users?email=${email}`
           );
           const users = await userResponse.json();
           const user = users[0];
 
-          if (user && (await bcrypt.compare(password, user.password))) {
+          if (
+            user &&
+            user.password &&
+            (await bcrypt.compare(password as string, user.password))
+          ) {
             return {
               id: user.id.toString(),
               email: user.email,

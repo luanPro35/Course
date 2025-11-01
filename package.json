@@ -9,6 +9,7 @@
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.544.0",
+    "next-auth": "^4.24.13",
     "react-github-contribution-calendar": "^2.2.0",
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.5.0",

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CoursePro } from "@/types/coursePro";
 import Background from "@/components/ui/Background";
+import { PRO_API_URL } from "@/services/api.service";
 interface CoursePaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,9 +21,7 @@ export default function CoursePaymentModal({
     const fetchData = async () => {
       if (!courseId) return;
       try {
-        const response = await fetch(
-          `http://localhost:3001/coursesPro/${courseId}`
-        );
+        const response = await fetch(`${PRO_API_URL}/${courseId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch course data");
         }

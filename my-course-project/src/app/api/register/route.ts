@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-
+import { USER_API_URL } from "@/services/api.service";
 export async function POST(request: Request) {
   try {
     const formData = await request.json();
@@ -14,9 +14,7 @@ export async function POST(request: Request) {
     }
 
     // Check if email already exists in json-server
-    const userExistsResponse = await fetch(
-      `http://localhost:3001/users?email=${email}`
-    );
+    const userExistsResponse = await fetch(`${USER_API_URL}?email=${email}`);
     const existingUsers = await userExistsResponse.json();
 
     if (existingUsers.length > 0) {
@@ -42,7 +40,7 @@ export async function POST(request: Request) {
     };
 
     // POST new user to json-server
-    const createUserResponse = await fetch("http://localhost:3001/users", {
+    const createUserResponse = await fetch(`${USER_API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

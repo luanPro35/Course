@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { BlogPost } from "@/types/blog.types";
-import { API_BASE_URL } from "@/services/blog.service";
+import { BLOG_BASE_URL } from "@/services/api.service";
 export async function GET(req: Request) {
-  const res = await fetch(API_BASE_URL, { cache: "no-store" });
+  const res = await fetch(BLOG_BASE_URL, { cache: "no-store" });
   const blogPosts: BlogPost[] = await res.json();
   return NextResponse.json(blogPosts);
 }
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       fullContent: data.fullContent || "",
     };
 
-    const res = await fetch(API_BASE_URL, {
+    const res = await fetch(BLOG_BASE_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    const res = await fetch(`${API_BASE_URL}/${id}`, {
+    const res = await fetch(`${BLOG_BASE_URL}/${id}`, {
       method: "DELETE",
     });
 
@@ -88,7 +88,7 @@ export async function PUT(req: Request) {
 
     const updatedPost: Partial<BlogPost> = await req.json();
 
-    const res = await fetch(`${API_BASE_URL}/${id}`, {
+    const res = await fetch(`${BLOG_BASE_URL}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

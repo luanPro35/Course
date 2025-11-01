@@ -19,6 +19,7 @@ export interface User {
   facebook?: string;
   youtube?: string;
   username?: string;
+  role?: string;
   courses?: CourseFree[]; // Courses directly associated with the user
   blogs?: BlogPost[];
 }

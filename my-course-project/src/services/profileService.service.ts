@@ -1,6 +1,5 @@
 import { User } from "@/types/user";
-
-const PROFILE_API_URL = "http://localhost:3001/profile";
+import { PROFILE_API_URL } from "@/services/api.service";
 
 export const getProfile = async (userId: number): Promise<User> => {
   try {

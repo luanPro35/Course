@@ -1,5 +1,5 @@
 import type { CoursePro } from "@/types/coursePro";
-export const PRO_API_URL = "http://localhost:3001/coursesPro";
+import { PRO_API_URL } from "@/services/api.service";
 export async function getCourses(): Promise<CoursePro[]> {
   const response = await fetch(PRO_API_URL);
   if (!response.ok) {

@@ -5,7 +5,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Course } from "@/types/course";
 import { pathConfig } from "@/types/learningPaths";
-
+import { PRO_API_URL } from "@/services/api.service";
+import { FREE_API_URL } from "@/services/api.service";
 interface LearningPathPageProps {
   pathType: "frontend" | "backend";
 }
@@ -21,8 +22,8 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
     async function getCourses() {
       try {
         const [resFree, resPro] = await Promise.all([
-          fetch("http://localhost:3001/coursesFree"),
-          fetch("http://localhost:3001/coursesPro"),
+          fetch(`${FREE_API_URL}`),
+          fetch(`${PRO_API_URL}`),
         ]);
 
         if (!resFree.ok || !resPro.ok) {

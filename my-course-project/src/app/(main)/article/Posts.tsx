@@ -6,7 +6,7 @@ import Image from "next/image";
 import Loading from "../../../components/ui/Loading";
 import { FiBookmark } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
-import { ARTICLE_API_URL } from "@/services/article.service";
+import { ARTICLE_API_URL } from "@/services/api.service";
 import { BlogService } from "@/services/blog.service";
 import { useRouter } from "next/navigation";
 

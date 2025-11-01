@@ -4,10 +4,12 @@ import { CoursePro } from "@/types/coursePro";
 import { CardTrending } from "@/types/trending";
 import { TopVideo } from "@/types/topVideo";
 import { Post } from "@/types/post";
-import { FREE_API_URL } from "@/services/coursesFree.service";
-import { PRO_API_URL } from "@/services/coursesPro.service";
-import { TRENDING_API_URL } from "@/services/postTrending.service";
-import { TOP_VIDEO_API_URL } from "@/services/topVideo.service";
+import {
+  FREE_API_URL,
+  PRO_API_URL,
+  TRENDING_API_URL,
+  TOP_VIDEO_API_URL,
+} from "@/services/api.service";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

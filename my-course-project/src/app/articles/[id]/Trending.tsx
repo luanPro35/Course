@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CardTrending } from "@/types/trending";
 import Loading from "@/components/ui/Loading";
-
+import { TRENDING_API_URL } from "@/services/api.service";
 export default function CourseTrending() {
   const [postTrending, setPostTrending] = useState<CardTrending[]>([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ export default function CourseTrending() {
   useEffect(() => {
     const fetchTrendingPosts = async () => {
       try {
-        const res = await fetch("http://localhost:3001/trending");
+        const res = await fetch(TRENDING_API_URL);
         if (!res.ok) {
           throw new Error("Failed to fetch trending posts");
         }

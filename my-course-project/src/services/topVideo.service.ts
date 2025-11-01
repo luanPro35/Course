@@ -1,6 +1,5 @@
 import { TopVideo } from "@/types/topVideo";
-
-export const TOP_VIDEO_API_URL = "http://localhost:3001/topVideos";
+import { TOP_VIDEO_API_URL } from "@/services/api.service";
 export async function getTopVideos(): Promise<TopVideo[]> {
   const response = await fetch(TOP_VIDEO_API_URL);
   if (!response.ok) {
