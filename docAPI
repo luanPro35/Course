@@ -1,0 +1,175 @@
+1. API Xác thực & Người dùng (Authentication & User)
+Endpoint: POST /api/auth/register
+
+Request:
+    {
+      "name": "string",
+      "email": "string",
+      "password": "string",
+      "phone": "string" // (Optional)
+    }
+Response:
+    {
+      "id": "string",
+      "name": "string",
+      "email": "string",
+      "phone": "string", // (Optional)
+      "createdAt": "string",
+      "updatedAt": "string"
+    }
+
+Description: Đăng ký người dùng mới với tên, email, mật khẩu và số điện thoại tùy chọn.
+------------------------------
+Endpoint: POST /api/auth/login
+Request:
+    {
+      "email": "string",
+      "password": "string"
+    }
+Response:
+    {
+      "mess": "Đăng nhập thành công",
+      "success": true,
+      "token": "string (JWT Token)", // Token để xác thực các request sau này
+      "user": {
+        "id": "string",
+        "fullName": "string",
+        "email": "string",
+        // ... các thông tin khác của user
+      }
+    }
+Description: Đăng nhập người dùng với email và mật khẩu.
+------------------------------
+Endpoint:  GET /api/users/{userId}
+Response:
+    {
+      "id": "string",
+      "fullName": "string",
+      "email": "string",
+      "phone": "string",
+      "avatar": "string",
+      "about": "string",
+      "personalWebsite": "string",
+      "github": "string",
+      "linkedin": "string",
+      "facebook": "string",
+      "youtube": "string",
+      "createdAt": "string (ISO 8601 date)"
+    }
+
+Description: Lấy thông tin chi tiết của một người dùng dựa trên ID.
+------------------------------
+Endpoint: PATCH /api/users/{userId}
+Request:
+    {
+      "fullName": "string",
+      "avatar": "string",
+      "about": "string",
+      // ... các trường khác
+    }
+
+------------------------------------------------------
+2. API Bài viết (Posts / Articles / Blogs)
+Endpoint: GET /api/posts
+Response:
+    [
+      {
+        "id": "string",
+        "author": "string",
+        "title": "string",
+        "content": "string", // Nội dung tóm tắt
+        "fullContent": "string", // Nội dung đầy đủ
+        "category": "string",
+        "image": "string",
+        "status": "string ('published' hoặc 'draft')",
+        "createdAt": "string (ISO 8601 date)"
+      }
+    ]
+Description: Lấy danh sách tất cả các bài viết.
+------------------------------
+Endpoint: GET /api/posts/{postId}
+    {
+        "id": "string",
+        "author": "string",
+        "title": "string",
+        "content": "string", // Nội dung tóm tắt
+        "fullContent": "string", // Nội dung đầy đủ
+        "category": "string",
+        "image": "string",
+        "status": "string ('published' hoặc 'draft')",
+        "createdAt": "string (ISO 8601 date)"
+      }
+Description: Lấy thông tin chi tiết của một bài viết dựa trên ID.
+------------------------------
+Endpoint: POST /api/posts
+Request:
+    {
+      "author": "string", // Hoặc lấy từ user đã đăng nhập
+      "title": "string",
+      "content": "string",
+      "fullContent": "string",
+      "category": "string",
+      "image": "string",
+      "status": "string ('published' hoặc 'draft')"
+    }
+response:
+{
+        "id": "string",
+        "author": "string",
+        "title": "string",
+        "content": "string", // Nội dung tóm tắt
+        "fullContent": "string", // Nội dung đầy đủ
+        "category": "string",
+        "image": "string",
+        "status": "string ('published' hoặc 'draft')",
+        "createdAt": "string (ISO 8601 date)"
+      }
+
+Description: Tạo một bài viết mới
+------------------------------
+3. API Khóa học (Courses)
+Endpoint: GET /api/courses
+Response:
+    [
+      {
+        "id": "string",
+        "title": "string",
+        "image": "string",
+        "isFree": true,
+        "studentCount": 136848,
+        "lessonCount": 9,
+        "totalDuration": "3h12p",
+        // ... các trường khác
+      }
+    ]
+Description: Lấy danh sách tất cả các khóa học.
+------------------------------
+
+Endpoint: GET /api/courses/{courseId}
+Response:
+    {
+      "id": "string",
+      "title": "string",
+      // ...
+      "sections": [
+        {
+          "id": "string",
+          "title": "string",
+          "lessons": [
+            {
+              "id": "string",
+              "title": "string",
+              "videoUrl": "string"
+            }
+          ]
+        }
+      ]
+    }
+Description: Lấy thông tin chi tiết của một khóa học dựa trên ID.
+------------------------------
+Endpoint: POST /api/enrollments (hoặc POST /api/my-courses)
+Request:
+    {
+      "userId": "string", // Lấy từ user đang đăng nhập
+      "courseId": "string"
+    }

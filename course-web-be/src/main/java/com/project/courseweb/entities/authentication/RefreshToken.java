@@ -1,0 +1,31 @@
+package com.project.courseweb.entities.authentication;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@Builder
+public class RefreshToken {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    @Column(nullable = false, unique = true, length = 1000)
+    String token;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auth_id", nullable = false)
+    Auth auth;
+    @Column(nullable = false)
+    Date expiryTime;
+    @Column(nullable = false)
+    boolean revoked = false;
+    @Column(nullable = false)
+    Date createdAt;
+}

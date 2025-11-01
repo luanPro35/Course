@@ -1493,9 +1493,52 @@
           "category": "python",
           "image": "/images/1761991172754-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp",
           "fullContent": "đâsdasdasd",
-          "status": "draft",
+          "status": "published",
           "createdAt": "2025-11-01T09:59:37.748Z",
-          "updatedAt": "2025-11-01T09:59:37.748Z"
+          "updatedAt": "2025-11-01T09:59:51.172Z",
+          "user": {
+            "id": "1761971812330",
+            "name": "Nguyễn Tấn Lợi",
+            "fullName": "Nguyễn Tấn Lợi",
+            "email": "loint.24ite@vku.udn.vn24ite",
+            "phone": "0366500642",
+            "password": "$2b$10$Kj0aWU1rdhuyH9r5mj4UF.EHKNVlMmdiLVAeAGL8TpN5NC0MBzoMC",
+            "createdAt": "2025-11-01T04:36:52.330Z",
+            "updatedAt": "2025-11-01T04:36:52.330Z",
+            "about": "alooo",
+            "avatar": "",
+            "personalWebsite": "",
+            "github": "",
+            "linkedin": "",
+            "facebook": "",
+            "youtube": "",
+            "blogs": [
+              {
+                "id": 1761987462248,
+                "author": "Mập",
+                "title": "Tình yêu là gì",
+                "content": "Mập yêu Linh",
+                "category": "javascript",
+                "image": "/images/1761987436891-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng---Sao-chép.png",
+                "fullContent": "Allldasdlasdlalsdlasldlasdas",
+                "status": "published",
+                "createdAt": "2025-11-01T08:57:42.248Z",
+                "updatedAt": "2025-11-01T08:57:42.248Z"
+              },
+              {
+                "id": 1761991177748,
+                "author": "dấdasdasdasd",
+                "title": "đâsdasdas",
+                "content": "đấ",
+                "category": "python",
+                "image": "/images/1761991172754-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp",
+                "fullContent": "đâsdasdasd",
+                "status": "draft",
+                "createdAt": "2025-11-01T09:59:37.748Z",
+                "updatedAt": "2025-11-01T09:59:37.748Z"
+              }
+            ]
+          }
         }
       ]
     }

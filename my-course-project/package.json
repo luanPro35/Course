@@ -28,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "json-server": "^0.17.4",
+    "next-auth": "^4.24.13",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
