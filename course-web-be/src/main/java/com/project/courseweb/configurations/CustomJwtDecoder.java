@@ -19,6 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.secret-key}")
     String secretKey;
+    /// ////
     private final RedisService redisService;
 
     private NimbusJwtDecoder nimbusJwtDecoder;
