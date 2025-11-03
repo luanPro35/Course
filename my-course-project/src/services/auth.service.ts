@@ -1,6 +1,7 @@
 import {RegisterFormData, RegisterResponse} from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
+import { getAccessToken } from "@/utils/token";
 
 
 const register = async (
@@ -50,6 +51,25 @@ const login = async (formData: LoginFormData): Promise<LoginResponse> => {
   return data;
 };
 
+const logout = async (): Promise<void> => {
+  const accessToken = getAccessToken();
+  if (!accessToken) {
+    // Nếu không có accessToken trong localStorage, không cần gọi API
+    return;
+  }
+
+  // Gọi đến API Route của Next.js
+  await fetch(`/api/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ accessToken }),
+  });
+  // Chúng ta không cần xử lý response ở đây,
+  // vì dù thành công hay thất bại, FE vẫn sẽ xóa token và đăng xuất người dùng.
+};
+
 const loginWithSocial = (provider: "google" | "facebook") => signIn(provider);
 
-export const AuthService = { register, login, loginWithSocial };
+export const AuthService = { register, login, logout, loginWithSocial };

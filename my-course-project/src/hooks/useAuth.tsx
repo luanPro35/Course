@@ -9,6 +9,7 @@ import {
 } from "react";
 import { User } from "@/types/user";
 import { getTokens, removeTokens, setTokens } from "@/utils/token";
+import {AuthService} from "@/services/auth.service";
 // Removed getUserById as login logic will be updated to use email/password fetch
 // import { getUserById } from "@/services/user.service";
 
@@ -46,11 +47,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Logout logic from AuthContent.tsx
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    removeTokens(); // Use utility function
-    localStorage.removeItem("user"); // Also remove user info
+  const logout = async () => {
+    try {
+      // Gọi đến AuthService để thông báo cho backend
+      await AuthService.logout();
+    } catch (error) {
+      console.error("Failed to logout from server:", error);
+    } finally {
+      // Dù API có lỗi hay không, vẫn dọn dẹp ở FE để đảm bảo người dùng được đăng xuất
+      setUser(null);
+      setToken(null);
+      removeTokens();
+      localStorage.removeItem("user");
+    }
   };
 
   // useEffect for restoring user from localStorage from AuthContent.tsx
