@@ -1,4 +1,4 @@
-export const USER_API_URL = "http://localhost:3001/users";
+export const USER_API_URL = "http://localhost:8080/project";// call server BE
 export const TOP_VIDEO_API_URL = "http://localhost:3001/topVideos";
 export const PROFILE_API_URL = "http://localhost:3001/profile";
 export const TRENDING_API_URL = "http://localhost:3001/trending";

@@ -9,6 +9,7 @@ export type RegisterFormData = {
 export type RegisterResponse = {
   mess: string;
   success?: boolean;
+  data?: unknown;
 };
 
 export type RegisterFormProps = {

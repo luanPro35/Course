@@ -1,71 +1,58 @@
+// D:/MyProjects/Course/my-course-project/src/app/api/register/route.ts
+
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { USER_API_URL } from "@/services/api.service";
+
+// Hàm này sẽ được thực thi trên server mỗi khi có một request POST tới '/api/register'
 export async function POST(request: Request) {
   try {
+    // 1. Nhận và phân tích dữ liệu từ Frontend
     const formData = await request.json();
-    const { email, password, name, phone } = formData;
+    const { name, email, password, phone } = formData;
 
-    if (!email || !password || !name) {
-      return NextResponse.json(
-        { mess: "Tên, email và mật khẩu là bắt buộc", success: false },
-        { status: 400 }
-      );
-    }
-
-    // Check if email already exists in json-server
-    const userExistsResponse = await fetch(`${USER_API_URL}?email=${email}`);
-    const existingUsers = await userExistsResponse.json();
-
-    if (existingUsers.length > 0) {
-      return NextResponse.json(
-        { mess: "Email đã được sử dụng", success: false },
-        { status: 409 }
-      );
-    }
-
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user object
-    const newUser = {
-      id: Date.now().toString(), // Generate a string ID
-      name: name,
+    // 2. Ánh xạ (Map) dữ liệu sang định dạng mà Backend Java yêu cầu
+    // Đây là một bước rất quan trọng. Frontend có thể dùng tên trường là 'name' và 'password',
+    // nhưng Backend Java lại yêu cầu 'fullName' và 'passWord'.
+    // API Route này sẽ làm nhiệm vụ "dịch" dữ liệu.
+    const requestBodyToJava = {
       fullName: name,
-      email,
-      phone: phone || "",
-      password: hashedPassword,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      email: email,
+      passWord: password,
+      phone: phone,
     };
 
-    // POST new user to json-server
-    const createUserResponse = await fetch(`${USER_API_URL}`, {
+    // 3. Gửi yêu cầu tới Backend Java từ môi trường server an toàn
+    // URL của BE (http://localhost:8080) và các API Key (nếu có) sẽ được giữ bí mật ở đây.
+    // Người dùng cuối không bao giờ thấy được thông tin này.
+    const responseFromBE = await fetch(`${USER_API_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newUser),
+      body: JSON.stringify(requestBodyToJava), // Gửi đi body đã được ánh xạ
     });
 
-    if (!createUserResponse.ok) {
-      throw new Error("Không thể đăng ký người dùng trên máy chủ JSON.");
+    // 4. Nhận và xử lý phản hồi từ Backend Java
+    const dataFromBE = await responseFromBE.json();
+
+    // 5. Xử lý trường hợp Backend Java trả về lỗi (ví dụ: email đã tồn tại)
+    if (!responseFromBE.ok) {
+      // Chuyển tiếp thông báo lỗi và status code từ BE về lại cho FE
+      return NextResponse.json(
+          { mess: dataFromBE.message, success: false },
+          { status: responseFromBE.status }
+      );
     }
 
-    const createdUser = await createUserResponse.json();
+    // 6. Nếu thành công, trả về dữ liệu từ BE cho FE
+    return NextResponse.json(dataFromBE, { status: responseFromBE.status });
 
-    // Remove password from the returned user object for security
-    const { password: _password, ...userWithoutPassword } = createdUser;
-
-    return NextResponse.json(
-      { mess: "Đăng ký thành công!", success: true, user: userWithoutPassword },
-      { status: 201 }
-    );
   } catch (error) {
-    console.error("Register API error:", error);
+    // Bắt các lỗi không mong muốn (ví dụ: mất kết nối mạng giữa Next.js và BE Java)
+    console.error("Register API route error:", error);
     return NextResponse.json(
-      { mess: "Lỗi máy chủ nội bộ", success: false },
-      { status: 500 }
+        { mess: "Lỗi máy chủ nội bộ tại API Route", success: false },
+        { status: 500 }
     );
   }
 }
