@@ -21,10 +21,12 @@ public class Auth {
     Long id;
     @Column(unique = true, nullable = false)
     String email;
+    @Column(unique = true, nullable = false)
+    String phone;
     @Column(nullable = false)
     String passwordHash;
-    @OneToOne()
-            @JoinColumn(name = "profile_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id")
     Profile profile;
     @ManyToMany(fetch = FetchType.EAGER)
             @JoinTable(

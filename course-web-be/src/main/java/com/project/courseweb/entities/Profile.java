@@ -17,15 +17,15 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Profile {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @OneToOne(mappedBy = "profile", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "profile")
     Auth auth;
     String fullName;
     String avatar;
 
     @Lob
     String about;
-    String phone;
     String personalWebsite;
     String github;
     String linkedin;

@@ -9,9 +9,11 @@ import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.services.JwtService;
+import com.project.courseweb.services.RedisService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,17 +27,21 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret-key}")
+    @NonFinal
     String secretKey;
 
     @Value("${jwt.access-token-expiration}")
+    @NonFinal
     Long accessTokenExpiration;
 
     @Value("${jwt.refresh-token-expiration}")
+    @NonFinal
     Long refreshTokenExpiration;
 
+    RedisService redisService;
 
     @Override
     public String generateAccessToken(Auth auth) {
@@ -49,13 +55,11 @@ public class JwtServiceImpl implements JwtService {
                 .jwtID(UUID.randomUUID().toString())
                 .expirationTime(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .build();
-        JWSObject jwsObject = new JWSObject(jwsHeader
-                , new Payload(jwtClaimsSet.toJSONObject())
-        );
+        JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(jwtClaimsSet.toJSONObject()));
         try {
             jwsObject.sign(new MACSigner(secretKey));
         } catch (JOSEException e) {
-            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILDD);
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
         }
         return jwsObject.serialize();
     }
@@ -69,64 +73,81 @@ public class JwtServiceImpl implements JwtService {
                 .issuer("com.project.2TL")
                 .issueTime(new Date())
                 .jwtID(UUID.randomUUID().toString())
-                .expirationTime(new Date(System.currentTimeMillis() + accessTokenExpiration))
+                .expirationTime(new Date(System.currentTimeMillis() + refreshTokenExpiration))
                 .build();
-        JWSObject jwsObject = new JWSObject(jwsHeader
-                , new Payload(jwtClaimsSet.toJSONObject())
-        );
+        JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(jwtClaimsSet.toJSONObject()));
         try {
             jwsObject.sign(new MACSigner(secretKey));
         } catch (JOSEException e) {
-            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILDD);
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
         }
         return jwsObject.serialize();
     }
 
     @Override
     public boolean validateToken(String token) {
-        if (token == null || token.isBlank()) return false;
-        try{
+        if (token == null || token.isBlank() || redisService.isBlackListed(token)) return false;
+        try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier jwsVerifier = new MACVerifier(secretKey);
-            if(!signedJWT.verify(jwsVerifier)) return false;
+            if (!signedJWT.verify(jwsVerifier)) return false;
             Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-            if (expirationTime.before(new Date())) return false;
-            return true;
-        }catch (ParseException|JOSEException exception){
+            return !expirationTime.before(new Date());
+        } catch (ParseException | JOSEException exception) {
             throw new AppException(ErrorCode.VERIFY_TOKEN_FAILED);
         }
     }
 
     @Override
     public String getIdFromToken(String token) {
-        return "";
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getSubject();
+        } catch (ParseException e) {
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
+        }
     }
 
     @Override
     public Date getExpirationDateFromToken(String token) {
-        return null;
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getExpirationTime();
+        } catch (ParseException e) {
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
+        }
     }
 
     @Override
     public Date getIssuedAtDateFromToken(String token) {
-        return null;
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getIssueTime();
+        } catch (ParseException e) {
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
+        }
     }
 
     @Override
     public long getExpirationTimeFromToken(String token) {
-        return 0;
+        try {
+            Date expiration = this.getExpirationDateFromToken(token);
+            return (expiration.getTime() - System.currentTimeMillis()) / 1000; // Return in seconds
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.GENERATED_TOKEN_FAILED);
+        }
     }
 
     private String buildScope(Auth auth) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-
-        if (!CollectionUtils.isEmpty(auth.getRoles()))
+        if (!CollectionUtils.isEmpty(auth.getRoles())) {
             auth.getRoles().forEach(role -> {
                 stringJoiner.add("ROLE_" + role.getName());
-                if (!CollectionUtils.isEmpty(role.getPermissions()))
-                    role.getPermissions()
-                            .forEach(permission -> stringJoiner.add(permission.getName()));
+                if (!CollectionUtils.isEmpty(role.getPermissions())) {
+                    role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
+                }
             });
+        }
         return stringJoiner.toString();
     }
 }
