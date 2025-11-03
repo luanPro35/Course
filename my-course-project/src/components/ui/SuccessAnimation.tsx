@@ -4,10 +4,12 @@ import Lottie from "lottie-react";
 import successAnim from "../../../public/animations/success.json";
 
 interface SuccessAnimationProps {
+  mess: string;
   onComplete?: () => void;
 }
 
 export default function SuccessAnimation({
+    mess = "Thành công!",
   onComplete,
 }: SuccessAnimationProps) {
   return (
@@ -20,7 +22,7 @@ export default function SuccessAnimation({
           style={{ width: 150, height: 150 }}
         />
         <p className="text-green-600 font-bold text-lg mt-4">
-          Đăng ký thành công!
+          {mess}
         </p>
       </div>
     </div>

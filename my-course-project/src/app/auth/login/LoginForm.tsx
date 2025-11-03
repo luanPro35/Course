@@ -24,6 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     handleInputChange,
     handleSubmit,
     handleSocialLogin,
+    resetError,
   } = useLoginForm(onClose);
 
   return (
@@ -36,16 +37,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
       )}
       {isSuccess && (
         <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
-          <SuccessAnimation onComplete={onClose} />
+          <SuccessAnimation
+            mess="Đăng nhập thành công!"
+            onComplete={onClose}
+          />
         </div>
       )}
       {isError && !isSuccess && (
         <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
           <ErrorAnimation
             mess={errorMessage || "Đăng nhập thất bại!"}
-            onComplete={() => {
-              /* Reset error state */
-            }}
+            onComplete={resetError}
           />
         </div>
       )}

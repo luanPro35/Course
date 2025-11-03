@@ -1,70 +1,46 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import jwt, { SignOptions } from "jsonwebtoken";
-import { USER_API_URL } from "@/services/api.service";
+import {USER_API_URL} from "@/services/api.service";
+
+// Lấy URL của Backend Java từ biến môi trường
+const JAVA_API_BASE_URL = USER_API_URL;
+
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    // Admin login check (plaintext comparison for admin)
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
-      const adminUser = {
-        id: 0,
-        email: process.env.ADMIN_EMAIL,
-        fullName: "Admin",
-        role: "admin",
-      };
-
-      const token = jwt.sign(
-        { id: adminUser.id, role: adminUser.role },
-        process.env.JWT_SECRET! as string,
-        {
-          expiresIn: process.env.JWT_EXPIRES_IN! as string | number,
-        } as SignOptions
-      );
-
-      return NextResponse.json({
-        mess: "Đăng nhập quản trị viên thành công",
-        token,
-        user: adminUser,
-      });
-    }
-
-    const userResponse = await fetch(`${USER_API_URL}?email=${email}`);
-    const users = await userResponse.json();
-    const user = users[0];
-
-    if (
-      !user ||
-      !user.password ||
-      !(await bcrypt.compare(password, user.password))
-    ) {
-      return NextResponse.json(
-        { mess: "Email hoặc mật khẩu không đúng!" },
-        { status: 401 }
-      );
-    }
-
-    const token = jwt.sign(
-      { id: user.id, role: user.role || "user" },
-      process.env.JWT_SECRET! as string,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN! as string | number,
-      } as SignOptions
-    );
-
-    const { password: _password, ...userWithoutPassword } = user;
-
-    return NextResponse.json({
-      mess: "Đăng nhập thành công",
-      token,
-      user: userWithoutPassword,
+    // Gọi thẳng đến API login của Backend Java
+    const beResponse = await fetch(`${JAVA_API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
     });
+
+    const data = await beResponse.json();
+
+    // Nếu Backend Java trả về lỗi (ví dụ 401 Unauthorized)
+    if (!beResponse.ok) {
+      return NextResponse.json(
+        { mess: data.message || "Email hoặc mật khẩu không đúng!" },
+        { status: beResponse.status }
+      );
+    }
+
+    // Nếu thành công, trả về phần `result` từ Backend Java cho Frontend
+    // BE Java trả về { data: { user: {...}, token: { accessToken, refreshToken } }, message: "..." }
+    return NextResponse.json({
+      mess: data.message, // Lấy message từ response của BE
+      user: data.data.user,
+      accessToken: data.data.token.accessToken,
+      refreshToken: data.data.token.refreshToken,
+    }, { status: 200 });
+
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json({ mess: "Lỗi máy chủ nội bộ" }, { status: 500 });
+    return NextResponse.json(
+      { mess: "Không thể kết nối đến máy chủ xác thực" },
+      { status: 500 }
+    );
   }
 }

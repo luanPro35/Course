@@ -22,10 +22,10 @@ export const validateLoginForm = (
   }
 
   // Check password length
-  if (formData.password.length < 6) {
+  if (formData.password.length < 8) {
     return {
       isValid: false,
-      message: "Mật khẩu phải có ít nhất 6 ký tự!",
+      message: "Mật khẩu phải có ít nhất 8 ký tự!",
     };
   }
 
