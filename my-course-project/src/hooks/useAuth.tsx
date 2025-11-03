@@ -8,14 +8,19 @@ import {
   ReactNode,
 } from "react";
 import { User } from "@/types/user";
+import { getTokens, removeTokens, setTokens } from "@/utils/token";
 // Removed getUserById as login logic will be updated to use email/password fetch
 // import { getUserById } from "@/services/user.service";
 
 interface AuthContextType {
   user: User | null;
-  token: string | null; // Added token
+  token: string | null; // This will hold the accessToken
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>; // Updated login signature
+  login: (
+    userData: User,
+    accessToken: string,
+    refreshToken: string
+  ) => Promise<void>; // Updated login signature to accept data
   logout: () => void;
   setUser: React.Dispatch<React.SetStateAction<User | null>>; // Added setUser
 }
@@ -24,52 +29,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null); // Added token state
+  const [token, setToken] = useState<string | null>(null); // This will be the accessToken
   const [loading, setLoading] = useState(true);
 
-  // Login logic - call /api/login endpoint
-  const login = async (email: string, password: string) => {
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.mess || "Đăng nhập thất bại");
-      }
-
-      // Login successful
-      setUser(data.user);
-      setToken(data.token);
-
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
-    } catch (error) {
-      console.error("Lỗi khi đăng nhập:", error);
-      throw error;
-    }
+  // Hàm login mới: chỉ cập nhật state và localStorage từ dữ liệu có sẵn
+  const login = async (
+    userData: User,
+    accessToken: string,
+    refreshToken: string
+  ) => {
+    setUser(userData);
+    setToken(accessToken); // Set accessToken to context
+    localStorage.setItem("user", JSON.stringify(userData));
+    // Use utility functions to store both tokens
+    setTokens(accessToken, refreshToken);
   };
 
   // Logout logic from AuthContent.tsx
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    removeTokens(); // Use utility function
+    localStorage.removeItem("user"); // Also remove user info
   };
 
   // useEffect for restoring user from localStorage from AuthContent.tsx
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-    const savedToken = localStorage.getItem("token");
+    // Use utility function to get accessToken
+    const { accessToken: savedToken } = getTokens();
 
     if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
-      setToken(savedToken);
+      try {
+        setUser(JSON.parse(savedUser));
+        setToken(savedToken);
+      } catch (error) {
+        console.error("Failed to parse user data from localStorage", error);
+        // Xóa dữ liệu không hợp lệ để tránh lỗi lặp lại
+        logout();
+      }
     }
 
     setLoading(false);

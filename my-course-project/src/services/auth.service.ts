@@ -1,5 +1,7 @@
 import {RegisterFormData, RegisterResponse} from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
+import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
+
 
 const register = async (
     formData: RegisterFormData
@@ -30,6 +32,24 @@ const register = async (
   return { success: true, mess: "Đăng ký thành công!", data: data.result };
 };
 
+const login = async (formData: LoginFormData): Promise<LoginResponse> => {
+  const response = await fetch(`/api/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    // Ném lỗi để custom hook (useLoginForm) có thể bắt và xử lý
+    throw new Error(data.mess || "Đăng nhập thất bại");
+  }
+  return data;
+};
+
 const loginWithSocial = (provider: "google" | "facebook") => signIn(provider);
 
-export const AuthService = { register, loginWithSocial };
+export const AuthService = { register, login, loginWithSocial };

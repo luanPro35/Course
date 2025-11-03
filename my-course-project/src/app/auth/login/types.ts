@@ -11,8 +11,8 @@ export interface LoginFormProps {
 import { User } from "../../../types/user";
 
 export interface LoginResponse {
-  mess?: string;
-  success?: boolean;
-  token?: string;
-  user?: User;
+  mess: string;
+  user: User;
+  accessToken: string;
+  refreshToken: string;
 }

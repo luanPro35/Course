@@ -40,28 +40,19 @@ export const useLoginForm = (onClose: () => void) => {
     if (!validation.isValid) {
       setErrorMessage(validation.message!);
       setIsError(true);
-      setTimeout(() => setIsError(false), 2000);
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Call login and get the response to check user role
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // 1. Gọi AuthService.login để lấy dữ liệu từ backend
+      // Hàm này đã gọi đến /api/login và trả về { user, accessToken, refreshToken }
+      const data = await AuthService.login(formData);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.mess || "Đăng nhập thất bại");
-      }
-
-      // Now call the hook's login to update context state
-      await login(formData.email, formData.password);
+      // 2. Gọi hàm login từ useAuth context để cập nhật state toàn cục
+      // và lưu trữ tokens vào localStorage
+      await login(data.user, data.accessToken, data.refreshToken);
 
       // Đăng nh��p thành công, đặt trạng thái thành công và tắt trạng thái lỗi
       setIsSuccess(true);
@@ -78,6 +69,8 @@ export const useLoginForm = (onClose: () => void) => {
           console.log("Redirecting to home page");
           router.push("/");
         }
+        // Tải lại trang để đảm bảo các Server Component được cập nhật
+        router.refresh();
       }, 1500);
     } catch (error) {
       const message =
@@ -87,11 +80,15 @@ export const useLoginForm = (onClose: () => void) => {
       console.error("Login error:", error);
       setErrorMessage(message);
       setIsError(true);
-      setIsSuccess(false); // Đảm bảo không hiển thị thành công khi có lỗi
-      setTimeout(() => setIsError(false), 2000);
+      setIsSuccess(false);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const resetError = () => {
+    setIsError(false);
+    setErrorMessage("");
   };
 
   const handleSocialLogin = async (provider: "google" | "facebook") => {
@@ -102,7 +99,6 @@ export const useLoginForm = (onClose: () => void) => {
       console.error("Social login error:", error);
       setErrorMessage("Đăng nhập bằng mạng xã hội thất bại!");
       setIsError(true);
-      setTimeout(() => setIsError(false), 2000);
     }
   };
 
@@ -115,5 +111,6 @@ export const useLoginForm = (onClose: () => void) => {
     handleInputChange,
     handleSubmit,
     handleSocialLogin,
+    resetError,
   };
 };
