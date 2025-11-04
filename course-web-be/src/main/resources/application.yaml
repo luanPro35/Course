@@ -32,3 +32,10 @@ jwt:
   secret-key: ${SECRET_KEY}
   access-token-expiration : ${ACCESS_TOKEN_EX}
   refresh-token-expiration : ${REFRESH_TOKEN_EX}
+aws:
+  region: us-east-1
+  s3:
+    bucket-name: ${BUCKET_NAME}
+  credentials:
+    access-key: ${ACCESS_KEY}
+    secret-key: ${SECRET_ACCESS_KEY}

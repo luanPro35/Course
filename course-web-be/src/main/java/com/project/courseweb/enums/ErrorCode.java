@@ -17,7 +17,9 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(404, "Refresh token not found", HttpStatus.NOT_FOUND),
     REFRESH_TOKEN_EXPIRED(405, "Refresh token expired", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_FAILED(406, "Refresh token was used or expired", HttpStatus.UNAUTHORIZED),
-    INVALID_ACCESS_TOKEN(407, "Invalid access token", HttpStatus.UNAUTHORIZED);
+    INVALID_ACCESS_TOKEN(407, "Invalid access token", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(408, "Unauthorized", HttpStatus.UNAUTHORIZED),
+    PROFILE_NOT_FOUND(409, "Profile not found", HttpStatus.NOT_FOUND);
 
     int status;
     String message;
