@@ -1,0 +1,350 @@
+{
+	"info": {
+		"_postman_id": "943c60cc-6f4e-4dec-95c1-e0b6a0bf98e6",
+		"name": "Course-project",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45124082",
+		"_collection_link": "https://kobi-8284523.postman.co/workspace/Kobi's-Workspace~a55edbb3-41b6-41fc-87dc-ed8df8f34729/collection/45124082-943c60cc-6f4e-4dec-95c1-e0b6a0bf98e6?action=share&source=collection_link&creator=45124082"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// No actions needed in pre-request script for login token extraction.",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse JSON from response",
+									"let response;",
+									"try {",
+									"    response = pm.response.json();",
+									"} catch (e) {",
+									"    response = {};",
+									"}",
+									"",
+									"// Save token to environment variable",
+									"if (response.token) {",
+									"    pm.environment.set(\"accessToken\", response.token);",
+									"}",
+									"",
+									"// Test that token exists",
+									"pm.test(\"Token received\", function () {",
+									"    pm.expect(response.token).to.not.be.undefined;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"loint.24ite@vku.udn.vn\",\r\n  \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a POST request used to log in a user. It expects a JSON body with the following fields:\n\n- `email`: The user's email address\n- `password`: The user's password\n\nA successful login returns a `200 OK` status and a JSON response containing an authentication token. Example request body:\n\n```\n{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "refreshtoken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjIzNTM3NDksImlhdCI6MTc2MjA5NDU0OSwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJlOTdmNzMyYi04YmE3LTQ5MGMtYTcyMy0yZjRhMGM1YjRkZTAifQ.24SAqKHkU0ckdtqoEua5qx1dDQPwx_Vl9XyV2-79Ewwqa2hSGbLymxzqZBeFa43sEsr70zQINF9Bk5iDCLjyNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJzdWIiOiIxIiwidHlwZSI6InJlZnJlc2giLCJleHAiOjE3NjI3MDAxNjYsImlhdCI6MTc2MjA5NTM2NiwianRpIjoiMzk2NDBmODQtOWExOC00MmMzLWIzODAtY2I3YzBkZTAyMDg2In0.oDFxY8f6Q9y9OoVIImg8F09uUb9q6cZDcTY_OAoea3p1SknXM3r9-KaKCWmr4v91xQ19T3c650BTr3eTEmeOaw\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INTROSPECT TOKEN(Đừng quan tâm)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0MTQ5MzksImlhdCI6MTc2MjE1NTczOSwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJkNTZjY2FhOS03MjFjLTQ4Y2UtODU0OC00NjFlYjQ3YjBhZTcifQ.SJHU5Id3p-fM7WBbbarK9-ercrtIWiFvyJ0IYtmCVqblAjVME3wvSDARFBvI7wLTjiARnDmvPLECq6rujqJXYg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/introspect",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"introspect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Nguyễn Tấn Lợi\",\n  \"email\": \"loikobi1234@gmail.com\",\n  \"phone\": \"03665006424\",\n  \"passWord\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"register"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "logout(Token)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "updateProfile(Token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0ODQ1MDAsImlhdCI6MTc2MjIyNTMwMCwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJhNzhhMDJmYy0xMzRjLTQ3MDEtOTZmNi1kM2QwNTEzY2QxODIifQ.nGsy6utkKJx24z1XtFRbR90JhVQL2Wo5IEf7OMFbC7UfzIdf7EvI_hlngHvyGfgDLVxip6l4dzi0rwRMj0zncQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"Kobi\",\r\n  \"about\": \"Giới thiệu\",\r\n  \"avatar\":\"sssssssdasddwadwqeqwe\",\r\n  \"personalWebsite\": \"https://example.com\",\r\n  \"github\": \"github-username\",\r\n  \"linkedin\": \"linkedin-profile\",\r\n  \"facebook\": \"facebook-profile\",\r\n  \"youtube\": \"youtube-channel\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/profile/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadAvatar(Token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0OTE1OTYsImlhdCI6MTc2MjIzMjM5NiwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJhMjk1MWRjNS1mNDAwLTQwZTctOGM1Yy05NGI3ZDlhZDNhN2QifQ.14VGS-JASwLiMjq5-pf6DdrmgRMT_g_oOnflWXiy4gAMB9dg9MmVYchOE_cV_Ib5ybwjZ07EXr-qn-pRLIJx8A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-07-10 135756.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/profile/update-avatar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"profile",
+								"update-avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://template.postman-echo.com"
+		}
+	]
+}
