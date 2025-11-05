@@ -39,3 +39,8 @@ aws:
   credentials:
     access-key: ${ACCESS_KEY}
     secret-key: ${SECRET_ACCESS_KEY}
+google:
+  client-id: ${GOOGLE_CLIENT_ID}
+  client-secret: ${GOOGLE_CLIENT_SECRET}
+  redirect-uri: ${GOOGLE_REDIRECT_URI}
+  grant-type: "authorization_code"
