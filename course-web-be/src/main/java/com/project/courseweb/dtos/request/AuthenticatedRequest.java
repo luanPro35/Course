@@ -7,7 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class AuthenticatedRequest {
     @Email

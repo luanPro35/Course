@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum SuccessCode {
+    AUTHENTICATED_GOOGLE_SUCCESS(200, "Đăng nhập thành công với Google", HttpStatus.OK),
     CREATED_USER_SUCCESS(201, "Tạo thành công người dùng", HttpStatus.CREATED),
     AUTHENTICATED_SUCCESS(200, "Đăng nhập thành công", HttpStatus.OK),
     REFRESH_TOKEN_SUCCESS(200, "Refresh token thành công", HttpStatus.OK),

@@ -1,10 +1,7 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.request.*;
-import com.project.courseweb.dtos.response.AuthenticatedResponse;
-import com.project.courseweb.dtos.response.IntrospectTokenResponse;
-import com.project.courseweb.dtos.response.TokenResponse;
-import com.project.courseweb.dtos.response.UserResponse;
+import com.project.courseweb.dtos.response.*;
 import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.entities.authentication.RefreshToken;
 import com.project.courseweb.entities.authentication.Role;
@@ -14,6 +11,8 @@ import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.mappers.AuthMapper;
 import com.project.courseweb.repositories.AuthRepository;
 import com.project.courseweb.repositories.RefreshTokenRepository;
+import com.project.courseweb.repositories.https.GoogleOauth2Client;
+import com.project.courseweb.repositories.https.GoogleUserInfoClient;
 import com.project.courseweb.services.AuthService;
 import com.project.courseweb.services.JwtService;
 import com.project.courseweb.services.RedisService;
@@ -21,7 +20,9 @@ import com.project.courseweb.services.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,20 @@ public class AuthServiceImpl implements AuthService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     JwtService jwtService;
     RedisService redisService;
+    GoogleOauth2Client googleOauth2Client;
+    @NonFinal
+    @Value( "${google.client-id}")
+    String clientId;
+    @NonFinal
+    @Value( "${google.client-secret}")
+    String clientSecret;
+    @NonFinal
+    @Value( "${google.grant-type}")
+    String grantType;
+    @NonFinal
+    @Value( "${google.redirect-uri}")
+    String redirectUrl;
+    GoogleUserInfoClient googleUserInfoClient;
 
     @Override
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
@@ -64,6 +79,62 @@ public class AuthServiceImpl implements AuthService {
         if (!bCryptPasswordEncoder.matches(authenticatedRequest.getPassword(), auth.getPasswordHash())) {
             throw new AppException(ErrorCode.AUTHENTICATION_FAILED);
         }
+        String accessToken = jwtService.generateAccessToken(auth);
+        String refreshToken = jwtService.generateRefreshToken(auth);
+        var refreshTokenEntity = this.refreshTokenRepository.save(RefreshToken.builder()
+                .auth(auth)
+                .token(refreshToken)
+                .issueTime(this.jwtService.getIssuedAtDateFromToken(refreshToken))
+                .expiryTime(this.jwtService.getExpirationDateFromToken(refreshToken))
+                .build()
+        );
+        return AuthenticatedResponse.builder()
+                .user(this.authMapper.toUserResponse(auth))
+                .token(TokenResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .accessExpiresAt(jwtService.getExpirationDateFromToken(accessToken))
+                        .refreshExpiresAt(refreshTokenEntity.getExpiryTime())
+                        .accessIssuedAt(jwtService.getIssuedAtDateFromToken(accessToken))
+                        .refreshIssuedAt(refreshTokenEntity.getIssueTime())
+                        .accessExpirationTime(jwtService.getExpirationTimeFromToken(accessToken))
+                        .refreshExpirationTime(jwtService.getExpirationTimeFromToken(refreshToken))
+                        .build()
+                )
+                .build();
+    }
+
+    @Override
+    public AuthenticatedResponse authenticatedUserGoogle(String code) {
+        var tokenResponse = this.googleOauth2Client.exchangeToken(
+                ExchangeTokenRequest.builder()
+                        .clientId(clientId)
+                        .clientSecret(clientSecret)
+                        .code(code)
+                        .grantType(grantType)
+                        .redirectUri(redirectUrl)
+                        .build()
+        );
+        log.info("tokenResponse={}", tokenResponse);
+        var userGG = this.googleUserInfoClient.getUserInfo("json", Objects.requireNonNull(tokenResponse.block()).getAccessToken());
+        log.info("userGG={}", userGG);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.getRoleByName(Roles.USER.name()));
+
+        var auth = this.authRepository.findByEmail(Objects.requireNonNull(userGG.block()).getEmail()).orElseGet(
+                () -> {
+                    var auths = Auth.builder()
+                            .email(Objects.requireNonNull(userGG.block()).getEmail())
+                            .build();
+                    auths.setRoles(roles);
+                    var profile = auths.getProfile();
+                    profile.setFullName(Objects.requireNonNull(userGG.block()).getName());
+                    profile.setAvatar(Objects.requireNonNull(userGG.block()).getPicture());
+                    profile.setAuth(auths);
+                    return this.authRepository.save(auths);
+                }
+        );
         String accessToken = jwtService.generateAccessToken(auth);
         String refreshToken = jwtService.generateRefreshToken(auth);
         var refreshTokenEntity = this.refreshTokenRepository.save(RefreshToken.builder()
