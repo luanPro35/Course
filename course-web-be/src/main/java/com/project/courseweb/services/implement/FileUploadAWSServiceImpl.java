@@ -1,6 +1,9 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.response.FileResponse;
+import com.project.courseweb.entities.Profile;
+import com.project.courseweb.enums.ErrorCode;
+import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.repositories.ProfileRepository;
 import com.project.courseweb.services.FileUploadAWSService;
 import lombok.AccessLevel;
@@ -25,7 +28,6 @@ import java.util.UUID;
 @Slf4j
 @Component
 public class FileUploadAWSServiceImpl implements FileUploadAWSService {
-    ProfileServiceImpl profileService;
     ProfileRepository profileRepository;
     S3Client s3Client;
 
@@ -39,10 +41,8 @@ public class FileUploadAWSServiceImpl implements FileUploadAWSService {
 
 
     @Override
-    public FileResponse uploadAvatar(MultipartFile file) {
-        var idProfile = SecurityContextHolder.getContext().getAuthentication().getName();
-        var profile = this.profileService.getProfileById(Long.valueOf(idProfile));
-        String objKey = profile.getId().toString() + "/avatar/" + UUID.randomUUID()
+    public String uploadFile(Profile profile, String nameFolder, MultipartFile file) {
+        String objKey = profile.getId().toString() + "/"+nameFolder+"/" + UUID.randomUUID()
                 + "-" +file.getOriginalFilename();
         try {
             s3Client.putObject(PutObjectRequest.builder()
@@ -52,15 +52,9 @@ public class FileUploadAWSServiceImpl implements FileUploadAWSService {
                             .build()
                     , RequestBody.fromInputStream(file.getInputStream(), file.getSize())
             );
-            String url = String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, awsRegion, objKey);
-            profile.setAvatar(url);
-            profileRepository.save(profile);
-            return FileResponse.builder()
-                    .url(url)
-                    .build();
-
+            return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, awsRegion, objKey);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AppException(ErrorCode.UPLOAD_FILE_FAILED);
         }
     }
 }

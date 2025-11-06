@@ -5,7 +5,6 @@ import com.project.courseweb.dtos.request.ProfileUpdateRequest;
 import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.dtos.response.ProfileUpdateResponse;
 import com.project.courseweb.enums.SuccessCode;
-import com.project.courseweb.services.FileUploadAWSService;
 import com.project.courseweb.services.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class ProfileController {
     ProfileService profileService;
-    FileUploadAWSService fileUploadAWSService;
 
     @PutMapping("/update")
     ApiResponse<ProfileUpdateResponse> updateProfile(@RequestBody ProfileUpdateRequest updateRequest) {
@@ -27,6 +25,6 @@ public class ProfileController {
 
     @PatchMapping("/update-avatar")
     ApiResponse<FileResponse> updateAvatar(@RequestParam("file") MultipartFile file) {
-        return ApiResponse.ok(this.fileUploadAWSService.uploadAvatar(file), SuccessCode.UPDATE_AVATAR_SUCCESS);
+        return ApiResponse.ok(this.profileService.uploadAvatar(file), SuccessCode.UPDATE_AVATAR_SUCCESS);
     }
 }
