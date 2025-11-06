@@ -15,7 +15,10 @@ public enum SuccessCode {
     LOGOUT_SUCCESS(200, "Đăng xuất thành công", HttpStatus.OK),
     INTROSPECT_TOKEN_SUCCESS(200, "Introspect token thành công", HttpStatus.OK),
     UPDATE_PROFILE_SUCCESS(200, "Cập nhật thành công", HttpStatus.OK),
-    UPDATE_AVATAR_SUCCESS(200, "Cập nhật avatar thành công", HttpStatus.OK);
+    UPDATE_AVATAR_SUCCESS(200, "Cập nhật avatar thành công", HttpStatus.OK),
+    CREATE_POST_SUCCESS(201, "Tạo bài viết thành công", HttpStatus.CREATED),
+    UPLOAD_POST_THUMBNAIL_SUCCESS(200, "Cập nhật ảnh bài viết thành công",HttpStatus.OK)
+    ;
 
     int status;
     String message;

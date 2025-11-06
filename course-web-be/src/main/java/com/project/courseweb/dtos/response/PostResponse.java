@@ -1,4 +1,4 @@
-package com.project.courseweb.dtos.request;
+package com.project.courseweb.dtos.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class PostRequest {
+public class PostResponse {
+    String id;
     String author;
     String title;
     String category;

@@ -227,6 +227,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "login google",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/oauth2/callback?code=4%2F0Ab32j91-wVuVmX6ZTemrHrfXQRkboMEUvE9r2RvHf0y46OorQ10hl_lWdRsapZ2_bQ1hYA",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"oauth2",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "4%2F0Ab32j91-wVuVmX6ZTemrHrfXQRkboMEUvE9r2RvHf0y46OorQ10hl_lWdRsapZ2_bQ1hYA"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -241,16 +272,16 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0ODQ1MDAsImlhdCI6MTc2MjIyNTMwMCwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJhNzhhMDJmYy0xMzRjLTQ3MDEtOTZmNi1kM2QwNTEzY2QxODIifQ.nGsy6utkKJx24z1XtFRbR90JhVQL2Wo5IEf7OMFbC7UfzIdf7EvI_hlngHvyGfgDLVxip6l4dzi0rwRMj0zncQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI1MjQzNDAsImlhdCI6MTc2MjI2NTE0MCwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiIxMmY2NzE2ZC1kOWRlLTQ2MGQtYWM0Zi05OWEwNTMzNzdjMDUifQ.GS7ugIoRKHO996ZYZRSAVSd2-0xuDm4xHJwxA7A-MByd_IRLdWo7Z6TVk_o2XPDzaTDgJnnulGOUalY68dvw0g",
 									"type": "string"
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"fullName\": \"Kobi\",\r\n  \"about\": \"Giới thiệu\",\r\n  \"avatar\":\"sssssssdasddwadwqeqwe\",\r\n  \"personalWebsite\": \"https://example.com\",\r\n  \"github\": \"github-username\",\r\n  \"linkedin\": \"linkedin-profile\",\r\n  \"facebook\": \"facebook-profile\",\r\n  \"youtube\": \"youtube-channel\"\r\n}",
+							"raw": "{\r\n  \"fullName\": \"Kobi\",\r\n  \"about\": \"Giới thiệu\",\r\n  \"personalWebsite\": \"https://example.com\",\r\n  \"github\": \"github-username\",\r\n  \"linkedin\": \"linkedin-profile\",\r\n  \"facebook\": \"facebook-profile\",\r\n  \"youtube\": \"youtube-channel\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -309,6 +340,92 @@
 								"project",
 								"profile",
 								"update-avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "gọi api để upload file lên aws và nhậnveef url rồi lấy truyền vào api tạo bài(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI3MDI3MjQsImlhdCI6MTc2MjQ0MzUyNCwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjcwMGM5MWM2LTU0YTMtNDI5Mi1iNDRkLWVmMDg5ODU5NmJlZiJ9.Kco56DIlOK3EX8W5OuX1q-84rrV2pGnHXaV7uKmenJUL5gUKZ8uqOXYy6QFsVLeVerGyC3bsb89FloUGZYKcVg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-07-10 135756.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/upload-thumbnail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"upload-thumbnail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "created post(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI2OTk1MjUsImlhdCI6MTc2MjQ0MDMyNSwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6ImIwYWY4ODEwLTYyNjktNGMyMi1iN2FlLTk2M2M4YzRhM2FmYyJ9.eZLrJys9n4XEn5F-qC-XQY_8ATiSi6_nLQaHjAZ-jh6uYiW-ZMTt0NmC36K93RMuiQirqAl3WPNO9HpjRAQpHw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\" : \"Tan Loi\",\r\n    \"title\" : \"ccccc\",\r\n    \"category\" : \"react_native\",\r\n    \"content\" : \"cascascascascasc\",\r\n    \"fullContent\" : \"dasddddddddddddddddddddddddddddddddddddd\",\r\n    \"statusPost\" : \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/create-post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"create-post"
 							]
 						}
 					},

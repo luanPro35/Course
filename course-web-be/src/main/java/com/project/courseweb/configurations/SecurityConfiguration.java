@@ -35,7 +35,8 @@ public class SecurityConfiguration {
             "/auth/register",
             "/auth/login",
             "/auth/refresh-token",
-            "/auth/introspect"
+            "/auth/introspect",
+            "/oauth2/callback"
     };
 
     @Bean

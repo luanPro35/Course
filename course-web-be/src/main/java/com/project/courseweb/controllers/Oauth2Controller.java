@@ -13,7 +13,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/oauth2")
@@ -24,6 +23,6 @@ public class Oauth2Controller {
     
     @PostMapping("/callback")
     ApiResponse<AuthenticatedResponse> postMethodName(@RequestParam("code") String code) {
-        return ApiResponse.ok(this.authService.authenticatedUserGoogle(code), SuccessCode.)
+        return ApiResponse.ok(this.authService.authenticatedUserGoogle(code), SuccessCode.AUTHENTICATED_GOOGLE_SUCCESS);
     }
 }
