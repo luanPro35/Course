@@ -23,12 +23,11 @@ public class Auth {
     String email;
     @Column(unique = true, nullable = false)
     String phone;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     String passwordHash;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_id")
+    @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Profile profile;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
             @JoinTable(
                     name = "auth_roles",
                     joinColumns = @JoinColumn(name = "auth_id"),

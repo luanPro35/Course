@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "profiles")
@@ -19,7 +20,12 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @OneToOne(mappedBy = "profile")
+    @OneToOne(
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL
+    )
+    @MapsId
+    @JoinColumn(name = "id")
     Auth auth;
     String fullName;
     String avatar;
@@ -31,6 +37,9 @@ public class Profile {
     String linkedin;
     String facebook;
     String youtube;
+
+    @OneToMany(mappedBy = "profile")
+    Set<Post> posts;
 
     LocalDateTime createTime;
     LocalDateTime updateTime;
