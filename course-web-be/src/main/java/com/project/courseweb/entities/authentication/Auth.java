@@ -21,11 +21,10 @@ public class Auth {
     Long id;
     @Column(unique = true, nullable = false)
     String email;
-    @Column(unique = true, nullable = false)
     String phone;
 //    @Column(nullable = false)
     String passwordHash;
-    @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL)
     Profile profile;
     @ManyToMany(fetch = FetchType.LAZY)
             @JoinTable(

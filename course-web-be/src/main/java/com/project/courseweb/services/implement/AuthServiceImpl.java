@@ -2,6 +2,7 @@ package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.request.*;
 import com.project.courseweb.dtos.response.*;
+import com.project.courseweb.entities.Profile;
 import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.entities.authentication.RefreshToken;
 import com.project.courseweb.entities.authentication.Role;
@@ -116,22 +117,22 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
         log.info("tokenResponse={}", tokenResponse);
-        var userGG = this.googleUserInfoClient.getUserInfo("json", Objects.requireNonNull(tokenResponse.block()).getAccessToken());
+        var userGG = this.googleUserInfoClient.getUserInfo("json", Objects.requireNonNull(tokenResponse).getAccessToken());
         log.info("userGG={}", userGG);
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.getRoleByName(Roles.USER.name()));
 
-        var auth = this.authRepository.findByEmail(Objects.requireNonNull(userGG.block()).getEmail()).orElseGet(
+        var auth = this.authRepository.findByEmail(userGG.getEmail()).orElseGet(
                 () -> {
                     var auths = Auth.builder()
-                            .email(Objects.requireNonNull(userGG.block()).getEmail())
+                            .email(userGG.getEmail())
                             .build();
                     auths.setRoles(roles);
-                    var profile = auths.getProfile();
-                    profile.setFullName(Objects.requireNonNull(userGG.block()).getName());
-                    profile.setAvatar(Objects.requireNonNull(userGG.block()).getPicture());
-                    profile.setAuth(auths);
+                    auths.setProfile(Profile.builder().auth(auths)
+                            .fullName(userGG.getName())
+                            .avatar(userGG.getPicture())
+                            .build());
                     return this.authRepository.save(auths);
                 }
         );
