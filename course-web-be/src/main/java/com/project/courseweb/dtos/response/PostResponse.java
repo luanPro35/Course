@@ -1,5 +1,8 @@
 package com.project.courseweb.dtos.response;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +21,6 @@ public class PostResponse {
     String thumbnailUrl;
     String content;
     String fullContent;
+    LocalDateTime createdAt;
     String statusPost;
 }

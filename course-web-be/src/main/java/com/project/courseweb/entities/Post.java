@@ -1,5 +1,8 @@
 package com.project.courseweb.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.project.courseweb.enums.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,5 +34,12 @@ public class Post {
     @Lob
     String fullContent;
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_post", length = 20)
     PostStatus status;
+    LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

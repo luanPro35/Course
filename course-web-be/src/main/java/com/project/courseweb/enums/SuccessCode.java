@@ -18,6 +18,9 @@ public enum SuccessCode {
     UPDATE_AVATAR_SUCCESS(200, "Cập nhật avatar thành công", HttpStatus.OK),
     CREATE_POST_SUCCESS(201, "Tạo bài viết thành công", HttpStatus.CREATED),
     UPLOAD_POST_THUMBNAIL_SUCCESS(200, "Cập nhật ảnh bài viết thành công",HttpStatus.OK)
+    ,GET_POSTS_BY_STATUS_SUCCESS(200, "Lấy danh sách bài viết theo trạng thái thành công",HttpStatus.OK)
+    ,GET_POST_SUCCESS(200, "Lấy bài viết thành công",HttpStatus.OK)
+    ,UPDATED_POST_SUCCESS(200, "Cập nhật bài viết thành công",HttpStatus.OK)
     ;
 
     int status;

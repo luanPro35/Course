@@ -2,6 +2,7 @@ package com.project.courseweb.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.project.courseweb.dtos.request.PostRequest;
 import com.project.courseweb.dtos.response.PostResponse;
@@ -14,4 +15,7 @@ public interface PostMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "statusPost", ignore = true)
     PostResponse toPostResponse(Post post);
+
+    @Mapping(target = "category", ignore = true)
+    void updatePostFromRequest(PostRequest request, @MappingTarget Post post);
 }

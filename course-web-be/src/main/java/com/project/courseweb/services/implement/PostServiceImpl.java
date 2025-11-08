@@ -1,17 +1,24 @@
 package com.project.courseweb.services.implement;
 
 
-import com.project.courseweb.enums.CategoryType;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.PostRequest;
 import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.dtos.response.PostResponse;
 import com.project.courseweb.entities.Post;
+import com.project.courseweb.enums.CategoryType;
+import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.PostStatus;
+import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.mappers.PostMapper;
 import com.project.courseweb.repositories.PostRepository;
 import com.project.courseweb.services.CategoryService;
@@ -21,6 +28,7 @@ import com.project.courseweb.services.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +46,7 @@ public class PostServiceImpl implements PostService {
     public FileResponse uploadPostThumbnail(MultipartFile file) {
         return FileResponse.builder()
                 .url(this.fileUploadAWSService.uploadFile(
-                        this.profileServiceImpl.getProfileById(Long.valueOf(getAuthId())),
+                        this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),
                         "post-thumbnail",
                         file
                         )
@@ -48,7 +56,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse createPost(PostRequest request) {
         Post post = this.postMapper.toPostEntity(request);
-        post.setProfile(this.profileServiceImpl.getProfileById(Long.valueOf(this.getAuthId())));
+        post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
         post.setStatus(PostStatus.valueOf(request.getStatusPost()));
         post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
         var entity = this.postRepository.save(post);
@@ -57,8 +65,79 @@ public class PostServiceImpl implements PostService {
         response.setStatusPost(entity.getStatus().name());
         return response;
     }
-
-    private String getAuthId(){
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    @Override
+    public PageResponse<PostResponse> getPostsByStatus(Pageable pageable, String status) {
+        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+        Page<Post> posts = this.postRepository.getPostsByStatusAndProfileId(PostStatus.valueOf(status), profile.getId(), pageable);
+        List<PostResponse> postResponses = posts.stream().map(
+            post -> {
+                var response = this.postMapper.toPostResponse(post);
+                response.setCategory(post.getCategory().getSlug().name());
+                response.setStatusPost(post.getStatus().name());
+                return response;
+            }
+        ).toList();
+        return PageResponse.<PostResponse>builder()
+                .content(postResponses)
+                .pageNo(posts.getNumber())
+                .pageSize(posts.getSize())
+                .totalElements(posts.getTotalElements())
+                .totalPages(posts.getTotalPages())
+                .last(posts.isLast())
+                .build();
     }
+    @Override
+    public PostResponse getPostById(Long id) {
+        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
+        if(postOptional.isEmpty()){
+            throw new AppException(ErrorCode.POST_NOT_FOUND);
+        }
+        var post = postOptional.get();
+        var response = this.postMapper.toPostResponse(post);
+        response.setCategory(post.getCategory().getSlug().name()); 
+        response.setStatusPost(post.getStatus().name());
+        return response;
+    }
+    @Override
+    public PostResponse updatePost(Long id, PostRequest request) {
+        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
+        if(!postOptional.isPresent()){
+            throw new AppException(ErrorCode.POST_NOT_FOUND);
+        }   
+        var post = postOptional.get();
+        post.setCreatedAt(LocalDateTime.now());
+        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
+        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        this.postMapper.updatePostFromRequest(request, post);
+        var response = this.postMapper.toPostResponse(this.postRepository.save(post));
+        response.setCategory(post.getCategory().getSlug().name());
+        response.setStatusPost(post.getStatus().name());
+        return response;
+    }
+
+    @Override
+    public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {
+        Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);
+        List<PostResponse> postResponses = posts.stream().map(
+            post -> {
+                var response = this.postMapper.toPostResponse(post);
+                response.setCategory(post.getCategory().getSlug().name());
+                response.setStatusPost(post.getStatus().name());
+                return response;
+            }
+        ).toList();
+        return PageResponse.<PostResponse>builder()
+                .content(postResponses)
+                .pageNo(posts.getNumber())
+                .pageSize(posts.getSize())
+                .totalElements(posts.getTotalElements())
+                .totalPages(posts.getTotalPages())
+                .last(posts.isLast())
+                .build();
+    }
+
+    
+
 }
