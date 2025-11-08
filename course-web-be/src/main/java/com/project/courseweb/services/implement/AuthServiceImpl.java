@@ -227,4 +227,22 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.EMAIL_OR_PHONE_EXISTS);
         }
     }
+
+    @Override
+    public void createAuthAdmin(Auth auth) {
+        Optional<Auth> optionalAuth = this.authRepository.findByEmail(auth.getEmail());
+        if (optionalAuth.isPresent()) {
+            return;
+        }
+        Auth authAdmin = Auth.builder()
+                .email(auth.getEmail())
+                .phone(auth.getPhone())
+                .passwordHash(auth.getPasswordHash())
+                .build();
+        authAdmin.setPasswordHash(bCryptPasswordEncoder.encode(auth.getPasswordHash()));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.getRoleByName(Roles.ADMIN.name()));
+        authAdmin.setRoles(roles);
+        authRepository.save(authAdmin);
+    }
 }

@@ -1,9 +1,11 @@
 package com.project.courseweb.configurations;
 
+import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.entities.authentication.Permission;
 import com.project.courseweb.enums.CategoryType;
 import com.project.courseweb.enums.Permissions;
 import com.project.courseweb.enums.Roles;
+import com.project.courseweb.services.AuthService;
 import com.project.courseweb.services.CategoryService;
 import com.project.courseweb.services.PermissionService;
 import com.project.courseweb.services.RoleService;
@@ -26,6 +28,7 @@ public class ApplicationInitConfig implements ApplicationRunner {
     PermissionService permissionService;
     RoleService roleService;
     CategoryService categoryService;
+    AuthService authService;
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("Application started");
@@ -54,6 +57,10 @@ public class ApplicationInitConfig implements ApplicationRunner {
         this.categoryService.createCategory(CategoryType.python);
         this.categoryService.createCategory(CategoryType.react_native);
 
+        this.authService.createAuthAdmin(Auth.builder()
+                .email("admin@gmail.com")
+                .passwordHash("admin123")
+        .build());
 
     }
 }
