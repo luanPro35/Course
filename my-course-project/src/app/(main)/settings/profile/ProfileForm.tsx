@@ -80,12 +80,13 @@ export default function ProfileForm() {
                 Avatar
               </label>
               <div className="mt-1 flex items-center">
-                <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                <span className="inline-block h-12 w-12 overflow-hidden bg-gray-100 rounded-full">
                   <Image
                     src={form.avatar || "/images/avatar.png"}
                     alt="Avatar"
                     width={48}
                     height={48}
+                    className="rounded-full"
                   />
                 </span>
                 <Input

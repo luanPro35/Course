@@ -1,27 +1,12 @@
-import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
+import { NextResponse, NextRequest } from "next/server";
 import { User } from "@/types/user";
 
-const jsonFilePath = path.join(process.cwd(), "db.json");
+const BASE_URL = "http://localhost:8080/project/profile";
 
-async function readData(): Promise<{ users: User[] }> {
-  try {
-    const fileContent = await fs.readFile(jsonFilePath, "utf-8");
-    return JSON.parse(fileContent);
-  } catch (error) {
-    console.error("Error reading information.json:", error);
-    return { users: [] };
-  }
-}
-
-async function writeData(data: { users: User[] }): Promise<void> {
-  await fs.writeFile(jsonFilePath, JSON.stringify(data, null, 2), "utf-8");
-}
-
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
+  const authorization = request.headers.get("Authorization");
 
   if (!userId) {
     return NextResponse.json(
@@ -31,20 +16,21 @@ export async function GET(request: Request) {
   }
 
   try {
-    const data = await readData();
-    const user = data.users.find(
-      (u) => parseInt(u.id.toString(), 10) === parseInt(userId, 10)
-    );
+    // Forward the request to the backend service
+    const response = await fetch(`${BASE_URL}?userId=${userId}`, {
+      headers: {
+        ...(authorization && { Authorization: authorization }),
+      },
+    });
+    const data = await response.json();
 
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status });
     }
 
-    return NextResponse.json({ success: true, data: user });
+    return NextResponse.json(data);
   } catch (error) {
+    console.error("Error fetching profile:", error);
     return NextResponse.json(
       {
         success: false,
@@ -55,44 +41,67 @@ export async function GET(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
     const body: Partial<User> = await request.json();
-    const { id, ...updateData } = body;
+    const authorization = request.headers.get("Authorization");
 
-    if (!id) {
-      return NextResponse.json(
-        { success: false, message: "User ID is required for update" },
-        { status: 400 }
-      );
-    }
-
-    const data = await readData();
-    const userIndex = data.users.findIndex((u) => u.id === id);
-
-    if (userIndex === -1) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    const updatedUser = { ...data.users[userIndex], ...updateData };
-    data.users[userIndex] = updatedUser;
-
-    await writeData(data);
-
-    return NextResponse.json({
-      success: true,
-      message: "Profile updated successfully",
-      data: updatedUser,
+    // Forward the request to the backend service
+    const response = await fetch(`${BASE_URL}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(authorization && { Authorization: authorization }),
+      },
+      body: JSON.stringify(body),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error updating profile:", error);
     return NextResponse.json(
       {
         success: false,
         message: "An error occurred while updating the profile.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
+    const authorization = request.headers.get("Authorization");
+
+    // Forward the multipart request to the backend service
+    const response = await fetch(`${BASE_URL}/update-avatar`, {
+      method: "POST",
+      headers: {
+        ...(authorization && { Authorization: authorization }),
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status });
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error updating avatar:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "An error occurred while updating the avatar.",
       },
       { status: 500 }
     );

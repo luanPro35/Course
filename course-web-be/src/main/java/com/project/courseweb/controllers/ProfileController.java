@@ -27,4 +27,9 @@ public class ProfileController {
     ApiResponse<FileResponse> updateAvatar(@RequestParam("file") MultipartFile file) {
         return ApiResponse.ok(this.profileService.uploadAvatar(file), SuccessCode.UPDATE_AVATAR_SUCCESS);
     }
+
+    @GetMapping()
+    ApiResponse<ProfileUpdateResponse> getProfile(@RequestParam("userId") Long userId) {
+        return ApiResponse.ok(this.profileService.getProfile(userId), SuccessCode.GET_PROFILE_SUCCESS);
+    }
 }

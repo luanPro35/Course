@@ -16,6 +16,7 @@ public enum SuccessCode {
     INTROSPECT_TOKEN_SUCCESS(200, "Introspect token thành công", HttpStatus.OK),
     UPDATE_PROFILE_SUCCESS(200, "Cập nhật thành công", HttpStatus.OK),
     UPDATE_AVATAR_SUCCESS(200, "Cập nhật avatar thành công", HttpStatus.OK),
+    GET_PROFILE_SUCCESS(200, "Lấy thông tin thành công", HttpStatus.OK),
     CREATE_POST_SUCCESS(201, "Tạo bài viết thành công", HttpStatus.CREATED),
     UPLOAD_POST_THUMBNAIL_SUCCESS(200, "Cập nhật ảnh bài viết thành công",HttpStatus.OK)
     ,GET_POSTS_BY_STATUS_SUCCESS(200, "Lấy danh sách bài viết theo trạng thái thành công",HttpStatus.OK)
@@ -33,4 +34,3 @@ public enum SuccessCode {
         this.httpStatus = httpStatus;
     }
 }
-

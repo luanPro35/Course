@@ -12,4 +12,6 @@ public interface ProfileService {
     ProfileUpdateResponse updateProfile(ProfileUpdateRequest updateRequest);
 
     FileResponse uploadAvatar(MultipartFile file);
+
+    ProfileUpdateResponse getProfile(Long userId);
 }
