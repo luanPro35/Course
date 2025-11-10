@@ -430,6 +430,139 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get posst by status(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI4NzAzNTIsImlhdCI6MTc2MjYxMTE1MiwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjU3MjMwZWE4LTBiM2YtNDNhNi1iZTA1LTJhMDU1ZjI5ZDI1OCJ9.5aKepkkwMWxqrtjBOrO53rIrEs_-Tkm8l_l5CzFr51Pn-y-5K3NC9urG73HRF3iIiaoM3M8JmWiRFsB757CsJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts?status=PUBLISHED&page=0&size=2&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PUBLISHED"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post pending(admin)(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX0FETUlOIEVESVRfQ09VUlNFIFVQTE9BRF9DT1VSU0UgREVMRVRFX0NPVVJTRSIsImlzcyI6ImNvbS5wcm9qZWN0LjJUTCIsImV4cCI6MTc2Mjg3NDIwMywiaWF0IjoxNzYyNjE1MDAzLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6ImRmM2RhZTk5LWJmODctNDExMi04OGI0LTQ2ZTdlYWMyMGVkYiJ9.bs_wGPqAQCIR-7oEzbSwfL8H6nbafRi3DzTB0vV0F3hxMZ6KaDmBnkbPcYk8B7v7ea5a78ICqZ9L2F-LM8PyBQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts?page=0&size=2&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post (token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI4NzUxMTcsImlhdCI6MTc2MjYxNTkxNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjYwYzMzNzE4LWI0YzYtNGU5Yy1iNDJjLTNkZDdmZmI3MjA0ZCJ9.zmIUGVaQCpUj6YrV9ha_LYLvxJXfN8nxP-J3idMMtGJdsFf4-XwWqZWHxzKsCeUkr4hCGo_KHTqq8a7Th7OddQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update post(token)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		}
