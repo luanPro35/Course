@@ -45,6 +45,15 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public ProfileUpdateResponse getProfile(Long userId) {
+        Optional<Profile> optionalProfile = this.profileRepository.findById(userId);
+        if (optionalProfile.isEmpty()) {
+            return new ProfileUpdateResponse();
+        }
+        return this.profileMapper.toProfileUpdateResponse(optionalProfile.get());
+    }
+
+    @Override
     public FileResponse uploadAvatar(MultipartFile file) {
         var profile = this.getProfileById(this.getId());
         var url = this.fileUploadAWSService.uploadFile(profile,
