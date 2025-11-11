@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.courseweb.dtos.PageResponse;
@@ -54,6 +55,7 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
     @Override
+    @Transactional
     public PostResponse createPost(PostRequest request) {
         Post post = this.postMapper.toPostEntity(request);
         post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
@@ -87,6 +89,7 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostById(Long id) {
         var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
         var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
@@ -100,6 +103,7 @@ public class PostServiceImpl implements PostService {
         return response;
     }
     @Override
+    @Transactional
     public PostResponse updatePost(Long id, PostRequest request) {
         var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
         var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
@@ -118,6 +122,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);
         List<PostResponse> postResponses = posts.stream().map(

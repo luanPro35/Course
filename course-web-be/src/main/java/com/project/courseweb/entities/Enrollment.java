@@ -1,6 +1,5 @@
 package com.project.courseweb.entities;
 
-import com.project.courseweb.entities.authentication.Auth;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,8 +20,8 @@ public class Enrollment {
     Long id;
 
     @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "auth_id", nullable = false)
-    Auth auth;
+    @JoinColumn(name = "profile_id", nullable = false)
+    Profile profile;
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
