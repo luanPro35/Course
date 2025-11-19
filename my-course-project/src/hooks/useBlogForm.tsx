@@ -113,6 +113,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
   const handleSubmit = async (
     status: "draft" | "published",
     userId: string | null,
+    token: string | null,
     postId?: number | string,
     router?: AppRouterInstance
   ) => {
@@ -134,24 +135,40 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
     if (!userId) {
       setErrors((prev) => ({ ...prev, userId: "User ID is required" }));
+      alert("Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.");
+      return;
+    }
+
+    if (!token) {
+      setErrors((prev) => ({ ...prev, token: "Authentication token is missing" }));
+      alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
+      console.log("Submitting blog post with userId:", userId, "token:", token ? "present" : "missing");
+      
       if (postId) {
         // Update existing post with status
         await BlogService.update(
-          userId,
           parseInt(postId.toString(), 10),
           { ...formData, status }
         );
-        alert(`Bài viết đã được cập nhật dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
+        alert(
+          `Bài viết đã được cập nhật dưới dạng ${
+            status === "draft" ? "bản nháp" : "xuất bản"
+          }`
+        );
       } else {
         // Create new post
-        await BlogService.create(formData, userId, status);
-        alert(`Bài viết đã được lưu dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
+        await BlogService.create(formData, status);
+        alert(
+          `Bài viết đã được lưu dưới dạng ${
+            status === "draft" ? "bản nháp" : "xuất bản"
+          }`
+        );
         resetForm(); // Reset the form after successful creation
       }
 
@@ -161,7 +178,8 @@ export const useBlogForm = (initialState: BlogFormData) => {
       }
     } catch (error) {
       console.error("Failed to save the post:", error);
-      alert("Có lỗi xảy ra khi lưu bài viết.");
+      const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra khi lưu bài viết.";
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

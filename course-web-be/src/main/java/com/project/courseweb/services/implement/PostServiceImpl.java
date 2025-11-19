@@ -59,8 +59,17 @@ public class PostServiceImpl implements PostService {
     public PostResponse createPost(PostRequest request) {
         Post post = this.postMapper.toPostEntity(request);
         post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
-        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
-        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
+        try {
+            post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid status: " + request.getStatusPost());
+        }
+        try {
+            CategoryType categoryType = CategoryType.valueOf(request.getCategory());
+            post.setCategory(this.categoryService.getCategoryByName(categoryType));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid category: " + request.getCategory());
+        }
         var entity = this.postRepository.save(post);
         var response = this.postMapper.toPostResponse(post);
         response.setCategory(entity.getCategory().getSlug().name());
@@ -112,8 +121,17 @@ public class PostServiceImpl implements PostService {
         }   
         var post = postOptional.get();
         post.setCreatedAt(LocalDateTime.now());
-        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
-        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        try {
+            CategoryType categoryType = CategoryType.valueOf(request.getCategory());
+            post.setCategory(this.categoryService.getCategoryByName(categoryType));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid category: " + request.getCategory());
+        }
+        try {
+            post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid status: " + request.getStatusPost());
+        }
         this.postMapper.updatePostFromRequest(request, post);
         var response = this.postMapper.toPostResponse(this.postRepository.save(post));
         response.setCategory(post.getCategory().getSlug().name());
@@ -142,6 +160,7 @@ public class PostServiceImpl implements PostService {
                 .last(posts.isLast())
                 .build();
     }
+<<<<<<< HEAD
     @Override
     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
@@ -178,3 +197,6 @@ public class PostServiceImpl implements PostService {
             .orElse(false);
     }
 }
+=======
+}
+>>>>>>> b843148 ((fix): replace api)

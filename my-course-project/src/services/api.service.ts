@@ -1,10 +1,14 @@
-export const USER_API_URL = "http://localhost:8080"; // call server BE
+export const USER_API_URL = "http://localhost:8080/project"; // call server BE
 export const TOP_VIDEO_API_URL = "http://localhost:3001/topVideos";
-export const PROFILE_API_URL = "http://localhost:8080/profile/update";
-export const PROFILE_GET_API_URL = "http://localhost:8080/profile";
-export const AVATAR_API_URL = "http://localhost:8080/profile/update-avatar";
+export const PROFILE_API_URL = "http://localhost:8080/project/profile/update";
+export const PROFILE_GET_API_URL = "http://localhost:8080/project/profile";
+export const AVATAR_API_URL =
+  "http://localhost:8080/project/profile/update-avatar";
 export const TRENDING_API_URL = "http://localhost:3001/trending";
 export const PRO_API_URL = "http://localhost:3001/coursesPro";
 export const FREE_API_URL = "http://localhost:3001/coursesFree";
 export const BLOG_BASE_URL = "http://localhost:3001/blogs";
 export const ARTICLE_API_URL = "http://localhost:3001/article";
+export const POSTS_API_URL = "http://localhost:8080/project/posts/create-post";
+export const UPLOAD_IMAGE_POST_URL =
+  "http://localhost:8080/project/posts/upload-thumbnail";
