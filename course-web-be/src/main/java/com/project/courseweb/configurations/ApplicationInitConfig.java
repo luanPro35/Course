@@ -41,14 +41,29 @@ public class ApplicationInitConfig implements ApplicationRunner {
         var permission_edit_course = this.permissionService.createPermission(
                 Permissions.EDIT_COURSE.toString(), "Edit course"
         );
+        var permission_create_post = this.permissionService.createPermission(
+                Permissions.CREATE_POST.toString(), "Create post"
+        );
+        var permission_edit_post = this.permissionService.createPermission(
+                Permissions.EDIT_POST.toString(), "Edit post"
+        );
+        var permission_delete_post = this.permissionService.createPermission(
+                Permissions.DELETE_POST.toString(), "Delete post"
+        );
         Set<Permission> permissions_admin = new HashSet<>();
         permissions_admin.add(permission_upload_course);
         permissions_admin.add(permission_delete_course);
         permissions_admin.add(permission_edit_course);
+        permissions_admin.add(permission_create_post);
+        permissions_admin.add(permission_edit_post);
+        permissions_admin.add(permission_delete_post);
         this.roleService.createRole(
                 Roles.ADMIN.name(), "Admin", permissions_admin
         );
         Set<Permission> permissions_user = new HashSet<>();
+        permissions_user.add(permission_create_post);
+        permissions_user.add(permission_edit_post);
+        permissions_user.add(permission_delete_post);
         this.roleService.createRole(Roles.USER.name(), "User",permissions_user);
         
         this.categoryService.createCategory(CategoryType.cpp);

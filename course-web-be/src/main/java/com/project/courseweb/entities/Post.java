@@ -34,7 +34,6 @@ public class Post {
     @Lob
     String fullContent;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status_post", length = 20)
     PostStatus status;
     LocalDateTime createdAt;
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,7 +142,39 @@ public class PostServiceImpl implements PostService {
                 .last(posts.isLast())
                 .build();
     }
+    @Override
+    public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
+        Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
+        List<PostResponse> postResponses = posts.stream().map(
+            post -> {
+                var response = this.postMapper.toPostResponse(post);
+                response.setCategory(post.getCategory().getSlug().name());
+                response.setStatusPost(post.getStatus().name());
+                return response;
+            }
+        ).toList();
+        return PageResponse.<PostResponse>builder()
+                .content(postResponses)
+                .pageNo(posts.getNumber())
+                .pageSize(posts.getSize())
+                .totalElements(posts.getTotalElements())
+                .totalPages(posts.getTotalPages())
+                .last(posts.isLast())
+                .build();
+    }
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('DELETE_POST') and this.isPostOwner(#id) or hasRole('ADMIN')")
+    public void deletePost(Long id) {
+        Post post = this.postRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        this.postRepository.delete(post);
+    }
 
-    
-
+    public boolean isPostOwner(Long id){
+        return postRepository.findById(id)
+            .map(post->post.getProfile().getId()
+            .equals(this.profileServiceImpl.getId()))
+            .orElse(false);
+    }
 }

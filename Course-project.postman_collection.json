@@ -432,7 +432,7 @@
 					"response": []
 				},
 				{
-					"name": "get posst by status(token)",
+					"name": "get list posts by status(token)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -481,7 +481,7 @@
 					"response": []
 				},
 				{
-					"name": "get post pending(admin)(token)",
+					"name": "get list posts pending(admin)(token)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -559,8 +559,109 @@
 				{
 					"name": "update post(token)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM3NzgxMjcsImlhdCI6MTc2MzUxODkyNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjNlYTI5OWFlLTM2OGUtNGYzMC1iZGI0LTJiOTFkOGVmMzhlZiJ9.gb3NQ6hzcOolJM79C430uWyrRE_2tB-7UJMlKQPJu-RbUPlwVcO7Tq2XupYo5YQKViVZtgolmpNCpYDMzj4syA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"author\": \"Tan\",\r\n        \"title\": \"a\",\r\n        \"category\": \"cpp\",\r\n        \"thumbnailUrl\": \"https://my-course-webapp-2025.s3.us-east-1.amazonaws.com/1/post-thumbnail/67db7300-3993-4375-bf42-b0a5a3954080-vatly.jpg\",\r\n        \"content\": \"dad\",\r\n        \"fullContent\": \"D\",\r\n        \"statusPost\": \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/update-post/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"update-post",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get list post đã được admin duyệt published không cần token",
+					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/published?page=0&size=3&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"published"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete post(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX0FETUlOIERFTEVURV9DT1VSU0UgVVBMT0FEX0NPVVJTRSBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfUE9TVCBFRElUX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM3ODUyNTQsImlhdCI6MTc2MzUyNjA1NCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJmYTBkYWI2NC05YmE4LTRmN2MtODYxNC03MGEyM2YzNWJiNjQifQ.JRV2I8X2XwRYJEYcqiOQ7Cx4WZl8-MqrSr0rl0LdV4q1668sLHxcPdM8OZToJuFHOslg4xb5KNtDyxK2lUiyXA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"7"
+							]
+						}
 					},
 					"response": []
 				}

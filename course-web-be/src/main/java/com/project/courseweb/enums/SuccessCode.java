@@ -22,6 +22,7 @@ public enum SuccessCode {
     ,GET_POSTS_BY_STATUS_SUCCESS(200, "Lấy danh sách bài viết theo trạng thái thành công",HttpStatus.OK)
     ,GET_POST_SUCCESS(200, "Lấy bài viết thành công",HttpStatus.OK)
     ,UPDATED_POST_SUCCESS(200, "Cập nhật bài viết thành công",HttpStatus.OK)
+    ,DELETE_POST_SUCCESS(200, "Xóa bài viết thành công",HttpStatus.OK)
     ;
 
     int status;

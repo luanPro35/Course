@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,7 +51,7 @@ public class PostController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping("/pending-posts")
     ApiResponse<PageResponse<PostResponse>> getPostsByStatusPending(Pageable pageable) {
         return ApiResponse.ok(this.postService.getPostsByStatusPending(pageable), SuccessCode.GET_POSTS_BY_STATUS_SUCCESS);
     }
@@ -63,5 +64,16 @@ public class PostController {
     @PutMapping("/my-posts/update-post/{id}")
     ApiResponse<PostResponse> updatePost(@PathVariable Long id, @RequestBody PostRequest request) {
         return ApiResponse.ok(this.postService.updatePost(id, request), SuccessCode.UPDATED_POST_SUCCESS);
+    }
+
+    @GetMapping("/published")
+    ApiResponse<PageResponse<PostResponse>> getAllPosts(Pageable pageable) {
+        return ApiResponse.ok(this.postService.getAllPostsByStatusPublished(pageable), SuccessCode.GET_POST_SUCCESS);
+    }
+    
+    @DeleteMapping("/my-posts/{id}")
+    ApiResponse<Void> deletePost(@PathVariable Long id) {
+        this.postService.deletePost(id);
+        return ApiResponse.ok(null, SuccessCode.DELETE_POST_SUCCESS);
     }
 }  
