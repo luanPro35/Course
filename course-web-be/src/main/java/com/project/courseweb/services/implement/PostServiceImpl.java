@@ -160,7 +160,6 @@ public class PostServiceImpl implements PostService {
                 .last(posts.isLast())
                 .build();
     }
-<<<<<<< HEAD
     @Override
     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
@@ -197,6 +196,3 @@ public class PostServiceImpl implements PostService {
             .orElse(false);
     }
 }
-=======
-}
->>>>>>> b843148 ((fix): replace api)
