@@ -358,7 +358,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI3MDI3MjQsImlhdCI6MTc2MjQ0MzUyNCwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjcwMGM5MWM2LTU0YTMtNDI5Mi1iNDRkLWVmMDg5ODU5NmJlZiJ9.Kco56DIlOK3EX8W5OuX1q-84rrV2pGnHXaV7uKmenJUL5gUKZ8uqOXYy6QFsVLeVerGyC3bsb89FloUGZYKcVg",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzODkyODc3LCJpYXQiOjE3NjM2MzM2NzcsImVtYWlsIjoibG9pa29iaTEyMzRAZ21haWwuY29tIiwianRpIjoiZWUzMzYwNzYtNmRkOC00OTdhLWI3YTYtM2Q2Nzg1NjVkYTNiIn0.dOVYImlrxgj6mDtzmFvgKsxotiNOQPOfQNsF8rFYHZqKP8DSh_RWhUU-azDD4XPMHXw2ll59oHYdajs7y8eHiQ",
 									"type": "string"
 								}
 							]
@@ -371,7 +371,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-07-10 135756.png"
+									"src": "/D:/OneDrive/Pictures/Camera Roll/z7172600638304_6813af25d072a65e52b831ab121942cd.jpg"
 								}
 							]
 						},
@@ -439,7 +439,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI4NzAzNTIsImlhdCI6MTc2MjYxMTE1MiwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjU3MjMwZWE4LTBiM2YtNDNhNi1iZTA1LTJhMDU1ZjI5ZDI1OCJ9.5aKepkkwMWxqrtjBOrO53rIrEs_-Tkm8l_l5CzFr51Pn-y-5K3NC9urG73HRF3iIiaoM3M8JmWiRFsB757CsJQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzODkyODc3LCJpYXQiOjE3NjM2MzM2NzcsImVtYWlsIjoibG9pa29iaTEyMzRAZ21haWwuY29tIiwianRpIjoiZWUzMzYwNzYtNmRkOC00OTdhLWI3YTYtM2Q2Nzg1NjVkYTNiIn0.dOVYImlrxgj6mDtzmFvgKsxotiNOQPOfQNsF8rFYHZqKP8DSh_RWhUU-azDD4XPMHXw2ll59oHYdajs7y8eHiQ",
 									"type": "string"
 								}
 							]
@@ -463,50 +463,6 @@
 									"key": "status",
 									"value": "PUBLISHED"
 								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "2"
-								},
-								{
-									"key": "sort",
-									"value": "createdAt,desc"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get list posts pending(admin)(token)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX0FETUlOIEVESVRfQ09VUlNFIFVQTE9BRF9DT1VSU0UgREVMRVRFX0NPVVJTRSIsImlzcyI6ImNvbS5wcm9qZWN0LjJUTCIsImV4cCI6MTc2Mjg3NDIwMywiaWF0IjoxNzYyNjE1MDAzLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6ImRmM2RhZTk5LWJmODctNDExMi04OGI0LTQ2ZTdlYWMyMGVkYiJ9.bs_wGPqAQCIR-7oEzbSwfL8H6nbafRi3DzTB0vV0F3hxMZ6KaDmBnkbPcYk8B7v7ea5a78ICqZ9L2F-LM8PyBQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/project/posts?page=0&size=2&sort=createdAt,desc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"project",
-								"posts"
-							],
-							"query": [
 								{
 									"key": "page",
 									"value": "0"
@@ -599,7 +555,7 @@
 					"response": []
 				},
 				{
-					"name": "get list post đã được admin duyệt published không cần token",
+					"name": "get list post published không cần token",
 					"request": {
 						"method": "GET",
 						"header": [],
