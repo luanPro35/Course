@@ -57,7 +57,10 @@ public class ApplicationInitConfig implements ApplicationRunner {
         permissions_admin.add(permission_create_post);
         permissions_admin.add(permission_edit_post);
         permissions_admin.add(permission_delete_post);
-         Set<Permission> permissions_user = new HashSet<>();
+        Set<Permission> permissions_user = new HashSet<>();
+        permissions_user.add(permission_create_post);
+        permissions_user.add(permission_edit_post);
+        permissions_user.add(permission_delete_post);
         this.roleService.createRole(Roles.USER.name(), "User",permissions_user);
         
         this.categoryService.createCategory(CategoryType.cpp);
