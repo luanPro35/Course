@@ -8,6 +8,8 @@ export interface BlogPost {
   fullContent: string;
   category: string;
   image: string;
+  thumbnailUrl?: string;
+  statusPost?: string;
   createdAt?: string;
   updatedAt?: string;
   status?: "draft" | "published";

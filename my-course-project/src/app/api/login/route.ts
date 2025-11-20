@@ -38,11 +38,15 @@ export async function POST(req: Request) {
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Login error:", error);
-    return NextResponse.json(
-      { mess: "Không thể kết nối đến máy chủ xác thực" },
-      { status: 500 }
-    );
+    let mess = "Không thể kết nối đến máy chủ xác thực";
+    if (
+      (error as { cause?: { code?: string } }).cause?.code === "ECONNREFUSED"
+    ) {
+      mess =
+        "Không thể kết nối đến máy chủ. Vui lòng kiểm tra xem máy chủ đã chạy chưa.";
+    }
+    return NextResponse.json({ mess: mess }, { status: 500 });
   }
 }

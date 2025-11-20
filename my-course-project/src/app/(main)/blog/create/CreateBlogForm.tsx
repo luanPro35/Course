@@ -3,6 +3,7 @@ import React from "react";
 import { useBlogForm } from "@/hooks/useBlogForm";
 import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
 import { FileText, Tag, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // Import các component con
 import { FormInput } from "./FormInput";
@@ -16,6 +17,7 @@ import { TipsSection } from "./TipsSection";
 import { BlogPreview } from "./BlogPreview";
 
 export default function CreateBlogPost() {
+  const router = useRouter();
   const {
     formData,
     errors,
@@ -120,8 +122,24 @@ export default function CreateBlogPost() {
               />
 
               <FormActions
-                onDraft={() => handleSubmit("draft", "1")}
-                onPublish={() => handleSubmit("published", "1")}
+                onDraft={() =>
+                  handleSubmit(
+                    "draft",
+                    "1",
+                    "YOUR_AUTH_TOKEN_HERE",
+                    undefined,
+                    router
+                  )
+                }
+                onPublish={() =>
+                  handleSubmit(
+                    "published",
+                    "1",
+                    "YOUR_AUTH_TOKEN_HERE",
+                    undefined,
+                    router
+                  )
+                }
                 isSubmitting={isSubmitting}
                 isUploading={isUploading}
               />

@@ -21,7 +21,7 @@ export default function MyPosts() {
     }
 
     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
-      BlogService.delete(user.id, Number(id))
+      BlogService.delete(Number(id))
         .then(() => {
           setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
         })

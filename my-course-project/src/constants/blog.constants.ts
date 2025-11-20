@@ -1,9 +1,9 @@
 export const BLOG_CATEGORIES = [
-  { value: "react-native", label: "React Native" },
-  { value: "devops", label: "DevOps" },
-  { value: "cpp", label: "C++" },
-  { value: "javascript", label: "JavaScript" },
-  { value: "python", label: "Python" },
+  { value: "REACT_NATIVE", label: "React Native" },
+  { value: "DEVOPS", label: "DevOps" },
+  { value: "CPP", label: "C++" },
+  { value: "JAVASCRIPT", label: "JavaScript" },
+  { value: "PYTHON", label: "Python" },
 ];
 
 export const FORM_VALIDATION = {

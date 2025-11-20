@@ -1,72 +1,43 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-// Unified interfaces
-interface Post {
-  id: number;
-  author?: string;
-  title?: string;
-  content?: string;
-  category?: string;
-  timeAgo?: string;
-  readTime?: string;
-  image?: string;
+// Define the base URL for the posts API from an environment variable.
+import { POSTS_API_URL, UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
+
+if (!POSTS_API_URL || !UPLOAD_IMAGE_POST_URL) {
+  // Throw an error if the environment variable is not set.
+  throw new Error(
+    "POSTS_API_URL or UPLOAD_IMAGE_POST_URL is not defined in your environment variables."
+  );
 }
 
-interface Db {
-  posts: Post[];
-}
-
-// Unified DB helpers
-const dbPath = path.join(process.cwd(), "db.json");
-
-const readDb = (): Db => {
-  try {
-    // Check if db.json exists before reading
-    if (fs.existsSync(dbPath)) {
-      const data = fs.readFileSync(dbPath, "utf8");
-      // Handle empty file case
-      if (data) {
-        return JSON.parse(data);
-      }
-    }
-    // If file doesn't exist or is empty, return a default structure
-    return { posts: [] };
-  } catch (error) {
-    console.error("Error reading db.json:", error);
-    return { posts: [] };
-  }
-};
-
-const writeDb = (data: Db): boolean => {
-  try {
-    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), "utf8");
-    return true;
-  } catch (error) {
-    console.error("Error writing to db.json:", error);
-    return false;
-  }
-};
-
-// Combined GET handler
+/**
+ * Handles GET requests to fetch all posts or a single post by ID.
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
   try {
-    const db = readDb();
-    if (id) {
-      // Get single post by ID
-      const post = db.posts.find((p) => p.id.toString() === id);
-      if (!post) {
-        return NextResponse.json({ error: "Post not found" }, { status: 404 });
-      }
-      return NextResponse.json(post);
-    } else {
-      // Get all posts
-      return NextResponse.json(db.posts);
+    const targetUrl = id ? `${POSTS_API_URL}/${id}` : POSTS_API_URL;
+    const res = await fetch(targetUrl);
+
+    if (!res.ok) {
+      const errorData = await res
+        .json()
+        .catch(() => ({ message: "An unknown error occurred" }));
+      return NextResponse.json(
+        {
+          error:
+            errorData.message || `Failed to fetch data. Status: ${res.status}`,
+        },
+        { status: res.status }
+      );
     }
+
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error in GET method:", error);
     return NextResponse.json(
@@ -76,44 +47,103 @@ export async function GET(request: Request) {
   }
 }
 
-// POST handler to create a new post
+/**
+ * Handles POST requests to create a new post or upload an image.
+ */
 export async function POST(request: Request) {
-  try {
-    const postData = await request.json();
-    const db = readDb();
+  const session = await getServerSession(authOptions);
 
-    if (!db.posts) {
-      db.posts = [];
-    }
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-    const newPost: Post = {
-      id: Date.now(),
-      ...postData,
-      createdAt: new Date().toISOString(), // More standard field name
-      updatedAt: new Date().toISOString(),
-    };
+  const contentType = request.headers.get("content-type") || "";
+  const token = request.headers.get("Authorization");
 
-    db.posts.unshift(newPost);
+  // Handle image upload with multipart/form-data
+  if (contentType.includes("multipart/form-data")) {
+    try {
+      const formData = await request.formData();
 
-    if (writeDb(db)) {
-      return NextResponse.json(newPost, { status: 201 });
-    } else {
+      const res = await fetch(UPLOAD_IMAGE_POST_URL, {
+        method: "POST",
+        headers: {
+          ...(token && { Authorization: token }),
+        },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorData = await res
+          .json()
+          .catch(() => ({ message: "An unknown error occurred" }));
+        return NextResponse.json(
+          { error: errorData.message || "Failed to upload image" },
+          { status: res.status }
+        );
+      }
+
+      const result = await res.json();
+      return NextResponse.json(result, { status: 201 });
+    } catch (error) {
+      console.error("Error in POST (upload) method:", error);
       return NextResponse.json(
-        { error: "Không thể lưu bài viết mới" },
+        { error: "Error uploading image" },
         { status: 500 }
       );
     }
-  } catch (error) {
-    console.error("Error in POST method:", error);
-    return NextResponse.json(
-      { error: "Lỗi khi tạo bài viết" },
-      { status: 500 }
-    );
   }
+
+  // Handle post creation with application/json
+  if (contentType.includes("application/json")) {
+    try {
+      const postData = await request.json();
+
+      const res = await fetch(POSTS_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: token }),
+        },
+        body: JSON.stringify(postData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res
+          .json()
+          .catch(() => ({ message: "An unknown error occurred" }));
+        return NextResponse.json(
+          { error: errorData.message || "Không thể lưu bài viết mới" },
+          { status: res.status }
+        );
+      }
+
+      const newPost = await res.json();
+      return NextResponse.json(newPost, { status: 201 });
+    } catch (error) {
+      console.error("Error in POST (create post) method:", error);
+      return NextResponse.json(
+        { error: "Lỗi khi tạo bài viết" },
+        { status: 500 }
+      );
+    }
+  }
+
+  return NextResponse.json(
+    { error: "Unsupported Media Type" },
+    { status: 415 }
+  );
 }
 
-// PUT handler to update a post
+/**
+ * Handles PUT requests to update an existing post.
+ */
 export async function PUT(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
@@ -123,28 +153,29 @@ export async function PUT(request: Request) {
 
   try {
     const body = await request.json();
-    const db = readDb();
+    const token = request.headers.get("Authorization");
 
-    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
+    const res = await fetch(`${POSTS_API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: token }),
+      },
+      body: JSON.stringify(body),
+    });
 
-    if (postIndex === -1) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
-    }
-
-    db.posts[postIndex] = {
-      ...db.posts[postIndex],
-      ...body,
-      updatedAt: new Date().toISOString(),
-    };
-
-    if (writeDb(db)) {
-      return NextResponse.json(db.posts[postIndex]);
-    } else {
+    if (!res.ok) {
+      const errorData = await res
+        .json()
+        .catch(() => ({ message: "An unknown error occurred" }));
       return NextResponse.json(
-        { error: "Không thể cập nhật bài viết" },
-        { status: 500 }
+        { error: errorData.message || "Không thể cập nhật bài viết" },
+        { status: res.status }
       );
     }
+
+    const updatedPost = await res.json();
+    return NextResponse.json(updatedPost);
   } catch (error) {
     console.error("Error updating post:", error);
     return NextResponse.json(
@@ -154,8 +185,15 @@ export async function PUT(request: Request) {
   }
 }
 
-// DELETE handler to remove a post
+/**
+ * Handles DELETE requests to remove a post.
+ */
 export async function DELETE(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
@@ -164,27 +202,42 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    const db = readDb();
-    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
+    const token = request.headers.get("Authorization");
+    const res = await fetch(`${POSTS_API_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token && { Authorization: token }),
+      },
+    });
 
-    if (postIndex === -1) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    if (!res.ok) {
+      if (res.status === 204) {
+        // Handle no content success
+        return new NextResponse(null, { status: 204 });
+      }
+      const errorData = await res
+        .json()
+        .catch(() => ({ message: "An unknown error occurred" }));
+      return NextResponse.json(
+        { error: errorData.message || "Không thể xóa bài viết" },
+        { status: res.status }
+      );
     }
 
-    const deletedPost = db.posts[postIndex];
-    db.posts.splice(postIndex, 1);
-
-    if (writeDb(db)) {
+    // Handle case where delete returns the deleted object or a success message
+    try {
+      const data = await res.json();
       return NextResponse.json({
         success: true,
         message: "Xóa bài viết thành công",
-        deletedPost,
+        deletedPost: data,
       });
-    } else {
-      return NextResponse.json(
-        { error: "Không thể xóa bài viết" },
-        { status: 500 }
-      );
+    } catch (e) {
+      // If there's no body, return a simple success response
+      return NextResponse.json({
+        success: true,
+        message: "Xóa bài viết thành công",
+      });
     }
   } catch (error) {
     console.error("Error deleting post:", error);
