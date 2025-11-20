@@ -42,6 +42,7 @@ public class Course {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        status = CourseStatus.DRAFT;
     }
     @PreUpdate
     protected void onUpdate() {

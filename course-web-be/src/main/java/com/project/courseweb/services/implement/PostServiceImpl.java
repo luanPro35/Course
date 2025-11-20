@@ -102,14 +102,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {
-        Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);
-        return this.toPageResponse(posts);
-    }
-
-    @Override
     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
         return this.toPageResponse(posts);

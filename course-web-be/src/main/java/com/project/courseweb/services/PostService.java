@@ -23,8 +23,6 @@ public interface PostService {
 
     PostResponse updatePost(Long id, PostRequest request);
 
-    PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable);
-
     PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable);
 
     void deletePost(Long id);

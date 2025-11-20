@@ -50,12 +50,6 @@ public class PostController {
         return ApiResponse.ok(this.postService.getPostsByStatus(pageable, status), SuccessCode.GET_POSTS_BY_STATUS_SUCCESS);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/pending-posts")
-    ApiResponse<PageResponse<PostResponse>> getPostsByStatusPending(Pageable pageable) {
-        return ApiResponse.ok(this.postService.getPostsByStatusPending(pageable), SuccessCode.GET_POSTS_BY_STATUS_SUCCESS);
-    }
-    
     @GetMapping("/my-posts/{id}")
     ApiResponse<PostResponse> getPostById(@PathVariable Long id) {
         return ApiResponse.ok(this.postService.getPostById(id), SuccessCode.GET_POST_SUCCESS);
