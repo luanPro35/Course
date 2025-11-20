@@ -36,9 +36,11 @@ public class Post {
     @Enumerated(EnumType.STRING)
     PostStatus status;
     LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

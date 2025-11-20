@@ -72,7 +72,7 @@ public class ProfileServiceImpl implements ProfileService {
         return optionalProfile.get();
     }
 
-    protected Long getId(){
+    public Long getId(){
         var id = SecurityContextHolder.getContext().getAuthentication().getName();
         return Long.valueOf(id);
     }

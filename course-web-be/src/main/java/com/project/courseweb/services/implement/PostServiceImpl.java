@@ -2,7 +2,6 @@ package com.project.courseweb.services.implement;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,37 +55,20 @@ public class PostServiceImpl implements PostService {
     }
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_POST')")
     public PostResponse createPost(PostRequest request) {
         Post post = this.postMapper.toPostEntity(request);
         post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
         post.setStatus(PostStatus.valueOf(request.getStatusPost()));
         post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
         var entity = this.postRepository.save(post);
-        var response = this.postMapper.toPostResponse(post);
-        response.setCategory(entity.getCategory().getSlug().name());
-        response.setStatusPost(entity.getStatus().name());
-        return response;
+        return this.toResponse(entity);
     }
     @Override
     public PageResponse<PostResponse> getPostsByStatus(Pageable pageable, String status) {
         var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
         Page<Post> posts = this.postRepository.getPostsByStatusAndProfileId(PostStatus.valueOf(status), profile.getId(), pageable);
-        List<PostResponse> postResponses = posts.stream().map(
-            post -> {
-                var response = this.postMapper.toPostResponse(post);
-                response.setCategory(post.getCategory().getSlug().name());
-                response.setStatusPost(post.getStatus().name());
-                return response;
-            }
-        ).toList();
-        return PageResponse.<PostResponse>builder()
-                .content(postResponses)
-                .pageNo(posts.getNumber())
-                .pageSize(posts.getSize())
-                .totalElements(posts.getTotalElements())
-                .totalPages(posts.getTotalPages())
-                .last(posts.isLast())
-                .build();
+        return this.toPageResponse(posts);
     }
     @Override
     @Transactional(readOnly = true)
@@ -97,84 +79,71 @@ public class PostServiceImpl implements PostService {
             throw new AppException(ErrorCode.POST_NOT_FOUND);
         }
         var post = postOptional.get();
-        var response = this.postMapper.toPostResponse(post);
-        response.setCategory(post.getCategory().getSlug().name()); 
-        response.setStatusPost(post.getStatus().name());
-        return response;
+        return this.toResponse(post);
     }
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_POST') and @postServiceImpl.isPostOwner(#id))")
     public PostResponse updatePost(Long id, PostRequest request) {
-        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
-        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
-        if(!postOptional.isPresent()){
-            throw new AppException(ErrorCode.POST_NOT_FOUND);
-        }   
-        var post = postOptional.get();
-        post.setCreatedAt(LocalDateTime.now());
+        // var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+        // var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
+        // if(!postOptional.isPresent()){
+        //     throw new AppException(ErrorCode.POST_NOT_FOUND);
+        // }   
+        // var post = postOptional.get();
+        var post = this.postRepository.findById(id).orElseThrow(
+            () -> new AppException(ErrorCode.POST_NOT_FOUND)
+        );
+        post.setUpdatedAt(LocalDateTime.now());
         post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
         post.setStatus(PostStatus.valueOf(request.getStatusPost()));
         this.postMapper.updatePostFromRequest(request, post);
-        var response = this.postMapper.toPostResponse(this.postRepository.save(post));
-        response.setCategory(post.getCategory().getSlug().name());
-        response.setStatusPost(post.getStatus().name());
-        return response;
+        return this.toResponse(this.postRepository.save(post));
     }
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);
-        List<PostResponse> postResponses = posts.stream().map(
-            post -> {
-                var response = this.postMapper.toPostResponse(post);
-                response.setCategory(post.getCategory().getSlug().name());
-                response.setStatusPost(post.getStatus().name());
-                return response;
-            }
-        ).toList();
-        return PageResponse.<PostResponse>builder()
-                .content(postResponses)
-                .pageNo(posts.getNumber())
-                .pageSize(posts.getSize())
-                .totalElements(posts.getTotalElements())
-                .totalPages(posts.getTotalPages())
-                .last(posts.isLast())
-                .build();
+        return this.toPageResponse(posts);
     }
+
     @Override
     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
-        List<PostResponse> postResponses = posts.stream().map(
-            post -> {
-                var response = this.postMapper.toPostResponse(post);
-                response.setCategory(post.getCategory().getSlug().name());
-                response.setStatusPost(post.getStatus().name());
-                return response;
-            }
-        ).toList();
-        return PageResponse.<PostResponse>builder()
-                .content(postResponses)
-                .pageNo(posts.getNumber())
-                .pageSize(posts.getSize())
-                .totalElements(posts.getTotalElements())
-                .totalPages(posts.getTotalPages())
-                .last(posts.isLast())
-                .build();
+        return this.toPageResponse(posts);
     }
+
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('DELETE_POST') and this.isPostOwner(#id) or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('DELETE_POST') and @postServiceImpl.isPostOwner(#id))")
     public void deletePost(Long id) {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
         this.postRepository.delete(post);
     }
 
+    private PostResponse toResponse(Post post){
+        var res = this.postMapper.toPostResponse(post);
+        res.setCategory(post.getCategory().getSlug().name());
+        res.setStatusPost(post.getStatus().name());
+        return res;
+    }
+
+    private PageResponse<PostResponse> toPageResponse(Page<Post> page){
+        var content = page.stream().map(this::toResponse).toList();
+        return PageResponse.<PostResponse>builder()
+            .content(content)
+            .pageNo(page.getNumber())
+            .pageSize(page.getSize())
+            .totalElements(page.getTotalElements())
+            .totalPages(page.getTotalPages())
+            .last(page.isLast())
+            .build();
+    }
+
     public boolean isPostOwner(Long id){
-        return postRepository.findById(id)
-            .map(post->post.getProfile().getId()
-            .equals(this.profileServiceImpl.getId()))
-            .orElse(false);
+        return postRepository.existsByIdAndProfileId(id, this.profileServiceImpl.getId());
     }
 }
