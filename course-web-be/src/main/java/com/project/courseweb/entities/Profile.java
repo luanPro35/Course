@@ -21,8 +21,8 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @OneToOne(
-        fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
     )
     @MapsId
     @JoinColumn(name = "id")
@@ -40,6 +40,12 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile")
     Set<Post> posts;
+
+    @OneToMany(mappedBy = "creator")
+    Set<Course> courses;
+
+    @OneToMany(mappedBy = "profile")
+    Set<Enrollment> enrollments;
 
     LocalDateTime createTime;
     LocalDateTime updateTime;

@@ -1,7 +1,10 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.request.*;
-import com.project.courseweb.dtos.response.*;
+import com.project.courseweb.dtos.response.AuthenticatedResponse;
+import com.project.courseweb.dtos.response.IntrospectTokenResponse;
+import com.project.courseweb.dtos.response.TokenResponse;
+import com.project.courseweb.dtos.response.UserResponse;
 import com.project.courseweb.entities.Profile;
 import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.entities.authentication.RefreshToken;
@@ -43,23 +46,23 @@ public class AuthServiceImpl implements AuthService {
     JwtService jwtService;
     RedisService redisService;
     GoogleOauth2Client googleOauth2Client;
+    GoogleUserInfoClient googleUserInfoClient;
     @NonFinal
-    @Value( "${google.client-id}")
+    @Value("${google.client-id}")
     String clientId;
     @NonFinal
-    @Value( "${google.client-secret}")
+    @Value("${google.client-secret}")
     String clientSecret;
     @NonFinal
-    @Value( "${google.grant-type}")
+    @Value("${google.grant-type}")
     String grantType;
     @NonFinal
-    @Value( "${google.redirect-uri}")
+    @Value("${google.redirect-uri}")
     String redirectUrl;
-    GoogleUserInfoClient googleUserInfoClient;
 
     @Override
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
-        this.checkEmailPhone(userCreateRequest.getEmail(),  userCreateRequest.getPhone());
+        this.checkEmailPhone(userCreateRequest.getEmail(), userCreateRequest.getPhone());
         var auth = authMapper.toAuth(userCreateRequest);
         auth.setPasswordHash(bCryptPasswordEncoder.encode(userCreateRequest.getPassWord()));
         auth.getProfile().setAuth(auth);
@@ -169,11 +172,11 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
         RefreshToken refreshToken = optionalRefreshToken.get();
-        if(this.jwtService.validateToken(refreshToken.getToken()) && refreshToken.isRevoked()) {
+        if (this.jwtService.validateToken(refreshToken.getToken()) && refreshToken.isRevoked()) {
             throw new AppException(ErrorCode.REFRESH_TOKEN_FAILED);
         }
         var id = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(id.equals(refreshToken.getAuth().getId().toString())) refreshToken.setRevoked(true);
+        if (id.equals(refreshToken.getAuth().getId().toString())) refreshToken.setRevoked(true);
         Optional<Auth> optionalAuth = this.authRepository.findById(refreshToken.getAuth().getId());
         if (optionalAuth.isEmpty()) {
             throw new AppException(ErrorCode.AUTHENTICATION_FAILED);
@@ -222,7 +225,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    private void checkEmailPhone(String email, String phone){
+    private void checkEmailPhone(String email, String phone) {
         if (this.authRepository.existsByEmailOrPhone(email, phone)) {
             throw new AppException(ErrorCode.EMAIL_OR_PHONE_EXISTS);
         }
@@ -234,15 +237,15 @@ public class AuthServiceImpl implements AuthService {
         if (optionalAuth.isPresent()) {
             return;
         }
-        Auth authAdmin = Auth.builder()
-                .email(auth.getEmail())
-                .phone(auth.getPhone())
-                .passwordHash(auth.getPasswordHash())
+        Profile profile = Profile.builder()
+                .fullName("Admin")
                 .build();
-        authAdmin.setPasswordHash(bCryptPasswordEncoder.encode(auth.getPasswordHash()));
+        profile.setAuth(auth);
+        auth.setProfile(profile);
+        auth.setPasswordHash(bCryptPasswordEncoder.encode(auth.getPasswordHash()));
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.getRoleByName(Roles.ADMIN.name()));
-        authAdmin.setRoles(roles);
-        authRepository.save(authAdmin);
+        auth.setRoles(roles);
+        authRepository.save(auth);
     }
 }

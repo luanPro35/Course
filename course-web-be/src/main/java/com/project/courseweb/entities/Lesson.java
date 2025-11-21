@@ -17,9 +17,9 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
-    String thumbnailUrl;
+    String contentUrl;
     @Column(columnDefinition = "int default 0", nullable = false)
-    int durationInMinutes;
+    Long durationInMinutes;
     @Column(columnDefinition = "int default 0", nullable = false)
     int orderIndex;
     @ManyToOne
