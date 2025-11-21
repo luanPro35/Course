@@ -1,8 +1,10 @@
 import type { Post } from "../types/post";
-import { ARTICLE_API_URL } from "./api.service";
+import { getPublishedArticlesURL } from "./api.service";
 
-export async function getArticle(): Promise<Post[]> {
-  const response = await fetch(ARTICLE_API_URL, { cache: "no-store" });
+export async function getArticle(page: number, size: number): Promise<Post[]> {
+  const response = await fetch(getPublishedArticlesURL(page, size), {
+    cache: "no-store",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch articles");
   }

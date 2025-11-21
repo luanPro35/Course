@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
-import fs from "fs";
+import { UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
 
 export async function POST(req: Request) {
   try {
@@ -20,24 +18,26 @@ export async function POST(req: Request) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const authHeader = req.headers.get("authorization") || "";
+    const forwardForm = new FormData();
+    forwardForm.append("file", file);
 
-    // *** THAY ĐỔI: Lưu vào public/images ***
-    const uploadDir = path.join(process.cwd(), "public", "images");
+    const res = await fetch(UPLOAD_IMAGE_POST_URL, {
+      method: "POST",
+      headers: authHeader ? { Authorization: authHeader } : {},
+      body: forwardForm,
+    });
 
-    // Tạo tên tệp duy nhất để tránh ghi đè
-    const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-    const filePath = path.join(uploadDir, filename);
+    const result = await res.json();
 
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    if (!res.ok || !result?.data?.url) {
+      return NextResponse.json(
+        { error: result?.message || "Upload failed" },
+        { status: res.status || 500 }
+      );
     }
 
-    await writeFile(filePath, buffer);
-    const publicPath = `/images/${filename}`;
-
-    return NextResponse.json({ success: true, path: publicPath });
+    return NextResponse.json({ success: true, path: result.data.url });
   } catch (error) {
     console.error("Upload failed:", error);
     return NextResponse.json(

@@ -43,9 +43,7 @@ export default function MyPosts() {
 
     BlogService.getAll()
       .then((allPosts) => {
-        // Filter posts to only show current user's posts
-        const userPosts = allPosts.filter((post) => post.user?.id === user.id);
-        setPosts(userPosts);
+        setPosts(allPosts);
       })
       .catch((err) => console.error(err));
   }, [user?.id]);
