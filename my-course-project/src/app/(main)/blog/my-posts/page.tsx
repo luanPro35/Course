@@ -91,6 +91,7 @@ export default function MyPosts() {
                 post={p}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                avatar={user?.avatar}
               />
             ))
           ) : (
@@ -108,6 +109,7 @@ export default function MyPosts() {
                 post={p}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                avatar={user?.avatar}
               />
             ))
           ) : (

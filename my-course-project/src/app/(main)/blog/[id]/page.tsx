@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BlogPost } from "@/types/blog.types";
 import Image from "next/image";
-import { getPostByIdURL } from "@/services/api.service";
+import { getPublishedArticlesURL } from "@/services/api.service";
 
 const BlogPostPage = () => {
   const { id } = useParams();
@@ -15,27 +15,51 @@ const BlogPostPage = () => {
     if (!id) return;
     const fetchPost = async () => {
       try {
-        const res = await fetch(getPostByIdURL(String(id)), { cache: "no-store" });
-        const data = await res.json();
-        const raw = data?.result ?? data?.data ?? data;
-        if (!raw) {
-          setError("Không tìm thấy bài viết.");
-          return;
+        let page = 0;
+        const size = 10;
+        let found = null;
+        while (!found && page < 100) {
+          // safety limit
+          const res = await fetch(getPublishedArticlesURL(page, size), {
+            cache: "no-store",
+          });
+          if (!res.ok) {
+            setError("Không thể tải được bài viết.");
+            return;
+          }
+          const data = await res.json();
+          const container = data?.result ?? data?.data ?? data;
+          const list = container?.content || [];
+          found = list.find((item: BlogPost) => String(item.id) === String(id));
+          if (found) {
+            const mapped: BlogPost = {
+              id: found.id,
+              author: found.author,
+              title: found.title,
+              content: found.fullContent || found.content,
+              fullContent: found.fullContent,
+              category: found.category,
+              image: found.thumbnailUrl || found.image,
+              status: found.statusPost || found.status,
+              createdAt:
+                found.createdAt ||
+                found.created_date ||
+                found.createdDate ||
+                found.updatedAt,
+              updatedAt: found.updatedAt,
+              user: found.user, // may be undefined
+            };
+            setPost(mapped);
+            return;
+          }
+          if (!container?.last && !container?.hasNext) {
+            break;
+          }
+          page++;
         }
-        const mapped: BlogPost = {
-          id: raw.id,
-          author: raw.user?.fullName || raw.author,
-          title: raw.title,
-          content: raw.content,
-          fullContent: raw.fullContent,
-          category: raw.category,
-          image: raw.thumbnailUrl || raw.image,
-          status: raw.statusPost || raw.status,
-          createdAt: raw.createdAt || raw.created_date || raw.createdDate || raw.updatedAt,
-          updatedAt: raw.updatedAt,
-          user: raw.user,
-        };
-        setPost(mapped);
+        if (!found) {
+          setError("Không tìm thấy bài viết.");
+        }
       } catch (err) {
         console.error("Error fetching post:", err);
         setError("Không thể tải được bài viết.");
@@ -64,10 +88,10 @@ const BlogPostPage = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-              {post.image ? (
+              {post.user?.avatar ? (
                 <Image
-                  src={post.image}
-                  alt={post.author || post.user?.fullName || "Ảnh bài viết"}
+                  src={post.user.avatar}
+                  alt={post.author || post.user?.fullName || "Avatar"}
                   fill
                   className="object-cover"
                   unoptimized
@@ -75,7 +99,7 @@ const BlogPostPage = () => {
               ) : (
                 <Image
                   src="/images/avatar.png"
-                  alt={post.author || post.user?.fullName || "Ảnh bài viết"}
+                  alt={post.author || post.user?.fullName || "Avatar"}
                   fill
                   className="object-cover"
                   unoptimized
@@ -84,13 +108,15 @@ const BlogPostPage = () => {
             </div>
             <div>
               <h2 className="text-sm font-medium text-gray-900">
-                {post.author || post.user?.fullName || "Ẩn danh"}
+                {post.author || post.user?.fullName || ""}
               </h2>
               <div className="text-sm text-gray-500 mt-0.5">
                 {(() => {
                   const d = post.createdAt ? new Date(post.createdAt) : null;
                   const ok = d && !isNaN(d.getTime());
-                  return ok ? <span>{d!.toLocaleDateString("vi-VN")}</span> : null;
+                  return ok ? (
+                    <span>{d!.toLocaleDateString("vi-VN")}</span>
+                  ) : null;
                 })()}
               </div>
             </div>
@@ -98,9 +124,20 @@ const BlogPostPage = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8 leading-tight">
-          {post.title}
+        <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
+          {post.title || "Tiêu đề bài viết"}
         </h1>
+        {post.image && (
+          <div className="relative w-full h-64 md:h-96 rounded-xl overflow-hidden mb-8">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+        )}
         <div className="prose prose-base md:prose-lg lg:prose-xl max-w-none">
           <div
             className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl"
