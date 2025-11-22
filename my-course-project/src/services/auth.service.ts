@@ -1,11 +1,11 @@
-import {RegisterFormData, RegisterResponse} from "@/app/auth/register/type";
+import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
 import { getAccessToken } from "@/utils/token";
-
+import { CALL_LOGIN_GG, GOOGLE_REDIRECT_URI } from "./api.service";
 
 const register = async (
-    formData: RegisterFormData
+  formData: RegisterFormData
 ): Promise<RegisterResponse> => {
   // 1. Thay đổi điểm cuối (endpoint) API
   // Thay vì gọi trực tiếp tới 'http://localhost:8080/project/auth/register',
@@ -70,6 +70,45 @@ const logout = async (): Promise<void> => {
   // vì dù thành công hay thất bại, FE vẫn sẽ xóa token và đăng xuất người dùng.
 };
 
-const loginWithSocial = (provider: "google" | "facebook") => signIn(provider);
+const loginWithSocial = (provider: "google" | "facebook") => {
+  if (provider === "google") {
+    window.location.href = CALL_LOGIN_GG;
+    return Promise.resolve();
+  }
+  return signIn(provider);
+};
 
-export const AuthService = { register, login, logout, loginWithSocial };
+const loginWithGoogle = async (code: string): Promise<LoginResponse> => {
+  const response = await fetch(
+    `http://localhost:8080/project/oauth2/callback?code=${code}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.mess || data.message || "Authentication failed");
+  }
+
+  const result = data.result;
+
+  return {
+    mess: data.message || "Login successful",
+    user: result.user,
+    accessToken: result.token.accessToken,
+    refreshToken: result.token.refreshToken,
+  };
+};
+
+export const AuthService = {
+  register,
+  login,
+  logout,
+  loginWithSocial,
+  loginWithGoogle,
+};

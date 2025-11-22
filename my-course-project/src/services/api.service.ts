@@ -17,3 +17,21 @@ export const getMyPostsURL = (status: string, page: number, size: number) =>
   `http://localhost:8080/project/posts/my-posts?status=${status}&page=${page}&size=${size}&sort=createdAt,desc`;
 export const getPostByIdURL = (id: string | number) =>
   `http://localhost:8080/project/posts/${id}`;
+export const GOOGLE_CLIENT_ID = "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
+export const GOOGLE_REDIRECT_URI = "http://localhost:3000/oauth2/callback";
+export const GOOGLE_AUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
+export const GOOGLE_SCOPES = "openid profile email";
+
+export const getGoogleAuthUrl = () => {
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: GOOGLE_REDIRECT_URI,
+    response_type: "code",
+    scope: GOOGLE_SCOPES,
+    access_type: "offline",
+    prompt: "consent",
+  });
+  return `${GOOGLE_AUTH_ENDPOINT}?${params.toString()}`;
+};
+
+export const CALL_LOGIN_GG = getGoogleAuthUrl();
