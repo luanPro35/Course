@@ -1,9 +1,10 @@
 package com.project.courseweb.services.implement;
 
-import com.project.courseweb.dtos.request.CourseCreateRequest;
-import com.project.courseweb.dtos.request.LessonCreateRequest;
-import com.project.courseweb.dtos.request.SectionCreateRequest;
+import com.project.courseweb.dtos.PageResponse;
+import com.project.courseweb.dtos.request.*;
+import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.entities.Course;
 import com.project.courseweb.enums.CourseStatus;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.exceptions.AppException;
@@ -15,6 +16,8 @@ import com.project.courseweb.services.CourseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -61,6 +64,62 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+    public CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request) {
+        var course = courseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        courseMapper.updateCourse(course, request);
+        return courseMapper.toResponse(courseRepository.save(course));
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+    public CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request) {
+        //
+        var course = courseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        //
+        courseMapper.updateCourseIngredient(course, request);
+        //
+        course.getSections().clear();
+        if (request.getSections() != null) {
+            for (SectionCreateRequest sectionRequest : request.getSections()) {
+                var section = this.sectionMapper.toEntity(sectionRequest);
+                section.setLessons(new ArrayList<>());
+                section.setCourse(course);
+                if (sectionRequest.getLessons() != null) {
+                    for (LessonCreateRequest lessonRequest : sectionRequest.getLessons()) {
+                        var lesson = this.lessonMapper.toEntity(lessonRequest);
+                        lesson.setSection(section);
+                        section.getLessons().add(lesson);
+                    }
+                }
+                course.getSections().add(section);
+            }
+        }
+        return courseMapper.toResponse(courseRepository.save(course));
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+    public CourseResponse updateStatusCourse(Long id, String status) {
+        var course = courseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        course.setStatus(CourseStatus.valueOf(status.toUpperCase()));
+        return courseMapper.toResponse(courseRepository.save(course));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN') or @courseServiceImpl.isOwn(#id)")
+    public PageResponse<CourseLabelResponse> getCoursesByStatus(String status, Pageable pageable) {
+        Page<Course> courses = courseRepository.getCoursesByStatus(CourseStatus.valueOf(status), pageable);
+        return this.toPageResponse(courses);
+    }
+
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CourseResponse getCourseById(Long id) {
         var course = courseRepository.findById(id)
@@ -69,7 +128,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public CourseResponse getPublishedCourseById(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
@@ -80,15 +138,34 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_COURSE')")
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('DELETE_COURSE') and @courseServiceImpl.isOwn(#id))")
     public void deleteCourse(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         courseRepository.delete(course);
     }
 
+    @Override
+    public PageResponse<CourseLabelResponse> getCoursesByStatusPublished(Pageable pageable) {
+        Page<Course> courses = this.courseRepository.getCoursesByStatus(CourseStatus.PUBLISHED, pageable);
+        return this.toPageResponse(courses);
+    }
+
+
     public boolean isOwn(Long id) {
         var profileId = SecurityContextHolder.getContext().getAuthentication().getName();
         return courseRepository.existsByIdAndCreatorId(id, Long.valueOf(profileId));
+    }
+
+    private PageResponse<CourseLabelResponse> toPageResponse(Page<Course> page) {
+        var content = page.stream().map(this.courseMapper::toLabelResponse).toList();
+        return PageResponse.<CourseLabelResponse>builder()
+                .content(content)
+                .pageNo(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
     }
 }

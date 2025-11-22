@@ -21,7 +21,11 @@ public enum SuccessCode {
     UPLOAD_POST_THUMBNAIL_SUCCESS(200, "Cập nhật ảnh bài viết thành công", HttpStatus.OK), GET_POSTS_BY_STATUS_SUCCESS(200, "Lấy danh sách bài viết theo trạng thái thành công", HttpStatus.OK), GET_POST_SUCCESS(200, "Lấy bài viết thành công", HttpStatus.OK), UPDATED_POST_SUCCESS(200, "Cập nhật bài viết thành công", HttpStatus.OK), DELETE_POST_SUCCESS(200, "Xóa bài viết thành công", HttpStatus.OK),
     CREATE_COURSE_SUCCESS(201, "Tạo khóa học thành công", HttpStatus.CREATED),
     GET_COURSE_SUCCESS(200, "Lấy khóa học thành công", HttpStatus.OK),
-    DELETE_COURSE_SUCCESS(200, "Xóa khóa học thành công", HttpStatus.OK);
+    DELETE_COURSE_SUCCESS(200, "Xóa khóa học thành công", HttpStatus.OK),
+    UPDATE_COURSE_SUCCESS(200, "Cập nhật khóa học thành công", HttpStatus.OK),
+    UPDATE_STATUS_COURSE_SUCCESS(200, "Cập nhật trạng thái khóa học thành công", HttpStatus.OK),
+    GET_COURSES_SUCCESS(200, "Lấy danh sách khóa học thành công", HttpStatus.OK),
+    ENROLL_COURSE_SUCCESS(200, "Đăng ký khóa học thành công", HttpStatus.OK);
 
     final int status;
     final String message;

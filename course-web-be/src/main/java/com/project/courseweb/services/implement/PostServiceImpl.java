@@ -1,15 +1,6 @@
 package com.project.courseweb.services.implement;
 
 
-import java.time.LocalDateTime;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.PostRequest;
 import com.project.courseweb.dtos.response.FileResponse;
@@ -24,11 +15,18 @@ import com.project.courseweb.repositories.PostRepository;
 import com.project.courseweb.services.CategoryService;
 import com.project.courseweb.services.FileUploadAWSService;
 import com.project.courseweb.services.PostService;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,13 +44,14 @@ public class PostServiceImpl implements PostService {
     public FileResponse uploadPostThumbnail(MultipartFile file) {
         return FileResponse.builder()
                 .url(this.fileUploadAWSService.uploadFile(
-                        this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),
-                        "post-thumbnail",
-                        file
+                                this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),
+                                "post-thumbnail",
+                                file
                         )
                 )
                 .build();
     }
+
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_POST')")
@@ -64,23 +63,23 @@ public class PostServiceImpl implements PostService {
         var entity = this.postRepository.save(post);
         return this.toResponse(entity);
     }
+
     @Override
     public PageResponse<PostResponse> getPostsByStatus(Pageable pageable, String status) {
         var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
         Page<Post> posts = this.postRepository.getPostsByStatusAndProfileId(PostStatus.valueOf(status), profile.getId(), pageable);
         return this.toPageResponse(posts);
     }
+
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isPostOwner(#id)")
     public PostResponse getPostById(Long id) {
-        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
-        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
-        if(postOptional.isEmpty()){
-            throw new AppException(ErrorCode.POST_NOT_FOUND);
-        }
-        var post = postOptional.get();
-        return this.toResponse(post);
+        return this.toResponse(this.postRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND))
+        );
     }
+
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_POST') and @postServiceImpl.isPostOwner(#id))")
@@ -92,7 +91,7 @@ public class PostServiceImpl implements PostService {
         // }   
         // var post = postOptional.get();
         var post = this.postRepository.findById(id).orElseThrow(
-            () -> new AppException(ErrorCode.POST_NOT_FOUND)
+                () -> new AppException(ErrorCode.POST_NOT_FOUND)
         );
         post.setUpdatedAt(LocalDateTime.now());
         post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
@@ -116,26 +115,26 @@ public class PostServiceImpl implements PostService {
         this.postRepository.delete(post);
     }
 
-    private PostResponse toResponse(Post post){
+    private PostResponse toResponse(Post post) {
         var res = this.postMapper.toPostResponse(post);
         res.setCategory(post.getCategory().getSlug().name());
         res.setStatusPost(post.getStatus().name());
         return res;
     }
 
-    private PageResponse<PostResponse> toPageResponse(Page<Post> page){
+    private PageResponse<PostResponse> toPageResponse(Page<Post> page) {
         var content = page.stream().map(this::toResponse).toList();
         return PageResponse.<PostResponse>builder()
-            .content(content)
-            .pageNo(page.getNumber())
-            .pageSize(page.getSize())
-            .totalElements(page.getTotalElements())
-            .totalPages(page.getTotalPages())
-            .last(page.isLast())
-            .build();
+                .content(content)
+                .pageNo(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
     }
 
-    public boolean isPostOwner(Long id){
+    public boolean isPostOwner(Long id) {
         return postRepository.existsByIdAndProfileId(id, this.profileServiceImpl.getId());
     }
 }

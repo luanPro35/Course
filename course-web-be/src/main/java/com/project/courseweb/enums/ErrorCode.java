@@ -23,7 +23,9 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(410, "Category not found", HttpStatus.NOT_FOUND),
     UPLOAD_FILE_FAILED(411, "Upload file failed", HttpStatus.INTERNAL_SERVER_ERROR),
     POST_NOT_FOUND(412, "Post not found", HttpStatus.NOT_FOUND),
-    COURSE_NOT_FOUND(413, "Course not found", HttpStatus.NOT_FOUND);
+    COURSE_NOT_FOUND(413, "Course not found", HttpStatus.NOT_FOUND),
+    ALREADY_ENROLLED(414, "Already enrolled", HttpStatus.CONFLICT),
+    COURSE_IS_NOT_FREE(415, "Course is not free", HttpStatus.BAD_REQUEST);
 
     int status;
     String message;

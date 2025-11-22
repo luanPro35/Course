@@ -63,7 +63,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"loint.24ite@vku.udn.vn\",\r\n  \"password\": \"12345678\"\r\n}",
+							"raw": "{\r\n    // \"email\": \"loikobi12345@gmail.com\",\r\n    // \"password\" : \"12345678\"\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -272,7 +272,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI1MjQzNDAsImlhdCI6MTc2MjI2NTE0MCwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiIxMmY2NzE2ZC1kOWRlLTQ2MGQtYWM0Zi05OWEwNTMzNzdjMDUifQ.GS7ugIoRKHO996ZYZRSAVSd2-0xuDm4xHJwxA7A-MByd_IRLdWo7Z6TVk_o2XPDzaTDgJnnulGOUalY68dvw0g",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI2OTM0MzcsImlhdCI6MTc2MjQzNDIzNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjAwNWI3OTNlLWQ4ZTctNGM0ZC05ZTFiLTE3ZTdiYWVmZWI2NCJ9.aGZXrGC_4K-B46pk5i5p-okE0Hbd59J1Ck1DPra1-8lt2R9XuRGHlZpf-TLWRL7O77d6VKVvRoaZkikJbLeTpA",
 									"type": "string"
 								}
 							]
@@ -312,7 +312,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0OTE1OTYsImlhdCI6MTc2MjIzMjM5NiwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJhMjk1MWRjNS1mNDAwLTQwZTctOGM1Yy05NGI3ZDlhZDNhN2QifQ.14VGS-JASwLiMjq5-pf6DdrmgRMT_g_oOnflWXiy4gAMB9dg9MmVYchOE_cV_Ib5ybwjZ07EXr-qn-pRLIJx8A",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI3MDI3MjQsImlhdCI6MTc2MjQ0MzUyNCwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjcwMGM5MWM2LTU0YTMtNDI5Mi1iNDRkLWVmMDg5ODU5NmJlZiJ9.Kco56DIlOK3EX8W5OuX1q-84rrV2pGnHXaV7uKmenJUL5gUKZ8uqOXYy6QFsVLeVerGyC3bsb89FloUGZYKcVg",
 									"type": "string"
 								}
 							]
@@ -325,7 +325,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-07-10 135756.png"
+									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-08-10 132604.png"
 								}
 							]
 						},
@@ -616,6 +616,399 @@
 								"posts",
 								"my-posts",
 								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "get course",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/courses/19",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"courses",
+								"19"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get list course published",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/courses/published?page=0&size=3&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"courses",
+								"published"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Post",
+					"item": []
+				},
+				{
+					"name": "Course",
+					"item": [
+						{
+							"name": "tạo khóa học bao gồm các chưởng và bài học (token của admin)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM5MTE4MDksImlhdCI6MTc2MzY1MjYwOSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiIwMzZjODNhYS0zOTM2LTRmMzUtYTAxNi1iMWMyMGY1NGJlM2YifQ.-q6kUI-h2f_I5A2u82OF7vPYdBh35Os1qFviW9_6YFNVk9gKV7XfweGxqGnjdMex7ZoCfEZS1j5K5KeC1nkImg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học Lập trình Java Toàn tập từ Zero đến Hero\",\r\n    \"description\": \"Đây là một khóa học toàn diện, cung cấp kiến thức từ cơ bản đến nâng cao về ngôn ngữ lập trình Java, giúp bạn tự tin xây dựng các ứng dụng thực tế.\",\r\n    \"price\": 1200000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\",\r\n    \"sections\": [\r\n        {\r\n            \"title\": \"Chương 1: Giới thiệu và Cài đặt môi trường\",\r\n            \"orderIndex\": 0,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 1.1: Java là gì? Tại sao nên học Java?\",\r\n                    \"contentUrl\": \"images/lessons/java-intro.png\",\r\n                    \"orderIndex\": 0,\r\n                    \"durationInMinutes\": 15\r\n                },\r\n                {\r\n                    \"title\": \"Bài 1.2: Hướng dẫn cài đặt JDK và IntelliJ IDEA\",\r\n                    \"contentUrl\": \"images/lessons/java-setup.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Chương 2: Biến, Kiểu dữ liệu và Toán tử\",\r\n            \"orderIndex\": 1,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 2.1: Tìm hiểu về biến và các kiểu dữ liệu nguyên thủy\",\r\n                    \"contentUrl\": \"images/lessons/java-variables.png\",\r\n                    \"orderIndex\": 0,\r\n                    \"durationInMinutes\": 25\r\n                },\r\n                {\r\n                    \"title\": \"Bài 2.2: Các toán tử số học, so sánh và logic\",\r\n                    \"contentUrl\": \"mage/lessonsjava-operators.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/courses/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"courses",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get courrse (token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgVklFV19DT1VSU0UgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgRURJVF9QT1NUIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTE2ODM3LCJpYXQiOjE3NjM2NTc2MzcsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYWQ5YTQ0MmQtNDczMS00YWIyLWE2MjEtOWQyM2IzZWRhNTlkIn0.X84cW_Emn8L-WqyF3Lt0WjQuDMjN_lkJm4uGixGY5drOYcpsoEcVhCaQtUXZMv73uKk1ORYI-HW--p5m0kHmuA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/get/19",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"get",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "xóa course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfUE9TVCBVUExPQURfQ09VUlNFIEVESVRfQ09VUlNFIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTE5OTQyLCJpYXQiOjE3NjM2NjA3NDIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiZGY1OTU5YzctYjhkMC00MWU3LTgwODItZTYzODVmYmU3ZjViIn0.SM8QEyLQivt_OmH0sysQtTe4Er-TovjoAFe1gouttoHzc1ZMiy541g9d38keKn5bbvDexQWHfV3farcuDUrOhA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/delete/15",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"delete",
+										"15"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cập nhập toàn bộ course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkwODA0LCJpYXQiOjE3NjM3MzE2MDQsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiMTY2NDU5YTAtODE5Zi00NTE4LTg1ZTEtNzAzZjQxMGE4ODQ2In0.sv3PoFWHjYOAbvP3EeEy4OkHtWk_xGo9wIftN78bePs2Rn50C6GWNx9RyyrIuV8alwrAUb26y3HeZ3UdyndzBw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 190000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\",\r\n    \"sections\": [\r\n        {\r\n            \"title\": \"Chương 1: Giới thiệu và Cài đặt môi trường\",\r\n            \"orderIndex\": 0,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 1.2: Hướng dẫn cài đặt JDK và IntelliJ IDEA\",\r\n                    \"contentUrl\": \"images/lessons/java-setup.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Chương 2: Biến, Kiểu dữ liệu và Toán tử\",\r\n            \"orderIndex\": 1,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 2.2: Các toán tử số học, so sánh và logic\",\r\n                    \"contentUrl\": \"mage/lessonsjava-operators.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update/16",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cách 2: upodate từng phân riêng rẻ (update course)(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkxMjY5LCJpYXQiOjE3NjM3MzIwNjksImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYTlmNmI5ZmYtNjU5ZS00NDczLThhZTktOTI3ZWU0ZDEzZDE2In0.7QdHumy5AOSISPSkHWjJNU5_fT0lHA-uLg2nYkUH_7Y3SpkkP8dAbcl8cl8cKelGoH_1GuuoBKR7TcWFMw_3ZQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 800000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update/16",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "thay đổi trạng thái course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkxMjY5LCJpYXQiOjE3NjM3MzIwNjksImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYTlmNmI5ZmYtNjU5ZS00NDczLThhZTktOTI3ZWU0ZDEzZDE2In0.7QdHumy5AOSISPSkHWjJNU5_fT0lHA-uLg2nYkUH_7Y3SpkkP8dAbcl8cl8cKelGoH_1GuuoBKR7TcWFMw_3ZQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update-status/17?status=PUBLISHED",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update-status",
+										"17"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "PUBLISHED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get list courses by status(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIFZJRVdfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTk0MTE1LCJpYXQiOjE3NjM3MzQ5MTUsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiOWRmNGJiNWMtMTMxMS00YmI5LThlNzktYzQ5MGQ4Y2FhMGI2In0.jzHcLR7YLO4mmvc3gazfhqc4ynXy6NTLaIZ3pVeHDp1f5KmohTT1XrwIjgpzEfCuwQweY7jLZ9is7Gcqk4Qv2Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses?status=PUBLISHED&page=0&size=2&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "PUBLISHED"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Erollment",
+			"item": [
+				{
+					"name": "ghi danh khoa hoc(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIFZJRVdfQ09VUlNFIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwMDA4MTUsImlhdCI6MTc2Mzc0MTYxNSwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiOTE1MWM1ZjMtMWE2NC00MmFjLWE3ZGMtMzQyZGFhODU2NTU5In0.p2FpGiMJxaapUo8roQTI1nw3rReeS2LRqC-KwulGalLEa9IiF8W5h02iYPT4cy09RNNdHKLlINeLbCUn94fw6w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/enrollments/free/18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"enrollments",
+								"free",
+								"18"
 							]
 						}
 					},

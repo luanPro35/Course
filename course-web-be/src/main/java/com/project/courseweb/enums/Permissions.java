@@ -10,5 +10,6 @@ public enum Permissions {
     //user
     CREATE_POST,
     EDIT_POST,
-    DELETE_POST
+    DELETE_POST,
+    ENROLL_COURSE
 }

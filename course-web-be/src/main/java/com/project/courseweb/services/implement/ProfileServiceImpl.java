@@ -1,13 +1,5 @@
 package com.project.courseweb.services.implement;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.project.courseweb.dtos.request.ProfileUpdateRequest;
 import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.dtos.response.ProfileUpdateResponse;
@@ -18,11 +10,16 @@ import com.project.courseweb.mappers.ProfileMapper;
 import com.project.courseweb.repositories.ProfileRepository;
 import com.project.courseweb.services.FileUploadAWSService;
 import com.project.courseweb.services.ProfileService;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -64,7 +61,8 @@ public class ProfileServiceImpl implements ProfileService {
         return new FileResponse(url);
     }
 
-    protected Profile getProfileById(Long id){
+    @Override
+    public Profile getProfileById(Long id) {
         Optional<Profile> optionalProfile = this.profileRepository.findById(id);
         if (optionalProfile.isEmpty()) {
             throw new AppException(ErrorCode.PROFILE_NOT_FOUND);
@@ -72,7 +70,8 @@ public class ProfileServiceImpl implements ProfileService {
         return optionalProfile.get();
     }
 
-    public Long getId(){
+    @Override
+    public Long getId() {
         var id = SecurityContextHolder.getContext().getAuthentication().getName();
         return Long.valueOf(id);
     }
