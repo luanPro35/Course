@@ -2,6 +2,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { BlogService } from "@/services/blog.service";
+import { getTokens } from "@/utils/token";
 import { BlogFormData } from "@/types/blog.types";
 
 export const useBlogForm = (initialState: BlogFormData) => {
@@ -45,8 +46,13 @@ export const useBlogForm = (initialState: BlogFormData) => {
           uploadFormData.append("file", file);
 
           try {
+            const { accessToken } = getTokens();
+            const headers = accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : undefined;
             const res = await fetch("/api/upload", {
               method: "POST",
+              headers,
               body: uploadFormData,
             });
             const result = await res.json();
@@ -85,8 +91,13 @@ export const useBlogForm = (initialState: BlogFormData) => {
     uploadFormData.append("file", file);
 
     try {
+      const { accessToken } = getTokens();
+      const headers = accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined;
       const res = await fetch("/api/upload", {
         method: "POST",
+        headers,
         body: uploadFormData,
       });
 
@@ -140,7 +151,10 @@ export const useBlogForm = (initialState: BlogFormData) => {
     }
 
     if (!token) {
-      setErrors((prev) => ({ ...prev, token: "Authentication token is missing" }));
+      setErrors((prev) => ({
+        ...prev,
+        token: "Authentication token is missing",
+      }));
       alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       return;
     }
@@ -148,14 +162,19 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setIsSubmitting(true);
 
     try {
-      console.log("Submitting blog post with userId:", userId, "token:", token ? "present" : "missing");
-      
+      console.log(
+        "Submitting blog post with userId:",
+        userId,
+        "token:",
+        token ? "present" : "missing"
+      );
+
       if (postId) {
         // Update existing post with status
-        await BlogService.update(
-          parseInt(postId.toString(), 10),
-          { ...formData, status }
-        );
+        await BlogService.update(parseInt(postId.toString(), 10), {
+          ...formData,
+          status,
+        });
         alert(
           `Bài viết đã được cập nhật dưới dạng ${
             status === "draft" ? "bản nháp" : "xuất bản"
@@ -178,7 +197,10 @@ export const useBlogForm = (initialState: BlogFormData) => {
       }
     } catch (error) {
       console.error("Failed to save the post:", error);
-      const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra khi lưu bài viết.";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Có lỗi xảy ra khi lưu bài viết.";
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);

@@ -1,5 +1,9 @@
 import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
-import { USER_API_URL, POSTS_API_URL } from "@/services/api.service";
+import {
+  USER_API_URL,
+  POSTS_API_URL,
+  getMyPostsURL,
+} from "@/services/api.service";
 // export const API_BASE_URL = "http://localhost:3001/blogs";
 import { fetchWithAuth } from "@/utils/api.utils";
 
@@ -16,12 +20,10 @@ export class BlogService {
       // Backend expects lowercase enum slugs: react_native, devops, cpp, javascript, python
       category: data.category?.toLowerCase(),
       thumbnailUrl: data.image, // Backend expects thumbnailUrl, not image
-      statusPost: status.toUpperCase(), // Backend expects uppercase status
+      statusPost: status.toUpperCase(), // Convert to uppercase for backend enum
     };
 
     try {
-      console.log("Creating post with data:", postData);
-
       const response = await fetchWithAuth(POSTS_API_URL, {
         method: "POST",
         body: JSON.stringify(postData),
@@ -65,29 +67,32 @@ export class BlogService {
 
   static async getMyPostsByStatus(status: string): Promise<BlogPost[]> {
     try {
-      const response = await fetchWithAuth(
-        `${USER_API_URL}/posts/my-posts?status=${status}`
-      );
-
+      const response = await fetchWithAuth(getMyPostsURL(status, 0, 50));
       if (!response.ok) {
         throw new Error(`Lỗi khi tải danh sách bài viết với status ${status}.`);
       }
 
       const result = await response.json();
-      const posts = result.data?.content || result.data || [];
+      const rawList = result?.data?.content ?? result?.data ?? [];
+      return (Array.isArray(rawList) ? rawList : []).map((post: BlogPost) => {
+        const normalizedStatus = String(
+          post.statusPost ?? post.status ?? "draft"
+        ).toLowerCase() as BlogStatus;
 
-      return posts.map((post: BlogPost) => ({
-        id: post.id,
-        author: post.author,
-        title: post.title,
-        content: post.content,
-        fullContent: post.fullContent,
-        category: post.category,
-        image: post.thumbnailUrl || post.image,
-        status: post.statusPost || post.status,
-        createdAt: post.createdAt,
-        updatedAt: post.updatedAt,
-      }));
+        return {
+          id: post.id,
+          author: post.author,
+          title: post.title,
+          content: post.content,
+          fullContent: post.fullContent,
+          category: post.category,
+          image: post.thumbnailUrl || post.image || "",
+          status: normalizedStatus,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+          user: post.user,
+        } as BlogPost;
+      });
     } catch (error) {
       console.error(`Error fetching posts with status ${status}:`, error);
       return [];
@@ -142,7 +147,7 @@ export class BlogService {
       author: data.author,
       category: data.category?.toLowerCase(), // align with backend enum slugs
       thumbnailUrl: data.image,
-      statusPost: data.status?.toUpperCase(), // Backend expects uppercase status
+      statusPost: data.status?.toUpperCase(), // Convert to uppercase for backend enum
     };
 
     try {

@@ -10,9 +10,15 @@ interface PostItemProps {
   post: BlogPost;
   handleDelete: (id: number | string) => void;
   handleEdit: (id: number | string) => void;
+  avatar?: string;
 }
 
-export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
+export const PostItem = ({
+  post,
+  handleDelete,
+  handleEdit,
+  avatar,
+}: PostItemProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -59,7 +65,28 @@ export const PostItem = ({ post, handleDelete, handleEdit }: PostItemProps) => {
       onClick={handleNavigate}
     >
       <div className="flex items-center justify-between mb-4">
-        <span className="font-medium text-gray-800">{post.author}</span>
+        <div className="flex items-center gap-3">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+            {avatar ? (
+              <Image
+                src={avatar}
+                alt={post.author || "Avatar"}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            ) : (
+              <Image
+                src="/images/avatar.png"
+                alt={post.author || "Avatar"}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            )}
+          </div>
+          <span className="font-medium text-gray-800">{post.author}</span>
+        </div>
         <div className="relative" ref={menuRef}>
           <button
             className="flex items-center gap-2 cursor-pointer"
