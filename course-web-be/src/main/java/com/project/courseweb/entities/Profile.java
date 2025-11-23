@@ -47,6 +47,9 @@ public class Profile {
     @OneToMany(mappedBy = "profile")
     Set<Enrollment> enrollments;
 
+    @OneToMany(mappedBy = "profile")
+    Set<Order> orders;
+
     LocalDateTime createTime;
     LocalDateTime updateTime;
 

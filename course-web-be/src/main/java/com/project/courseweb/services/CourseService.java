@@ -6,6 +6,7 @@ import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
 import com.project.courseweb.dtos.request.CourseUpdateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.entities.Course;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,9 @@ public interface CourseService {
 
     void deleteCourse(Long id);
 
-
     CourseResponse getPublishedCourseById(Long id);
 
     PageResponse<CourseLabelResponse> getCoursesByStatusPublished(Pageable pageable);
 
-
+    Course findCourseById(Long id);
 }

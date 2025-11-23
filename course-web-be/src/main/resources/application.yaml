@@ -6,7 +6,7 @@ spring:
   profiles:
     active: dev
   application:
-     name: course-web-be
+    name: course-web-be
   datasource:
     url: ${SQL_URL}
     username: ${USER_NAME}
@@ -30,8 +30,8 @@ spring:
     allow-bean-definition-overriding: true
 jwt:
   secret-key: ${SECRET_KEY}
-  access-token-expiration : ${ACCESS_TOKEN_EX}
-  refresh-token-expiration : ${REFRESH_TOKEN_EX}
+  access-token-expiration: ${ACCESS_TOKEN_EX}
+  refresh-token-expiration: ${REFRESH_TOKEN_EX}
 aws:
   region: us-east-1
   s3:
@@ -44,3 +44,10 @@ google:
   client-secret: ${GOOGLE_CLIENT_SECRET}
   redirect-uri: ${GOOGLE_REDIRECT_URI}
   grant-type: "authorization_code"
+
+vnpay:
+  tmnCode: ${VNPAY_TMNCODE}
+  hashSecret: ${VNPAY_HASHSECRET}
+  url: ${VNPAY_URL}
+  returnUrl: ${VNPAY_RETURNURL}
+  apiUrl: ${VNPAY_APIURL}

@@ -7,8 +7,10 @@ import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
 import com.project.courseweb.dtos.request.CourseUpdateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.dtos.response.OrderResponse;
 import com.project.courseweb.enums.SuccessCode;
 import com.project.courseweb.services.CourseService;
+import com.project.courseweb.services.OrderService;
 import com.project.courseweb.services.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     PostService postService;
     CourseService courseService;
+    OrderService orderService;
 
     @PostMapping("/courses/create")
     ApiResponse<CourseResponse> createCourse(@RequestBody CourseCreateRequest request) {
@@ -58,5 +61,10 @@ public class AdminController {
     @GetMapping("/courses")
     ApiResponse<PageResponse<CourseLabelResponse>> getCoursesByStatus(@RequestParam String status, Pageable pageable) {
         return ApiResponse.ok(this.courseService.getCoursesByStatus(status, pageable), SuccessCode.GET_COURSES_SUCCESS);
+    }
+
+    @GetMapping("/orders")
+    ApiResponse<PageResponse<OrderResponse>> getOrdersByStatus(Pageable pageable) {
+        return ApiResponse.ok(this.orderService.getAllOrders(pageable), SuccessCode.GET_ORDERS_SUCCESS);
     }
 }

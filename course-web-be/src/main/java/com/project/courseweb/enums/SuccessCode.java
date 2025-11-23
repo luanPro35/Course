@@ -25,7 +25,13 @@ public enum SuccessCode {
     UPDATE_COURSE_SUCCESS(200, "Cập nhật khóa học thành công", HttpStatus.OK),
     UPDATE_STATUS_COURSE_SUCCESS(200, "Cập nhật trạng thái khóa học thành công", HttpStatus.OK),
     GET_COURSES_SUCCESS(200, "Lấy danh sách khóa học thành công", HttpStatus.OK),
-    ENROLL_COURSE_SUCCESS(200, "Đăng ký khóa học thành công", HttpStatus.OK);
+    ENROLL_COURSE_SUCCESS(200, "Đăng ký khóa học thành công", HttpStatus.OK),
+    CREATE_PAYMENT(201, "Tạo thanh toán thành công", HttpStatus.CREATED),
+    VN_PAY_IPN_SUCCESS(200, "Xử lý thanh toán thành công", HttpStatus.OK),
+    PAYMENT_SUCCESS(200, "Thanh toán thành công", HttpStatus.OK),
+    REFUND_SUCCESS(200, "Hoàn tiền thành công", HttpStatus.OK),
+    CHECK_TRANSACTION_STATUS_SUCCESS(200, "Kiểm tra trạng thái giao dịch thành công", HttpStatus.OK),
+    GET_ORDERS_SUCCESS(200, "Lấy danh sách đơn hàng thành công", HttpStatus.OK);
 
     final int status;
     final String message;

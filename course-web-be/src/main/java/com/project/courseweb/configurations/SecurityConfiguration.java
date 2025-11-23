@@ -39,7 +39,9 @@ public class SecurityConfiguration {
             "/auth/introspect",
             "/oauth2/callback",
             "/posts/published",
-            "/courses/**"
+            "/courses/**",
+            "/payment/vnp-ipn",
+            "/payment/vnp-return"
     };
     CustomJwtDecoder customJwtDecoder;
 

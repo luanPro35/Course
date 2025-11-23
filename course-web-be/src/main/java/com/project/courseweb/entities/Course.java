@@ -46,6 +46,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Enrollment> enrollments;
 
+    @OneToMany(mappedBy = "course")
+    Set<Order> orders;
+
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 

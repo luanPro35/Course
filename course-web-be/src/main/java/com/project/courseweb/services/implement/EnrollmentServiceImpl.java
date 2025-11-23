@@ -1,7 +1,9 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.response.EnrollmentResponse;
+import com.project.courseweb.entities.Course;
 import com.project.courseweb.entities.Enrollment;
+import com.project.courseweb.entities.Profile;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.mappers.EnrollmentMapper;
@@ -51,5 +53,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .build();
 
         return this.enrollmentMapper.toResponse(enrollmentRepository.save(enrollment));
+    }
+
+    @Override
+    public void enrollInCourseVip(Course course, Profile profile) {
+        this.enrollmentRepository.save(
+                Enrollment.builder()
+                        .profile(profile)
+                        .course(course)
+                        .build()
+        );
     }
 }

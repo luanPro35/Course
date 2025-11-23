@@ -25,7 +25,8 @@ public enum ErrorCode {
     POST_NOT_FOUND(412, "Post not found", HttpStatus.NOT_FOUND),
     COURSE_NOT_FOUND(413, "Course not found", HttpStatus.NOT_FOUND),
     ALREADY_ENROLLED(414, "Already enrolled", HttpStatus.CONFLICT),
-    COURSE_IS_NOT_FREE(415, "Course is not free", HttpStatus.BAD_REQUEST);
+    COURSE_IS_NOT_FREE(415, "Course is not free", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(416, "Order not found", HttpStatus.NOT_FOUND);
 
     int status;
     String message;

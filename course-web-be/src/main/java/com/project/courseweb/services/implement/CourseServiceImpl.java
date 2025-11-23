@@ -151,6 +151,11 @@ public class CourseServiceImpl implements CourseService {
         return this.toPageResponse(courses);
     }
 
+    @Override
+    public Course findCourseById(Long id) {
+        return this.courseRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+    }
+
 
     public boolean isOwn(Long id) {
         var profileId = SecurityContextHolder.getContext().getAuthentication().getName();
