@@ -9,10 +9,10 @@ export default async function CoursePage({
 }) {
   const { id } = await params;
 
-  // Fetch course trực tiếp từ db.json
+  
   const course = await getCourseById(id);
 
-  // Nếu không tìm thấy course, hiển thị 404
+  
   if (!course) {
     notFound();
   }

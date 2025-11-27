@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-lg h-screen w-1/5 fixed left-0 top-0">
       <div className="flex flex-col h-full">
-        {/* Logo section */}
+        {}
         <div className="p-6 border-b">
           <Link href="/" className="flex flex-col items-center gap-3">
             <Image

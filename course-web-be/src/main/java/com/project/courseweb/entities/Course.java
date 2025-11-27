@@ -24,10 +24,28 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
+    @Lob
     String thumbnailUrl;
     @Lob
     String description;
     BigDecimal price;
+    
+    String badge;
+    String titleHighlight;
+    String subtitle;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String subtitleHighlights;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String stats;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String learningOutcomes;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
     CourseStatus status;

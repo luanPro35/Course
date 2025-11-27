@@ -2,19 +2,17 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-// Define the base URL for the posts API from an environment variable.
+
 import { POSTS_API_URL, UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
 
 if (!POSTS_API_URL || !UPLOAD_IMAGE_POST_URL) {
-  // Throw an error if the environment variable is not set.
+  
   throw new Error(
     "POSTS_API_URL or UPLOAD_IMAGE_POST_URL is not defined in your environment variables."
   );
 }
 
-/**
- * Handles GET requests to fetch all posts or a single post by ID.
- */
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
@@ -47,9 +45,7 @@ export async function GET(request: Request) {
   }
 }
 
-/**
- * Handles POST requests to create a new post or upload an image.
- */
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
@@ -60,7 +56,7 @@ export async function POST(request: Request) {
   const contentType = request.headers.get("content-type") || "";
   const token = request.headers.get("Authorization");
 
-  // Handle image upload with multipart/form-data
+  
   if (contentType.includes("multipart/form-data")) {
     try {
       const formData = await request.formData();
@@ -94,7 +90,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Handle post creation with application/json
+  
   if (contentType.includes("application/json")) {
     try {
       const postData = await request.json();
@@ -135,9 +131,7 @@ export async function POST(request: Request) {
   );
 }
 
-/**
- * Handles PUT requests to update an existing post.
- */
+
 export async function PUT(request: Request) {
   const session = await getServerSession(authOptions);
 
@@ -185,9 +179,7 @@ export async function PUT(request: Request) {
   }
 }
 
-/**
- * Handles DELETE requests to remove a post.
- */
+
 export async function DELETE(request: Request) {
   const session = await getServerSession(authOptions);
 
@@ -212,7 +204,7 @@ export async function DELETE(request: Request) {
 
     if (!res.ok) {
       if (res.status === 204) {
-        // Handle no content success
+        
         return new NextResponse(null, { status: 204 });
       }
       const errorData = await res
@@ -224,7 +216,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Handle case where delete returns the deleted object or a success message
+    
     try {
       const data = await res.json();
       return NextResponse.json({
@@ -233,7 +225,7 @@ export async function DELETE(request: Request) {
         deletedPost: data,
       });
     } catch (e) {
-      // If there's no body, return a simple success response
+      
       return NextResponse.json({
         success: true,
         message: "Xóa bài viết thành công",

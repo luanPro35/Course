@@ -14,18 +14,18 @@ export async function POST(req: Request) {
       );
     }
 
-    // Gọi đến API logout của Backend Java để vô hiệu hóa token
+    
     await fetch(`${JAVA_API_BASE_URL}/auth/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Thêm accessToken vào header để xác thực request
+        
         "Authorization": `Bearer ${accessToken}`
       },
       body: JSON.stringify({ accessToken }),
     });
 
-    // Không quan trọng kết quả trả về, chỉ cần trả về 200 để FE biết đã xử lý
+    
     return NextResponse.json({ mess: "Logged out successfully" });
   } catch (error) {
     console.error("Logout API route error:", error);

@@ -26,7 +26,7 @@ export const authOptions: AuthOptions = {
         const { email, password } = credentials as Record<"email", string> &
           Record<"password", string>;
 
-        // Admin login
+        
         if (
           email === process.env.ADMIN_EMAIL &&
           password === process.env.ADMIN_PASSWORD
@@ -39,7 +39,7 @@ export const authOptions: AuthOptions = {
           };
         }
 
-        // Regular user login
+        
         try {
           const userResponse = await fetch(
             `${USER_API_URL}/users?email=${email}`

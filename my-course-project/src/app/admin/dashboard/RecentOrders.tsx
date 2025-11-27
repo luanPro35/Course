@@ -18,7 +18,7 @@ const RecentOrders = ({ orders }: RecentOrdersProps) => {
         </button>
       </div>
 
-      {/* Giới hạn chiều cao và cho phép scroll */}
+      {}
       <div className="max-h-[200px] overflow-y-auto">
         <table className="w-full">
           <thead className="sticky top-0 bg-white">

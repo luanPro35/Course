@@ -49,13 +49,13 @@ export default function RoutePage() {
 
   return (
     <div className="flex flex-col lg:flex-row items-start w-full lg:-ml-10 -mt-10">
-      {/* Sidebar (Filters and Images) */}
+      {}
       <div className="w-full lg:w-[350px] lg:sticky top-24 mb-8 lg:mb-24 ml-0 lg:ml-12 mt-8 lg:mt-0 order-1 lg:order-2">
-        {/* Filter Section */}
+        {}
         <div className="px-4 md:px-6 lg:px-0">
           <h3 className="text-lg font-bold mb-4 lg:hidden">Chủ đề</h3>
           <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-col">
-            {/* "All posts" button */}
+            {}
             <div
               onClick={handleResetFilter}
               className={`text-center lg:text-left px-4 py-2 text-sm font-medium rounded-2xl border cursor-pointer transition-all ${
@@ -67,7 +67,7 @@ export default function RoutePage() {
               Tất cả bài viết
             </div>
 
-            {/* Other filter buttons */}
+            {}
             {linkPosts.map((item) => (
               <div
                 key={item.id}
@@ -85,7 +85,7 @@ export default function RoutePage() {
           </div>
         </div>
 
-        {/* Promotional Images (Hidden on Mobile) */}
+        {}
         <div className="hidden lg:flex flex-col gap-6 justify-center items-center mt-8">
           <Link href="/images/PostF8.png">
             <Image
@@ -108,7 +108,7 @@ export default function RoutePage() {
         </div>
       </div>
 
-      {/* Main content (Posts list) */}
+      {}
       <div className="flex-1 px-4 md:px-6 lg:px-12 py-8 justify-start w-full order-2 lg:order-1">
         <Posts filterCategories={selectedCategories} />
       </div>

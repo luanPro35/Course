@@ -13,7 +13,7 @@ export default function FrontendCourseCard({ course }: FrontendCourseCardProps) 
       <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-orange-300 cursor-pointer group">
         <div className="relative h-40 overflow-hidden">
           <Image
-            src={course.image}
+            src={course.thumbnailUrl}
             alt={course.title}
             width={400}
             height={160}

@@ -17,45 +17,31 @@ export default function CoursePro({ course }: CourseProProps) {
     >
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">
         <Image
-          src={course.image}
+          src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
           alt={course.title}
           width={320}
           height={180}
           className="w-full h-40 object-cover"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/images/PostF8.png";
+          }}
         />
+
       </div>
 
       <div className="p-4 bg-white">
         <h3 className="font-semibold text-gray-800 mb-3">{course.title}</h3>
-
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-          <span className="text-orange-600 font-bold text-lg">
-            {new Intl.NumberFormat("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            }).format(course.price)}
-          </span>{" "}
-          <span className="text-gray-400 line-through">
-            {new Intl.NumberFormat("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            }).format(course.discountPrice ?? 0)}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4 bg-gray-400 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">▶</span>
-            </div>
-            <span>{course.numberOfPosts}</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4 bg-gray-400 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">🕐</span>
-            </div>
-            <span>{course.totalTime}</span>
+        <div className="flex items-center justify-between">
+          <div className="text-xl font-bold text-orange-600">
+            {course.price ? (
+              new Intl.NumberFormat('vi-VN', { 
+                style: 'currency', 
+                currency: 'VND' 
+              }).format(course.price)
+            ) : (
+              'Liên hệ'
+            )}
           </div>
         </div>
       </div>

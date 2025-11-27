@@ -115,7 +115,7 @@ export default function UserPurchasesPage() {
     );
   }
 
-  // Tính tổng
+  
   const totalRevenue = userPurchases.reduce(
     (sum, purchase) => sum + purchase.totalSpent,
     0
@@ -132,7 +132,7 @@ export default function UserPurchasesPage() {
         Thống Kê Mua Hàng
       </h1>
 
-      {/* Statistics Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <p className="text-sm text-gray-600 mb-2">Tổng Doanh Thu</p>
@@ -157,7 +157,7 @@ export default function UserPurchasesPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {}
       {userPurchases.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-8 text-center">
           <p className="text-gray-500">Chưa có dữ liệu mua hàng</p>

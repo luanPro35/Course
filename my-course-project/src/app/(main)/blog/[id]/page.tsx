@@ -19,7 +19,7 @@ const BlogPostPage = () => {
         const size = 10;
         let found = null;
         while (!found && page < 100) {
-          // safety limit
+          
           const res = await fetch(getPublishedArticlesURL(page, size), {
             cache: "no-store",
           });
@@ -47,7 +47,7 @@ const BlogPostPage = () => {
                 found.createdDate ||
                 found.updatedAt,
               updatedAt: found.updatedAt,
-              user: found.user, // may be undefined
+              user: found.user, 
             };
             setPost(mapped);
             return;
@@ -123,7 +123,7 @@ const BlogPostPage = () => {
           </div>
         </div>
 
-        {/* Title */}
+        {}
         <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
           {post.title || "Tiêu đề bài viết"}
         </h1>

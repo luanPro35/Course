@@ -4,7 +4,7 @@ import {
   POSTS_API_URL,
   getMyPostsURL,
 } from "@/services/api.service";
-// export const API_BASE_URL = "http://localhost:3001/blogs";
+
 import { fetchWithAuth } from "@/utils/api.utils";
 
 export class BlogService {
@@ -17,10 +17,10 @@ export class BlogService {
       content: data.content,
       fullContent: data.fullContent,
       author: data.author,
-      // Backend expects lowercase enum slugs: react_native, devops, cpp, javascript, python
+      
       category: data.category?.toLowerCase(),
-      thumbnailUrl: data.image, // Backend expects thumbnailUrl, not image
-      statusPost: status.toUpperCase(), // Convert to uppercase for backend enum
+      thumbnailUrl: data.image, 
+      statusPost: status.toUpperCase(), 
     };
 
     try {
@@ -52,7 +52,7 @@ export class BlogService {
 
   static async getAll(): Promise<BlogPost[]> {
     try {
-      // Fetch both draft and published posts
+      
       const [drafts, published] = await Promise.all([
         this.getMyPostsByStatus("DRAFT"),
         this.getMyPostsByStatus("PUBLISHED"),
@@ -145,9 +145,9 @@ export class BlogService {
       content: data.content,
       fullContent: data.fullContent,
       author: data.author,
-      category: data.category?.toLowerCase(), // align with backend enum slugs
+      category: data.category?.toLowerCase(), 
       thumbnailUrl: data.image,
-      statusPost: data.status?.toUpperCase(), // Convert to uppercase for backend enum
+      statusPost: data.status?.toUpperCase(), 
     };
 
     try {

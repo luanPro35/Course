@@ -61,13 +61,13 @@ const CourseLandingSlider: React.FC = () => {
     },
   ];
 
-  // Auto-play functionality
+  
   useEffect(() => {
     if (isPlaying) {
       const interval = setInterval(() => {
         setDirection("right");
         setCurrentSlide((prev) => (prev + 1) % courses.length);
-      }, 5000); // 5 seconds per slide
+      }, 5000); 
       return () => clearInterval(interval);
     }
   }, [isPlaying, courses.length]);
@@ -90,7 +90,7 @@ const CourseLandingSlider: React.FC = () => {
   return (
     <>
       <div className="relative">
-        {/* Main Slider Container */}
+        {}
         <div className="relative w-full h-[60vh] overflow-hidden rounded-3xl shadow-2xl">
           {courses.map((course, index) => (
             <section
@@ -111,7 +111,7 @@ const CourseLandingSlider: React.FC = () => {
             >
               <div className="max-w-8xl mx-auto h-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 h-full">
-                  {/* Content Section */}
+                  {}
                   <div className="space-y-6 animate-fade-in">
                     <h2 className="text-4xl md:text-6xl font-bold leading-tight animate-slide-up">
                       {course.title}
@@ -144,7 +144,7 @@ const CourseLandingSlider: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Image Section */}
+                  {}
                   <div className="relative flex justify-center lg:justify-end items-center h-full">
                     <div className="relative w-full max-w-2xl h-96 lg:h-full animate-float">
                       {course.image && (
@@ -153,6 +153,7 @@ const CourseLandingSlider: React.FC = () => {
                             src={`/images/${course.image}`}
                             alt={course.title}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 800px"
                             className="object-contain drop-shadow-2xl"
                             priority={index === 0}
                           />
@@ -163,7 +164,7 @@ const CourseLandingSlider: React.FC = () => {
                 </div>
               </div>
 
-              {/* Decorative elements */}
+              {}
               <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full translate-y-12 -translate-x-12 animate-pulse"></div>
               <div className="absolute top-1/2 left-10 w-16 h-16 bg-white opacity-3 rounded-full animate-bounce"></div>
@@ -171,9 +172,9 @@ const CourseLandingSlider: React.FC = () => {
           ))}
         </div>
 
-        {/* Navigation Controls */}
+        {}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Previous Button */}
+          {}
           <button
             onClick={prevSlide}
             className="absolute left-4 lg:left-8 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 backdrop-blur-sm pointer-events-auto group"
@@ -193,7 +194,7 @@ const CourseLandingSlider: React.FC = () => {
             </svg>
           </button>
 
-          {/* Next Button */}
+          {}
           <button
             onClick={nextSlide}
             className="absolute right-4 lg:right-8 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 backdrop-blur-sm pointer-events-auto group"
@@ -214,10 +215,10 @@ const CourseLandingSlider: React.FC = () => {
           </button>
         </div>
 
-        {/* Bottom Controls */}
+        {}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <div className="flex items-center space-y-4">
-            {/* Slide Indicators */}
+            {}
             <div className="flex space-x-3">
               {courses.map((_, index) => (
                 <button
@@ -235,7 +236,7 @@ const CourseLandingSlider: React.FC = () => {
         </div>
       </div>
 
-      {/* Custom Styles */}
+      {}
       <style jsx global>{`
         @keyframes slide-up {
           from {

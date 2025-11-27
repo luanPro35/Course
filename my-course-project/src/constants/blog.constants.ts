@@ -10,7 +10,7 @@ export const FORM_VALIDATION = {
   AUTHOR_MIN_LENGTH: 2,
   TITLE_MIN_LENGTH: 10,
   CONTENT_MIN_LENGTH: 50,
-  MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB
+  MAX_IMAGE_SIZE: 5 * 1024 * 1024, 
 } as const;
 
 export const TIPS = [

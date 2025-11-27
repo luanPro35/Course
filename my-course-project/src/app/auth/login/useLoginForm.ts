@@ -1,4 +1,4 @@
-// components/auth/login/useLoginForm.ts
+
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ export const useLoginForm = (onClose: () => void) => {
     setIsError(false);
     setIsSuccess(false);
 
-    // Validate form
+    
     const validation = validateLoginForm(formData);
     if (!validation.isValid) {
       setErrorMessage(validation.message!);
@@ -46,30 +46,45 @@ export const useLoginForm = (onClose: () => void) => {
     setIsLoading(true);
 
     try {
-      // 1. Gọi AuthService.login để lấy dữ liệu từ backend
-      // Hàm này đã gọi đến /api/login và trả về { user, accessToken, refreshToken }
       const data = await AuthService.login(formData);
-
-      // 2. Gọi hàm login từ useAuth context để cập nhật state toàn cục
-      // và lưu trữ tokens vào localStorage
       await login(data.user, data.accessToken, data.refreshToken);
 
-      // Đăng nh��p thành công, đặt trạng thái thành công và tắt trạng thái lỗi
-      setIsSuccess(true);
-      setIsError(false); // Đảm bảo không hiển thị lỗi
 
-      // Redirect after success animation - use response data to determine route
+
+      setIsSuccess(true);
+      setIsError(false);
+
       setTimeout(() => {
+        const savedUser = localStorage.getItem("user");
+        const savedToken = localStorage.getItem("accessToken");
+        
+
+        
         onClose();
-        // Use the response data to determine redirect path
-        if (data.user?.role === "admin") {
-          console.log("Redirecting to admin page");
+        onClose();
+        const isAdmin = 
+          data.user?.email === "admin@gmail.com" ||
+          data.user?.role === "ADMIN" || 
+          data.user?.role === "admin" ||
+          (Array.isArray(data.user?.roles) && 
+           data.user.roles.some((r: any) => 
+             r && (
+               r === "ADMIN" || 
+               r === "admin" || 
+               r?.name === "ADMIN" || 
+               r?.name === "admin"
+             )
+           ));
+
+
+
+        if (isAdmin) {
+
           router.push("/admin");
         } else {
-          console.log("Redirecting to home page");
+
           router.push("/");
         }
-        // Tải lại trang để đảm bảo các Server Component được cập nhật
         router.refresh();
       }, 1500);
     } catch (error) {

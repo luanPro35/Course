@@ -1,10 +1,15 @@
 import React from "react";
 
-export default function VideoForm() {
+interface VideoFormProps {
+  onSuccess?: () => void;
+}
+
+export default function VideoForm({ onSuccess }: VideoFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Xử lý submit form
+    
     console.log("Submit video");
+    if (onSuccess) onSuccess();
   };
 
   return (

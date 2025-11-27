@@ -132,9 +132,9 @@ export const PostItem = ({
         </div>
       </div>
 
-      {/* Nội dung chính */}
+      {}
       <div className="flex md:flex-row flex-col gap-6">
-        {/* Text bên trái */}
+        {}
         <div className="flex-1">
           <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
             {post.title}
@@ -143,7 +143,7 @@ export const PostItem = ({
             {post.content}
           </p>
 
-          {/* Tags và thông tin */}
+          {}
           <div className="flex items-center gap-3 text-sm text-gray-500">
             <span className="bg-gray-100 px-3 py-1 rounded-full">
               {post.category}
@@ -151,7 +151,7 @@ export const PostItem = ({
           </div>
         </div>
 
-        {/* Hình ảnh bên phải */}
+        {}
         <div className="md:flex-shrink-0 flex-shrink">
           <div className="relative md:w-52 w-full md:h-36 h-48 rounded-xl overflow-hidden">
             <Image

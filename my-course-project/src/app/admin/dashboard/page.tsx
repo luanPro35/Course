@@ -1,6 +1,6 @@
 import OrderChart from "./OrderChart";
 import Information from "./Information";
-import DailyIncomeTracker from "./DailyIncomeTracker"; // Đã đổi tên
+import DailyIncomeTracker from "./DailyIncomeTracker"; 
 import RecentOrders from "./RecentOrders";
 import { CoursePro } from "@/types/coursePro";
 export const orderData = [

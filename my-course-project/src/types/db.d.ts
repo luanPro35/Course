@@ -5,7 +5,6 @@ export interface Course {
   title: string;
   image?: string;
   price?: number;
-  discountPrice?: number;
   author?: string;
   numberOfPosts?: number;
   totalTime?: string;
@@ -16,8 +15,8 @@ export interface Course {
   section?: Section | Section[];
 }
 
-// The Course, CourseSection, and CourseLesson interfaces are now defined in types/user.ts
-// and are re-exported here for consistency with the DbData interface.
+
+
 export { User, CourseFree, Lesson, Section };
 
 export interface Post {
@@ -119,12 +118,12 @@ export interface DbData {
   informations: Information[];
   saved: SavedItem[];
   blogs: Blog[];
-  upload: unknown[]; // Keeping as any[] as it's an empty array and its structure is not defined
-  coursesFree: CourseFree[]; // Changed to CourseFree
+  upload: unknown[]; 
+  coursesFree: CourseFree[]; 
   coursesPro: Course[];
   article: Article[];
   trending: Trending[];
   profile: Profile[];
-  register: unknown[]; // Keeping as any[] as it's an empty array and its structure is not defined
+  register: unknown[]; 
   topVideos: Video[];
 }
