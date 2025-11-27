@@ -7,6 +7,7 @@ import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
 import com.project.courseweb.dtos.request.CourseUpdateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.dtos.response.OrderResponse;
 import com.project.courseweb.enums.SuccessCode;
 import com.project.courseweb.services.CourseService;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +32,11 @@ public class AdminController {
     @PostMapping("/courses/create")
     ApiResponse<CourseResponse> createCourse(@RequestBody CourseCreateRequest request) {
         return ApiResponse.ok(this.courseService.createCourse(request), SuccessCode.CREATE_COURSE_SUCCESS);
+    }
+
+    @PostMapping("/courses/upload-thumbnail")
+    ApiResponse<FileResponse> uploadThumbnail(@RequestParam("file") MultipartFile file) {
+        return ApiResponse.ok(this.courseService.uploadCourseThumbnail(file), SuccessCode.UPLOAD_FILE_SUCCESS);
     }
 
     @GetMapping("/courses/get/{id}")

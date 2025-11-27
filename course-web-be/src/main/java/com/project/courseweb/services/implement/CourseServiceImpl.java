@@ -4,6 +4,7 @@ import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.*;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.entities.Course;
 import com.project.courseweb.enums.CourseStatus;
 import com.project.courseweb.enums.ErrorCode;
@@ -22,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,8 @@ public class CourseServiceImpl implements CourseService {
     SectionMapper sectionMapper;
     LessonMapper lessonMapper;
     ProfileServiceImpl profileService;
+    FileUploadAWSServiceImpl fileUploadAWSService;
+
 
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPLOAD_COURSE')")
     @Transactional
@@ -62,6 +66,21 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(course);
         return this.courseMapper.toResponse(course);
     }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('UPLOAD_COURSE') and @courseServiceImpl.isOwn(#id))")
+    public FileResponse uploadCourseThumbnail(MultipartFile file) {
+        return FileResponse.builder()
+                .url(
+                        this.fileUploadAWSService.uploadFile(
+                                        this.profileService.getProfileById(this.profileService.getId()),
+                                        "course-thumbnail",
+                                        file
+                ))
+                .build();
+    }
+
 
     @Override
     @Transactional

@@ -31,7 +31,9 @@ public enum SuccessCode {
     PAYMENT_SUCCESS(200, "Thanh toán thành công", HttpStatus.OK),
     REFUND_SUCCESS(200, "Hoàn tiền thành công", HttpStatus.OK),
     CHECK_TRANSACTION_STATUS_SUCCESS(200, "Kiểm tra trạng thái giao dịch thành công", HttpStatus.OK),
-    GET_ORDERS_SUCCESS(200, "Lấy danh sách đơn hàng thành công", HttpStatus.OK);
+    GET_ORDERS_SUCCESS(200, "Lấy danh sách đơn hàng thành công", HttpStatus.OK),
+    UPLOAD_FILE_SUCCESS(200, "Cập nhật ảnh thành công", HttpStatus.OK),
+    GET_LIST_COURSE_ENROLLMENT_SUCCESS(200, "Lấy danh sách khóa học ghi danh thành công", HttpStatus.OK);
 
     final int status;
     final String message;

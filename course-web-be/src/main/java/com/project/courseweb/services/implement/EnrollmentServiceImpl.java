@@ -1,5 +1,7 @@
 package com.project.courseweb.services.implement;
 
+import com.project.courseweb.dtos.PageResponse;
+import com.project.courseweb.dtos.response.CourseEnrollmentResponse;
 import com.project.courseweb.dtos.response.EnrollmentResponse;
 import com.project.courseweb.entities.Course;
 import com.project.courseweb.entities.Enrollment;
@@ -15,9 +17,13 @@ import com.project.courseweb.services.ProfileService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Component
@@ -63,5 +69,27 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                         .course(course)
                         .build()
         );
+    }
+
+    @Override
+    public PageResponse<CourseEnrollmentResponse> getListCourseEnrollment(Pageable pageable) {
+        Page<Enrollment> enrollments = this.enrollmentRepository.findAllByProfileId(this.profileService.getId(), pageable);
+        List<CourseEnrollmentResponse> courseEnrollmentResponses = enrollments.stream()
+                .map(enrollment -> {
+                    var course = enrollment.getCourse();
+                    return CourseEnrollmentResponse.builder()
+                            .courseID(course.getId())
+                            .title(course.getTitle())
+                            .thumbnail(course.getThumbnailUrl())
+                            .build();
+                }).toList();
+        return PageResponse.<CourseEnrollmentResponse>builder()
+                .content(courseEnrollmentResponses)
+                .pageNo(enrollments.getNumber())
+                .pageSize(enrollments.getSize())
+                .totalElements(enrollments.getTotalElements())
+                .totalPages(enrollments.getTotalPages())
+                .last(enrollments.isLast())
+                .build();
     }
 }

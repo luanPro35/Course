@@ -6,13 +6,17 @@ import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
 import com.project.courseweb.dtos.request.CourseUpdateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
+import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.entities.Course;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface CourseService {
     CourseResponse createCourse(CourseCreateRequest request);
+
+    FileResponse uploadCourseThumbnail(MultipartFile file);
 
     CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request);
 
