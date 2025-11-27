@@ -45,19 +45,21 @@ public class CourseServiceImpl implements CourseService {
         var profile = this.profileService.getProfileById(profileService.getId());
         course.setCreator(profile);
         //
-        for (SectionCreateRequest sectionRequest : request.getSections()) {
-            var section = this.sectionMapper.toEntity(sectionRequest);
-            section.setLessons(new ArrayList<>());
-            section.setCourse(course);
-            if (sectionRequest.getLessons() != null) {
-                for (LessonCreateRequest lessonRequest : sectionRequest.getLessons()) {
-                    var lesson = this.lessonMapper.toEntity(lessonRequest);
-                    lesson.setSection(section);
+        if (request.getSections() != null) {
+            for (SectionCreateRequest sectionRequest : request.getSections()) {
+                var section = this.sectionMapper.toEntity(sectionRequest);
+                section.setLessons(new ArrayList<>());
+                section.setCourse(course);
+                if (sectionRequest.getLessons() != null) {
+                    for (LessonCreateRequest lessonRequest : sectionRequest.getLessons()) {
+                        var lesson = this.lessonMapper.toEntity(lessonRequest);
+                        lesson.setSection(section);
 
-                    section.getLessons().add(lesson);
+                        section.getLessons().add(lesson);
+                    }
                 }
+                course.getSections().add(section);
             }
-            course.getSections().add(section);
         }
         courseRepository.save(course);
         return this.courseMapper.toResponse(course);
@@ -154,6 +156,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findCourseById(Long id) {
         return this.courseRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<CourseLabelResponse> getAllCourses(Pageable pageable) {
+        Page<Course> courses = courseRepository.findAll(pageable);
+        return this.toPageResponse(courses);
     }
 
 

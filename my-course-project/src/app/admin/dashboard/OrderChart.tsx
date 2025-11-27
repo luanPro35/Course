@@ -36,7 +36,7 @@ export default function OrderChart({ data }: OrderChartProps) {
           <XAxis dataKey="month" tick={{ fontSize: 12 }} />
           <YAxis />
           <Tooltip />
-          {/* @ts-expect-error Recharts Legend type issue */}
+          {}
           <Legend />
           <Bar
             dataKey="totalOrders"

@@ -1,5 +1,5 @@
 export type RegisterFormData = {
-  name: string; // Đổi từ fullName thành name
+  name: string; 
   phone: string;
   email: string;
   password?: string;

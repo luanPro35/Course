@@ -1,4 +1,4 @@
-// components/auth/register/useRegisterForm.ts
+
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ import { AuthService } from "@/services/auth.service";
 
 export const useRegisterForm = (onSuccess: () => void) => {
   const [formData, setFormData] = useState<RegisterFormData>({
-    name: "", // Khớp với kiểu dữ liệu mới
+    name: "",
     phone: "",
     email: "",
     password: "",
@@ -30,7 +30,6 @@ export const useRegisterForm = (onSuccess: () => void) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form
     const validation = validateRegisterForm(formData);
     if (!validation.isValid) {
       toast.error(validation.message!);
@@ -42,8 +41,6 @@ export const useRegisterForm = (onSuccess: () => void) => {
     setIsLoading(true);
 
     try {
-      // Loại bỏ đoạn mã chuyển đổi không cần thiết
-      // Dữ liệu đã ở đúng định dạng
       const data = await AuthService.register(formData);
       if (data.success) {
         toast.success(data.mess || "Đăng ký thành công");

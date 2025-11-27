@@ -19,4 +19,6 @@ public class CourseLabelResponse {
     BigDecimal price;
     String creator;
     LocalDateTime updatedAt;
+    String status;
+    String courseType;
 }

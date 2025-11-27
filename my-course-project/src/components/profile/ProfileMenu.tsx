@@ -48,7 +48,7 @@ export default function ProfileMenu({ onClose }: ProfileMenuProps) {
     { label: "Trang cá nhân", icon: <FiUser />, href: "/profile" },
     { label: "Viết blog", icon: <FiEdit />, href: "/blog/create" },
     { label: "Bài viết của tôi", icon: <FiBookOpen />, href: "/blog/my-posts" },
-    // { label: "Bài viết đã lưu", icon: <FiBookmark />, href: "/blog/saved" },
+    
     { label: "Cài đặt", icon: <FiSettings />, href: "/settings" },
   ];
   return (
@@ -58,7 +58,7 @@ export default function ProfileMenu({ onClose }: ProfileMenuProps) {
     >
       <div className="flex items-center gap-3 p-4 border-b border-gray-100">
         <Image
-          src={user?.avatar || "/images/avatar.png"}
+          src={user?.avatar && user.avatar.trim() !== "" ? user.avatar : "/images/avatar.png"}
           alt={user?.fullName || "User Avatar"}
           width={45}
           height={45}
@@ -83,7 +83,7 @@ export default function ProfileMenu({ onClose }: ProfileMenuProps) {
         ))}
       </ul>
 
-      {/* Logout */}
+      {}
       <button
         onClick={handleLogout}
         className="flex items-center w-full gap-3 px-4 py-3 text-red-500 hover:bg-red-50 border-t border-gray-100 font-medium transition-colors"

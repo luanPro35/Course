@@ -29,7 +29,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <AuthLayout onClose={onClose}>
-      {/* Loading, Success, Error States */}
       {isLoading && (
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
           <p className="text-gray-600 font-medium text-lg">Đang đăng nhập...</p>
@@ -53,9 +52,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        {/* Left side - Form */}
         <div>
-          {/* Header */}
           <div>
             <h2 className="text-2xl font-bold text-center mb-1">Đăng nhập</h2>
             <p className="text-center text-gray-500 mb-6">
@@ -65,7 +62,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </p>
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4 mb-6">
             <LoginFormFields
               formData={formData}
@@ -84,7 +80,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </button>
           </form>
 
-          {/* Social Login */}
           <div className="space-y-3 mb-6">
             <SocialButton
               icon={<FaGoogle />}
@@ -99,7 +94,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             />
           </div>
 
-          {/* Links */}
           <div className="text-center space-y-4">
             <div className="flex justify-center space-x-1 text-sm">
               <span className="text-gray-600">Chưa có tài khoản?</span>
@@ -120,7 +114,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </Link>
           </div>
 
-          {/* Terms */}
           <div className="mt-8 pt-6 border-t border-gray-100">
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với{" "}
@@ -132,7 +125,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </div>
         </div>
 
-        {/* Right side - Animation */}
         <div className="hidden md:flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg p-4">
           <LoginAnimation />
         </div>

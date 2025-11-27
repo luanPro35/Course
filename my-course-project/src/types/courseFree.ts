@@ -1,22 +1,23 @@
 export interface CourseFree {
   id: string;
-  image: string;
+  thumbnailUrl: string;
   title: string;
   free: string;
   people: number;
   numberOfPosts: number;
   totalTime: string;
   price: number;
-  section?: Section[];
+  sections?: Section[];
   contentSection: string;
   titleSection: string;
-  isCompleted?: boolean; // Add isCompleted property
+  isCompleted?: boolean;
+  status?: string;
 }
 
 export interface Lesson {
   id: string;
   title: string;
-  videoUrl?: string;
+  contentUrl?: string;
 }
 
 export interface Section {

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CourseFree } from "@/types/courseFree"; // Import CourseFree type
+import { CourseFree } from "@/types/courseFree";
 
 interface MyCoursesDropdownProps {
   courses: CourseFree[];
@@ -34,7 +34,7 @@ export default function MyCoursesDropdown({ courses }: MyCoursesDropdownProps) {
             >
               <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                 <Image
-                  src={course.image || "/images/Introductory.png"} // Use course image or placeholder
+                  src={course.thumbnailUrl || "/images/Introductory.png"}
                   alt={course.title}
                   width={64}
                   height={64}

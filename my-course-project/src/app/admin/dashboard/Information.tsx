@@ -1,12 +1,12 @@
 import React from "react";
-import { Users, Package, BookOpen } from "lucide-react"; // Thêm icon BookOpen
+import { Users, Package, BookOpen } from "lucide-react"; 
 import StatCard from "./StatCard";
 import { DashboardProps, StatItem } from "./dashboard.types";
 
 export default function Information({
   totalOrders,
   totalUsers,
-  totalCourses, // Thêm totalCourses
+  totalCourses, 
 }: DashboardProps) {
   const statsData: StatItem[] = [
     {

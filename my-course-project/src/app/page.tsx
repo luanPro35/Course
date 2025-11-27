@@ -69,6 +69,7 @@ export default function Home() {
     const fetchProCourses = async () => {
       try {
         const data = await getProCourses();
+
         setProCourses(data);
       } catch (error) {
         console.error("Failed to fetch pro courses:", error);

@@ -1,32 +1,37 @@
 export interface CoursePro {
   id: string;
-  image: string;
+  thumbnailUrl: string;
   title: string;
+  description?: string;
   price: number;
-  discountPrice?: number;
-  author: string;
-  numberOfPosts: number;
-  totalTime: string;
-  badge: string;
-  heroTitle: string;
-  titleHighlight: string;
-  subtitle: string;
-  subtitleHighlights: {
+  author?: string;
+  creator?: string;
+  numberOfPosts?: number;
+  totalTime?: string;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  sections?: any[];
+  badge?: string;
+  heroTitle?: string;
+  titleHighlight?: string;
+  subtitle?: string;
+  subtitleHighlights?: {
     text: string;
     isHighlight: boolean;
   }[];
-  codePreview: {
+  codePreview?: {
     lines: {
       text: string;
       color: string;
       indent: number;
     }[];
   };
-  stats: {
+  stats?: {
     projects: string;
     exercises: string;
     access: string;
     support: string;
   };
-  learningOutcomes: string[];
+  learningOutcomes?: string[];
 }

@@ -29,7 +29,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
     "#06b6d4",
   ];
 
-  // Globe Animation
+  
   useEffect(() => {
     const canvas = globeCanvasRef.current;
     if (!canvas) return;
@@ -50,7 +50,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
     const drawGlobe = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Outer glow
+      
       const outerGlow = ctx.createRadialGradient(
         centerX,
         centerY,
@@ -66,7 +66,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
       ctx.arc(centerX, centerY, radius + 40, 0, Math.PI * 2);
       ctx.fill();
 
-      // Globe gradient
+      
       const gradient = ctx.createRadialGradient(
         centerX - 60,
         centerY - 60,
@@ -84,7 +84,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Grid lines - Latitude
+      
       ctx.strokeStyle = "rgba(139, 92, 246, 0.4)";
       ctx.lineWidth = 1.5;
       for (let i = -2; i <= 2; i++) {
@@ -98,7 +98,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
         ctx.stroke();
       }
 
-      // Grid lines - Longitude
+      
       for (let i = 0; i < 8; i++) {
         const angle = (i / 8) * Math.PI * 2 + rotation;
         const x = Math.cos(angle);
@@ -120,7 +120,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
         }
       }
 
-      // Connection points
+      
       const points = 30;
       for (let i = 0; i < points; i++) {
         const theta = (i / points) * Math.PI * 2 + rotation;
@@ -171,7 +171,7 @@ const CourseThreadBackground: React.FC<React.PropsWithChildren> = ({
     };
   }, []);
 
-  // Thread Background Animation
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;

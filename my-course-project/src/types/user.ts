@@ -20,7 +20,8 @@ export interface User {
   youtube?: string;
   username?: string;
   role?: string;
-  courses?: CourseFree[]; // Courses directly associated with the user
+  roles?: Array<string | { name: string; description?: string }>; 
+  courses?: CourseFree[]; 
   blogs?: BlogPost[];
 }
 
@@ -72,7 +73,7 @@ export interface DbJson {
   coursesPro: Course[];
   article: Post[];
   trending: TrendingItem[];
-  profile: Information[]; // Assuming profile items are similar to Information
+  profile: Information[]; 
   register: unknown[];
   topVideos: TopVideo[];
 }

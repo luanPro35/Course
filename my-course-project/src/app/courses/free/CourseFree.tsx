@@ -14,6 +14,7 @@ export default function CourseFree() {
     const fetchCourses = async () => {
       try {
         const data = await getAllCourses();
+
         setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -39,7 +40,7 @@ export default function CourseFree() {
         >
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">
             <Image
-              src={course.image}
+              src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
               alt={course.title}
               width={320}
               height={180}
@@ -50,26 +51,10 @@ export default function CourseFree() {
           <div className="p-4 bg-white">
             <h3 className="font-semibold text-gray-800 mb-3">{course.title}</h3>
 
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-              <span className="text-orange-600 font-bold text-lg">
-                {course.free}
-              </span>{" "}
-            </div>
-
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <div className="w-4 h-4 bg-gray-400 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">▶</span>
-                </div>
-                <span>{course.numberOfPosts}</span>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <div className="w-4 h-4 bg-gray-400 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">🕐</span>
-                </div>
-                <span>{course.totalTime}</span>
-              </div>
+            <div className="mb-4">
+              <span className="text-blue-600 font-bold text-lg">
+                Miễn phí
+              </span>
             </div>
           </div>
         </div>

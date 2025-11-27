@@ -1,4 +1,4 @@
-// components/auth/register/RegisterFormFields.tsx
+
 
 import React from "react";
 import { InputField } from "@/components/course/InputField";

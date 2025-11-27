@@ -4,7 +4,7 @@ import { UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
 export async function POST(req: Request) {
   try {
     const data = await req.formData();
-    // *** SỬA LỖI: Thay "avatar" thành "file" để khớp với client ***
+    
     const file: File | null = data.get("file") as unknown as File;
 
     if (!file) {

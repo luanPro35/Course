@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Forward the request to the backend service
+    
     const response = await fetch(`${BASE_URL}?userId=${userId}`, {
       headers: {
         ...(authorization && { Authorization: authorization }),
@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest) {
     const body: Partial<User> = await request.json();
     const authorization = request.headers.get("Authorization");
 
-    // Forward the request to the backend service
+    
     const response = await fetch(`${BASE_URL}/update`, {
       method: "PUT",
       headers: {
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const authorization = request.headers.get("Authorization");
 
-    // Forward the multipart request to the backend service
+    
     const response = await fetch(`${BASE_URL}/update-avatar`, {
       method: "POST",
       headers: {

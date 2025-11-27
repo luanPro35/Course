@@ -6,7 +6,7 @@ import CourseSearch from "../course/CourseSearch";
 import AuthModal from "@/app/auth/AuthModal";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileMenu from "@/components/profile/ProfileMenu";
-import MyCoursesDropdown from "@/components/course/MyCoursesDropdown"; // Import MyCoursesDropdown
+import MyCoursesDropdown from "@/components/course/MyCoursesDropdown"; 
 import {
   FiArrowLeft as ArrowLeft,
   FiMenu,
@@ -16,8 +16,8 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { ROUTES_WITH_BACK_BUTTON } from "@/constants/routes";
-import { courseService } from "@/services/course.service"; // Import courseService
-import { CourseFree } from "@/types/courseFree"; // Import CourseFree type
+import { courseService } from "@/services/course.service"; 
+import { CourseFree } from "@/types/courseFree"; 
 
 interface NavbarProps {
   onLoginClick?: () => void;
@@ -44,7 +44,7 @@ export default function Navbar({
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Check if the current route should have a back button
+  
   const showBackButton = ROUTES_WITH_BACK_BUTTON.some((route) =>
     pathname.startsWith(route)
   );
@@ -84,7 +84,7 @@ export default function Navbar({
 
   useEffect(() => {
     if (user?.id && showMyCoursesDropdown) {
-      console.log("Fetching courses for userId:", user.id); // Log the user ID
+      console.log("Fetching courses for userId:", user.id); 
       const fetchCourses = async () => {
         const courses = await courseService.getMyCourses(user.id);
         setMyCourses(courses);
@@ -116,9 +116,9 @@ export default function Navbar({
 
   return (
     <nav className="flex items-center justify-between px-4 md:px-6 py-3 shadow-md bg-white fixed top-0 left-0 w-full z-40">
-      {/* LOGO + Quay lại / Tiêu đề */}
+      {}
       <div className="flex items-center gap-3">
-        {/* Logo luôn hiển thị */}
+        {}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0">
           <Image
             src="/images/Brand.jpg"
@@ -129,7 +129,7 @@ export default function Navbar({
           />
         </Link>
 
-        {/* Nếu ở route đặc biệt thì hiện "Quay lại", ngược lại thì hiện tiêu đề */}
+        {}
         {showBackButton ? (
           <button
             onClick={() => router.back()}
@@ -145,16 +145,16 @@ export default function Navbar({
         )}
       </div>
 
-      {/* THANH TÌM KIẾM (Desktop) */}
+      {}
       <div className="flex-1 max-w-md mx-6 hidden md:block">
         <CourseSearch onSearch={(query) => console.log(query)} />
       </div>
 
-      {/* USER SECTION (Desktop) */}
+      {}
       <div className="hidden md:flex items-center gap-3">
         {user ? (
           <>
-            {/* Khóa học của tôi dropdown */}
+            {}
             <div className="relative" ref={myCoursesMenuRef}>
               <button
                 onClick={() => setShowMyCoursesDropdown(!showMyCoursesDropdown)}
@@ -187,7 +187,7 @@ export default function Navbar({
                 />
               </div>
 
-              {/* Profile menu thả xuống */}
+              {}
               <div
                 className={`absolute right-0 top-14 transition-all duration-300 ease-out transform origin-top-right z-50 ${
                   showProfile
@@ -200,7 +200,7 @@ export default function Navbar({
             </div>
           </>
         ) : (
-          // Nút đăng ký / đăng nhập
+          
           <div className="flex items-center gap-3">
             <button
               onClick={handleRegisterClick}
@@ -218,7 +218,7 @@ export default function Navbar({
         )}
       </div>
 
-      {/* Mobile Menu Button & User Avatar */}
+      {}
       <div className="md:hidden flex items-center gap-4">
         {user && (
           <div className="relative" ref={mobileProfileMenuRef}>
@@ -254,7 +254,7 @@ export default function Navbar({
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {}
       <div
         ref={mobileMenuRef}
         className={`absolute top-full left-0 w-full bg-white shadow-lg md:hidden transition-all duration-300 ease-out transform z-70 ${
@@ -322,7 +322,7 @@ export default function Navbar({
         )}
       </div>
 
-      {/* Modal đăng nhập / đăng ký */}
+      {}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={onCloseAuthModal}

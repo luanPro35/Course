@@ -2,7 +2,7 @@ import { CourseFree } from "@/types/courseFree";
 import React from "react";
 import { getCourseById } from "@/services/coursesFree.service";
 import RouteLayout from "@/components/layout/RouteLayout";
-import Loading from "@/components/ui/Loading"; // Keep one import for Loading
+import Loading from "@/components/ui/Loading"; 
 import CourseDetailDynamicWrapper from "../CourseDetailDynamicWrapper";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
     id: string;
   }>;
 }
-//Note function
+
 export default async function page({ params }: Props) {
   const { id } = await params;
   const course: CourseFree = await getCourseById(id);

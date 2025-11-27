@@ -1,75 +1,75 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import { DbData } from "../../../types/db";
 import { User } from "@/types/user";
 import { CourseFree } from "@/types/courseFree";
-const dbPath = path.resolve(process.cwd(), "db.json");
+
+
+const BACKEND_API_URL = "http://localhost:8080/project";
+const FREE_COURSES_API = `${BACKEND_API_URL}/courses/published?page=0&size=100&sort=createdAt,desc`;
+const USER_API = `${BACKEND_API_URL}/users`;
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, course }: { userId: string; course: CourseFree } =
-      await req.json();
+    const { searchParams } = req.nextUrl;
+    const userId = searchParams.get("userId");
+    const { courseId } = await req.json();
 
-    if (!userId || !course) {
+    if (!userId || !courseId) {
       return NextResponse.json(
-        { message: "Missing userId or course data" },
+        { message: "Missing userId or courseId" },
         { status: 400 }
       );
     }
 
-    const dbData: DbData = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
-
-    const userIndex = dbData.users.findIndex(
-      (user: User) => user.id === userId
-    );
-
-    if (userIndex === -1) {
+    
+    const userRes = await fetch(`${USER_API}/${userId}`);
+    if (!userRes.ok) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+    const user: User = await userRes.json();
 
-    if (!dbData.users[userIndex].courses) {
-      dbData.users[userIndex].courses = [];
-    }
-
-    const courseExists = dbData.coursesFree.some(
-      (c: CourseFree) => c.id.toString() === course.id.toString()
-    );
-
-    if (!courseExists) {
+    
+    const courseRes = await fetch(`${FREE_COURSES_API}/${courseId}`);
+    if (!courseRes.ok) {
       return NextResponse.json(
-        { message: "Course not found in database" },
+        { message: "Course not found" },
         { status: 404 }
       );
     }
+    const course: CourseFree = await courseRes.json();
 
-    const isCourseAlreadyRegistered = dbData.users[userIndex].courses!.some(
-      (c: CourseFree) => c.id === course.id
-    );
-
-    console.log("isCourseAlreadyRegistered:", isCourseAlreadyRegistered);
-    console.log("Before push, courses:", dbData.users[userIndex].courses);
-
-    if (isCourseAlreadyRegistered) {
-      console.log("Course already registered, returning 409");
-      return NextResponse.json(
-        { message: "Course already registered" },
-        { status: 409 }
+    
+    const userCoursesRes = await fetch(`${USER_API}/${userId}/courses`);
+    if (userCoursesRes.ok) {
+      const userCourses: CourseFree[] = await userCoursesRes.json();
+      const isCourseAlreadyRegistered = userCourses.some(
+        (c: CourseFree) => c.id === courseId
       );
-    } else {
-      dbData.users[userIndex].courses!.push(course); // Push to user's courses array
-      console.log("Course registered successfully");
+
+      if (isCourseAlreadyRegistered) {
+        return NextResponse.json(
+          { message: "Course already registered" },
+          { status: 409 }
+        );
+      }
     }
 
-    console.log("After push, courses:", dbData.users[userIndex].courses);
-    fs.writeFileSync(dbPath, JSON.stringify(dbData, null, 2));
+    
+    const registerRes = await fetch(`${USER_API}/${userId}/courses`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ courseId }),
+    });
+
+    if (!registerRes.ok) {
+      throw new Error("Failed to register course");
+    }
 
     return NextResponse.json(
       { message: "Course registered successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Error registering course:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
@@ -89,28 +89,16 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    let dbData: DbData;
-    try {
-      const fileContent = fs.readFileSync(dbPath, "utf-8");
-      dbData = JSON.parse(fileContent);
-    } catch (parseError) {
-      console.error("Error parsing db.json:", parseError);
-      return NextResponse.json(
-        { message: "Error reading or parsing database" },
-        { status: 500 }
-      );
-    }
-
-    const user = dbData.users.find((user: User) => user.id === userId);
-
-    if (!user) {
-      console.warn(`User with ID ${userId} not found in db.json`);
+    
+    const userRes = await fetch(`${USER_API}/${userId}`);
+    if (!userRes.ok) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    const user: User = await userRes.json();
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    console.error("Unhandled error in GET /api/my-courses:", error);
+    console.error("Error fetching user:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
