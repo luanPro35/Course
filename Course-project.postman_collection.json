@@ -692,7 +692,230 @@
 			"item": [
 				{
 					"name": "Post",
-					"item": []
+					"item": [
+						{
+							"name": "get list post published không cần token Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/published?page=0&size=3&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"published"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "3"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"author\": \"Tan\",\r\n        \"title\": \"a\",\r\n        \"category\": \"cpp\",\r\n        \"thumbnailUrl\": \"https://my-course-webapp-2025.s3.us-east-1.amazonaws.com/1/post-thumbnail/67db7300-3993-4375-bf42-b0a5a3954080-vatly.jpg\",\r\n        \"content\": \"dad\",\r\n        \"fullContent\": \"D\",\r\n        \"statusPost\": \"DRAFT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/update-post/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"update-post",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get post (token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDgyNzAsImlhdCI6MTc2Mzc4OTA3MCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJiNjA1YjI2NC0wYzM1LTRhNmMtODlhOS03YjkwMTIwYzA5ZmIifQ.AlLsNzWJskzPx2zKqbBskZk-oYaDKaPHaqurc8rcw_O73xxK27CYtTu-JHkQsOE82RXMCaNg7jPw4VotJ_kR8A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "created post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDgyNzAsImlhdCI6MTc2Mzc4OTA3MCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJiNjA1YjI2NC0wYzM1LTRhNmMtODlhOS03YjkwMTIwYzA5ZmIifQ.AlLsNzWJskzPx2zKqbBskZk-oYaDKaPHaqurc8rcw_O73xxK27CYtTu-JHkQsOE82RXMCaNg7jPw4VotJ_kR8A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"author\" : \"Tan Loi\",\r\n    \"title\" : \"ccccc\",\r\n    \"category\" : \"react_native\",\r\n    \"content\" : \"cascascascascasc\",\r\n    \"fullContent\" : \"dasddddddddddddddddddddddddddddddddddddd\",\r\n    \"statusPost\" : \"DRAFT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/create-post",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"create-post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gọi api để upload file lên aws và nhậnveef url rồi lấy truyền vào api tạo bài(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "postman-cloud:///1f05e01a-08eb-4290-be75-f4913fecbecf"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/upload-thumbnail",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"upload-thumbnail"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Course",
@@ -974,6 +1197,128 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "get list order(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBFTlJPTExfQ09VUlNFIERFTEVURV9DT1VSU0UgQ1JFQVRFX1BPU1QgVVBMT0FEX0NPVVJTRSBWSUVXX0NPVVJTRSBFRElUX1BPU1QgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwODExMjAsImlhdCI6MTc2MzgyMTkyMCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJlZWU0ZDFlNy04MzY4LTQ1MTEtYmY2Ny0yZDY3ODczMzk4ZTEifQ.d4NkIFJ3hA41OBiENLe9__160IHjt7sZBg8RIMFE8V-QYrwD9Tug-iUYLIMqRCkGkHIBw9LdmflzJK4GZlNANA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/orders?page=0&size=25&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "25"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refund monney(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBFTlJPTExfQ09VUlNFIERFTEVURV9DT1VSU0UgQ1JFQVRFX1BPU1QgVVBMT0FEX0NPVVJTRSBWSUVXX0NPVVJTRSBFRElUX1BPU1QgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwODExMjAsImlhdCI6MTc2MzgyMTkyMCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJlZWU0ZDFlNy04MzY4LTQ1MTEtYmY2Ny0yZDY3ODczMzk4ZTEifQ.d4NkIFJ3hA41OBiENLe9__160IHjt7sZBg8RIMFE8V-QYrwD9Tug-iUYLIMqRCkGkHIBw9LdmflzJK4GZlNANA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/payment/refund/24",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"payment",
+										"refund",
+										"24"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "check order(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFTlJPTExfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCBERUxFVEVfQ09VUlNFIEVESVRfQ09VUlNFIFVQTE9BRF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNzc0NDgsImlhdCI6MTc2MzgxODI0OCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiIwMDI2Mjk1My05ZTRhLTQ0MGMtYjA1My1mMmRjNDA4OTcyYzkifQ.tkUU1bvns7RGNLza6NFS-Sdub52PVuOFBmR7cluUuXuNv4mlyiystUMthikh3-VvL18RZRtA-fIMlNUqmqZpQg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/payment/21/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"payment",
+										"21",
+										"status"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1009,6 +1354,73 @@
 								"enrollments",
 								"free",
 								"18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List course enrollmen (token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgRURJVF9QT1NUIFZJRVdfQ09VUlNFIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UgQ1JFQVRFX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQ0Njg4NTMsImlhdCI6MTc2NDIwOTY1MywiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMjY4NTFhZDQtN2RlMi00ODg5LTlhZTgtMzE1YTc0NDdlYjg3In0.c0vXEH5GHgNRKWSFV1qQKe3vGTsSiTG1qe4wzN0ETmkm_GU5HWcCnPQaHPgPj5Ec5zzQEfSJyS0q8BeDgLwxzA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/enrollments/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"enrollments",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "create payment(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsInNjb3BlIjoiUk9MRV9VU0VSIFZJRVdfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCBERUxFVEVfUE9TVCBFTlJPTExfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzY0MDc0ODgwLCJpYXQiOjE3NjM4MTU2ODAsImVtYWlsIjoibG9uY29uY2F0MDA4QGdtYWlsLmNvbSIsImp0aSI6IjE3OGYwYzcyLWM1MzQtNDUzZi05MjI3LWQ4NzVmZjgyMzBlOSJ9.SdfxPCzAfv4eSG7yP9rAwz5cl6jcbmrThm7OL8AM6XA6by_bon-1-tep2F3H_RehQM22JAF4Pd1xWA2mRtkkxQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/payment/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"payment",
+								"16"
 							]
 						}
 					},
