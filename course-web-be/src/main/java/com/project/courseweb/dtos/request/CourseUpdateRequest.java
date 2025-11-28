@@ -16,4 +16,10 @@ public class CourseUpdateRequest {
     String description;
     String thumbnailUrl;
     BigDecimal price;
+    String badge;
+    String titleHighlight;
+    String subtitle;
+    String subtitleHighlights; 
+    String stats; 
+    String learningOutcomes;
 }

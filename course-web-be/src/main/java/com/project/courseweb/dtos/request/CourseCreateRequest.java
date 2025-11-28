@@ -17,4 +17,10 @@ public class CourseCreateRequest {
     BigDecimal price;
     String thumbnailUrl;
     List<SectionCreateRequest> sections;
+    String badge;
+    String titleHighlight;
+    String subtitle;
+    String subtitleHighlights;
+    String stats;
+    String learningOutcomes;
 }

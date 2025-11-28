@@ -35,7 +35,6 @@ export default function UserCoursesPage() {
     fetchUserCourses();
   }, [user?.id]);
 
-  // === Giao diện hiển thị ===
   if (loading) return <div className="text-center py-10">Đang tải...</div>;
   if (error)
     return <div className="text-center text-red-500 py-10">{error}</div>;
@@ -56,10 +55,9 @@ export default function UserCoursesPage() {
             key={`${course.id}-${index}`}
             className="w-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
-            {/* Hình ảnh */}
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">
               <Image
-                src={course.image}
+                src={course.thumbnailUrl}
                 alt={course.title}
                 width={320}
                 height={180}
@@ -67,7 +65,6 @@ export default function UserCoursesPage() {
               />
             </div>
 
-            {/* Nội dung */}
             <div className="p-4 bg-white">
               <h3 className="font-semibold text-gray-800 mb-3">
                 {course.title}

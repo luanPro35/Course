@@ -5,7 +5,7 @@ import type { Post, LinkPost } from "@/types/post";
 import { linkPosts } from "@/app/(main)/article/page";
 import Image from "next/image";
 
-// Helper functions
+
 export const getPostsByGroup = (
   articles: Post[],
   groupLink: string
@@ -22,7 +22,7 @@ export const getPostsByGroup = (
   );
 };
 
-// Hàm lọc bài viết theo category cụ thể
+
 export const getPostsByCategory = (
   articles: Post[],
   category: string
@@ -30,13 +30,13 @@ export const getPostsByCategory = (
   return articles.filter((article) => article.category === category);
 };
 
-// Hàm lấy tất cả categories unique
+
 export const getAllCategories = (articles: Post[]): string[] => {
   const categories = articles.map((article) => article.category);
   return [...new Set(categories)].filter((cat) => cat !== "");
 };
 
-// Component example usage
+
 export const ArticleList = ({
   articles,
   groupLink,
@@ -75,7 +75,7 @@ export const ArticleList = ({
   );
 };
 
-// Page component
+
 export default function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   return (

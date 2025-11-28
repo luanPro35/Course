@@ -72,7 +72,7 @@ export default function CreateBlogPost() {
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Form Section */}
+            {}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <FormHeader
                 title={pageTitle}
@@ -181,7 +181,7 @@ export default function CreateBlogPost() {
               </div>
             </div>
 
-            {/* Preview Section */}
+            {}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <FormHeader
                 title="Xem trước"

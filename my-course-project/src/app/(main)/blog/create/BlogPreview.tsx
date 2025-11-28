@@ -30,16 +30,16 @@ export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow min-h-64">
-      {/* Header với tên tác giả */}
+      {}
       <div className="flex items-center justify-between mb-4">
         <span className="font-medium text-gray-800">
           {formData.author || "Tên tác giả"}
         </span>
       </div>
 
-      {/* Nội dung chính */}
+      {}
       <div className="flex gap-6">
-        {/* Text bên trái */}
+        {}
         <div className="flex-1">
           <h2 className="text-xl font-bold text-gray-900 mb-3 uppercase">
             {formData.title || "TIÊU ĐỀ BÀI VIẾT SẼ HIỂN THỊ Ở ĐÂY"}
@@ -52,7 +52,7 @@ export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
               "Nội dung đầy đủ của bài viết sẽ hiển thị ở đây..."}
           </p>
 
-          {/* Tags và thông tin */}
+          {}
           <div className="flex items-center gap-3 text-sm text-gray-500">
             {formData.category && (
               <span className="bg-gray-100 px-3 py-1 rounded-full">
@@ -62,7 +62,7 @@ export const BlogPreview = ({ formData, imagePreview }: BlogPreviewProps) => {
           </div>
         </div>
 
-        {/* Hình ảnh bên phải */}
+        {}
         <div className="flex-shrink-0">
           <div className="relative w-52 h-36 rounded-xl overflow-hidden bg-gray-100">
             {formData.image || imagePreview ? (

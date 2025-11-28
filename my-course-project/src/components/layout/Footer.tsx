@@ -184,7 +184,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* --- Bản quyền --- */}
+      {}
       <div className="border-t border-gray-800 relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-gray-400">

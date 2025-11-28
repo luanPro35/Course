@@ -18,6 +18,13 @@ public class CourseResponse {
     String description;
     BigDecimal price;
     String thumbnailUrl;
+    String badge;
+    String titleHighlight;
+    String subtitle;
+    String subtitleHighlights;
+    String stats;
+    String learningOutcomes;
+    
     List<SectionResponse> sections;
     String creator;
     String status;

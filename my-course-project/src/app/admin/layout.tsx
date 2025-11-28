@@ -11,26 +11,53 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, token, loading } = useAuth(); // Destructure loading state
+  const { user, token, loading } = useAuth(); 
   const router = useRouter();
 
   useEffect(() => {
-    // Wait until loading is false before checking auth state
+    
     if (!loading) {
-      console.log("Admin layout check - user:", user, "token:", token, "role:", user?.role);
-      if (!token || user?.role !== "admin") {
-        console.log("Not admin, redirecting to login");
+      const isAdmin = 
+        user?.email === "admin@gmail.com" || 
+        user?.role === "admin" || 
+        user?.role === "ADMIN" ||
+        (Array.isArray(user?.roles) && 
+         user.roles.some((r: any) => 
+           r && (
+             r === "ADMIN" || 
+             r === "admin" || 
+             r?.name === "ADMIN" || 
+             r?.name === "admin"
+           )
+         ));
+
+      if (!token || !isAdmin) {
         router.push("/auth/login");
       }
     }
   }, [user, token, loading, router]);
 
-  // Show loading indicator while checking auth state
+  
   if (loading) {
     return <Loading />;
   }
 
-  if (!token || user?.role !== "admin") {
+  
+  const isAdmin = 
+    user?.email === "admin@gmail.com" || 
+    user?.role === "admin" || 
+    user?.role === "ADMIN" ||
+    (Array.isArray(user?.roles) && 
+     user?.roles.some((r: any) => 
+       r && (
+         r === "ADMIN" || 
+         r === "admin" || 
+         r?.name === "ADMIN" || 
+         r?.name === "admin"
+       )
+     ));
+
+  if (!token || !isAdmin) {
     return <Loading />;
   }
 

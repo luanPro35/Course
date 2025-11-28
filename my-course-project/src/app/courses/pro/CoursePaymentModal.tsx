@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CoursePro } from "@/types/coursePro";
 import Background from "@/components/ui/Background";
-import { PRO_API_URL } from "@/services/api.service";
+import { getCourseByIdURL } from "@/services/api.service";
+
 interface CoursePaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,15 +22,15 @@ export default function CoursePaymentModal({
     const fetchData = async () => {
       if (!courseId) return;
       try {
-        const response = await fetch(`${PRO_API_URL}/${courseId}`);
+        const response = await fetch(getCourseByIdURL(courseId));
         if (!response.ok) {
           throw new Error("Failed to fetch course data");
         }
-        const selectedCourse = await response.json();
-        setCourse(selectedCourse);
+        const result = await response.json();
+        setCourse(result?.data || null);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setCourse(null); // Đặt lại khóa học nếu có lỗi
+        setCourse(null);
       }
     };
 
@@ -61,7 +62,7 @@ export default function CoursePaymentModal({
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center overflow-hidden">
                   <Image
-                    src={course?.image || "/images/default-course.png"}
+                    src={course?.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
                     alt={course?.title || "Course"}
                     width={80}
                     height={80}
@@ -79,7 +80,7 @@ export default function CoursePaymentModal({
                     <span className={item.isHighlight ? "font-bold" : ""}>
                       {item.text}
                     </span>
-                    {index < course?.subtitleHighlights?.length - 1 ? " " : ""}
+                    {index < course!.subtitleHighlights!.length - 1 ? " " : ""}
                   </React.Fragment>
                 ))}
               </div>
@@ -117,14 +118,8 @@ export default function CoursePaymentModal({
                   {course?.title}
                 </h4>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between text-gray-600">
-                    <span>• Giá gốc</span>
-                    <span className="line-through">
-                      {formatPrice(course?.discountPrice || course?.price || 0)}
-                    </span>
-                  </div>
                   <div className="flex justify-between text-gray-900 font-semibold">
-                    <span>• Giá ưu đãi hôm nay</span>
+                    <span>• Giá khóa học</span>
                     <span className="text-orange-600">
                       {formatPrice(course?.price || 0)}
                     </span>

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 const POSTS_PER_PAGE = 5;
 
 interface PostsProps {
-  filterCategories?: string[]; // Nhận categories để lọc
+  filterCategories?: string[]; 
 }
 
 interface ApiPostItem {
@@ -148,7 +148,7 @@ export default function Posts({ filterCategories }: PostsProps) {
         })
       )}
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-center mt-8">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

@@ -19,9 +19,9 @@ export default function UserPurchasesPage() {
   useEffect(() => {
     async function fetchUserPurchases() {
       try {
-        // In a real application, you would fetch from an API endpoint
-        // For this example, we're directly importing db.json
-        const response = await fetch("/db.json"); // Assuming db.json is accessible publicly or via a local API
+        
+        
+        const response = await fetch("/db.json"); 
         if (!response.ok) {
           throw new Error("Failed to fetch db.json");
         }
@@ -39,7 +39,7 @@ export default function UserPurchasesPage() {
 
         const userPurchasesData: { [key: string]: UserPurchase } = {};
 
-        // Process courses directly associated with users (if they have price info)
+        
         db.users.forEach((user) => {
           if (user.courses) {
             user.courses.forEach((course) => {
@@ -63,7 +63,7 @@ export default function UserPurchasesPage() {
           }
         });
 
-        // Process courses from "my-courses" array
+        
         db["my-courses"].forEach((myCourse) => {
           const user = usersMap.get(myCourse.userId);
           const proCourse = proCoursesMap.get(myCourse.course.id.toString());
@@ -77,7 +77,7 @@ export default function UserPurchasesPage() {
                 totalSpent: 0,
               };
             }
-            // Check if the course is already added to avoid duplicates if it's in both user.courses and my-courses
+            
             const isDuplicate = userPurchasesData[
               user.id
             ].purchasedCourses.some((c) => c.title === proCourse.title);

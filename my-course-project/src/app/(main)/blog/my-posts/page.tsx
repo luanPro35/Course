@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BlogService } from "@/services/blog.service"; // Force re-import
+import { BlogService } from "@/services/blog.service"; 
 import { BlogPost } from "@/types/blog.types";
 import { PostItem } from "./PostItem";
 import { useRouter } from "next/navigation";
@@ -81,7 +81,7 @@ export default function MyPosts() {
         </button>
       </div>
 
-      {/* Hiển thị nội dung theo trạng thái */}
+      {}
       {activeContent === "draft" && (
         <section>
           {drafts.length ? (

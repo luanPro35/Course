@@ -35,4 +35,6 @@ public interface CourseService {
     PageResponse<CourseLabelResponse> getCoursesByStatusPublished(Pageable pageable);
 
     Course findCourseById(Long id);
+
+    PageResponse<CourseLabelResponse> getAllCourses(Pageable pageable);
 }

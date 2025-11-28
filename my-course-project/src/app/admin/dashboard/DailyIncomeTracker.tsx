@@ -121,7 +121,7 @@ export default function DailyIncomeTracker() {
           </text>
         </svg>
 
-        {/* Amount labels */}
+        {}
         <div className="flex justify-between items-center px-2 mt-1">
           <div className="text-left">
             <p className="text-xs text-gray-500">Bắt đầu</p>

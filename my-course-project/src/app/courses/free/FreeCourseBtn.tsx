@@ -3,26 +3,26 @@ import { addCoursesToUser } from "@/services/user.service";
 import type { CourseFree } from "@/types/courseFree";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth"; // Import useAuth hook
+import { useAuth } from "@/hooks/useAuth"; 
 
 interface FreeCoursesBtnProps {
-  course: CourseFree; // Only need the course object, not its ID as a prop
+  course: CourseFree; 
 }
 export default function FreeCourseBtn({ course }: FreeCoursesBtnProps) {
-  const { user } = useAuth(); // Get current user from auth context
+  const { user } = useAuth(); 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleRegister = async (course: CourseFree) => {
     if (!user?.id) {
-      alert("Bạn cần đăng nhập để đăng ký khóa học."); // User not logged in
+      alert("Bạn cần đăng nhập để đăng ký khóa học."); 
       return;
     }
 
     setLoading(true);
     try {
-      await addCoursesToUser(user.id, course); // Pass user.id instead of course.id
-      router.refresh(); // Force a refresh of the current route
+      await addCoursesToUser(user.id, course); 
+      router.refresh(); 
       alert("Đăng kí khóa học thành công");
     } catch (error) {
       console.error("Error registering course:", error);

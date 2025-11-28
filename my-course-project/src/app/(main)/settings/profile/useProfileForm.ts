@@ -45,7 +45,7 @@ export function useProfileForm() {
         setLoading(true);
         try {
           const profileData = await getProfile(Number(user.id), token);
-          // Giữ lại email từ user hiện tại vì backend không trả về email
+          
           setUser({
             ...profileData,
             email: user.email,
@@ -82,7 +82,7 @@ export function useProfileForm() {
     setEditingField(null);
   };
 
-  // Hàm xử lý khi người dùng nhập liệu
+  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -105,7 +105,7 @@ export function useProfileForm() {
 
     try {
       const updatedUser = await updateAvatar(Number(user.id), file, token);
-      // Cập nhật user, giữ lại email
+      
       setUser({
         ...updatedUser,
         email: user.email,
@@ -141,13 +141,13 @@ export function useProfileForm() {
 
       const updatedUser = await updateProfile(Number(user.id), payload, token);
 
-      // Cập nhật dữ liệu người dùng trong context, giữ lại email
+      
       setUser({
         ...updatedUser,
         email: user.email,
       });
 
-      // Cập nhật form với toàn bộ dữ liệu từ kết quả API
+      
       setForm({
         name: updatedUser.fullName || "",
         fullName: updatedUser.fullName || "",
@@ -174,7 +174,7 @@ export function useProfileForm() {
     }
   };
 
-  // Hàm xử lý khi submit toàn bộ form
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -190,16 +190,16 @@ export function useProfileForm() {
         email: user.email,
       };
 
-      // 1. Gửi dữ liệu lên server để cập nhật profile
+      
       const updatedUser = await updateProfile(Number(user.id), payload, token);
 
-      // Cập nhật user, giữ lại email
+      
       setUser({
         ...updatedUser,
         email: user.email,
       });
 
-      // Cập nhật form với toàn bộ dữ liệu từ kết quả API
+      
       setForm({
         name: updatedUser.fullName || "",
         fullName: updatedUser.fullName || "",

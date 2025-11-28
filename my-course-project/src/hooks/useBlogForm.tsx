@@ -10,7 +10,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false); // State for image upload
+  const [isUploading, setIsUploading] = useState(false); 
 
   const resetForm = () => {
     setFormData(initialState);
@@ -83,9 +83,9 @@ export const useBlogForm = (initialState: BlogFormData) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
 
-    // Set uploading state
+    
     setIsUploading(true);
-    setErrors((prev) => ({ ...prev, image: undefined })); // Clear previous image error
+    setErrors((prev) => ({ ...prev, image: undefined })); 
 
     const uploadFormData = new FormData();
     uploadFormData.append("file", file);
@@ -107,7 +107,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
         throw new Error(result.error || "Tải ảnh lên thất bại.");
       }
 
-      // On successful upload, update the form data with the REAL path
+      
       setFormData((prev) => ({ ...prev, image: result.path }));
     } catch (error) {
       console.error(error);
@@ -116,7 +116,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
         image: "Lỗi khi tải ảnh lên. Vui lòng thử lại.",
       }));
     } finally {
-      // Unset uploading state
+      
       setIsUploading(false);
     }
   };
@@ -170,7 +170,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
       );
 
       if (postId) {
-        // Update existing post with status
+        
         await BlogService.update(parseInt(postId.toString(), 10), {
           ...formData,
           status,
@@ -181,17 +181,17 @@ export const useBlogForm = (initialState: BlogFormData) => {
           }`
         );
       } else {
-        // Create new post
+        
         await BlogService.create(formData, status);
         alert(
           `Bài viết đã được lưu dưới dạng ${
             status === "draft" ? "bản nháp" : "xuất bản"
           }`
         );
-        resetForm(); // Reset the form after successful creation
+        resetForm(); 
       }
 
-      // Redirect to my-posts page after successful save
+      
       if (router) {
         router.push("/blog/my-posts");
       }
@@ -212,13 +212,13 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setFormData,
     errors,
     isSubmitting,
-    isUploading, // Expose uploading state to the component
+    isUploading, 
     imagePreview,
-    setImagePreview, // Expose setImagePreview
+    setImagePreview, 
     handleChange,
-    handleImageChange, // Use this new handler for the file input
+    handleImageChange, 
     handlePaste,
     handleSubmit,
-    resetForm, // Expose the reset function
+    resetForm, 
   };
 };
