@@ -1,20 +1,19 @@
 package com.project.courseweb.mappers;
 
-import com.project.courseweb.dtos.response.RoleResponse;
-import com.project.courseweb.dtos.response.UserResponse;
 import com.project.courseweb.dtos.request.UserCreateRequest;
+import com.project.courseweb.dtos.response.UserResponse;
 import com.project.courseweb.entities.authentication.Auth;
-import com.project.courseweb.entities.authentication.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AuthMapper {
     @Mapping(target = "fullName", source = "profile.fullName")
+    @Mapping(target = "roles", source = "auth.roles")
     UserResponse toUserResponse(Auth auth);
+
     @Mapping(target = "profile.fullName", source = "fullName")
     @Mapping(target = "passwordHash", source = "passWord")
     Auth toAuth(UserCreateRequest userCreateRequest);
-
-    RoleResponse toRoleResponse(Role role);
+    
 }

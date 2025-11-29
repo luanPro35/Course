@@ -55,10 +55,10 @@ public class AdminController {
         return ApiResponse.ok(this.courseService.updateCourseIngredient(id, request), SuccessCode.UPDATE_COURSE_SUCCESS);
     }
 
-    @PatchMapping("/courses/update/{id}")
-    ApiResponse<CourseResponse> updateCourse(@PathVariable Long id, @RequestBody CourseUpdateRequest request) {
-        return ApiResponse.ok(this.courseService.updateCourseInfo(id, request), SuccessCode.UPDATE_COURSE_SUCCESS);
-    }
+//    @PatchMapping("/courses/update/{id}")
+//    ApiResponse<CourseResponse> updateCourse(@PathVariable Long id, @RequestBody CourseUpdateRequest request) {
+//        return ApiResponse.ok(this.courseService.updateCourseInfo(id, request), SuccessCode.UPDATE_COURSE_SUCCESS);
+//    }
 
     @PatchMapping("/courses/update-status/{id}")
     ApiResponse<CourseResponse> updateStatusCourse(@PathVariable Long id, @RequestParam String status) {

@@ -26,6 +26,12 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+      lecture:
+        pool:
+          max-active: 50
+          max-idle: 10
+          min-idle: 5
+          max-await: 1000ms
   main:
     allow-bean-definition-overriding: true
 jwt:

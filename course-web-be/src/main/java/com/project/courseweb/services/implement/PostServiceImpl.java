@@ -19,6 +19,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,6 +59,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_POST')")
+    @CacheEvict(value = "posts", allEntries = true)
     public PostResponse createPost(PostRequest request) {
         Post post = this.postMapper.toPostEntity(request);
         post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
@@ -74,6 +79,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isPostOwner(#id)")
+    @Cacheable(value = "post", key = "#id")
     public PostResponse getPostById(Long id) {
         return this.toResponse(this.postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND))
@@ -83,6 +89,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_POST') and @postServiceImpl.isPostOwner(#id))")
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", key = "#id")
+    })
     public PostResponse updatePost(Long id, PostRequest request) {
         // var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
         // var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
@@ -101,6 +111,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Cacheable(value = "posts", key = "'published_page_' + #pageable.pageNumber + '_size_' + #pageable.pageSize")
     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
         return this.toPageResponse(posts);
@@ -109,6 +120,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('DELETE_POST') and @postServiceImpl.isPostOwner(#id))")
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", key = "#id")
+    })
     public void deletePost(Long id) {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
