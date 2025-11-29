@@ -39,7 +39,7 @@ export const updateCourseStatusURL = (id: number, status: string) =>
 export const getCoursesByStatusURL = (status: string, page: number, size: number) => 
   `http://localhost:8080/project/admin/courses?status=${status}&page=${page}&size=${size}&sort=createdAt,desc`;
 export const getAllCoursesAdminURL = (page: number, size: number) => 
-  `http://localhost:8080/project/admin/courses?page=${page}&size=${size}&sort=createdAt,desc`;
+  `http://localhost:8080/project/admin/courses/all?page=${page}&size=${size}&sort=createdAt,desc`;
 export const GOOGLE_CLIENT_ID =
   "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
 export const GOOGLE_REDIRECT_URI = "http://localhost:3000/oauth2/callback";

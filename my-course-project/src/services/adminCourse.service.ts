@@ -152,7 +152,7 @@ export async function getCoursesByStatus(
 }
 
 export async function getAllCourses(
-  page: number = 10,
+  page: number = 0,
   size: number = 10
 ): Promise<PaginatedResponse<AdminCourse>> {
   const token = localStorage.getItem("accessToken");

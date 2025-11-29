@@ -13,9 +13,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class CourseIngredientUpdateRequest {
-    String name;
+    String title;
     String description;
     String thumbnailUrl;
     BigDecimal price;
+    String badge;
+    String titleHighlight;
+    String subtitle;
+    String subtitleHighlights;
+    String stats;
+    String learningOutcomes;
     List<SectionCreateRequest> sections;
 }

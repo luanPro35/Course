@@ -40,7 +40,9 @@ export default function Navbar() {
               alt="logo"
               width={100}
               height={50}
+              priority
               className="object-contain cursor-pointer"
+              style={{ height: 'auto' }}
             />
             <h2 className="text-base font-semibold text-black text-center">
               Học Tập Không Giới Hạn

@@ -175,17 +175,26 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
         price: price,
         thumbnailUrl: formData.thumbnailUrl || "/images/PostF8.png",
         sections: sections,
-        ...(formData.badge && { badge: formData.badge }),
-        ...(formData.heroTitle && { heroTitle: formData.heroTitle }),
-        ...(formData.titleHighlight && { titleHighlight: formData.titleHighlight }),
-        ...(formData.subtitle && { subtitle: formData.subtitle }),
-        ...(learningOutcomes.length > 0 && { learningOutcomes: JSON.stringify(learningOutcomes) }),
+        badge: formData.badge,
+        heroTitle: formData.heroTitle,
+        titleHighlight: formData.titleHighlight,
+        subtitle: formData.subtitle,
+        learningOutcomes: JSON.stringify(learningOutcomes),
         status: status,
       };
 
       if (editCourse) {
         await updateCourse(Number(editCourse.id), courseData);
-        setToast({ message: "Cập nhật khóa học thành công!", type: "success" });
+        await updateCourseStatus(
+          Number(editCourse.id), 
+          status === "DRAFT" ? CourseStatus.DRAFT : CourseStatus.PUBLISHED
+        );
+        setToast({ 
+          message: status === "DRAFT" 
+            ? "Cập nhật và chuyển về nháp thành công!" 
+            : "Cập nhật và công khai khóa học thành công!", 
+          type: "success" 
+        });
       } else {
         const createdCourse = await createCourse(courseData);
         if (status === "PUBLISHED" && createdCourse?.id) {
@@ -524,11 +533,7 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
             className="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-            {loading
-              ? "Đang xử lý..."
-              : editCourse
-              ? "Cập nhật khóa học"
-              : "💾 Lưu nháp"}
+            {loading ? "Đang xử lý..." : editCourse ? "💾 Lưu nháp" : "💾 Lưu nháp"}
           </button>
           
           <button
@@ -538,11 +543,7 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
             className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
           >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-            {loading
-              ? "Đang xử lý..."
-              : editCourse
-              ? "Cập nhật khóa học"
-              : "🚀 Công khai ngay"}
+            {loading ? "Đang xử lý..." : editCourse ? "🚀 Công khai" : "🚀 Công khai ngay"}
           </button>
         </div>
       </form>
