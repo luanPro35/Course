@@ -1,5 +1,6 @@
 package com.project.courseweb.dtos;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;

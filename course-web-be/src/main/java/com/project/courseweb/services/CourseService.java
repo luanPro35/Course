@@ -18,7 +18,7 @@ public interface CourseService {
 
     FileResponse uploadCourseThumbnail(MultipartFile file);
 
-    CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request);
+//    CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request);
 
     CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request);
 
@@ -35,6 +35,4 @@ public interface CourseService {
     PageResponse<CourseLabelResponse> getCoursesByStatusPublished(Pageable pageable);
 
     Course findCourseById(Long id);
-
-    PageResponse<CourseLabelResponse> getAllCourses(Pageable pageable);
 }

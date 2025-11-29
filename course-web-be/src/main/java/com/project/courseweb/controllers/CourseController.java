@@ -8,6 +8,7 @@ import com.project.courseweb.enums.SuccessCode;
 import com.project.courseweb.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/courses")
+@Slf4j
 public class CourseController {
     CourseService courseService;
 
@@ -28,6 +30,7 @@ public class CourseController {
 
     @GetMapping("/published")
     ApiResponse<PageResponse<CourseLabelResponse>> getCoursesPublish(Pageable pageable) {
+        log.info("getCoursesPublish");
         return ApiResponse.ok(this.courseService.getCoursesByStatusPublished(pageable), SuccessCode.GET_COURSES_SUCCESS);
     }
 }

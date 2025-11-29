@@ -1,6 +1,7 @@
 package com.project.courseweb.dtos.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,6 +20,7 @@ public class OrderResponse {
     String status;
     String paymentGateway;
     String payDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdAt;
 
     // Thông tin người mua

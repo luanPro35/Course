@@ -17,6 +17,9 @@ import com.project.courseweb.services.CourseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,8 +45,9 @@ public class CourseServiceImpl implements CourseService {
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPLOAD_COURSE')")
     @Transactional
     @Override
+    //default course status is DRAFT
     public CourseResponse createCourse(CourseCreateRequest request) {
-        //1. Created obj Course
+        //1. created obj Course
         var course = this.courseMapper.toEntity(request);
         course.setSections(new ArrayList<>());
         var profile = this.profileService.getProfileById(profileService.getId());
@@ -76,27 +80,31 @@ public class CourseServiceImpl implements CourseService {
         return FileResponse.builder()
                 .url(
                         this.fileUploadAWSService.uploadFile(
-                                        this.profileService.getProfileById(this.profileService.getId()),
-                                        "course-thumbnail",
-                                        file
-                ))
+                                this.profileService.getProfileById(this.profileService.getId()),
+                                "course-thumbnail",
+                                file
+                        ))
                 .build();
     }
 
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
-    public CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request) {
-        var course = courseRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
-        courseMapper.updateCourse(course, request);
-        return courseMapper.toResponse(courseRepository.save(course));
-    }
+//    @Override
+//    @Transactional
+//    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+//    public CourseResponse updateCourseInfo(Long id, CourseUpdateRequest request) {
+//        var course = courseRepository.findById(id)
+//                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+//        courseMapper.updateCourse(course, request);
+//        return courseMapper.toResponse(courseRepository.save(course));
+//    }
 
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+    @Caching(evict = {
+        @CacheEvict(value = "courses", allEntries = true),
+        @CacheEvict(value = "course", key = "#id")
+    })
     public CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request) {
         //
         var course = courseRepository.findById(id)
@@ -126,6 +134,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
+    @Caching(evict = {
+            @CacheEvict(value = "courses", allEntries = true),
+            @CacheEvict(value = "course", key = "#id")
+    })
     public CourseResponse updateStatusCourse(Long id, String status) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
@@ -149,6 +161,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Cacheable(value = "course", key = "#id")
     public CourseResponse getPublishedCourseById(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
@@ -160,6 +173,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('DELETE_COURSE') and @courseServiceImpl.isOwn(#id))")
+    @Caching(evict = {
+            @CacheEvict(value = "courses", allEntries = true),
+            @CacheEvict(value = "course", key = "#id")
+    })
     public void deleteCourse(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
@@ -167,6 +184,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Cacheable(value = "courses", key = "'published_page_' + #pageable.pageNumber + '_size_' + #pageable.pageSize")
     public PageResponse<CourseLabelResponse> getCoursesByStatusPublished(Pageable pageable) {
         Page<Course> courses = this.courseRepository.getCoursesByStatus(CourseStatus.PUBLISHED, pageable);
         return this.toPageResponse(courses);
@@ -176,14 +194,6 @@ public class CourseServiceImpl implements CourseService {
     public Course findCourseById(Long id) {
         return this.courseRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
     }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<CourseLabelResponse> getAllCourses(Pageable pageable) {
-        Page<Course> courses = courseRepository.findAll(pageable);
-        return this.toPageResponse(courses);
-    }
-
 
     public boolean isOwn(Long id) {
         var profileId = SecurityContextHolder.getContext().getAuthentication().getName();
