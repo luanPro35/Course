@@ -1,8 +1,9 @@
-package com.project.courseweb.repositories.https;
+package com.project.courseweb.httpsClients;
 
 import com.project.courseweb.dtos.response.VnPayQueryDrResponse;
 import com.project.courseweb.dtos.response.VnPayRefundResponse;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.PostExchange;

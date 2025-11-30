@@ -1,5 +1,8 @@
 package com.project.courseweb.services.implement;
 
+import com.project.courseweb.dtos.https.brevo.EmailRequest;
+import com.project.courseweb.dtos.https.brevo.Recipient;
+import com.project.courseweb.dtos.https.brevo.SendEmailRequest;
 import com.project.courseweb.dtos.request.*;
 import com.project.courseweb.dtos.response.AuthenticatedResponse;
 import com.project.courseweb.dtos.response.IntrospectTokenResponse;
@@ -15,21 +18,21 @@ import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.mappers.AuthMapper;
 import com.project.courseweb.repositories.AuthRepository;
 import com.project.courseweb.repositories.RefreshTokenRepository;
-import com.project.courseweb.repositories.https.GoogleOauth2Client;
-import com.project.courseweb.repositories.https.GoogleUserInfoClient;
-import com.project.courseweb.services.AuthService;
-import com.project.courseweb.services.JwtService;
-import com.project.courseweb.services.RedisService;
-import com.project.courseweb.services.RoleService;
+import com.project.courseweb.httpsClients.GoogleOauth2Client;
+import com.project.courseweb.httpsClients.GoogleUserInfoClient;
+import com.project.courseweb.services.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -59,7 +62,9 @@ public class AuthServiceImpl implements AuthService {
     @NonFinal
     @Value("${google.redirect-uri}")
     String redirectUrl;
+    NotificationService notificationService;
 
+    @Transactional
     @Override
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
         this.checkEmailPhone(userCreateRequest.getEmail(), userCreateRequest.getPhone());
@@ -69,8 +74,11 @@ public class AuthServiceImpl implements AuthService {
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.getRoleByName(Roles.USER.name()));
         auth.setRoles(roles);
-        authRepository.save(auth);
-        return authMapper.toUserResponse(auth);
+        var response = authRepository.save(auth);
+
+        String userName = auth.getProfile().getFullName();
+        this.notificationService.sendWelcomeEmail(auth.getEmail(), userName);
+        return authMapper.toUserResponse(response);
     }
 
     @Override

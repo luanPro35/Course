@@ -8,11 +8,9 @@ import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.OrderStatus;
 import com.project.courseweb.exceptions.AppException;
 import com.project.courseweb.repositories.OrderRepository;
-import com.project.courseweb.repositories.https.VnPayClient;
-import com.project.courseweb.services.CourseService;
-import com.project.courseweb.services.EnrollmentService;
-import com.project.courseweb.services.ProfileService;
-import com.project.courseweb.services.VnPayService;
+import com.project.courseweb.httpsClients.VnPayClient;
+import com.project.courseweb.services.*;
+import com.project.notification.PaymentSuccessEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +40,7 @@ public class VnPayServiceImpl implements VnPayService {
 
     VnPayClient vnPayClient;
 
+    NotificationService notificationService;
     @Override
     @Transactional
     public CreatePaymentResponse createPayment(Long id, HttpServletRequest httpServletRequest) {
@@ -126,6 +125,16 @@ public class VnPayServiceImpl implements VnPayService {
                 enrollmentService.enrollInCourseVip(order.getCourse(), order.getProfile());
                 order.setStatus(OrderStatus.FULFILLED);
                 this.orderRepository.save(order);
+
+                //send email
+                notificationService.sendPaymentSuccessEmail(
+                        PaymentSuccessEvent.builder()
+                                .email(order.getProfile().getAuth().getEmail())
+                                .fullName(order.getProfile().getFullName())
+                                .courseName(order.getCourse().getTitle())
+                                .orderRef(order.getOrderRef())
+                                .build()
+                );
             } catch (Exception e) {
                 log.error("Enrollment failed: {}", e.getMessage());
             }

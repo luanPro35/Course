@@ -32,6 +32,18 @@ spring:
           max-idle: 10
           min-idle: 5
           max-await: 1000ms
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      auto-offset-reset: earliest
+      group-id: course-web-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
   main:
     allow-bean-definition-overriding: true
 jwt:
@@ -57,3 +69,11 @@ vnpay:
   url: ${VNPAY_URL}
   returnUrl: ${VNPAY_RETURNURL}
   apiUrl: ${VNPAY_APIURL}
+
+notification:
+  email:
+    url: ${BREVO_URL}
+    api-key: ${BREVO_API_KEY}
+  sender:
+    name: ${SENDER_NAME}
+    email: ${SENDER_EMAIL}

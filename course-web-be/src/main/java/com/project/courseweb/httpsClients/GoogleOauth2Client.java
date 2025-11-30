@@ -1,4 +1,4 @@
-package com.project.courseweb.repositories.https;
+package com.project.courseweb.httpsClients;
 
 import com.project.courseweb.dtos.request.ExchangeTokenRequest;
 import com.project.courseweb.dtos.response.ExchangeTokenResponse;

@@ -1,4 +1,4 @@
-package com.project.courseweb.repositories.https;
+package com.project.courseweb.httpsClients;
 
 import com.project.courseweb.dtos.response.GoogleInfoUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
