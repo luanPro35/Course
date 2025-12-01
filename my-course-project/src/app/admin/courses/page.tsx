@@ -49,6 +49,7 @@ export default function CoursesPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const showToast = (message: string, type: Toast["type"] = "success") => {
     const id = Date.now();
@@ -191,8 +192,48 @@ export default function CoursesPage() {
 
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Danh sách khóa học</h2>
-          <p className="text-sm text-gray-600 mt-1">Quản lý và chỉnh sửa khóa học của bạn</p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Danh sách khóa học</h2>
+              <p className="text-sm text-gray-600 mt-1">Quản lý và chỉnh sửa khóa học của bạn</p>
+            </div>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="mt-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên khóa học hoặc ID..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
         
         <div className="border-b border-gray-200 bg-white">
@@ -244,10 +285,18 @@ export default function CoursesPage() {
             <tbody className="bg-white divide-y divide-gray-100"> 
               {courses
                 .filter(course => {
-                  if (activeFilter === "all") return true;
-                  if (activeFilter === "published") return course.status === "PUBLISHED";
-                  if (activeFilter === "draft") return course.status === "DRAFT";
-                  return true;
+                  const statusMatch = 
+                    activeFilter === "all" ? true :
+                    activeFilter === "published" ? course.status === "PUBLISHED" :
+                    activeFilter === "draft" ? course.status === "DRAFT" :
+                    true;
+                  
+                  const searchMatch = 
+                    searchQuery === "" ||
+                    course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    String(course.id).toLowerCase().includes(searchQuery.toLowerCase());
+                  
+                  return statusMatch && searchMatch;
                 })
                 .map((course) => (
                 <tr key={course.id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 transition-all group">
@@ -256,7 +305,7 @@ export default function CoursesPage() {
                       <div className="h-12 w-12 flex-shrink-0 relative rounded-lg overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                         <Image
                           src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
-                          alt={course.title}
+                          alt={course.title || "Course Image"}
                           fill
                           className="object-cover"
                           sizes="48px"
@@ -341,24 +390,34 @@ export default function CoursesPage() {
         </div>
 
         {courses.filter(course => {
-          if (activeFilter === "all") return true;
-          if (activeFilter === "published") return course.status === "PUBLISHED";
-          if (activeFilter === "draft") return course.status === "DRAFT";
-          return true;
+          const statusMatch = 
+            activeFilter === "all" ? true :
+            activeFilter === "published" ? course.status === "PUBLISHED" :
+            activeFilter === "draft" ? course.status === "DRAFT" :
+            true;
+          
+          const searchMatch = 
+            searchQuery === "" ||
+            course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            String(course.id).toLowerCase().includes(searchQuery.toLowerCase());
+          
+          return statusMatch && searchMatch;
         }).length === 0 && (
           <div className="text-center py-16">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
               <BookOpen className="w-8 h-8 text-gray-400" />
             </div>
             <p className="text-gray-500 text-lg font-medium">
-              {activeFilter === "all" && "Chưa có khóa học nào"}
-              {activeFilter === "published" && "Chưa có khóa học công khai"}
-              {activeFilter === "draft" && "Chưa có bản nháp"}
+              {searchQuery !== "" && "Không tìm thấy khóa học nào"}
+              {searchQuery === "" && activeFilter === "all" && "Chưa có khóa học nào"}
+              {searchQuery === "" && activeFilter === "published" && "Chưa có khóa học công khai"}
+              {searchQuery === "" && activeFilter === "draft" && "Chưa có bản nháp"}
             </p>
             <p className="text-gray-400 text-sm mt-1">
-              {activeFilter === "all" && "Tạo khóa học đầu tiên của bạn"}
-              {activeFilter === "published" && "Xuất bản khóa học để hiển thị ở đây"}
-              {activeFilter === "draft" && "Tạo bản nháp mới hoặc chuyển khóa học về nháp"}
+              {searchQuery !== "" && "Thử tìm kiếm với từ khóa khác"}
+              {searchQuery === "" && activeFilter === "all" && "Tạo khóa học đầu tiên của bạn"}
+              {searchQuery === "" && activeFilter === "published" && "Xuất bản khóa học để hiển thị ở đây"}
+              {searchQuery === "" && activeFilter === "draft" && "Tạo bản nháp mới hoặc chuyển khóa học về nháp"}
             </p>
           </div>
         )}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import type { CoursePro } from "@/types/coursePro";
 import Link from "next/link";
@@ -9,6 +9,15 @@ interface CourseProProps {
 }
 
 export default function CoursePro({ course }: CourseProProps) {
+  const [imgSrc, setImgSrc] = useState<string>(
+    course.thumbnailUrl && 
+    course.thumbnailUrl.trim() !== "" && 
+    !course.thumbnailUrl.startsWith("data:image") && 
+    course.thumbnailUrl !== "/default-course.jpg" 
+      ? course.thumbnailUrl 
+      : "/images/PostF8.png"
+  );
+
   return (
     <Link
       href={`/courses/pro/${course.id}`}
@@ -17,14 +26,13 @@ export default function CoursePro({ course }: CourseProProps) {
     >
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">
         <Image
-          src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
+          src={imgSrc}
           alt={course.title}
           width={320}
           height={180}
           className="w-full h-40 object-cover"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = "/images/PostF8.png";
+          onError={() => {
+            setImgSrc("/images/PostF8.png");
           }}
         />
 

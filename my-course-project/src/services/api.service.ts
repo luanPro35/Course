@@ -34,6 +34,12 @@ export const updateCourseStatusURL = (id: number, status: string) =>
 export const createPayment = "http://localhost:8080/project/payment/16";
 export const enrollFreeCourse = "http://localhost:8080/project/enrollments/free/18";
 export const enrollCourse = "http://localhost:8080/project/enrollments/courses";
+export const getListOrderURL = (page: number, size: number) =>
+  `http://localhost:8080/project/admin/orders?page=${page}&size=${size}&sort=createdAt,desc`;
+export const refundMoneyURL = (orderId: number) =>
+  `http://localhost:8080/project/payment/refund/${orderId}`;
+export const checkOrderURL = (orderId: number) =>
+  `http://localhost:8080/project/payment/${orderId}/status`;
 export const getCoursesByStatusURL = (
   status: string,
   page: number,
@@ -41,7 +47,7 @@ export const getCoursesByStatusURL = (
 ) =>
   `http://localhost:8080/project/admin/courses?status=${status}&page=${page}&size=${size}&sort=createdAt,desc`;
 export const getAllCoursesAdminURL = (page: number, size: number) =>
-  `http://localhost:8080/project/admin/courses/all?page=${page}&size=${size}&sort=createdAt,desc`;
+  `http://localhost:8080/project/admin/courses?page=${page}&size=${size}&sort=createdAt,desc`;
 export const GOOGLE_CLIENT_ID =
   "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
 export const GOOGLE_REDIRECT_URI = "http://localhost:3000/oauth2/callback";

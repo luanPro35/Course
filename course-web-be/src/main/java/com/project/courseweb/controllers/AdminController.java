@@ -70,11 +70,6 @@ public class AdminController {
         return ApiResponse.ok(this.courseService.getCoursesByStatus(status, pageable), SuccessCode.GET_COURSES_SUCCESS);
     }
 
-//    @GetMapping("/courses/all")
-//    ApiResponse<PageResponse<CourseLabelResponse>> getAllCourses(Pageable pageable) {
-//        return ApiResponse.ok(this.courseService.getAllCourses(pageable), SuccessCode.GET_COURSES_SUCCESS);
-//    }
-
     @GetMapping("/orders")
     ApiResponse<PageResponse<OrderResponse>> getOrdersByStatus(Pageable pageable) {
         return ApiResponse.ok(this.orderService.getAllOrders(pageable), SuccessCode.GET_ORDERS_SUCCESS);

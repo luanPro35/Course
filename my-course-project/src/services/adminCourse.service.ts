@@ -156,31 +156,61 @@ export async function getAllCourses(
   size: number = 10
 ): Promise<PaginatedResponse<AdminCourse>> {
   const token = localStorage.getItem("accessToken");
-  const url = getAllCoursesAdminURL(page, size);
+  
+  const url = getCoursesByStatusURL("PUBLISHED", page, size);
   
   console.log("Fetching all courses from:", url);
   
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const [publishedResponse, draftResponse] = await Promise.all([
+      fetch(getCoursesByStatusURL("PUBLISHED", 0, 100), {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      fetch(getCoursesByStatusURL("DRAFT", 0, 100), {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    ]);
 
-  if (!response.ok) {
-    let errorMessage = `Failed to fetch courses (${response.status})`;
-    try {
-      const error = await response.json();
-      console.error("Backend error response:", error);
-      errorMessage = error.message || errorMessage;
-    } catch (e) {
-      const text = await response.text();
-      console.error("Backend error text:", text);
+    if (!publishedResponse.ok || !draftResponse.ok) {
+      let errorMessage = `Failed to fetch courses`;
+      try {
+        const error = await (publishedResponse.ok ? draftResponse : publishedResponse).json();
+        console.error("Backend error response:", error);
+        errorMessage = error.message || errorMessage;
+      } catch (e) {
+        console.error("Error parsing response");
+      }
+      throw new Error(errorMessage);
     }
-    throw new Error(errorMessage);
-  }
 
-  const result: ApiResponse<PaginatedResponse<AdminCourse>> =
-    await response.json();
-  return result.data;
+    const publishedResult: ApiResponse<PaginatedResponse<AdminCourse>> = await publishedResponse.json();
+    const draftResult: ApiResponse<PaginatedResponse<AdminCourse>> = await draftResponse.json();
+
+    const allCourses = [
+      ...publishedResult.data.content,
+      ...draftResult.data.content,
+    ];
+
+    const startIndex = page * size;
+    const endIndex = startIndex + size;
+    const paginatedCourses = allCourses.slice(startIndex, endIndex);
+
+    return {
+      content: paginatedCourses,
+      totalPages: Math.ceil(allCourses.length / size),
+      totalElements: allCourses.length,
+      pageSize: size,
+      pageNo: page,
+      last: page >= Math.ceil(allCourses.length / size) - 1,
+    };
+  } catch (error) {
+    console.error("Error fetching all courses:", error);
+    throw error;
+  }
 }

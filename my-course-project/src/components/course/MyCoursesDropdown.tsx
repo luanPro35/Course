@@ -35,7 +35,7 @@ export default function MyCoursesDropdown({ courses }: MyCoursesDropdownProps) {
               <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                 <Image
                   src={course.thumbnailUrl || "/images/Introductory.png"}
-                  alt={course.title}
+                  alt={course.title || "Course Image"}
                   width={64}
                   height={64}
                   className="object-cover w-full h-full"

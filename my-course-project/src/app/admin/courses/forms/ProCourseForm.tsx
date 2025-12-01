@@ -533,7 +533,7 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
             className="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-            {loading ? "Đang xử lý..." : editCourse ? "💾 Lưu nháp" : "💾 Lưu nháp"}
+            {loading ? "Đang xử lý..." : editCourse ? "💾 Cập nhật nháp" : "💾 Lưu nháp"}
           </button>
           
           <button
@@ -543,7 +543,7 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
             className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
           >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-            {loading ? "Đang xử lý..." : editCourse ? "🚀 Công khai" : "🚀 Công khai ngay"}
+            {loading ? "Đang xử lý..." : editCourse ? "🚀 Cập nhật & Công khai" : "🚀 Công khai ngay"}
           </button>
         </div>
       </form>

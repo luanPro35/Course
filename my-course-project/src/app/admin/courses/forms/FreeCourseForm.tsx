@@ -368,7 +368,7 @@ export default function FreeCourseForm({
             {loading
               ? "Đang xử lý..."
               : editCourse
-              ? "Cập nhật khóa học"
+              ? "💾 Cập nhật nháp"
               : "💾 Lưu nháp"}
           </button>
           
@@ -382,7 +382,7 @@ export default function FreeCourseForm({
             {loading
               ? "Đang xử lý..."
               : editCourse
-              ? "Cập nhật khóa học"
+              ? "🚀 Cập nhật & Công khai"
               : "🚀 Công khai ngay"}
           </button>
         </div>

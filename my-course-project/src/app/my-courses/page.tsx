@@ -31,9 +31,20 @@ export default function MyCoursesPage() {
       const data = await getEnrolledCourses(token, currentPage, 12);
       setCourses(data.content);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error fetching enrolled courses:", err);
-      setError(err.message || "Không thể tải danh sách khóa học");
+      
+      let errorMessage = "Không thể tải danh sách khóa học";
+      
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === "string") {
+        errorMessage = err;
+      } else if (err && typeof err === "object" && "message" in err) {
+        errorMessage = String(err.message);
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -91,7 +102,7 @@ export default function MyCoursesPage() {
                   <div className="relative h-48">
                     <Image
                       src={course.thumbnailUrl || "/images/PostF8.png"}
-                      alt={course.title}
+                      alt={course.title || "Course Image"}
                       fill
                       className="object-cover"
                     />
