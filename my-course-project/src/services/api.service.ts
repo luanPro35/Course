@@ -1,16 +1,10 @@
-export const USER_API_URL = "http://localhost:8080/project"; 
-
-
-
-
-
-
+export const USER_API_URL = "http://localhost:8080/project";
 export const PROFILE_API_URL = "http://localhost:8080/project/profile/update";
 export const PROFILE_GET_API_URL = "http://localhost:8080/project/profile";
 export const AVATAR_API_URL =
   "http://localhost:8080/project/profile/update-avatar";
 
-export const PRO_API_URL = 
+export const PRO_API_URL =
   "http://localhost:8080/project/courses/published?page=0&size=100&sort=createdAt,desc";
 export const FREE_API_URL =
   "http://localhost:8080/project/courses/published?page=0&size=3&sort=createdAt,desc";
@@ -27,18 +21,26 @@ export const getMyPostsURL = (status: string, page: number, size: number) =>
 export const getPostByIdURL = (id: string | number) =>
   `http://localhost:8080/project/posts/${id}`;
 
-export const CREATE_COURSE_URL = "http://localhost:8080/project/admin/courses/create";
-export const getCourseByAdminIdURL = (id: number) => 
+export const CREATE_COURSE_URL =
+  "http://localhost:8080/project/admin/courses/create";
+export const getCourseByAdminIdURL = (id: number) =>
   `http://localhost:8080/project/admin/courses/get/${id}`;
-export const updateCourseByAdminURL = (id: number) => 
+export const updateCourseByAdminURL = (id: number) =>
   `http://localhost:8080/project/admin/courses/update/${id}`;
-export const deleteCourseByAdminURL = (id: number) => 
+export const deleteCourseByAdminURL = (id: number) =>
   `http://localhost:8080/project/admin/courses/delete/${id}`;
-export const updateCourseStatusURL = (id: number, status: string) => 
+export const updateCourseStatusURL = (id: number, status: string) =>
   `http://localhost:8080/project/admin/courses/update-status/${id}?status=${status}`;
-export const getCoursesByStatusURL = (status: string, page: number, size: number) => 
+export const createPayment = "http://localhost:8080/project/payment/16";
+export const enrollFreeCourse = "http://localhost:8080/project/enrollments/free/18";
+export const enrollCourse = "http://localhost:8080/project/enrollments/courses";
+export const getCoursesByStatusURL = (
+  status: string,
+  page: number,
+  size: number
+) =>
   `http://localhost:8080/project/admin/courses?status=${status}&page=${page}&size=${size}&sort=createdAt,desc`;
-export const getAllCoursesAdminURL = (page: number, size: number) => 
+export const getAllCoursesAdminURL = (page: number, size: number) =>
   `http://localhost:8080/project/admin/courses/all?page=${page}&size=${size}&sort=createdAt,desc`;
 export const GOOGLE_CLIENT_ID =
   "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
