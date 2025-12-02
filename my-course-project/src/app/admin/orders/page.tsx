@@ -33,15 +33,7 @@ export default function AdminOrdersPage() {
     setError(null);
 
     try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        setError("Vui lòng đăng nhập để xem đơn hàng");
-        setLoading(false);
-        return;
-      }
-
-      const data = await getAllOrders(token, currentPage, 25);
+      const data = await getAllOrders(currentPage, 25);
       
       const { getCourseById } = await import("@/services/adminCourse.service");
       
@@ -84,10 +76,7 @@ export default function AdminOrdersPage() {
 
     setActionLoading(true);
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("Không tìm thấy token");
-
-      await refundOrder(selectedOrder.id, token);
+      await refundOrder(selectedOrder.id);
       alert("Hoàn tiền thành công!");
       setShowRefundModal(false);
       fetchOrders(); // Refresh list
@@ -112,10 +101,7 @@ export default function AdminOrdersPage() {
     setShowStatusModal(true);
 
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("Không tìm thấy token");
-
-      const status = await checkOrderStatus(order.id, token);
+      const status = await checkOrderStatus(order.id);
       setOrderStatus(status);
     } catch (err) {
       let errorMessage = "Không thể kiểm tra trạng thái";
@@ -144,12 +130,14 @@ export default function AdminOrdersPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "COMPLETED":
+      case "FULFILLED":
         return "bg-green-100 text-green-800";
+      case "PAID":
+        return "bg-blue-100 text-blue-800";
       case "PENDING":
         return "bg-yellow-100 text-yellow-800";
-      case "REFUNDED":
-        return "bg-blue-100 text-blue-800";
+      case "REFUND":
+        return "bg-purple-100 text-purple-800";
       case "FAILED":
         return "bg-red-100 text-red-800";
       default:
@@ -159,11 +147,13 @@ export default function AdminOrdersPage() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "COMPLETED":
+      case "FULFILLED":
         return "Hoàn thành";
+      case "PAID":
+        return "Đã thanh toán";
       case "PENDING":
         return "Đang xử lý";
-      case "REFUNDED":
+      case "REFUND":
         return "Đã hoàn tiền";
       case "FAILED":
         return "Thất bại";
@@ -222,8 +212,9 @@ export default function AdminOrdersPage() {
               >
                 <option value="ALL">Tất cả</option>
                 <option value="PENDING">Đang xử lý</option>
-                <option value="COMPLETED">Hoàn thành</option>
-                <option value="REFUNDED">Đã hoàn tiền</option>
+                <option value="PAID">Đã thanh toán</option>
+                <option value="FULFILLED">Hoàn thành</option>
+                <option value="REFUND">Đã hoàn tiền</option>
                 <option value="FAILED">Thất bại</option>
               </select>
             </div>
@@ -339,7 +330,7 @@ export default function AdminOrdersPage() {
                           >
                             Kiểm tra
                           </button>
-                          {order.status === "COMPLETED" && (
+                          {order.status === "FULFILLED" && (
                             <button
                               onClick={() => {
                                 setSelectedOrder(order);

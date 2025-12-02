@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
-
-
-
-
-
 export async function GET() {
   return NextResponse.json(
     { error: "Blog feature is not available - backend endpoint missing" },
-    { status: 501 } 
+    { status: 501 }
   );
 }
 

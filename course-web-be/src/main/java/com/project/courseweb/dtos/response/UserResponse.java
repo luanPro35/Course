@@ -3,6 +3,8 @@ package com.project.courseweb.dtos.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -11,9 +13,12 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    String id;
+    Long id;
     String fullName;
     String email;
     String phone;
-    Set<RoleResponse> roles;
+    String avatar;
+    LocalDateTime createdAt;
+    Set<String> roles;
+    List<CourseEnrollmentResponse> enrolledCourses;
 }

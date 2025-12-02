@@ -125,6 +125,7 @@ const Footer: React.FC = () => {
                 height={48}
                 className="w-40 h-auto object-contain brightness-110 drop-shadow-[0_2px_6px_rgba(255,255,255,0.2)]"
                 priority
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
             <p className="text-gray-400 text-sm mb-4">

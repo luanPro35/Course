@@ -10,4 +10,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByIdAndCreatorId(Long id, Long creatorId);
 
     Page<Course> getCoursesByStatus(CourseStatus status, Pageable pageable);
+    
+    long countByStatus(CourseStatus status);
 }

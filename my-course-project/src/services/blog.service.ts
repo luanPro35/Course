@@ -52,16 +52,46 @@ export class BlogService {
 
   static async getAll(): Promise<BlogPost[]> {
     try {
+      // Use the Public endpoint to get PUBLISHED posts only
+      const { getPublishedArticlesURL } = await import("@/services/api.service");
       
-      const [drafts, published] = await Promise.all([
-        this.getMyPostsByStatus("DRAFT"),
-        this.getMyPostsByStatus("PUBLISHED"),
-      ]);
+      // Public endpoint doesn't need token
+      const response = await fetch(getPublishedArticlesURL(0, 100), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      return [...drafts, ...published];
+      if (!response.ok) {
+        console.error("Error fetching published posts:", response.status);
+        return [];
+      }
+
+      const result = await response.json();
+      const rawList = result?.data?.content ?? result?.data ?? [];
+      
+      return (Array.isArray(rawList) ? rawList : []).map((post: BlogPost) => {
+        const normalizedStatus = String(
+          post.statusPost ?? post.status ?? "draft"
+        ).toLowerCase() as BlogStatus;
+
+        return {
+          id: post.id,
+          author: post.author,
+          title: post.title,
+          content: post.content,
+          fullContent: post.fullContent,
+          category: post.category,
+          image: post.thumbnailUrl || post.image || "",
+          status: normalizedStatus,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+          user: post.user,
+        } as BlogPost;
+      });
     } catch (error) {
       console.error("Error fetching all posts:", error);
-      throw new Error("Lỗi khi tải danh sách bài viết.");
+      return [];
     }
   }
 

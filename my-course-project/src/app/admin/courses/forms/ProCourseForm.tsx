@@ -6,6 +6,7 @@ import {
   AdminCourse,
   CourseStatus,
   CreateCourseDTO,
+  UpdateCourseDTO,
   Section,
   Lesson,
 } from "@/types/admin.types";
@@ -169,22 +170,22 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
     setLoading(true);
 
     try {
-      const courseData: CreateCourseDTO = {
-        title: formData.title,
-        description: formData.description,
-        price: price,
-        thumbnailUrl: formData.thumbnailUrl || "/images/PostF8.png",
-        sections: sections,
-        badge: formData.badge,
-        heroTitle: formData.heroTitle,
-        titleHighlight: formData.titleHighlight,
-        subtitle: formData.subtitle,
-        learningOutcomes: JSON.stringify(learningOutcomes),
-        status: status,
-      };
-
       if (editCourse) {
-        await updateCourse(Number(editCourse.id), courseData);
+        // For UPDATE: use UpdateCourseDTO without status
+        const updateData: UpdateCourseDTO = {
+          title: formData.title,
+          description: formData.description,
+          price: price,
+          thumbnailUrl: formData.thumbnailUrl || "/images/PostF8.png",
+          sections: sections,
+          badge: formData.badge,
+          heroTitle: formData.heroTitle,
+          titleHighlight: formData.titleHighlight,
+          subtitle: formData.subtitle,
+          learningOutcomes: JSON.stringify(learningOutcomes),
+        };
+        
+        await updateCourse(Number(editCourse.id), updateData);
         await updateCourseStatus(
           Number(editCourse.id), 
           status === "DRAFT" ? CourseStatus.DRAFT : CourseStatus.PUBLISHED
@@ -196,6 +197,21 @@ export default function ProCourseForm({ onSuccess, editCourse }: ProCourseFormPr
           type: "success" 
         });
       } else {
+        // For CREATE: use CreateCourseDTO with status
+        const courseData: CreateCourseDTO = {
+          title: formData.title,
+          description: formData.description,
+          price: price,
+          thumbnailUrl: formData.thumbnailUrl || "/images/PostF8.png",
+          sections: sections,
+          badge: formData.badge,
+          heroTitle: formData.heroTitle,
+          titleHighlight: formData.titleHighlight,
+          subtitle: formData.subtitle,
+          learningOutcomes: JSON.stringify(learningOutcomes),
+          status: status,
+        };
+        
         const createdCourse = await createCourse(courseData);
         if (status === "PUBLISHED" && createdCourse?.id) {
           await updateCourseStatus(Number(createdCourse.id), CourseStatus.PUBLISHED);

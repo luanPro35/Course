@@ -17,23 +17,32 @@ const RecentOrders = () => {
       const token = localStorage.getItem("accessToken");
       if (!token) return;
 
-      const data = await getAllOrders(token, 0, 5);
-      
+      const data = await getAllOrders(0, 5);
+
       const { getCourseById } = await import("@/services/adminCourse.service");
-      
-      const ordersWithThumbnails = await Promise.all(data.content.map(async (order) => {
-        if (!order.courseThumbnail || order.courseThumbnail === "/images/PostF8.png" || order.courseThumbnail.trim() === "") {
+
+      const ordersWithThumbnails = await Promise.all(
+        data.content.map(async (order) => {
+          if (
+            !order.courseThumbnail ||
+            order.courseThumbnail === "/images/PostF8.png" ||
+            order.courseThumbnail.trim() === ""
+          ) {
             try {
-                const course = await getCourseById(order.courseId);
-                if (course && course.thumbnailUrl) {
-                    return { ...order, courseThumbnail: course.thumbnailUrl };
-                }
+              const course = await getCourseById(order.courseId);
+              if (course && course.thumbnailUrl) {
+                return { ...order, courseThumbnail: course.thumbnailUrl };
+              }
             } catch (e) {
-                console.error(`Failed to fetch course details for order ${order.id}`, e);
+              console.error(
+                `Failed to fetch course details for order ${order.id}`,
+                e
+              );
             }
-        }
-        return order;
-      }));
+          }
+          return order;
+        })
+      );
 
       setOrders(ordersWithThumbnails);
     } catch (error) {
@@ -45,12 +54,14 @@ const RecentOrders = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "COMPLETED":
+      case "FULFILLED":
         return "text-green-600";
+      case "PAID":
+        return "text-blue-600";
       case "PENDING":
         return "text-yellow-600";
-      case "REFUNDED":
-        return "text-blue-600";
+      case "REFUND":
+        return "text-purple-600";
       case "FAILED":
         return "text-red-600";
       default:
@@ -60,11 +71,13 @@ const RecentOrders = () => {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "COMPLETED":
+      case "FULFILLED":
         return "Hoàn thành";
+      case "PAID":
+        return "Đã thanh toán";
       case "PENDING":
         return "Đang xử lý";
-      case "REFUNDED":
+      case "REFUND":
         return "Đã hoàn tiền";
       case "FAILED":
         return "Thất bại";
@@ -99,9 +112,7 @@ const RecentOrders = () => {
 
       <div className="max-h-[400px] overflow-y-auto">
         {orders.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">
-            Chưa có đơn hàng nào
-          </p>
+          <p className="text-center text-gray-500 py-8">Chưa có đơn hàng nào</p>
         ) : (
           <table className="w-full">
             <thead className="sticky top-0 bg-white">

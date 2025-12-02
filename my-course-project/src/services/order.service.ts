@@ -1,8 +1,4 @@
-import {
-  getListOrderURL,
-  refundMoneyURL,
-  checkOrderURL,
-} from "./api.service";
+import { getListOrderURL, refundMoneyURL, checkOrderURL } from "./api.service";
 
 export interface OrderResponse {
   id: number;
@@ -12,7 +8,7 @@ export interface OrderResponse {
   courseName: string;
   courseThumbnail: string;
   amount: number;
-  status: "PENDING" | "COMPLETED" | "REFUNDED" | "FAILED";
+  status: "PENDING" | "PAID" | "FULFILLED" | "REFUND" | "FAILED";
   paymentMethod: string;
   createdAt: string;
   updatedAt: string;
@@ -30,11 +26,15 @@ export interface PageResponse<T> {
  * Lấy danh sách tất cả đơn hàng (Admin only)
  */
 export const getAllOrders = async (
-  token: string,
   page: number = 0,
   size: number = 25
 ): Promise<PageResponse<OrderResponse>> => {
   try {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      throw new Error("Vui lòng đăng nhập để xem đơn hàng");
+    }
+
     const response = await fetch(getListOrderURL(page, size), {
       method: "GET",
       headers: {
@@ -52,18 +52,22 @@ export const getAllOrders = async (
     return result.data;
   } catch (err) {
     console.error("Error fetching orders:", err);
-    throw err instanceof Error ? err : new Error("Không thể lấy danh sách đơn hàng");
+    throw err instanceof Error
+      ? err
+      : new Error("Không thể lấy danh sách đơn hàng");
   }
 };
 
 /**
  * Hoàn tiền cho đơn hàng (Admin only)
  */
-export const refundOrder = async (
-  orderId: number,
-  token: string
-): Promise<void> => {
+export const refundOrder = async (orderId: number): Promise<void> => {
   try {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      throw new Error("Không tìm thấy token");
+    }
+
     const response = await fetch(refundMoneyURL(orderId), {
       method: "POST",
       headers: {
@@ -82,14 +86,13 @@ export const refundOrder = async (
   }
 };
 
-/**
- * Kiểm tra trạng thái đơn hàng
- */
-export const checkOrderStatus = async (
-  orderId: number,
-  token: string
-): Promise<string> => {
+export const checkOrderStatus = async (orderId: number): Promise<string> => {
   try {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      throw new Error("Không tìm thấy token");
+    }
+
     const response = await fetch(checkOrderURL(orderId), {
       method: "GET",
       headers: {
@@ -109,6 +112,8 @@ export const checkOrderStatus = async (
     return result.data;
   } catch (err) {
     console.error("Error checking order status:", err);
-    throw err instanceof Error ? err : new Error("Không thể kiểm tra trạng thái đơn hàng");
+    throw err instanceof Error
+      ? err
+      : new Error("Không thể kiểm tra trạng thái đơn hàng");
   }
 };

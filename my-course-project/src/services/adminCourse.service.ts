@@ -75,18 +75,43 @@ export async function updateCourse(
   courseData: UpdateCourseDTO
 ): Promise<AdminCourse> {
   const token = localStorage.getItem("accessToken");
+  const cleanCourseData = JSON.parse(JSON.stringify(courseData));
+  
+  if (cleanCourseData.sections) {
+    cleanCourseData.sections = cleanCourseData.sections.map((section: any) => {
+      const { id, ...sectionRest } = section;
+      const cleanLessons = section.lessons?.map((lesson: any) => {
+        const { id, ...lessonRest } = lesson;
+        return lessonRest;
+      });
+      return { ...sectionRest, lessons: cleanLessons };
+    });
+  }
+
+  console.log("Updating course ID:", id);
+  console.log("Update data (cleaned):", cleanCourseData);
+  
   const response = await fetch(updateCourseByAdminURL(id), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(courseData),
+    body: JSON.stringify(cleanCourseData),
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to update course");
+    let errorMessage = `Failed to update course (${response.status})`;
+    try {
+      const error = await response.json();
+      console.error("Backend error response:", error);
+      errorMessage = error.message || errorMessage;
+    } catch (e) {
+      const text = await response.text();
+      console.error("Backend error text:", text);
+      errorMessage = text || errorMessage;
+    }
+    throw new Error(errorMessage);
   }
 
   const result: ApiResponse<AdminCourse> = await response.json();

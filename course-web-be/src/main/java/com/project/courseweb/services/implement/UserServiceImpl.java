@@ -1,6 +1,7 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.PageResponse;
+import com.project.courseweb.dtos.response.CourseEnrollmentResponse;
 import com.project.courseweb.dtos.response.UserResponse;
 import com.project.courseweb.entities.authentication.Auth;
 import com.project.courseweb.enums.ErrorCode;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private PageResponse<UserResponse> toPageResponse(Page<Auth> page) {
-        var content = page.stream().map(authMapper::toUserResponse).toList();
+        var content = page.stream().map(this::toUserResponse).toList();
         return PageResponse.<UserResponse>builder()
                 .content(content)
                 .pageNo(page.getNumber())
@@ -52,6 +53,31 @@ public class UserServiceImpl implements UserService {
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
                 .last(page.isLast())
+                .build();
+    }
+
+    private UserResponse toUserResponse(Auth auth) {
+        var profile = auth.getProfile();
+        var enrollments = profile != null && profile.getEnrollments() != null
+                ? profile.getEnrollments().stream()
+                .map(enrollment -> CourseEnrollmentResponse.builder()
+                        .courseId(enrollment.getCourse().getId())
+                        .courseTitle(enrollment.getCourse().getTitle())
+                        .courseThumbnail(enrollment.getCourse().getThumbnailUrl())
+                        .enrolledAt(enrollment.getEnrollmentDate())
+                        .build())
+                .toList()
+                : java.util.Collections.<CourseEnrollmentResponse>emptyList();
+
+        return UserResponse.builder()
+                .id(auth.getId())
+                .email(auth.getEmail())
+                .fullName(profile != null ? profile.getFullName() : null)
+                .avatar(profile != null ? profile.getAvatar() : null)
+                .phone(auth.getPhone())
+                .createdAt(profile != null ? profile.getCreateTime() : null)
+                .roles(auth.getRoles().stream().map(com.project.courseweb.entities.authentication.Role::getName).collect(java.util.stream.Collectors.toSet()))
+                .enrolledCourses(enrollments)
                 .build();
     }
 }

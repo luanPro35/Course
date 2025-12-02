@@ -32,8 +32,10 @@ export const deleteCourseByAdminURL = (id: number) =>
 export const updateCourseStatusURL = (id: number, status: string) =>
   `http://localhost:8080/project/admin/courses/update-status/${id}?status=${status}`;
 export const createPayment = "http://localhost:8080/project/payment/16";
-export const enrollFreeCourse = "http://localhost:8080/project/enrollments/free/18";
+export const enrollFreeCourse = "http://localhost:8080/project/enrollments/free";
 export const enrollCourse = "http://localhost:8080/project/enrollments/courses";
+export const getMyEnrolledCoursesURL = (page: number = 0, size: number = 100) =>
+  `http://localhost:8080/project/enrollments/courses?page=${page}&size=${size}`;
 export const getListOrderURL = (page: number, size: number) =>
   `http://localhost:8080/project/admin/orders?page=${page}&size=${size}&sort=createdAt,desc`;
 export const refundMoneyURL = (orderId: number) =>
@@ -48,6 +50,14 @@ export const getCoursesByStatusURL = (
   `http://localhost:8080/project/admin/courses?status=${status}&page=${page}&size=${size}&sort=createdAt,desc`;
 export const getAllCoursesAdminURL = (page: number, size: number) =>
   `http://localhost:8080/project/admin/courses?page=${page}&size=${size}&sort=createdAt,desc`;
+export const getAllPostsAdminURL = (page: number, size: number) =>
+  `http://localhost:8080/project/admin/posts?page=${page}&size=${size}&sort=createdAt,desc`;
+export const getDashboardStatsURL = () =>
+  `http://localhost:8080/project/admin/dashboard/stats`;
+export const getAllUsersURL = (page: number, size: number) =>
+  `http://localhost:8080/project/admin/users?page=${page}&size=${size}`;
+export const deleteUserURL = (userId: number) =>
+  `http://localhost:8080/project/admin/users/delete/${userId}`;
 export const GOOGLE_CLIENT_ID =
   "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
 export const GOOGLE_REDIRECT_URI = "http://localhost:3000/oauth2/callback";

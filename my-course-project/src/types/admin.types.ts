@@ -86,7 +86,8 @@ export interface UpdateCourseDTO {
   subtitle?: string;
   subtitleHighlights?: string; 
   stats?: string; 
-  learningOutcomes?: string; 
+  learningOutcomes?: string;
+  sections?: Section[];
 }
 
 

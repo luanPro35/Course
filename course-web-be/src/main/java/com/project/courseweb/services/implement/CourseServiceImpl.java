@@ -40,6 +40,7 @@ public class CourseServiceImpl implements CourseService {
     LessonMapper lessonMapper;
     ProfileServiceImpl profileService;
     FileUploadAWSServiceImpl fileUploadAWSService;
+    com.project.courseweb.repositories.OrderRepository orderRepository;
 
 
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPLOAD_COURSE')")
@@ -180,6 +181,12 @@ public class CourseServiceImpl implements CourseService {
     public void deleteCourse(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        
+        // Manually delete related orders to avoid foreign key constraint violation
+        if (course.getOrders() != null && !course.getOrders().isEmpty()) {
+            orderRepository.deleteAll(course.getOrders());
+        }
+        
         courseRepository.delete(course);
     }
 

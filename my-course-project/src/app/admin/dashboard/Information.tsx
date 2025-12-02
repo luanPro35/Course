@@ -15,7 +15,6 @@ export default function Information({
       value: totalUsers,
       icon: Users,
       trend: {
-        value: "11.01%",
         isPositive: true,
       },
       iconBgColor: "bg-blue-50",
@@ -27,7 +26,6 @@ export default function Information({
       value: totalOrders,
       icon: Package,
       trend: {
-        value: "9.05%",
         isPositive: false,
       },
       iconBgColor: "bg-purple-50",

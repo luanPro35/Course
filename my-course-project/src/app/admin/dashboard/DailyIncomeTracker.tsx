@@ -2,9 +2,16 @@
 import { useState, useEffect } from "react";
 import { Calendar } from "lucide-react";
 
-export default function DailyIncomeTracker() {
-  const [dailyGoal] = useState(10000000);
-  const [currentAmount] = useState(1200000);
+interface DailyIncomeTrackerProps {
+  todayRevenue: number;
+  dailyGoal?: number;
+}
+
+export default function DailyIncomeTracker({
+  todayRevenue = 0,
+  dailyGoal = 10000000,
+}: DailyIncomeTrackerProps) {
+  const [currentAmount] = useState(todayRevenue);
   const [progress, setProgress] = useState(0);
   const [animatedValue, setAnimatedValue] = useState(0);
 
@@ -40,6 +47,9 @@ export default function DailyIncomeTracker() {
   }, [currentAmount, dailyGoal]);
 
   const formatShort = (amount: number) => {
+    if (amount == null || isNaN(amount)) {
+      return "0đ";
+    }
     if (amount >= 1000000) {
       return (amount / 1000000).toFixed(1) + " triệu";
     }

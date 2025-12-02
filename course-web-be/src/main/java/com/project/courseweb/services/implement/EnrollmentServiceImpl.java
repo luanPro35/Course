@@ -78,9 +78,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .map(enrollment -> {
                     var course = enrollment.getCourse();
                     return CourseEnrollmentResponse.builder()
-                            .courseID(course.getId())
-                            .title(course.getTitle())
-                            .thumbnail(course.getThumbnailUrl())
+                            .courseId(course.getId())
+                            .courseTitle(course.getTitle())
+                            .courseThumbnail(course.getThumbnailUrl())
+                            .enrolledAt(enrollment.getEnrollmentDate())
                             .build();
                 }).toList();
         return PageResponse.<CourseEnrollmentResponse>builder()

@@ -74,7 +74,7 @@ const OAuth2CallbackPage = () => {
     };
 
     handleLogin();
-  }, [searchParams, login, router]);
+  }, []); // Empty dependency array - only run once on mount
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

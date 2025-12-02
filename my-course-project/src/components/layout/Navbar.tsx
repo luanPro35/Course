@@ -84,9 +84,8 @@ export default function Navbar({
 
   useEffect(() => {
     if (user?.id && showMyCoursesDropdown) {
-      console.log("Fetching courses for userId:", user.id); 
       const fetchCourses = async () => {
-        const courses = await courseService.getMyCourses(user.id);
+        const courses = await courseService.getMyCourses();
         setMyCourses(courses);
       };
       fetchCourses();
