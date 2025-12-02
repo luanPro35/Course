@@ -4,15 +4,12 @@ import com.project.courseweb.dtos.ApiResponse;
 import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.CourseCreateRequest;
 import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
-import com.project.courseweb.dtos.request.CourseUpdateRequest;
-import com.project.courseweb.dtos.response.CourseLabelResponse;
-import com.project.courseweb.dtos.response.CourseResponse;
-import com.project.courseweb.dtos.response.FileResponse;
-import com.project.courseweb.dtos.response.OrderResponse;
+import com.project.courseweb.dtos.response.*;
 import com.project.courseweb.enums.SuccessCode;
 import com.project.courseweb.services.CourseService;
 import com.project.courseweb.services.OrderService;
 import com.project.courseweb.services.PostService;
+import com.project.courseweb.services.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +25,7 @@ public class AdminController {
     PostService postService;
     CourseService courseService;
     OrderService orderService;
+    UserService userService;
 
     @PostMapping("/courses/create")
     ApiResponse<CourseResponse> createCourse(@RequestBody CourseCreateRequest request) {
@@ -73,5 +71,16 @@ public class AdminController {
     @GetMapping("/orders")
     ApiResponse<PageResponse<OrderResponse>> getOrdersByStatus(Pageable pageable) {
         return ApiResponse.ok(this.orderService.getAllOrders(pageable), SuccessCode.GET_ORDERS_SUCCESS);
+    }
+
+    @GetMapping("users")
+    ApiResponse<PageResponse<UserResponse>> getUsers(Pageable pageable) {
+        return ApiResponse.ok(this.userService.getUserList(pageable), SuccessCode.GET_USERS_SUCCESS);
+    }
+
+    @DeleteMapping("/users/delete/{id}")
+    ApiResponse<Void> deleteUser(@PathVariable Long id) {
+        this.userService.deleteUser(id);
+        return ApiResponse.ok(null, SuccessCode.DELETE_USER_SUCCESS);
     }
 }

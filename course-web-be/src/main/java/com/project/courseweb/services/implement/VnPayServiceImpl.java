@@ -7,8 +7,8 @@ import com.project.courseweb.entities.Order;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.OrderStatus;
 import com.project.courseweb.exceptions.AppException;
-import com.project.courseweb.repositories.OrderRepository;
 import com.project.courseweb.httpsClients.VnPayClient;
+import com.project.courseweb.repositories.OrderRepository;
 import com.project.courseweb.services.*;
 import com.project.notification.PaymentSuccessEvent;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +41,7 @@ public class VnPayServiceImpl implements VnPayService {
     VnPayClient vnPayClient;
 
     NotificationService notificationService;
+
     @Override
     @Transactional
     public CreatePaymentResponse createPayment(Long id, HttpServletRequest httpServletRequest) {
@@ -125,20 +126,18 @@ public class VnPayServiceImpl implements VnPayService {
                 enrollmentService.enrollInCourseVip(order.getCourse(), order.getProfile());
                 order.setStatus(OrderStatus.FULFILLED);
                 this.orderRepository.save(order);
-
-                //send email
-                notificationService.sendPaymentSuccessEmail(
-                        PaymentSuccessEvent.builder()
-                                .email(order.getProfile().getAuth().getEmail())
-                                .fullName(order.getProfile().getFullName())
-                                .courseName(order.getCourse().getTitle())
-                                .orderRef(order.getOrderRef())
-                                .build()
-                );
             } catch (Exception e) {
                 log.error("Enrollment failed: {}", e.getMessage());
             }
-
+            //send email
+            notificationService.sendPaymentSuccessEmail(
+                    PaymentSuccessEvent.builder()
+                            .email(order.getProfile().getAuth().getEmail())
+                            .fullName(order.getProfile().getFullName())
+                            .courseName(order.getCourse().getTitle())
+                            .orderRef(order.getOrderRef())
+                            .build()
+            );
             return new VnPayIPNResponse("00", "Transaction successful");
         } else {
             order.setStatus(OrderStatus.FAILED);
