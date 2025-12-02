@@ -33,7 +33,9 @@ public enum SuccessCode {
     CHECK_TRANSACTION_STATUS_SUCCESS(200, "Kiểm tra trạng thái giao dịch thành công", HttpStatus.OK),
     GET_ORDERS_SUCCESS(200, "Lấy danh sách đơn hàng thành công", HttpStatus.OK),
     UPLOAD_FILE_SUCCESS(200, "Cập nhật ảnh thành công", HttpStatus.OK),
-    GET_LIST_COURSE_ENROLLMENT_SUCCESS(200, "Lấy danh sách khóa học ghi danh thành công", HttpStatus.OK);
+    GET_LIST_COURSE_ENROLLMENT_SUCCESS(200, "Lấy danh sách khóa học ghi danh thành công", HttpStatus.OK),
+    GET_USERS_SUCCESS(200, "Lấy danh sách người dùng thành công", HttpStatus.OK),
+    DELETE_USER_SUCCESS(200, "Xóa người dùng thành công", HttpStatus.OK);
 
     final int status;
     final String message;
