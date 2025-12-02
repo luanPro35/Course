@@ -2,9 +2,9 @@ import { CourseFree } from "@/types/courseFree";
 import { getMyEnrolledCoursesURL } from "@/services/api.service";
 
 interface CourseEnrollmentResponse {
-  courseID: number;
-  title: string;
-  thumbnail: string;
+  courseId: number;
+  courseTitle: string;
+  courseThumbnail: string;
   enrolledAt?: string;
 }
 
@@ -40,13 +40,11 @@ export const courseService = {
 
       const result = await response.json();
       const pageData: PageResponse<CourseEnrollmentResponse> = result.data;
-
-      // Map CourseEnrollmentResponse to CourseFree
       const courses: CourseFree[] = pageData.content.map((enrollment) => ({
-        id: enrollment.courseID.toString(),
-        title: enrollment.title,
-        thumbnailUrl: enrollment.thumbnail,
-        free: "false", // Enrolled courses are typically paid
+        id: enrollment.courseId.toString(),
+        title: enrollment.courseTitle,
+        thumbnailUrl: enrollment.courseThumbnail,
+        free: "false",
         people: 0,
         numberOfPosts: 0,
         totalTime: "",

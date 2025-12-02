@@ -6,29 +6,26 @@ import Link from "next/link";
 export default function PaymentReturnPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
+  const [status, setStatus] = useState<"loading" | "success" | "failed">(
+    "loading"
+  );
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Lấy response code từ VNPay
     const vnp_ResponseCode = searchParams.get("vnp_ResponseCode");
     const vnp_TxnRef = searchParams.get("vnp_TxnRef");
     const vnp_Amount = searchParams.get("vnp_Amount");
 
     if (vnp_ResponseCode === "00") {
-      // Thanh toán thành công
       setStatus("success");
       setMessage("Thanh toán thành công! Bạn đã được ghi danh vào khóa học.");
-      
-      // Tự động chuyển hướng sau 3 giây
+
       setTimeout(() => {
-        router.push("/my-courses");
+        router.push("/");
       }, 3000);
     } else {
-      // Thanh toán thất bại
       setStatus("failed");
-      
-      // Map error codes
+
       const errorMessages: Record<string, string> = {
         "07": "Giao dịch bị nghi ngờ gian lận",
         "09": "Thẻ/Tài khoản chưa đăng ký dịch vụ",
@@ -41,12 +38,12 @@ export default function PaymentReturnPage() {
         "65": "Tài khoản vượt quá hạn mức giao dịch",
         "75": "Ngân hàng thanh toán đang bảo trì",
         "79": "Giao dịch vượt quá số lần nhập sai mật khẩu",
-        "99": "Lỗi không xác định"
+        "99": "Lỗi không xác định",
       };
-      
+
       setMessage(
-        errorMessages[vnp_ResponseCode || "99"] || 
-        "Thanh toán thất bại. Vui lòng thử lại."
+        errorMessages[vnp_ResponseCode || "99"] ||
+          "Thanh toán thất bại. Vui lòng thử lại."
       );
     }
   }, [searchParams, router]);

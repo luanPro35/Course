@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Image from "next/image";
 import { CourseFree } from "@/types/courseFree";
 import { courseService } from "@/services/course.service";
@@ -22,7 +22,7 @@ export default function UserCoursesPage() {
 
       try {
         setLoading(true);
-        const courses = await courseService.getMyCourses(user.id);
+        const courses = await courseService.getMyCourses();
         setRegisteredCourses(courses);
       } catch (err) {
         console.error("Failed to fetch user courses:", err);
