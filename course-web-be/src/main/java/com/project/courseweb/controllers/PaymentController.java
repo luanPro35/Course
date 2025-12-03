@@ -2,16 +2,19 @@ package com.project.courseweb.controllers;
 
 import com.project.courseweb.dtos.ApiResponse;
 import com.project.courseweb.dtos.response.CreatePaymentResponse;
+import com.project.courseweb.dtos.response.TransactionStatusResponse;
 import com.project.courseweb.dtos.response.VnPayIPNResponse;
-import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.SuccessCode;
 import com.project.courseweb.services.VnPayService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -19,38 +22,42 @@ import java.util.Map;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaymentController {
-    VnPayService paymentService;
+    VnPayService vnPayService;
 
     @PostMapping("/{id}")
     ApiResponse<CreatePaymentResponse> createPayment(@PathVariable Long id, HttpServletRequest httpServletRequest) {
-        return ApiResponse.ok(this.paymentService.createPayment(id, httpServletRequest), SuccessCode.CREATE_PAYMENT);
+        return ApiResponse.ok(this.vnPayService.createPayment(id, httpServletRequest), SuccessCode.CREATE_PAYMENT);
     }
 
     @GetMapping("/vnp-ipn")
     ApiResponse<VnPayIPNResponse> handleVnPayIPN(@RequestParam Map<String, String> allRequestParams) {
-        return ApiResponse.ok(paymentService.handleVnPayIPN(allRequestParams), SuccessCode.VN_PAY_IPN_SUCCESS);
+        return ApiResponse.ok(vnPayService.handleVnPayIPN(allRequestParams), SuccessCode.VN_PAY_IPN_SUCCESS);
     }
 
     @GetMapping("/vnp-return")
-    public ApiResponse<String> handleVnpayReturn(@RequestParam Map<String, String> allRequestParams) {
-        String vnp_ResponseCode = allRequestParams.get("vnp_ResponseCode");
-        if ("00".equals(vnp_ResponseCode)) {
-            // Thanh toán thành công, trả về thông báo cho người dùng thấy trên trình duyệt
-            return ApiResponse.ok("Giao dich thanh cong", SuccessCode.PAYMENT_SUCCESS);
-        } else {
-            // Thanh toán thất bại
-            return ApiResponse.error("Giao dich that bai", ErrorCode.AUTHENTICATION_FAILED); // Bạn có thể tạo ErrorCode mới
+    public void handleVnpayReturn(@RequestParam Map<String, String> allRequestParams, HttpServletResponse response) throws IOException {
+        String frontendUrl = "http://localhost:3000/payment/return";
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(frontendUrl);
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (key != null && value != null) {
+                builder.queryParam(key, value);
+            }
         }
+        response.sendRedirect(builder.toUriString());
     }
+
 
     @PostMapping("/refund/{orderId}")
     ApiResponse<Void> refundPayment(@PathVariable Long orderId) {
-        this.paymentService.refundPayment(orderId);
+        this.vnPayService.refundPayment(orderId);
         return ApiResponse.ok(null, SuccessCode.REFUND_SUCCESS);
     }
 
     @GetMapping("/{orderId}/status")
-    ApiResponse<String> checkTransactionStatus(@PathVariable Long orderId) {
-        return ApiResponse.ok(this.paymentService.checkVnPayTransactionStatus(orderId), SuccessCode.CHECK_TRANSACTION_STATUS_SUCCESS);
+    ApiResponse<TransactionStatusResponse> checkTransactionStatus(@PathVariable Long orderId) {
+        return ApiResponse.ok(this.vnPayService.checkVnPayTransactionStatus(orderId), SuccessCode.CHECK_TRANSACTION_STATUS_SUCCESS);
     }
 }

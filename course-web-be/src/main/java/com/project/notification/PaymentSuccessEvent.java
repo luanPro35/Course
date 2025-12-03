@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class PaymentSuccessEvent {
     String email;
     String fullName;
+    Long courseId;
     String courseName;
     String orderRef;
 }

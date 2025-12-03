@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class NotificationService {
     KafkaTemplate<String, Object> kafkaTemplate;
-    public void sendPaymentSuccessEmail(PaymentSuccessEvent event){
+
+    public void sendPaymentSuccessEmail(PaymentSuccessEvent event) {
         String subject = "Xác nhận thanh toán thành công cho khóa học: " + event.getCourseName();
         String htmlContent = """
                 <!DOCTYPE html>
@@ -34,14 +35,14 @@ public class NotificationService {
                                 <p style="font-size: 16px; color: #555555;">Cảm ơn bạn đã đăng ký khóa học "<strong>%s</strong>".</p>
                                 <p style="font-size: 14px; color: #888888;">Mã đơn hàng của bạn là: <strong>%s</strong></p>
                                 <p style="margin-top: 30px;">
-                                    <a href="http://localhost:3000/my-courses" style="background-color: #007bff; color: #ffffff; padding: 15px 25px; text-decoration: none; border-radius: 5px;">Vào học ngay</a>
+                                    <a href="http://localhost:3000/courses/free/%s" style="background-color: #007bff; color: #ffffff; padding: 15px 25px; text-decoration: none; border-radius: 5px;">Vào học ngay</a>
                                 </p>
                             </td>
                         </tr>
                     </table>
                 </body>
                 </html>
-                """.formatted(event.getFullName(), event.getCourseName(), event.getOrderRef());
+                """.formatted(event.getFullName(), event.getCourseName(), event.getOrderRef(), event.getCourseId());
         this.kafkaTemplate.send("email-notifications", SendEmailRequest.builder()
                 .to(Recipient.builder()
                         .email(event.getEmail())
@@ -51,6 +52,7 @@ public class NotificationService {
                 .htmlContent(htmlContent)
                 .build());
     }
+
     public void sendWelcomeEmail(String email, String fullName) {
         String subject = "Chào mừng " + fullName + " đến với Web-!";
         String htmlContent = """
