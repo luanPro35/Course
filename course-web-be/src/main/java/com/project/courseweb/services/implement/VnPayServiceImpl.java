@@ -2,6 +2,7 @@ package com.project.courseweb.services.implement;
 
 import com.project.courseweb.configurations.VnPayConfig;
 import com.project.courseweb.dtos.response.CreatePaymentResponse;
+import com.project.courseweb.dtos.response.TransactionStatusResponse;
 import com.project.courseweb.dtos.response.VnPayIPNResponse;
 import com.project.courseweb.entities.Order;
 import com.project.courseweb.enums.ErrorCode;
@@ -134,6 +135,7 @@ public class VnPayServiceImpl implements VnPayService {
                     PaymentSuccessEvent.builder()
                             .email(order.getProfile().getAuth().getEmail())
                             .fullName(order.getProfile().getFullName())
+                            .courseId(order.getCourse().getId())
                             .courseName(order.getCourse().getTitle())
                             .orderRef(order.getOrderRef())
                             .build()
@@ -194,7 +196,7 @@ public class VnPayServiceImpl implements VnPayService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public String checkVnPayTransactionStatus(Long orderId) {
+    public TransactionStatusResponse checkVnPayTransactionStatus(Long orderId) {
         log.info("Bắt đầu kiểm tra trạng thái giao dịch VNPAY cho orderId: {}", orderId);
         Order order = this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
@@ -206,32 +208,69 @@ public class VnPayServiceImpl implements VnPayService {
         vnp_Params.put("vnp_TmnCode", vnPayConfig.getTmnCode());
         vnp_Params.put("vnp_TxnRef", order.getOrderRef());
         vnp_Params.put("vnp_OrderInfo", "Kiem tra ket qua giao dich " + order.getOrderRef());
-        vnp_Params.put("vnp_TransactionDate", order.getPayDate());
+
+        String transactionDate = order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        vnp_Params.put("vnp_TransactionDate", transactionDate);
 
         String createDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         vnp_Params.put("vnp_CreateDate", createDate);
         vnp_Params.put("vnp_IpAddr", "127.0.0.1");
 
-        String hashData = VnPayUtils.getPipeDelimitedHashDataForQuery(vnp_Params);
+        String hashData = VnPayUtils.getPipeDelimitedHashData(vnp_Params);
         String calculatedHash = VnPayUtils.hmacSHA512(vnPayConfig.getHashSecret(), hashData);
         vnp_Params.put("vnp_SecureHash", calculatedHash);
 
         var response = vnPayClient.callQueryDr(vnp_Params).block();
-
-        if (response == null || !"00".equals(response.getResponseCode())) {
-            throw new RuntimeException("VNPAY từ chối yêu cầu truy vấn. Lý do: " + (response != null ? response.getMessage() : "Response is null"));
+        log.info("Response từ VNPAY: {}", response);
+        if (response == null || !"00".equals(response.getResponseCode()) || response.getTransactionStatus() == null) {
+            String reason = response != null ? response.getMessage() : "Response is null";
+            log.error("VNPAY query request was denied. Reason: {}", reason);
+            throw new RuntimeException("VNPAY từ chối yêu cầu truy vấn. Lý do: " + reason);
         }
 
         String vnpayStatus = response.getTransactionStatus();
-        String localStatus = order.getStatus().name();
+        String message;
 
-        if ("PENDING".equals(localStatus) && "00".equals(vnpayStatus)) {
-            order.setGatewayTransId(response.getTransactionNo()); // Cập nhật lại mã giao dịch VNPAY
-            enrollmentService.enrollInCourseVip(order.getCourse(), order.getProfile());
-            order.setStatus(OrderStatus.FULFILLED);
-            this.orderRepository.save(order);
+        switch (vnpayStatus) {
+            case "00":
+                if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.PAID) {
+                    order.setGatewayTransId(response.getTransactionNo());
+                    order.setPayDate(response.getPayDate());
+                    enrollmentService.enrollInCourseVip(order.getCourse(), order.getProfile());
+                    order.setStatus(OrderStatus.FULFILLED);
+                    this.orderRepository.save(order);
+                    notificationService.sendPaymentSuccessEmail(
+                            PaymentSuccessEvent.builder()
+                                    .email(order.getProfile().getAuth().getEmail())
+                                    .fullName(order.getProfile().getFullName())
+                                    .courseId(order.getCourse().getId())
+                                    .courseName(order.getCourse().getTitle())
+                                    .orderRef(order.getOrderRef())
+                                    .build()
+                    );
+                    message = "Giao dịch thành công. Trạng thái đơn hàng đã được cập nhật.";
+                } else {
+                    message = "Đơn hàng này đã được xác nhận thành công trước đó.";
+                }
+                break;
+            case "02", "04", "05", "09":
+                if (order.getStatus() == OrderStatus.PENDING) {
+                    order.setStatus(OrderStatus.FAILED);
+                    this.orderRepository.save(order);
+                    message = "Giao dịch thất bại. Trạng thái đơn hàng đã được cập nhật.";
+                } else {
+                    message = "Giao dịch đã ở trạng thái thất bại hoặc đã hoàn tiền.";
+                }
+                break;
+            default:
+                message = "Giao dịch chưa hoàn tất hoặc đang ở trạng thái trung gian.";
+                break;
         }
 
-        return "Mã trạng thái: " + vnpayStatus + " (00: Thành công, 01: Chưa hoàn tất, 02: Lỗi)";
+        return TransactionStatusResponse.builder()
+                .vnPayStatus(vnpayStatus)
+                .localStatus(order.getStatus().name())
+                .message(message)
+                .build();
     }
 }
