@@ -79,7 +79,7 @@ export default function AdminOrdersPage() {
       await refundOrder(selectedOrder.id);
       alert("Hoàn tiền thành công!");
       setShowRefundModal(false);
-      fetchOrders(); // Refresh list
+      fetchOrders();
     } catch (err) {
       let errorMessage = "Không thể hoàn tiền";
       if (err instanceof Error) {
@@ -173,7 +173,6 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Quản lý đơn hàng
@@ -183,10 +182,8 @@ export default function AdminOrdersPage() {
           </p>
         </div>
 
-        {/* Filters */}
         <div className="bg-white rounded-lg shadow-md p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Search */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tìm kiếm
@@ -200,7 +197,6 @@ export default function AdminOrdersPage() {
               />
             </div>
 
-            {/* Status Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Lọc theo trạng thái
@@ -221,14 +217,12 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
-        {/* Orders Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -330,13 +324,14 @@ export default function AdminOrdersPage() {
                           >
                             Kiểm tra
                           </button>
-                          {order.status === "FULFILLED" && (
+                          {order.status === "FAILED" && (
                             <button
                               onClick={() => {
                                 setSelectedOrder(order);
                                 setShowRefundModal(true);
                               }}
                               className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-xs font-medium"
+                              title="Hoàn tiền cho đơn hàng thất bại"
                             >
                               Hoàn tiền
                             </button>
@@ -350,7 +345,6 @@ export default function AdminOrdersPage() {
             </table>
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
               <div className="flex items-center justify-between">
@@ -381,7 +375,6 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* Refund Modal */}
       {showRefundModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
@@ -427,7 +420,6 @@ export default function AdminOrdersPage() {
         </div>
       )}
 
-      {/* Status Modal */}
       {showStatusModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">

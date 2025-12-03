@@ -26,6 +26,7 @@ export default function Navbar() {
       ],
     },
     { href: "/admin/users", label: "Quản lí người dùng" },
+    { href: "/admin/orders", label: "Quản lí đơn hàng" },
   ];
 
   return (
