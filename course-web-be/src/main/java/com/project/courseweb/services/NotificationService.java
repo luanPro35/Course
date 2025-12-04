@@ -17,6 +17,40 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
     KafkaTemplate<String, Object> kafkaTemplate;
 
+    public void sendForgotPasswordEmail(String email, String fullName, String otp) {
+        String subject = "Mã OTP đặt lại mật khẩu của bạn";
+        String htmlContent = """
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Mã OTP Đặt Lại Mật Khẩu</title>
+                </head>
+                <body style="font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9;">
+                    <div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        <h2 style="color: #333333; text-align: center;">Yêu Cầu Đặt Lại Mật Khẩu</h2>
+                        <p style="font-size: 16px; color: #555555;">Xin chào <strong>%s</strong>,</p>
+                        <p style="font-size: 16px; color: #555555;">Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Vui lòng sử dụng mã OTP dưới đây để hoàn tất quá trình:</p>
+                        <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px;">
+                            <strong style="font-size: 24px; color: #0056b3; letter-spacing: 4px;">%s</strong>
+                        </div>
+                        <p style="font-size: 14px; color: #888888; text-align: center;">Mã OTP này sẽ hết hạn sau 10 phút.</p>
+                        <p style="font-size: 14px; color: #888888; text-align: center;">Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+                    </div>
+                </body>
+                </html>
+                """.formatted(fullName, otp);
+        this.kafkaTemplate.send("email-notifications", SendEmailRequest.builder()
+                .to(Recipient.builder()
+                        .email(email)
+                        .name(fullName)
+                        .build())
+                .subject(subject)
+                .htmlContent(htmlContent)
+                .build()
+        );
+    }
+
     public void sendPaymentSuccessEmail(PaymentSuccessEvent event) {
         String subject = "Xác nhận thanh toán thành công cho khóa học: " + event.getCourseName();
         String htmlContent = """

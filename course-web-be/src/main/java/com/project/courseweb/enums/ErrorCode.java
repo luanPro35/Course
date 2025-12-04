@@ -27,7 +27,8 @@ public enum ErrorCode {
     ALREADY_ENROLLED(414, "Already enrolled", HttpStatus.CONFLICT),
     COURSE_IS_NOT_FREE(415, "Course is not free", HttpStatus.BAD_REQUEST),
     ORDER_NOT_FOUND(416, "Order not found", HttpStatus.NOT_FOUND),
-    USER_NOT_FOUND(417, "User not found", HttpStatus.NOT_FOUND);
+    USER_NOT_FOUND(417, "User not found", HttpStatus.NOT_FOUND),
+    INVALID_OTP(418, "Invalid OTP", HttpStatus.BAD_REQUEST);
 
     int status;
     String message;

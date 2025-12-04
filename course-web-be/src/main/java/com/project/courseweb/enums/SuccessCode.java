@@ -40,7 +40,10 @@ public enum SuccessCode {
     GET_LIST_COURSE_ENROLLMENT_SUCCESS(200, "Lấy danh sách khóa học ghi danh thành công", HttpStatus.OK),
     GET_DASHBOARD_STATS_SUCCESS(200, "Lấy thống kê dashboard thành công", HttpStatus.OK),
     GET_USERS_SUCCESS(200, "Lấy danh sách người dùng thành công", HttpStatus.OK),
-    DELETE_USER_SUCCESS(200, "Xóa người dùng thành công", HttpStatus.OK);
+    DELETE_USER_SUCCESS(200, "Xóa người dùng thành công", HttpStatus.OK),
+    DELETE_ACCOUNT_SUCCESS(200, "Xóa tài khoản thành công", HttpStatus.OK),
+    FORGOT_PASSWORD_SUCCESS(200, "Gửi mã OTP thành công", HttpStatus.OK),
+    RESET_PASSWORD_SUCCESS(200, "Đặt lại mật khẩu thành công", HttpStatus.OK);
 
     final int status;
     final String message;
