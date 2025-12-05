@@ -9,6 +9,7 @@ export const createBlogPost = (
     author: FormData.author,
     title: FormData.title,
     content: FormData.content,
+    fullContent: FormData.fullContent,
     category: FormData.category,
     image: FormData.image,
     createdAt: new Date().toISOString(),

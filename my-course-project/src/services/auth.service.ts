@@ -2,7 +2,14 @@ import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
 import { getAccessToken, getRefreshToken, setTokens } from "@/utils/token";
-import { CALL_LOGIN_GG, refreshTokenURL } from "./api.service";
+import {
+  CALL_LOGIN_GG,
+  refreshTokenURL,
+  forgotPasswordURL,
+  resetPasswordURL,
+  deleteAccountURL
+} from "./api.service";
+import api from "@/lib/validations/axios";
 
 const register = async (
   formData: RegisterFormData
@@ -104,13 +111,11 @@ const refreshToken = async (): Promise<LoginResponse> => {
   });
 
   const data = await response.json();
-  
   if (!response.ok) {
     throw new Error(data.message || "Refresh token failed");
   }
 
   const tokenData = data.data;
-  
   setTokens(tokenData.accessToken, tokenData.refreshToken);
 
   return {
@@ -121,6 +126,72 @@ const refreshToken = async (): Promise<LoginResponse> => {
   };
 };
 
+const forgotPassword = async (email: string): Promise<{ message: string }> => {
+  const response = await fetch(forgotPasswordURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to send reset email");
+  }
+
+  return {
+    message: data.message || "If email exists, OTP has been sent",
+  };
+};
+
+interface ResetPasswordRequest {
+  email: string;
+  otp: string;
+  newPassword: string;
+}
+
+const resetPassword = async (request: ResetPasswordRequest): Promise<{ message: string }> => {
+  const response = await fetch(resetPasswordURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to reset password");
+  }
+
+  return {
+    message: data.message || "Password reset successfully",
+  };
+};
+
+const deleteAccount = async (): Promise<{ message: string }> => {
+  try {
+    const response = await api.delete(deleteAccountURL);
+    return {
+      message: response.data.message || "Account deleted successfully",
+    };
+  } catch (error) {
+    let errorMessage = "Failed to delete account";
+    
+    if (error && typeof error === "object" && "response" in error) {
+      const axiosError = error as { response?: { data?: { data?: { message?: string }; message?: string } }; message?: string };
+      errorMessage =
+        axiosError.response?.data?.data?.message ||
+        axiosError.response?.data?.message ||
+        axiosError.message ||
+        errorMessage;
+    }
+    
+    throw new Error(errorMessage);
+  }
+};
+
 export const AuthService = {
   register,
   login,
@@ -128,4 +199,7 @@ export const AuthService = {
   loginWithSocial,
   loginWithGoogle,
   refreshToken,
+  forgotPassword,
+  resetPassword,
+  deleteAccount,
 };

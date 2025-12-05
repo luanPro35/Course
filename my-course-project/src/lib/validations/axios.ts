@@ -1,45 +1,44 @@
 import axios from "axios";
 import { getAccessToken, getRefreshToken, setTokens, removeTokens } from "@/utils/token";
 
+
+
 const api = axios.create({
-    
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/project', 
-    headers: {
-        'Content-Type' : 'application/json'
-    },
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/project",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-
 api.interceptors.request.use(
-    (config) => {
-        const token = getAccessToken();
-        
-        if (token && !config.headers.Authorization) { 
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) =>{
-        return Promise.reject(error);
-    }
-)
+  (config) => {
+    const token = getAccessToken();
 
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 let isRefreshing = false;
 let failedQueue: {
-    resolve: (value: unknown) => void; 
-    reject: (reason?: unknown) => void
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
 }[] = [];
 
-const processQueue = (error: unknown, token : string | null = null) => {
-    failedQueue.forEach(prom => {
-        if (error) {
-            prom.reject(error);
-        } else {
-            prom.resolve(token);
-        }
-    });
-    failedQueue = [];
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
 };
 api.interceptors.response.use(
     (response) => {
@@ -49,10 +48,9 @@ api.interceptors.response.use(
         const originalRequest = error.config;
         
         if (error.response?.status === 401 && !originalRequest._retry) {
-            
             if (isRefreshing) {
                 return new Promise(function (resolve, reject) {
-                    failedQueue.push({ resolve, reject });
+                    failedQueue.push({resolve, reject});
                 })
                     .then(token => {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -62,26 +60,22 @@ api.interceptors.response.use(
                         return Promise.reject(err);
                     });
             }
-
+            
             originalRequest._retry = true;
             isRefreshing = true;
-
             const refreshToken = getRefreshToken();
             
             if (!refreshToken) {
                 removeTokens();
-                window.location.href = '/auth/login';
+                window.location.href = '/';
                 return Promise.reject(error);
             }
-
+            
             try {
-                const rs = await axios.post(
-                    `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/project'}/auth/refresh-token`,
-                    {
-                        refreshToken: refreshToken,
-                    }
-                );
-
+                const rs = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/project'}/auth/refresh-token`, {
+                    refreshToken: refreshToken,
+                });
+                        
                 const tokenData = rs.data.data;
                 const newAccessToken = tokenData.accessToken;
                 const newRefreshToken = tokenData.refreshToken;
@@ -92,14 +86,16 @@ api.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
                 processQueue(null, newAccessToken);
-                
                 return api(originalRequest);
-                
-            } catch (refreshError) {
-                processQueue(refreshError, null);
+            } catch (error) {
+                processQueue(error, null);
                 removeTokens();
-                window.location.href = '/auth/login';
-                return Promise.reject(refreshError);
+                
+                // Redirect về trang chủ khi authentication fail
+                if (!window.location.pathname.includes('/auth')) {
+                    window.location.href = '/';
+                }
+                return Promise.reject(error);
             } finally {
                 isRefreshing = false;
             }

@@ -44,7 +44,7 @@ export function useProfileForm() {
       if (user?.id && token) {
         setLoading(true);
         try {
-          const profileData = await getProfile(Number(user.id), token);
+          const profileData = await getProfile(Number(user.id));
           
           setUser({
             ...profileData,
@@ -104,7 +104,7 @@ export function useProfileForm() {
     setError("");
 
     try {
-      const updatedUser = await updateAvatar(Number(user.id), file, token);
+      const updatedUser = await updateAvatar(Number(user.id), file);
       
       setUser({
         ...updatedUser,
@@ -139,7 +139,7 @@ export function useProfileForm() {
         [fieldName]: value,
       };
 
-      const updatedUser = await updateProfile(Number(user.id), payload, token);
+      const updatedUser = await updateProfile(Number(user.id), payload);
 
       
       setUser({
@@ -191,7 +191,7 @@ export function useProfileForm() {
       };
 
       
-      const updatedUser = await updateProfile(Number(user.id), payload, token);
+      const updatedUser = await updateProfile(Number(user.id), payload);
 
       
       setUser({

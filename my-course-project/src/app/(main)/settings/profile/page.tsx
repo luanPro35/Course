@@ -1,6 +1,8 @@
 import React from "react";
 import ProfileForm from "./ProfileForm";
-export default function page() {
+
+export default function ProfilePage() {
+
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-4">Thông tin cá nhân</h1>

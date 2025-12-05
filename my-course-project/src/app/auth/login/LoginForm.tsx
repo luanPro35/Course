@@ -1,7 +1,6 @@
 import React from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "next/link";
-import { AuthLayout } from "@/components/auth/AuthLayout";
 import SuccessAnimation from "@/components/ui/SuccessAnimation";
 import ErrorAnimation from "@/components/ui/ErrorAnimation";
 import { SocialButton } from "../SocialButton";
@@ -14,6 +13,7 @@ import LoginAnimation from "@/components/ui/LoginAnimation";
 const LoginForm: React.FC<LoginFormProps> = ({
   onClose,
   onSwitchToRegister,
+  onSwitchToForgot,
 }) => {
   const {
     formData,
@@ -28,7 +28,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   } = useLoginForm(onClose);
 
   return (
-    <AuthLayout onClose={onClose}>
+    <div className="relative w-full h-full">
       {isLoading && (
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
           <p className="text-gray-600 font-medium text-lg">Đang đăng nhập...</p>
@@ -106,12 +106,14 @@ const LoginForm: React.FC<LoginFormProps> = ({
               </button>
             </div>
 
-            <Link
-              href="/forgot-password"
-              className="block text-orange-500 hover:text-orange-600 text-sm font-medium"
+
+            <button
+              type="button"
+              onClick={onSwitchToForgot}
+              className="block w-full text-center text-orange-500 hover:text-orange-600 text-sm font-medium hover:underline"
             >
               Quên mật khẩu?
-            </Link>
+            </button>
           </div>
 
           <div className="mt-8 pt-6 border-t border-gray-100">
@@ -129,7 +131,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <LoginAnimation />
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 };
 

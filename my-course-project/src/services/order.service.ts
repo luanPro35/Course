@@ -22,6 +22,12 @@ export interface PageResponse<T> {
   number: number;
 }
 
+export interface TransactionStatusResponse {
+  vnPayStatus: string;
+  localStatus: string;
+  message: string;
+}
+
 /**
  * Lấy danh sách tất cả đơn hàng (Admin only)
  */
@@ -86,7 +92,9 @@ export const refundOrder = async (orderId: number): Promise<void> => {
   }
 };
 
-export const checkOrderStatus = async (orderId: number): Promise<string> => {
+export const checkOrderStatus = async (
+  orderId: number
+): Promise<TransactionStatusResponse> => {
   try {
     const token = localStorage.getItem("accessToken");
     if (!token) {

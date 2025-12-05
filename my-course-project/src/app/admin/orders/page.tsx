@@ -5,6 +5,7 @@ import {
   refundOrder,
   checkOrderStatus,
   OrderResponse,
+  TransactionStatusResponse,
 } from "@/services/order.service";
 import Image from "next/image";
 
@@ -21,7 +22,9 @@ export default function AdminOrdersPage() {
   );
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
-  const [orderStatus, setOrderStatus] = useState<string>("");
+  const [orderStatus, setOrderStatus] = useState<
+    TransactionStatusResponse | string | null
+  >(null);
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ export default function AdminOrdersPage() {
     setActionLoading(true);
     setShowStatusModal(true);
 
-    try {
+    try { 
       const status = await checkOrderStatus(order.id);
       setOrderStatus(status);
     } catch (err) {
@@ -112,7 +115,7 @@ export default function AdminOrdersPage() {
       } else if (err && typeof err === "object" && "message" in err) {
         errorMessage = String(err.message);
       }
-      setOrderStatus("Lỗi: " + errorMessage);
+      setOrderStatus(errorMessage);
     } finally {
       setActionLoading(false);
     }
@@ -436,7 +439,11 @@ export default function AdminOrdersPage() {
                 {actionLoading ? (
                   <p className="text-gray-500 mt-2">Đang kiểm tra...</p>
                 ) : (
-                  <p className="font-semibold text-lg mt-2">{orderStatus}</p>
+                  <div className="font-semibold text-lg mt-2">
+                    {typeof orderStatus === "string"
+                      ? orderStatus
+                      : orderStatus?.message}
+                  </div>
                 )}
               </div>
             </div>
