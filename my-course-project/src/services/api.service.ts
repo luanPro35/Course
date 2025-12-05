@@ -58,6 +58,7 @@ export const getAllUsersURL = (page: number, size: number) =>
   `http://localhost:8080/project/admin/users?page=${page}&size=${size}`;
 export const deleteUserURL = (userId: number) =>
   `http://localhost:8080/project/admin/users/delete/${userId}`;
+export const refreshTokenURL = "http://localhost:8080/project/auth/refresh-token";
 export const GOOGLE_CLIENT_ID =
   "121852921364-eipdrl0m9a6qsft95htfdkn6t5dtmsov.apps.googleusercontent.com";
 export const GOOGLE_REDIRECT_URI = "http://localhost:3000/oauth2/callback";

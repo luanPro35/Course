@@ -1,8 +1,8 @@
 import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
-import { getAccessToken } from "@/utils/token";
-import { CALL_LOGIN_GG } from "./api.service";
+import { getAccessToken, getRefreshToken, setTokens } from "@/utils/token";
+import { CALL_LOGIN_GG, refreshTokenURL } from "./api.service";
 
 const register = async (
   formData: RegisterFormData
@@ -89,10 +89,43 @@ const loginWithGoogle = async (code: string): Promise<LoginResponse> => {
   };
 };
 
+const refreshToken = async (): Promise<LoginResponse> => {
+  const currentRefreshToken = getRefreshToken();
+  if (!currentRefreshToken) {
+    throw new Error("Refresh token not found");
+  }
+
+  const response = await fetch(refreshTokenURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ refreshToken: currentRefreshToken }),
+  });
+
+  const data = await response.json();
+  
+  if (!response.ok) {
+    throw new Error(data.message || "Refresh token failed");
+  }
+
+  const tokenData = data.data;
+  
+  setTokens(tokenData.accessToken, tokenData.refreshToken);
+
+  return {
+    mess: "Token refreshed successfully",
+    user: tokenData.user,
+    accessToken: tokenData.accessToken,
+    refreshToken: tokenData.refreshToken,
+  };
+};
+
 export const AuthService = {
   register,
   login,
   logout,
   loginWithSocial,
   loginWithGoogle,
+  refreshToken,
 };

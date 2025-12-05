@@ -1,8 +1,6 @@
 import axios from "axios";
 import { getAccessToken, getRefreshToken, setTokens, removeTokens } from "@/utils/token";
 
-
-
 const api = axios.create({
     
     baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/project', 
@@ -45,68 +43,69 @@ const processQueue = (error: unknown, token : string | null = null) => {
 };
 api.interceptors.response.use(
     (response) => {
-        
         return response;
     },
     async (error) => {
         const originalRequest = error.config;
         
         if (error.response?.status === 401 && !originalRequest._retry) {
+            
             if (isRefreshing) {
-                
                 return new Promise(function (resolve, reject) {
-                    failedQueue.push({resolve, reject});
+                    failedQueue.push({ resolve, reject });
                 })
-                    .then(token=>{
+                    .then(token => {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
                         return api(originalRequest);
                     })
                     .catch(err => {
                         return Promise.reject(err);
                     });
-                    }
             }
+
             originalRequest._retry = true;
             isRefreshing = true;
+
             const refreshToken = getRefreshToken();
+            
             if (!refreshToken) {
-                
-                
                 removeTokens();
                 window.location.href = '/auth/login';
                 return Promise.reject(error);
             }
-            try{
-                
-                
-                const rs = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
-                    
-                    token: refreshToken,
-                });
-                
-                const { accessToken: newAccessToken, refreshToken: newRefreshToken } = rs.data.result;
 
-                
+            try {
+                const rs = await axios.post(
+                    `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/project'}/auth/refresh-token`,
+                    {
+                        refreshToken: refreshToken,
+                    }
+                );
+
+                const tokenData = rs.data.data;
+                const newAccessToken = tokenData.accessToken;
+                const newRefreshToken = tokenData.refreshToken;
+
                 setTokens(newAccessToken, newRefreshToken);
 
-                
                 api.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-                
                 processQueue(null, newAccessToken);
+                
                 return api(originalRequest);
-                } catch (error) {
-                    
-                    processQueue(error, null);
-                    removeTokens();
-                    
-                    window.location.href = '/auth/login'; 
-                    return Promise.reject(error);
-                } finally {
-                    isRefreshing = false;
-                }
+                
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                removeTokens();
+                window.location.href = '/auth/login';
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
 
         return Promise.reject(error);
-    });
+    }
+);
 export default api;

@@ -52,10 +52,8 @@ export class BlogService {
 
   static async getAll(): Promise<BlogPost[]> {
     try {
-      // Use the Public endpoint to get PUBLISHED posts only
       const { getPublishedArticlesURL } = await import("@/services/api.service");
       
-      // Public endpoint doesn't need token
       const response = await fetch(getPublishedArticlesURL(0, 100), {
         headers: {
           "Content-Type": "application/json",
