@@ -17,8 +17,11 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
-    String thumbleUrl;
-
+    String contentUrl;
+    @Column(columnDefinition = "int default 0", nullable = false)
+    Long durationInMinutes;
+    @Column(columnDefinition = "int default 0", nullable = false)
+    int orderIndex;
     @ManyToOne
     @JoinColumn(name = "section_id", nullable = false)
     Section section;

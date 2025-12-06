@@ -2,6 +2,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { BlogService } from "@/services/blog.service";
+import { getTokens } from "@/utils/token";
 import { BlogFormData } from "@/types/blog.types";
 
 export const useBlogForm = (initialState: BlogFormData) => {
@@ -9,7 +10,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false); // State for image upload
+  const [isUploading, setIsUploading] = useState(false); 
 
   const resetForm = () => {
     setFormData(initialState);
@@ -45,8 +46,13 @@ export const useBlogForm = (initialState: BlogFormData) => {
           uploadFormData.append("file", file);
 
           try {
+            const { accessToken } = getTokens();
+            const headers = accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : undefined;
             const res = await fetch("/api/upload", {
               method: "POST",
+              headers,
               body: uploadFormData,
             });
             const result = await res.json();
@@ -77,16 +83,21 @@ export const useBlogForm = (initialState: BlogFormData) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
 
-    // Set uploading state
+    
     setIsUploading(true);
-    setErrors((prev) => ({ ...prev, image: undefined })); // Clear previous image error
+    setErrors((prev) => ({ ...prev, image: undefined })); 
 
     const uploadFormData = new FormData();
     uploadFormData.append("file", file);
 
     try {
+      const { accessToken } = getTokens();
+      const headers = accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined;
       const res = await fetch("/api/upload", {
         method: "POST",
+        headers,
         body: uploadFormData,
       });
 
@@ -96,7 +107,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
         throw new Error(result.error || "Tải ảnh lên thất bại.");
       }
 
-      // On successful upload, update the form data with the REAL path
+      
       setFormData((prev) => ({ ...prev, image: result.path }));
     } catch (error) {
       console.error(error);
@@ -105,7 +116,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
         image: "Lỗi khi tải ảnh lên. Vui lòng thử lại.",
       }));
     } finally {
-      // Unset uploading state
+      
       setIsUploading(false);
     }
   };
@@ -113,6 +124,7 @@ export const useBlogForm = (initialState: BlogFormData) => {
   const handleSubmit = async (
     status: "draft" | "published",
     userId: string | null,
+    token: string | null,
     postId?: number | string,
     router?: AppRouterInstance
   ) => {
@@ -134,34 +146,62 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
     if (!userId) {
       setErrors((prev) => ({ ...prev, userId: "User ID is required" }));
+      alert("Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.");
+      return;
+    }
+
+    if (!token) {
+      setErrors((prev) => ({
+        ...prev,
+        token: "Authentication token is missing",
+      }));
+      alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
+      console.log(
+        "Submitting blog post with userId:",
+        userId,
+        "token:",
+        token ? "present" : "missing"
+      );
+
       if (postId) {
-        // Update existing post with status
-        await BlogService.update(
-          userId,
-          parseInt(postId.toString(), 10),
-          { ...formData, status }
+        
+        await BlogService.update(parseInt(postId.toString(), 10), {
+          ...formData,
+          status,
+        });
+        alert(
+          `Bài viết đã được cập nhật dưới dạng ${
+            status === "draft" ? "bản nháp" : "xuất bản"
+          }`
         );
-        alert(`Bài viết đã được cập nhật dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
       } else {
-        // Create new post
-        await BlogService.create(formData, userId, status);
-        alert(`Bài viết đã được lưu dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
-        resetForm(); // Reset the form after successful creation
+        
+        await BlogService.create(formData, status);
+        alert(
+          `Bài viết đã được lưu dưới dạng ${
+            status === "draft" ? "bản nháp" : "xuất bản"
+          }`
+        );
+        resetForm(); 
       }
 
-      // Redirect to my-posts page after successful save
+      
       if (router) {
         router.push("/blog/my-posts");
       }
     } catch (error) {
       console.error("Failed to save the post:", error);
-      alert("Có lỗi xảy ra khi lưu bài viết.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Có lỗi xảy ra khi lưu bài viết.";
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -172,13 +212,13 @@ export const useBlogForm = (initialState: BlogFormData) => {
     setFormData,
     errors,
     isSubmitting,
-    isUploading, // Expose uploading state to the component
+    isUploading, 
     imagePreview,
-    setImagePreview, // Expose setImagePreview
+    setImagePreview, 
     handleChange,
-    handleImageChange, // Use this new handler for the file input
+    handleImageChange, 
     handlePaste,
     handleSubmit,
-    resetForm, // Expose the reset function
+    resetForm, 
   };
 };

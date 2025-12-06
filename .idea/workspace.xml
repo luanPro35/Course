@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="feat: add account deletion and password reset functionalities with OTP verification">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_6_22_AM_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_6_22_AM__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_20_2025_11_08_AM_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_20_2025_11_08_AM__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application-dev.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762223183859-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762243257847-ktx.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762244701926-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762244839990-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762325467263-z6756276697393_9f541a408d0892795188927cea3ca6c2(1)(1).jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762398671731-z7172600638304_6813af25d072a65e52b831ab121942cd.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codeTokenStore.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docAPI" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-course-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/package-lock.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="AUTO_SHOW_ERRORS_IN_EDITOR" value="false" />
+    <option name="DISPLAY_NOTIFICATION_POPUP" value="false" />
+    <option name="CLEAR_OUTPUT_DIRECTORY" value="false" />
+    <option name="REBUILD_ON_DEPENDENCY_CHANGE" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="implement-be" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDOP3_9yc63EesL",
+        "number": 21
+      },
+      "lastSeen": 1764982029003
+    }
+  ]
+}]]></component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/luanPro35/Course.git&quot;,
+    &quot;accountId&quot;: &quot;da221f8d-7b53-4067-887d-7dd3c7cf51b5&quot;
+  }
+}</component>
+  <component name="HttpClientEndpointsTabState">
+    <option name="cachedRequestData" value="&lt;CachedHttpClientTabRequests&gt;&#10;  &lt;entry key=&quot;83e60647aa8bf341969df790dc3ab56de90fb0ea&quot; value=&quot;###&amp;#10;POST http://localhost:8080/project/oauth2/callback?&amp;#10;    code={{$random.alphanumeric(8)}}&quot; /&gt;&#10;  &lt;entry key=&quot;44113b749967c56ba021e77d207d7c1f5dd22e10&quot; value=&quot;###&amp;#10;POST http://localhost:8080/project/posts/create-post-status-draft&amp;#10;Content-Type: application/json&amp;#10;&amp;#10;{&amp;#10;  &amp;quot;author&amp;quot;: &amp;quot;&amp;quot;,&amp;#10;  &amp;quot;title&amp;quot;: &amp;quot;&amp;quot;,&amp;#10;  &amp;quot;category&amp;quot;: &amp;quot;&amp;quot;,&amp;#10;  &amp;quot;content&amp;quot;: &amp;quot;&amp;quot;,&amp;#10;  &amp;quot;fullContent&amp;quot;: &amp;quot;&amp;quot;&amp;#10;}&quot; /&gt;&#10;&lt;/CachedHttpClientTabRequests&gt;" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="35320d6YgZEEGMpeKV4oq1yDJQp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.course-web-be [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.course-web-be [install].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;Spring Boot.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#21 on implement-be&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;24.11.1&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.10.1&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/MyProjects/Course&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/loiko/AppData/Roaming/JetBrains/IntelliJIdea2025.1/node/versions/24.11.1/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMThirdPartyAiProvidersConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.project.courseweb.dtos.response" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\MyProjects\Course" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\MyProjects\Course" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.project.courseweb.dtos.response" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.CourseWebBeApplication">
+    <configuration name="CourseWebBeApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.project.courseweb.CourseWebBeApplication" />
+      <module name="course-web-be" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.project.courseweb.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CourseWebBeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="course-web-be" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.project.courseweb.CourseWebBeApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CourseWebBeApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="" />
+      <created>1762324214027</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762324214027</updated>
+      <workItem from="1763040274080" duration="159000" />
+      <workItem from="1763129877848" duration="148000" />
+      <workItem from="1763535147148" duration="213000" />
+      <workItem from="1763535860791" duration="680000" />
+      <workItem from="1763547173603" duration="188000" />
+      <workItem from="1763547385405" duration="785000" />
+      <workItem from="1763551174106" duration="2000" />
+      <workItem from="1763609479086" duration="27000" />
+      <workItem from="1763611161323" duration="3155000" />
+    </task>
+    <task id="LOCAL-00001" summary="oauth2">
+      <option name="closed" value="true" />
+      <created>1762327020023</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762327020023</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Refactor entity relationships and add CategoryType enum">
+      <option name="closed" value="true" />
+      <created>1762444628890</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762444628890</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Refactor file upload service to support generic file uploads and update avatar handling">
+      <option name="closed" value="true" />
+      <created>1762444753381</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762444753381</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Implement category management and post creation features with file upload support">
+      <option name="closed" value="true" />
+      <created>1762444892860</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762444892860</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Refactor authentication and Google OAuth2 integration for improved user profile handling">
+      <option name="closed" value="true" />
+      <created>1762528011199</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762528011199</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add admin authentication creation in AuthService and initialize in ApplicationInitConfig">
+      <option name="closed" value="true" />
+      <created>1762618554267</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762618554267</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Implement post management features including creation, retrieval, and updating with pagination support">
+      <option name="closed" value="true" />
+      <created>1762618603526</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1762618603526</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Add new Postman requests for retrieving and updating posts with token authentication">
+      <option name="closed" value="true" />
+      <created>1762763708130</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1762763708130</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Enhance course and enrollment models with new fields and relationships; add timestamps and update transaction management in PostServiceImpl">
+      <option name="closed" value="true" />
+      <created>1762903302718</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1762903302718</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add CourseStatus enum to define course publication states">
+      <option name="closed" value="true" />
+      <created>1762903366430</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1762903366430</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add api public(get all post status publish) and api delete post">
+      <option name="closed" value="true" />
+      <created>1763536286501</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763536286501</updated>
+    </task>
+    <task id="LOCAL-00012" summary="refactor code">
+      <option name="closed" value="true" />
+      <created>1763611265168</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1763611265168</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add role user">
+      <option name="closed" value="true" />
+      <created>1763612532292</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1763612532292</updated>
+    </task>
+    <task id="LOCAL-00014" summary="REMOVE STATUS POST(PENDING AND REJECT)">
+      <option name="closed" value="true" />
+      <created>1763634141927</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1763634141927</updated>
+    </task>
+    <task id="LOCAL-00015" summary="ADD POSTMAN">
+      <option name="closed" value="true" />
+      <created>1763634328561</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1763634328561</updated>
+    </task>
+    <task id="LOCAL-00016" summary="ADD admin and course management functionality">
+      <option name="closed" value="true" />
+      <created>1763727888695</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1763727888695</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add api admin management courses and posts and api external">
+      <option name="closed" value="true" />
+      <created>1763789853384</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1763789853384</updated>
+    </task>
+    <task id="LOCAL-00018" summary="feat: implement order management and payment processing functionalit with VnPaySanbox">
+      <option name="closed" value="true" />
+      <created>1763898570012</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1763898570012</updated>
+    </task>
+    <task id="LOCAL-00019" summary="feat: refactor auth service for improved API integration and error handling">
+      <option name="closed" value="true" />
+      <created>1763998644643</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1763998644643</updated>
+    </task>
+    <task id="LOCAL-00020" summary="feat: add course thumbnail upload functionality and enrollment response DTO">
+      <option name="closed" value="true" />
+      <created>1764209833372</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1764209833372</updated>
+    </task>
+    <task id="LOCAL-00021" summary="add postman">
+      <option name="closed" value="true" />
+      <created>1764295819484</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1764295819484</updated>
+    </task>
+    <task id="LOCAL-00022" summary="feat: add user management functionalities including user list retrieval and deletion">
+      <option name="closed" value="true" />
+      <created>1764672039262</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1764672039262</updated>
+    </task>
+    <task id="LOCAL-00023" summary="feat: implement user management endpoints for retrieving and deleting users">
+      <option name="closed" value="true" />
+      <created>1764673077682</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1764673077682</updated>
+    </task>
+    <task id="LOCAL-00024" summary="feat: enhance VnPay transaction status handling and add pay date to response">
+      <option name="closed" value="true" />
+      <created>1764774818400</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1764774818400</updated>
+    </task>
+    <task id="LOCAL-00025" summary="feat: enhance payment processing with improved email notifications and transaction status handling">
+      <option name="closed" value="true" />
+      <created>1764775337484</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1764775337484</updated>
+    </task>
+    <task id="LOCAL-00026" summary="feat: enhance payment processing with improved email notifications and transaction status handling">
+      <option name="closed" value="true" />
+      <created>1764775448348</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1764775448348</updated>
+    </task>
+    <task id="LOCAL-00027" summary="refactor code">
+      <option name="closed" value="true" />
+      <created>1764854745379</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1764854745379</updated>
+    </task>
+    <task id="LOCAL-00028" summary="feat: add account deletion and password reset functionalities with OTP verification">
+      <option name="closed" value="true" />
+      <created>1764854911964</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1764854911964</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Refactor file upload service to support generic file uploads and update avatar handling" />
+    <MESSAGE value="Implement category management and post creation features with file upload support" />
+    <MESSAGE value="Refactor authentication and Google OAuth2 integration for improved user profile handling" />
+    <MESSAGE value="Add admin authentication creation in AuthService and initialize in ApplicationInitConfig" />
+    <MESSAGE value="Implement post management features including creation, retrieval, and updating with pagination support" />
+    <MESSAGE value="Add new Postman requests for retrieving and updating posts with token authentication" />
+    <MESSAGE value="Enhance course and enrollment models with new fields and relationships; add timestamps and update transaction management in PostServiceImpl" />
+    <MESSAGE value="Add CourseStatus enum to define course publication states" />
+    <MESSAGE value="add api public(get all post status publish) and api delete post" />
+    <MESSAGE value="add role user" />
+    <MESSAGE value="REMOVE STATUS POST(PENDING AND REJECT)" />
+    <MESSAGE value="ADD POSTMAN" />
+    <MESSAGE value="ADD admin and course management functionality" />
+    <MESSAGE value="add api admin management courses and posts and api external" />
+    <MESSAGE value="feat: implement order management and payment processing functionalit with VnPaySanbox" />
+    <MESSAGE value="feat: refactor auth service for improved API integration and error handling" />
+    <MESSAGE value="feat: add course thumbnail upload functionality and enrollment response DTO" />
+    <MESSAGE value="add postman" />
+    <MESSAGE value="feat: add user management functionalities including user list retrieval and deletion" />
+    <MESSAGE value="feat: implement user management endpoints for retrieving and deleting users" />
+    <MESSAGE value="feat: enhance VnPay transaction status handling and add pay date to response" />
+    <MESSAGE value="feat: enhance payment processing with improved email notifications and transaction status handling" />
+    <MESSAGE value="refactor code" />
+    <MESSAGE value="feat: add account management features including delete account, forgot password, and reset password" />
+    <MESSAGE value="feat: add account deletion and password reset functionalities with OTP verification" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add account deletion and password reset functionalities with OTP verification" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

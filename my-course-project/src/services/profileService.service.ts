@@ -1,14 +1,17 @@
 import { User } from "@/types/user";
-import { PROFILE_API_URL } from "@/services/api.service";
+import {
+  PROFILE_API_URL,
+  AVATAR_API_URL,
+  PROFILE_GET_API_URL,
+} from "@/services/api.service";
+import api from "@/lib/validations/axios";
 
-export const getProfile = async (userId: number): Promise<User> => {
+export const getProfile = async (
+  userId: number
+): Promise<User> => {
   try {
-    const response = await fetch(`${PROFILE_API_URL}?userId=${userId}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch profile");
-    }
-    const data = await response.json();
-    return data.data;
+    const response = await api.get(`${PROFILE_GET_API_URL}?userId=${userId}`);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching profile:", error);
     throw error;
@@ -20,20 +23,34 @@ export const updateProfile = async (
   profileData: Partial<User>
 ): Promise<User> => {
   try {
-    const response = await fetch(PROFILE_API_URL, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: userId, ...profileData }),
+    const response = await api.put(PROFILE_API_URL, {
+      id: userId,
+      ...profileData,
     });
-    if (!response.ok) {
-      throw new Error("Failed to update profile");
-    }
-    const data = await response.json();
-    return data.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error updating profile:", error);
+    throw error;
+  }
+};
+
+export const updateAvatar = async (
+  userId: number,
+  avatar: File
+): Promise<User> => {
+  try {
+    const formData = new FormData();
+    formData.append("file", avatar);
+
+    const response = await api.patch(AVATAR_API_URL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Error updating avatar:", error);
     throw error;
   }
 };

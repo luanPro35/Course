@@ -6,7 +6,7 @@ interface StatCardProps {
   value: number | string;
   icon: LucideIcon;
   trend?: {
-    value: string;
+    value?: string;
     isPositive: boolean;
   };
   iconBgColor?: string;
@@ -35,16 +35,6 @@ export default function StatCard({
         <h2 className="text-4xl font-bold text-gray-900">
           {typeof value === "number" ? value.toLocaleString() : value}
         </h2>
-
-        {trend && (
-          <span
-            className={`text-sm font-semibold flex items-center ${
-              trend.isPositive ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {trend.isPositive ? "↑" : "↓"} {trend.value}
-          </span>
-        )}
       </div>
     </div>
   );

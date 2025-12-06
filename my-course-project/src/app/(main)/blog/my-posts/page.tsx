@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BlogService } from "@/services/blog.service"; // Force re-import
+import { BlogService } from "@/services/blog.service"; 
 import { BlogPost } from "@/types/blog.types";
 import { PostItem } from "./PostItem";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,7 @@ export default function MyPosts() {
     }
 
     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
-      BlogService.delete(user.id, Number(id))
+      BlogService.delete(Number(id))
         .then(() => {
           setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
         })
@@ -43,9 +43,7 @@ export default function MyPosts() {
 
     BlogService.getAll()
       .then((allPosts) => {
-        // Filter posts to only show current user's posts
-        const userPosts = allPosts.filter((post) => post.user?.id === user.id);
-        setPosts(userPosts);
+        setPosts(allPosts);
       })
       .catch((err) => console.error(err));
   }, [user?.id]);
@@ -83,7 +81,7 @@ export default function MyPosts() {
         </button>
       </div>
 
-      {/* Hiển thị nội dung theo trạng thái */}
+      {}
       {activeContent === "draft" && (
         <section>
           {drafts.length ? (
@@ -93,6 +91,7 @@ export default function MyPosts() {
                 post={p}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                avatar={user?.avatar}
               />
             ))
           ) : (
@@ -110,6 +109,7 @@ export default function MyPosts() {
                 post={p}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                avatar={user?.avatar}
               />
             ))
           ) : (

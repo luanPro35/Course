@@ -3,8 +3,9 @@ import React from "react";
 import { useBlogForm } from "@/hooks/useBlogForm";
 import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
 import { FileText, Tag, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-// Import các component con
+
 import { FormInput } from "./FormInput";
 import { FormTextarea } from "./FormTextarea";
 import { FormSelect } from "./FormSelect";
@@ -16,6 +17,7 @@ import { TipsSection } from "./TipsSection";
 import { BlogPreview } from "./BlogPreview";
 
 export default function CreateBlogPost() {
+  const router = useRouter();
   const {
     formData,
     errors,
@@ -39,7 +41,7 @@ export default function CreateBlogPost() {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Form Section */}
+          {}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <FormHeader
               title="Tạo Bài Viết Mới"
@@ -120,15 +122,31 @@ export default function CreateBlogPost() {
               />
 
               <FormActions
-                onDraft={() => handleSubmit("draft", "1")}
-                onPublish={() => handleSubmit("published", "1")}
+                onDraft={() =>
+                  handleSubmit(
+                    "draft",
+                    "1",
+                    "YOUR_AUTH_TOKEN_HERE",
+                    undefined,
+                    router
+                  )
+                }
+                onPublish={() =>
+                  handleSubmit(
+                    "published",
+                    "1",
+                    "YOUR_AUTH_TOKEN_HERE",
+                    undefined,
+                    router
+                  )
+                }
                 isSubmitting={isSubmitting}
                 isUploading={isUploading}
               />
             </div>
           </div>
 
-          {/* Preview Section */}
+          {}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <FormHeader
               title="Xem trước"

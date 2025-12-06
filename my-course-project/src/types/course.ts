@@ -3,18 +3,16 @@ export interface Course {
   title: string;
   slug: string;
   description: string;
-  image: string;
+  thumbnailUrl: string;
   icon: string;
   video: string;
   votes: number;
   students: number;
   free: boolean;
   price?: number;
-  discountPrice?: number;
   updatedAt: string;
 }
 
-// Inferred types for courseData based on usage in DynamicCoursePage.tsx
 export interface CourseBadge {
   bgColor: string;
   textColor: string;
@@ -67,5 +65,5 @@ export interface CourseContent {
   learningPoints: string[];
 }
 
-export type CourseType = "html-css" | "javascript-pro" | "sass-advanced"; // Defined in DynamicCoursePage.tsx, but exported here for consistency
+export type CourseType = "html-css" | "javascript-pro" | "sass-advanced"; 
 export type CourseDataType = Record<CourseType, CourseContent>;

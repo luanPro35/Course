@@ -20,7 +20,7 @@ export default function CreateBlogPost() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("id");
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const {
     formData,
@@ -45,8 +45,8 @@ export default function CreateBlogPost() {
   });
 
   useEffect(() => {
-    if (postId && user?.id) {
-      BlogService.getById(user.id, parseInt(postId, 10))
+    if (postId && user?.id && token) {
+      BlogService.getById(parseInt(postId, 10))
         .then((post) => {
           if (post) {
             setFormData(post);
@@ -61,7 +61,7 @@ export default function CreateBlogPost() {
           router.push("/blog/create");
         });
     }
-  }, [postId, user?.id, setFormData, setImagePreview, router]);
+  }, [postId, user?.id, token, setFormData, setImagePreview, router]);
 
   const pageTitle = postId ? "Chỉnh Sửa Bài Viết" : "Tạo Bài Viết Mới";
   const draftButtonText = postId ? "Cập nhật bản nháp" : "Lưu bản nháp";
@@ -72,7 +72,7 @@ export default function CreateBlogPost() {
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Form Section */}
+            {}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <FormHeader
                 title={pageTitle}
@@ -161,6 +161,7 @@ export default function CreateBlogPost() {
                     handleSubmit(
                       "draft",
                       user?.id ?? null,
+                      token ?? null,
                       postId ?? undefined,
                       router
                     )
@@ -169,6 +170,7 @@ export default function CreateBlogPost() {
                     handleSubmit(
                       "published",
                       user?.id ?? null,
+                      token ?? null,
                       postId ?? undefined,
                       router
                     )
@@ -179,7 +181,7 @@ export default function CreateBlogPost() {
               </div>
             </div>
 
-            {/* Preview Section */}
+            {}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <FormHeader
                 title="Xem trước"

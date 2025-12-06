@@ -26,7 +26,7 @@ export const authOptions: AuthOptions = {
         const { email, password } = credentials as Record<"email", string> &
           Record<"password", string>;
 
-        // Admin login
+        
         if (
           email === process.env.ADMIN_EMAIL &&
           password === process.env.ADMIN_PASSWORD
@@ -39,7 +39,7 @@ export const authOptions: AuthOptions = {
           };
         }
 
-        // Regular user login
+        
         try {
           const userResponse = await fetch(
             `${USER_API_URL}/users?email=${email}`
@@ -75,16 +75,13 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // @ts-expect-error Role is added to token
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        // @ts-expect-error ID is added to session user
         session.user.id = token.id;
-        // @ts-expect-error Role is added to session user
         session.user.role = token.role;
       }
       return session;

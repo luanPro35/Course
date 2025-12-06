@@ -125,6 +125,7 @@ const Footer: React.FC = () => {
                 height={48}
                 className="w-40 h-auto object-contain brightness-110 drop-shadow-[0_2px_6px_rgba(255,255,255,0.2)]"
                 priority
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
             <p className="text-gray-400 text-sm mb-4">
@@ -184,7 +185,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* --- Bản quyền --- */}
+      {}
       <div className="border-t border-gray-800 relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-gray-400">

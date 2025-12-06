@@ -1,6 +1,10 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { profileService } from "@/services/profileService/service";
+import {
+  getProfile,
+  updateProfile,
+  updateAvatar,
+} from "@/services/profileService.service";
 import { User } from "@/types/user";
 
 export interface ProfileFormData {
@@ -16,7 +20,7 @@ export interface ProfileFormData {
 }
 
 export function useProfileForm() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, token } = useAuth();
   const [form, setForm] = useState<ProfileFormData>({
     name: "",
     fullName: "",
@@ -37,25 +41,26 @@ export function useProfileForm() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (user?.id) {
+      if (user?.id && token) {
         setLoading(true);
         try {
-          // The user.id might be a number, but the service expects a string.
-          const profileData = await profileService.getProfile(String(user.id));
-          if (profileData.success && profileData.data) {
-            setUser(profileData.data);
-            setForm({
-              name: profileData.data.fullName || "",
-              fullName: profileData.data.fullName || "",
-              about: profileData.data.about || "",
-              avatar: profileData.data.avatar || "",
-              personalWebsite: profileData.data.personalWebsite || "",
-              github: profileData.data.github || "",
-              linkedin: profileData.data.linkedin || "",
-              facebook: profileData.data.facebook || "",
-              youtube: profileData.data.youtube || "",
-            });
-          }
+          const profileData = await getProfile(Number(user.id));
+          
+          setUser({
+            ...profileData,
+            email: user.email,
+          });
+          setForm({
+            name: profileData.fullName || "",
+            fullName: profileData.fullName || "",
+            about: profileData.about || "",
+            avatar: profileData.avatar || "",
+            personalWebsite: profileData.personalWebsite || "",
+            github: profileData.github || "",
+            linkedin: profileData.linkedin || "",
+            facebook: profileData.facebook || "",
+            youtube: profileData.youtube || "",
+          });
         } catch (error) {
           console.error("Failed to fetch profile:", error);
           setError("Không thể tải hồ sơ.");
@@ -66,7 +71,7 @@ export function useProfileForm() {
     };
 
     fetchProfile();
-  }, [user?.id, setUser]);
+  }, [user?.id, setUser, token]);
 
   const handleFieldClick = (fieldName: string) => {
     setEditingField(fieldName);
@@ -77,7 +82,7 @@ export function useProfileForm() {
     setEditingField(null);
   };
 
-  // Hàm xử lý khi người dùng nhập liệu
+  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -89,38 +94,28 @@ export function useProfileForm() {
   };
 
   const handleAvatarChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) {
+    if (!e.target.files || e.target.files.length === 0 || !user || !token) {
       return;
     }
 
     const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
 
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      const updatedUser = await updateAvatar(Number(user.id), file);
+      
+      setUser({
+        ...updatedUser,
+        email: user.email,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Cập nhật ảnh đại diện thất bại");
-      }
-
-      if (data.success && data.path) {
-        // Cập nhật avatar trong form
-        setForm((prevForm) => ({
-          ...prevForm,
-          avatar: data.path,
-        }));
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 2000);
-      }
+      setForm((prevForm) => ({
+        ...prevForm,
+        avatar: updatedUser.avatar || "",
+      }));
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Đã xảy ra lỗi không mong muốn.";
@@ -131,7 +126,7 @@ export function useProfileForm() {
   };
 
   const handleUpdateField = async (fieldName: string, value: string) => {
-    if (!user) {
+    if (!user || !token) {
       return;
     }
 
@@ -141,30 +136,28 @@ export function useProfileForm() {
 
     try {
       const payload: Partial<User> = {
-        id: user.id,
         [fieldName]: value,
       };
 
-      const result = await profileService.updateProfile(payload);
+      const updatedUser = await updateProfile(Number(user.id), payload);
 
-      if (!result.success || !result.data) {
-        throw new Error(result.message || "Cập nhật thất bại");
-      }
+      
+      setUser({
+        ...updatedUser,
+        email: user.email,
+      });
 
-      // Cập nhật dữ liệu người dùng trong context
-      setUser(result.data);
-
-      // Cập nhật form với toàn bộ dữ liệu từ kết quả API
+      
       setForm({
-        name: result.data.fullName || "",
-        fullName: result.data.fullName || "",
-        about: result.data.about || "",
-        avatar: result.data.avatar || "",
-        personalWebsite: result.data.personalWebsite || "",
-        github: result.data.github || "",
-        linkedin: result.data.linkedin || "",
-        facebook: result.data.facebook || "",
-        youtube: result.data.youtube || "",
+        name: updatedUser.fullName || "",
+        fullName: updatedUser.fullName || "",
+        about: updatedUser.about || "",
+        avatar: updatedUser.avatar || "",
+        personalWebsite: updatedUser.personalWebsite || "",
+        github: updatedUser.github || "",
+        linkedin: updatedUser.linkedin || "",
+        facebook: updatedUser.facebook || "",
+        youtube: updatedUser.youtube || "",
       });
 
       setSuccess(true);
@@ -181,11 +174,11 @@ export function useProfileForm() {
     }
   };
 
-  // Hàm xử lý khi submit toàn bộ form
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!user) return;
+    if (!user || !token) return;
 
     setLoading(true);
     setSuccess(false);
@@ -193,30 +186,30 @@ export function useProfileForm() {
 
     try {
       const payload: Partial<User> = {
-        id: user.id,
         ...form,
+        email: user.email,
       };
 
-      // 1. Gửi dữ liệu lên server để cập nhật profile
-      const result = await profileService.updateProfile(payload);
+      
+      const updatedUser = await updateProfile(Number(user.id), payload);
 
-      if (!result.success || !result.data) {
-        throw new Error(result.message || "Cập nhật hồ sơ thất bại.");
-      }
+      
+      setUser({
+        ...updatedUser,
+        email: user.email,
+      });
 
-      setUser(result.data);
-
-      // Cập nhật form với toàn bộ dữ liệu từ kết quả API
+      
       setForm({
-        name: result.data.fullName || "",
-        fullName: result.data.fullName || "",
-        about: result.data.about || "",
+        name: updatedUser.fullName || "",
+        fullName: updatedUser.fullName || "",
+        about: updatedUser.about || "",
         avatar: form.avatar || "",
-        personalWebsite: result.data.personalWebsite || "",
-        github: result.data.github || "",
-        linkedin: result.data.linkedin || "",
-        facebook: result.data.facebook || "",
-        youtube: result.data.youtube || "",
+        personalWebsite: updatedUser.personalWebsite || "",
+        github: updatedUser.github || "",
+        linkedin: updatedUser.linkedin || "",
+        facebook: updatedUser.facebook || "",
+        youtube: updatedUser.youtube || "",
       });
 
       setSuccess(true);

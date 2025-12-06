@@ -21,6 +21,7 @@ interface OrderChartProps {
 }
 
 export default function OrderChart({ data }: OrderChartProps) {
+  console.log("OrderChart data:", data);
   return (
     <div className="w-full h-[400px] bg-white shadow-lg p-4 rounded-xl">
       <h2 className="text-xl font-semibold mb-4">
@@ -28,7 +29,6 @@ export default function OrderChart({ data }: OrderChartProps) {
       </h2>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          hart
           data={data}
           margin={{ top: 20, right: 20, left: 10, bottom: 20 }}
         >
@@ -36,12 +36,11 @@ export default function OrderChart({ data }: OrderChartProps) {
           <XAxis dataKey="month" tick={{ fontSize: 12 }} />
           <YAxis />
           <Tooltip />
-          {/* @ts-expect-error Recharts Legend type issue */}
           <Legend />
           <Bar
             dataKey="totalOrders"
             fill="#3b82f6"
-            name="Tổng khóa học"
+            name="Tổng đơn hàng"
             radius={[6, 6, 0, 0]}
           />
         </BarChart>

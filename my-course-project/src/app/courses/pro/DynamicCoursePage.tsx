@@ -11,7 +11,7 @@ interface DynamicCoursePageProps {
   courseId: string;
   course: CoursePro;
 }
-//note
+
 export default function DynamicCoursePage({ course }: DynamicCoursePageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -22,11 +22,11 @@ export default function DynamicCoursePage({ course }: DynamicCoursePageProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <CourseThreadBackground>
       <div className="min-h-screen px-4 py-8 md:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
-          {/* Header Section */}
           <div className="mb-12 flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="bg-amber-50 rounded-lg p-3">
@@ -49,115 +49,119 @@ export default function DynamicCoursePage({ course }: DynamicCoursePageProps) {
             </div>
           </div>
 
-          {/* Hero Section */}
           <div className="mb-20">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="inline-block bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                  {course.badge}
-                </div>
+                {course.badge && (
+                  <div className="inline-block bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {course.badge}
+                  </div>
+                )}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                   {course.title}{" "}
-                  <span className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
-                    {course.titleHighlight}
-                  </span>{" "}
+                  {course.titleHighlight && (
+                    <span className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+                      {course.titleHighlight}
+                    </span>
+                  )}{" "}
                   {course.subtitle}
                 </h1>
-                <h2 className="text-lg md:text-xl text-white leading-relaxed mb-8">
-                  {course.subtitleHighlights.map((part, index) =>
-                    part.isHighlight ? (
-                      <span
-                        key={index}
-                        className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent"
-                      >
-                        {part.text}
+                
+                <p className="text-lg md:text-xl text-white leading-relaxed mb-6">
+                  {course.description || "Khóa học chất lượng cao với nội dung được thiết kế bài bản"}
+                </p>
+
+                <div className="mb-6">
+                  <div className="flex items-center gap-4 flex-wrap">
+                    {course.price && (
+                      <span className="text-3xl md:text-4xl font-bold text-amber-400">
+                        {course.price.toLocaleString('vi-VN')} VNĐ
                       </span>
-                    ) : (
-                      <span key={index}>{part.text}</span>
-                    )
-                  )}
-                </h2>
+                    )}
+                  </div>
+                </div>
 
                 <div className="flex flex-wrap gap-4 pt-4">
                   <ButtonRegister onClick={handleOpenModal} />
                 </div>
               </div>
 
-              {/* Hero Image/Preview */}
               <div className="relative">
                 <div className="bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl p-8 shadow-2xl">
                   <div className="bg-white rounded-lg p-6 shadow-lg">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <div className="space-y-3 font-mono text-sm">
-                      {course.codePreview.lines.map((line, index) => (
-                        <div
-                          key={index}
-                          className={`${line.color} ${
-                            line.indent === 1
-                              ? "pl-4"
-                              : line.indent === 2
-                              ? "pl-8"
-                              : ""
-                          }`}
-                        >
-                          {line.text || "\u00A0"}
-                        </div>
-                      ))}
-                    </div>
+                    <Image
+                      src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
+                      alt={course.title}
+                      width={500}
+                      height={300}
+                      className="w-full h-auto rounded-lg"
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
-            <div className="bg-white rounded-xl p-6 shadow-md text-center hover:shadow-lg transition-shadow">
-              <p className="text-4xl font-bold text-amber-600 mb-2">
-                {course.stats.projects}
-              </p>
-              <p className="text-gray-600 font-medium">Dự án thực tế</p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-md text-center hover:shadow-lg transition-shadow">
-              <p className="text-4xl font-bold text-amber-600 mb-2">
-                {course.stats.exercises}
-              </p>
-              <p className="text-gray-600 font-medium">Bài tập & Thử thách</p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-md text-center hover:shadow-lg transition-shadow">
-              <p className="text-4xl font-bold text-amber-600 mb-2">
-                {course.stats.access}
-              </p>
-              <p className="text-gray-600 font-medium">Truy cập trọn đời</p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-md text-center hover:shadow-lg transition-shadow">
-              <p className="text-4xl font-bold text-amber-600 mb-2">
-                {course.stats.support}
-              </p>
-              <p className="text-gray-600 font-medium">Hỗ trợ học viên</p>
+          <div className="mb-20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:scale-105 transition-transform duration-300">
+                <span className="text-4xl font-bold text-orange-500 mb-2">10+</span>
+                <span className="text-gray-600 font-medium">Số lượng dự án</span>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:scale-105 transition-transform duration-300">
+                <span className="text-4xl font-bold text-orange-500 mb-2">50+</span>
+                <span className="text-gray-600 font-medium">Số lượng bài tập</span>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:scale-105 transition-transform duration-300">
+                <span className="text-4xl font-bold text-orange-500 mb-2">∞</span>
+                <span className="text-gray-600 font-medium">Truy cập trọn đời</span>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:scale-105 transition-transform duration-300">
+                <span className="text-4xl font-bold text-orange-500 mb-2">24/7</span>
+                <span className="text-gray-600 font-medium">Hỗ trợ học viên</span>
+              </div>
             </div>
           </div>
 
-          {/* What You'll Learn */}
-          <div className="mb-20">
-            <h3 className="text-3xl font-bold text-white mb-8 text-center">
-              Bạn sẽ học được gì?
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6 text-white mx-auto max-w-4xl">
-              {course.learningOutcomes.map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm">✓</span>
+          {(() => {
+            let outcomes: string[] = [];
+            
+            if (course.learningOutcomes) {
+              try {
+                if (Array.isArray(course.learningOutcomes)) {
+                  outcomes = course.learningOutcomes;
+                } else if (typeof course.learningOutcomes === 'string') {
+                  outcomes = JSON.parse(course.learningOutcomes);
+                }
+              } catch (e) {
+                console.error('Failed to parse learningOutcomes:', e);
+              }
+            }
+            if (outcomes.length === 0) return null;
+            
+            return (
+              <div className="mb-20">
+                <h3 className="text-3xl font-bold text-white mb-8 text-center">
+                  Bạn sẽ học được gì?
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mx-auto max-w-4xl">
+                  <div className="grid md:grid-cols-2 gap-6 text-white">
+                    {outcomes.map((item, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white text-sm">✓</span>
+                        </div>
+                        <p className="text-white leading-relaxed">{item.trim()}</p>
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-white">{item}</p>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
       {isModalOpen && (

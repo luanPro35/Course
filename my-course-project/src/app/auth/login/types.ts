@@ -6,6 +6,7 @@ export interface LoginFormData {
 export interface LoginFormProps {
   onClose: () => void;
   onSwitchToRegister: () => void;
+  onSwitchToForgot: () => void;
 }
 
 import { User } from "../../../types/user";

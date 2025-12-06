@@ -30,8 +30,8 @@ export default function ManagerPosts() {
         ))}
       </div>
 
-      {activeTab === "free" && <FreeCourseForm />}
-      {activeTab === "pro" && <ProCourseForm />}
+      {activeTab === "free" && <FreeCourseForm onSuccess={() => {}} />}
+      {activeTab === "pro" && <ProCourseForm onSuccess={() => {}} />}
       {activeTab === "video" && <VideoForm />}
     </div>
   );

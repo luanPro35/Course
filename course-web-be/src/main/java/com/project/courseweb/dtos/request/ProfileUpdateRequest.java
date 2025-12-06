@@ -1,0 +1,21 @@
+package com.project.courseweb.dtos.request;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ProfileUpdateRequest {
+    //profile basic
+    String fullName;
+    String about;
+    //profile social
+    String personalWebsite;
+    String github;
+    String linkedin;
+    String facebook;
+    String youtube;
+}

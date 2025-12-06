@@ -1,4 +1,4 @@
-// components/auth/register/RegisterForm.tsx
+
 
 import React from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
@@ -33,7 +33,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     <AuthLayout onClose={onClose}>
       {showSuccessAnimation && (
         <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10 rounded-2xl">
-          <SuccessAnimation onComplete={handleAnimationComplete} />
+          <SuccessAnimation onComplete={handleAnimationComplete} mess={"Đăng ký thành công"} />
         </div>
       )}
       {showErrorAnimation && (
@@ -45,10 +45,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-6 items-center">
-        {/* Left side - Form */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        {}
         <div>
-          {/* Header */}
+          {}
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-1">Đăng ký tài khoản</h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
@@ -58,7 +58,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             </p>
           </div>
 
-          {/* Form đăng kí **/}
+          {}
           <form onSubmit={handleSubmit} className="space-y-4 mb-6">
             <RegisterFormFields
               formData={formData}
@@ -75,7 +75,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             </button>
           </form>
 
-          {/* Social Register */}
+          {}
           <div className="space-y-3 mb-6">
             <SocialButton
               icon={<FaGoogle />}
@@ -90,7 +90,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             />
           </div>
 
-          {/* Links */}
+          {}
           <div className="text-center">
             <div className="flex justify-center space-x-1 text-sm">
               <span className="text-gray-600">Đã có tài khoản?</span>
@@ -104,7 +104,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             </div>
           </div>
 
-          {/* Terms */}
+          {}
           <div className="mt-8 pt-6 border-t border-gray-100">
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               Bằng việc đăng ký, bạn đã đồng ý với{" "}
@@ -120,8 +120,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           </div>
         </div>
 
-        {/* Right side - Animation */}
-        <div className="flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg p-4">
+        {}
+        <div className="hidden md:flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg p-4">
           <RegisterAnimation />
         </div>
       </div>

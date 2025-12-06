@@ -33,7 +33,13 @@ export function CourseDetailClient({ course }: CourseDetailClientProps) {
   return (
     <div className="max-w-8xl mx-auto p-6 grid grid-cols-1 md:grid-cols-10 gap-6">
       <div className="md:col-span-4">
-        <CourseImageDisplay src={course.image} alt={course.title} />
+        {course.thumbnailUrl ? (
+          <CourseImageDisplay src={course.thumbnailUrl} alt={course.title} />
+        ) : (
+          <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+            No Image Available
+          </div>
+        )}
         <h1 className="text-4xl font-bold text-orange-600 mb-8 mt-8 text-center">
           Miễn phí
         </h1>
@@ -50,9 +56,9 @@ export function CourseDetailClient({ course }: CourseDetailClientProps) {
           {course.contentSection}
         </div>
         <div className="text-2xl font-semibold mb-3">Nội dung khóa học</div>
-        {course.section && course.section.length > 0 && (
+        {course.sections && course.sections.length > 0 && (
           <div className="mt-6 space-y-4">
-            {course.section.map((section, index) => (
+            {course.sections.map((section, index) => (
               <div key={index} className="border rounded-lg overflow-hidden">
                 <div
                   onClick={() => toggleSection(index)}
@@ -87,14 +93,26 @@ export function CourseDetailClient({ course }: CourseDetailClientProps) {
                         className="flex justify-between items-center py-2 border-b last:border-none border-gray-100"
                       >
                         <span>{lesson.title}</span>
-                        <a
-                          href={lesson.videoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline text-sm"
-                        >
-                          ▶ Xem
-                        </a>
+                        {lesson.contentUrl ? (
+                          <a
+                            href={lesson.contentUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm font-medium hover:text-blue-800 transition-colors"
+                            onClick={(e) => {
+                              if (!lesson.contentUrl || lesson.contentUrl.trim() === "") {
+                                e.preventDefault();
+                                alert("URL video chưa được cập nhật");
+                              }
+                            }}
+                          >
+                            ▶ Xem
+                          </a>
+                        ) : (
+                          <span className="text-gray-400 text-sm">
+                            Chưa có video
+                          </span>
+                        )}
                       </div>
                     ))}
                 </div>

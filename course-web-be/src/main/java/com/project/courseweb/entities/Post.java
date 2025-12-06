@@ -1,5 +1,8 @@
 package com.project.courseweb.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.project.courseweb.enums.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +21,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", nullable = false)
+    Profile profile;
     String title;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
@@ -29,4 +35,12 @@ public class Post {
     String fullContent;
     @Enumerated(EnumType.STRING)
     PostStatus status;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }

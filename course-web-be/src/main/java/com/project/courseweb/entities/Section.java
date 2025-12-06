@@ -22,10 +22,13 @@ public class Section {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     Course course;
-    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("id ASC")
+    @OneToMany(mappedBy = "section",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @OrderBy("orderIndex ASC")
     List<Lesson> lessons;
-
-
-
+    @Column(columnDefinition = "int default 0", nullable = false)
+    int orderIndex;
 }

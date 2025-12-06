@@ -1,0 +1,1677 @@
+{
+	"info": {
+		"_postman_id": "943c60cc-6f4e-4dec-95c1-e0b6a0bf98e6",
+		"name": "Course-project",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45124082",
+		"_collection_link": "https://kobi-8284523.postman.co/workspace/Kobi's-Workspace~a55edbb3-41b6-41fc-87dc-ed8df8f34729/collection/45124082-943c60cc-6f4e-4dec-95c1-e0b6a0bf98e6?action=share&source=collection_link&creator=45124082"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// No actions needed in pre-request script for login token extraction.",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse JSON from response",
+									"let response;",
+									"try {",
+									"    response = pm.response.json();",
+									"} catch (e) {",
+									"    response = {};",
+									"}",
+									"",
+									"// Save token to environment variable",
+									"if (response.token) {",
+									"    pm.environment.set(\"accessToken\", response.token);",
+									"}",
+									"",
+									"// Test that token exists",
+									"pm.test(\"Token received\", function () {",
+									"    pm.expect(response.token).to.not.be.undefined;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"email\": \"loikobi12345@gmail.com\",\r\n    // \"password\" : \"12345678\"\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a POST request used to log in a user. It expects a JSON body with the following fields:\n\n- `email`: The user's email address\n- `password`: The user's password\n\nA successful login returns a `200 OK` status and a JSON response containing an authentication token. Example request body:\n\n```\n{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "refreshtoken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjIzNTM3NDksImlhdCI6MTc2MjA5NDU0OSwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJlOTdmNzMyYi04YmE3LTQ5MGMtYTcyMy0yZjRhMGM1YjRkZTAifQ.24SAqKHkU0ckdtqoEua5qx1dDQPwx_Vl9XyV2-79Ewwqa2hSGbLymxzqZBeFa43sEsr70zQINF9Bk5iDCLjyNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJzdWIiOiIxIiwidHlwZSI6InJlZnJlc2giLCJleHAiOjE3NjI3MDAxNjYsImlhdCI6MTc2MjA5NTM2NiwianRpIjoiMzk2NDBmODQtOWExOC00MmMzLWIzODAtY2I3YzBkZTAyMDg2In0.oDFxY8f6Q9y9OoVIImg8F09uUb9q6cZDcTY_OAoea3p1SknXM3r9-KaKCWmr4v91xQ19T3c650BTr3eTEmeOaw\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INTROSPECT TOKEN(Đừng quan tâm)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI0MTQ5MzksImlhdCI6MTc2MjE1NTczOSwiZW1haWwiOiJsb2lrb2JpMTIzNEBnbWFpbC5jb20iLCJqdGkiOiJkNTZjY2FhOS03MjFjLTQ4Y2UtODU0OC00NjFlYjQ3YjBhZTcifQ.SJHU5Id3p-fM7WBbbarK9-ercrtIWiFvyJ0IYtmCVqblAjVME3wvSDARFBvI7wLTjiARnDmvPLECq6rujqJXYg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/introspect",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"introspect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Nguyễn Tấn Lợi\",\n  \"email\": \"loikobi1234@gmail.com\",\n  \"phone\": \"03665006424\",\n  \"passWord\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"register"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "logout(Token)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login google",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/oauth2/callback?code=4%2F0Ab32j91-wVuVmX6ZTemrHrfXQRkboMEUvE9r2RvHf0y46OorQ10hl_lWdRsapZ2_bQ1hYA",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"oauth2",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "4%2F0Ab32j91-wVuVmX6ZTemrHrfXQRkboMEUvE9r2RvHf0y46OorQ10hl_lWdRsapZ2_bQ1hYA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete account(token user)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsInNjb3BlIjoiUk9MRV9VU0VSIFZJRVdfQ09VUlNFIENSRUFURV9QT1NUIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UgRURJVF9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzY1MTAyNTcyLCJpYXQiOjE3NjQ4NDMzNzIsImVtYWlsIjoic2hvcDFAZ21haWwuY29tIiwianRpIjoiMjUyYmMxN2MtYzliMC00YjQxLWFmMDUtYjg1NmZhNzBhNjBjIn0.lFtlMbKbdycfMfJRewg__zMFCM3ONvl3JK5cFC0qnSD9b01YrsxbpJ8MVzXqCNzFCGQPfg1T4greGzR2qTh7KQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"email\": \"loikobi12345@gmail.com\",\r\n    // \"password\" : \"12345678\"\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"shopbanaccgiare2020@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/forgot-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"shopbanaccgiare2020@gmail.com\",\r\n    \"otp\": \"979049\",\r\n    \"newPassword\" : \"87654321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/reset-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "updateProfile(Token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI2OTM0MzcsImlhdCI6MTc2MjQzNDIzNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjAwNWI3OTNlLWQ4ZTctNGM0ZC05ZTFiLTE3ZTdiYWVmZWI2NCJ9.aGZXrGC_4K-B46pk5i5p-okE0Hbd59J1Ck1DPra1-8lt2R9XuRGHlZpf-TLWRL7O77d6VKVvRoaZkikJbLeTpA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"Kobi\",\r\n  \"about\": \"Giới thiệu\",\r\n  \"personalWebsite\": \"https://example.com\",\r\n  \"github\": \"github-username\",\r\n  \"linkedin\": \"linkedin-profile\",\r\n  \"facebook\": \"facebook-profile\",\r\n  \"youtube\": \"youtube-channel\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/profile/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadAvatar(Token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI3MDI3MjQsImlhdCI6MTc2MjQ0MzUyNCwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjcwMGM5MWM2LTU0YTMtNDI5Mi1iNDRkLWVmMDg5ODU5NmJlZiJ9.Kco56DIlOK3EX8W5OuX1q-84rrV2pGnHXaV7uKmenJUL5gUKZ8uqOXYy6QFsVLeVerGyC3bsb89FloUGZYKcVg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/OneDrive/Pictures/Screenshots/Ảnh chụp màn hình 2025-08-10 132604.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/profile/update-avatar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"profile",
+								"update-avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "gọi api để upload file lên aws và nhậnveef url rồi lấy truyền vào api tạo bài(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzODkyODc3LCJpYXQiOjE3NjM2MzM2NzcsImVtYWlsIjoibG9pa29iaTEyMzRAZ21haWwuY29tIiwianRpIjoiZWUzMzYwNzYtNmRkOC00OTdhLWI3YTYtM2Q2Nzg1NjVkYTNiIn0.dOVYImlrxgj6mDtzmFvgKsxotiNOQPOfQNsF8rFYHZqKP8DSh_RWhUU-azDD4XPMHXw2ll59oHYdajs7y8eHiQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/OneDrive/Pictures/Camera Roll/z7172600638304_6813af25d072a65e52b831ab121942cd.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/upload-thumbnail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"upload-thumbnail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "created post(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI2OTk1MjUsImlhdCI6MTc2MjQ0MDMyNSwiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6ImIwYWY4ODEwLTYyNjktNGMyMi1iN2FlLTk2M2M4YzRhM2FmYyJ9.eZLrJys9n4XEn5F-qC-XQY_8ATiSi6_nLQaHjAZ-jh6uYiW-ZMTt0NmC36K93RMuiQirqAl3WPNO9HpjRAQpHw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\" : \"Tan Loi\",\r\n    \"title\" : \"ccccc\",\r\n    \"category\" : \"react_native\",\r\n    \"content\" : \"cascascascascasc\",\r\n    \"fullContent\" : \"dasddddddddddddddddddddddddddddddddddddd\",\r\n    \"statusPost\" : \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/create-post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"create-post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get list posts by status(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzODkyODc3LCJpYXQiOjE3NjM2MzM2NzcsImVtYWlsIjoibG9pa29iaTEyMzRAZ21haWwuY29tIiwianRpIjoiZWUzMzYwNzYtNmRkOC00OTdhLWI3YTYtM2Q2Nzg1NjVkYTNiIn0.dOVYImlrxgj6mDtzmFvgKsxotiNOQPOfQNsF8rFYHZqKP8DSh_RWhUU-azDD4XPMHXw2ll59oHYdajs7y8eHiQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts?status=PUBLISHED&page=0&size=2&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PUBLISHED"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post (token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjI4NzUxMTcsImlhdCI6MTc2MjYxNTkxNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjYwYzMzNzE4LWI0YzYtNGU5Yy1iNDJjLTNkZDdmZmI3MjA0ZCJ9.zmIUGVaQCpUj6YrV9ha_LYLvxJXfN8nxP-J3idMMtGJdsFf4-XwWqZWHxzKsCeUkr4hCGo_KHTqq8a7Th7OddQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update post(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM3NzgxMjcsImlhdCI6MTc2MzUxODkyNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjNlYTI5OWFlLTM2OGUtNGYzMC1iZGI0LTJiOTFkOGVmMzhlZiJ9.gb3NQ6hzcOolJM79C430uWyrRE_2tB-7UJMlKQPJu-RbUPlwVcO7Tq2XupYo5YQKViVZtgolmpNCpYDMzj4syA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"author\": \"Tan\",\r\n        \"title\": \"a\",\r\n        \"category\": \"cpp\",\r\n        \"thumbnailUrl\": \"https://my-course-webapp-2025.s3.us-east-1.amazonaws.com/1/post-thumbnail/67db7300-3993-4375-bf42-b0a5a3954080-vatly.jpg\",\r\n        \"content\": \"dad\",\r\n        \"fullContent\": \"D\",\r\n        \"statusPost\": \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/update-post/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"update-post",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get list post published không cần token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/published?page=0&size=3&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"published"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete post(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX0FETUlOIERFTEVURV9DT1VSU0UgVVBMT0FEX0NPVVJTRSBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfUE9TVCBFRElUX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM3ODUyNTQsImlhdCI6MTc2MzUyNjA1NCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJmYTBkYWI2NC05YmE4LTRmN2MtODYxNC03MGEyM2YzNWJiNjQifQ.JRV2I8X2XwRYJEYcqiOQ7Cx4WZl8-MqrSr0rl0LdV4q1668sLHxcPdM8OZToJuFHOslg4xb5KNtDyxK2lUiyXA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/posts/my-posts/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"posts",
+								"my-posts",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "get course",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/courses/19",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"courses",
+								"19"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get list course published",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/courses/published?page=0&size=3&sort=createdAt,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"courses",
+								"published"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "get list post published không cần token Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/published?page=0&size=3&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"published"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "3"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"author\": \"Tan\",\r\n        \"title\": \"a\",\r\n        \"category\": \"cpp\",\r\n        \"thumbnailUrl\": \"https://my-course-webapp-2025.s3.us-east-1.amazonaws.com/1/post-thumbnail/67db7300-3993-4375-bf42-b0a5a3954080-vatly.jpg\",\r\n        \"content\": \"dad\",\r\n        \"fullContent\": \"D\",\r\n        \"statusPost\": \"DRAFT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/update-post/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"update-post",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get post (token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDgyNzAsImlhdCI6MTc2Mzc4OTA3MCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJiNjA1YjI2NC0wYzM1LTRhNmMtODlhOS03YjkwMTIwYzA5ZmIifQ.AlLsNzWJskzPx2zKqbBskZk-oYaDKaPHaqurc8rcw_O73xxK27CYtTu-JHkQsOE82RXMCaNg7jPw4VotJ_kR8A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/posts/my-posts/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"my-posts",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "created post(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFRElUX0NPVVJTRSBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDgyNzAsImlhdCI6MTc2Mzc4OTA3MCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJiNjA1YjI2NC0wYzM1LTRhNmMtODlhOS03YjkwMTIwYzA5ZmIifQ.AlLsNzWJskzPx2zKqbBskZk-oYaDKaPHaqurc8rcw_O73xxK27CYtTu-JHkQsOE82RXMCaNg7jPw4VotJ_kR8A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"author\" : \"Tan Loi\",\r\n    \"title\" : \"ccccc\",\r\n    \"category\" : \"react_native\",\r\n    \"content\" : \"cascascascascasc\",\r\n    \"fullContent\" : \"dasddddddddddddddddddddddddddddddddddddd\",\r\n    \"statusPost\" : \"DRAFT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/create-post",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"create-post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gọi api để upload file lên aws và nhậnveef url rồi lấy truyền vào api tạo bài(token) Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgVklFV19DT1VSU0UgRURJVF9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNDg1MDYsImlhdCI6MTc2Mzc4OTMwNiwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMmQzOWQ1ZTktOGU3NS00YjgzLTgwMDYtNmY4ZjhmNzAyMTNiIn0.E12urmtdLou-6HXD909mpbe6eqh6_oJLqiuLGSaMlI5iqGK6WHp3_4xRiLCtnXUWrXi5677t0JqpFkF8BSOdlQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "postman-cloud:///1f05e01a-08eb-4290-be75-f4913fecbecf"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/posts/upload-thumbnail",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"posts",
+										"upload-thumbnail"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Course",
+					"item": [
+						{
+							"name": "tạo khóa học bao gồm các chưởng và bài học (token của admin)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM5MTE4MDksImlhdCI6MTc2MzY1MjYwOSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiIwMzZjODNhYS0zOTM2LTRmMzUtYTAxNi1iMWMyMGY1NGJlM2YifQ.-q6kUI-h2f_I5A2u82OF7vPYdBh35Os1qFviW9_6YFNVk9gKV7XfweGxqGnjdMex7ZoCfEZS1j5K5KeC1nkImg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học Lập trình Java Toàn tập từ Zero đến Hero\",\r\n    \"description\": \"Đây là một khóa học toàn diện, cung cấp kiến thức từ cơ bản đến nâng cao về ngôn ngữ lập trình Java, giúp bạn tự tin xây dựng các ứng dụng thực tế.\",\r\n    \"price\": 1200000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\",\r\n    \"sections\": [\r\n        {\r\n            \"title\": \"Chương 1: Giới thiệu và Cài đặt môi trường\",\r\n            \"orderIndex\": 0,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 1.1: Java là gì? Tại sao nên học Java?\",\r\n                    \"contentUrl\": \"images/lessons/java-intro.png\",\r\n                    \"orderIndex\": 0,\r\n                    \"durationInMinutes\": 15\r\n                },\r\n                {\r\n                    \"title\": \"Bài 1.2: Hướng dẫn cài đặt JDK và IntelliJ IDEA\",\r\n                    \"contentUrl\": \"images/lessons/java-setup.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Chương 2: Biến, Kiểu dữ liệu và Toán tử\",\r\n            \"orderIndex\": 1,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 2.1: Tìm hiểu về biến và các kiểu dữ liệu nguyên thủy\",\r\n                    \"contentUrl\": \"images/lessons/java-variables.png\",\r\n                    \"orderIndex\": 0,\r\n                    \"durationInMinutes\": 25\r\n                },\r\n                {\r\n                    \"title\": \"Bài 2.2: Các toán tử số học, so sánh và logic\",\r\n                    \"contentUrl\": \"mage/lessonsjava-operators.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/courses/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"courses",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get courrse (token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgVklFV19DT1VSU0UgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgRURJVF9QT1NUIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTE2ODM3LCJpYXQiOjE3NjM2NTc2MzcsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYWQ5YTQ0MmQtNDczMS00YWIyLWE2MjEtOWQyM2IzZWRhNTlkIn0.X84cW_Emn8L-WqyF3Lt0WjQuDMjN_lkJm4uGixGY5drOYcpsoEcVhCaQtUXZMv73uKk1ORYI-HW--p5m0kHmuA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/get/19",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"get",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "xóa course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfUE9TVCBVUExPQURfQ09VUlNFIEVESVRfQ09VUlNFIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTE5OTQyLCJpYXQiOjE3NjM2NjA3NDIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiZGY1OTU5YzctYjhkMC00MWU3LTgwODItZTYzODVmYmU3ZjViIn0.SM8QEyLQivt_OmH0sysQtTe4Er-TovjoAFe1gouttoHzc1ZMiy541g9d38keKn5bbvDexQWHfV3farcuDUrOhA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/delete/15",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"delete",
+										"15"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cập nhập toàn bộ course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkwODA0LCJpYXQiOjE3NjM3MzE2MDQsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiMTY2NDU5YTAtODE5Zi00NTE4LTg1ZTEtNzAzZjQxMGE4ODQ2In0.sv3PoFWHjYOAbvP3EeEy4OkHtWk_xGo9wIftN78bePs2Rn50C6GWNx9RyyrIuV8alwrAUb26y3HeZ3UdyndzBw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 190000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\",\r\n    \"sections\": [\r\n        {\r\n            \"title\": \"Chương 1: Giới thiệu và Cài đặt môi trường\",\r\n            \"orderIndex\": 0,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 1.2: Hướng dẫn cài đặt JDK và IntelliJ IDEA\",\r\n                    \"contentUrl\": \"images/lessons/java-setup.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Chương 2: Biến, Kiểu dữ liệu và Toán tử\",\r\n            \"orderIndex\": 1,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 2.2: Các toán tử số học, so sánh và logic\",\r\n                    \"contentUrl\": \"mage/lessonsjava-operators.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update/16",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cách 2: upodate từng phân riêng rẻ (update course)(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkxMjY5LCJpYXQiOjE3NjM3MzIwNjksImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYTlmNmI5ZmYtNjU5ZS00NDczLThhZTktOTI3ZWU0ZDEzZDE2In0.7QdHumy5AOSISPSkHWjJNU5_fT0lHA-uLg2nYkUH_7Y3SpkkP8dAbcl8cl8cKelGoH_1GuuoBKR7TcWFMw_3ZQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 800000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update/16",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "thay đổi trạng thái course(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkxMjY5LCJpYXQiOjE3NjM3MzIwNjksImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYTlmNmI5ZmYtNjU5ZS00NDczLThhZTktOTI3ZWU0ZDEzZDE2In0.7QdHumy5AOSISPSkHWjJNU5_fT0lHA-uLg2nYkUH_7Y3SpkkP8dAbcl8cl8cKelGoH_1GuuoBKR7TcWFMw_3ZQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/update-status/17?status=PUBLISHED",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"update-status",
+										"17"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "PUBLISHED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get list courses by status(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfQ09VUlNFIFVQTE9BRF9DT1VSU0UgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIFZJRVdfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTk0MTE1LCJpYXQiOjE3NjM3MzQ5MTUsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiOWRmNGJiNWMtMTMxMS00YmI5LThlNzktYzQ5MGQ4Y2FhMGI2In0.jzHcLR7YLO4mmvc3gazfhqc4ynXy6NTLaIZ3pVeHDp1f5KmohTT1XrwIjgpzEfCuwQweY7jLZ9is7Gcqk4Qv2Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses?status=PUBLISHED&page=0&size=2&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "PUBLISHED"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "upload bảnh bìa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBFTlJPTExfQ09VUlNFIERFTEVURV9QT1NUIERFTEVURV9DT1VSU0UgRURJVF9DT1VSU0UgRURJVF9QT1NUIFZJRVdfQ09VUlNFIFVQTE9BRF9DT1VSU0UgQ1JFQVRFX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQ0NjMxMzAsImlhdCI6MTc2NDIwMzkzMCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiI0NDFlNmU5Zi02M2ZhLTQ2ZmItOWM0OC04ODlkOWRlMWExOGIifQ.taybxFld-nMqHWnOz9UDAbOmZtdqdt8UiZ03Vy4wsbEVEzZuj6caQ2o0Ba5jQJlqeUotcsDdhYZNrtoFCXm5mA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/D:/OneDrive/Pictures/571156313_10234837178283112_2546482585882123668_n.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/project/admin/courses/upload-thumbnail",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"courses",
+										"upload-thumbnail"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "get list order(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBFTlJPTExfQ09VUlNFIERFTEVURV9DT1VSU0UgQ1JFQVRFX1BPU1QgVVBMT0FEX0NPVVJTRSBWSUVXX0NPVVJTRSBFRElUX1BPU1QgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwODExMjAsImlhdCI6MTc2MzgyMTkyMCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJlZWU0ZDFlNy04MzY4LTQ1MTEtYmY2Ny0yZDY3ODczMzk4ZTEifQ.d4NkIFJ3hA41OBiENLe9__160IHjt7sZBg8RIMFE8V-QYrwD9Tug-iUYLIMqRCkGkHIBw9LdmflzJK4GZlNANA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/orders?page=0&size=25&sort=createdAt,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "25"
+										},
+										{
+											"key": "sort",
+											"value": "createdAt,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refund monney(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBFTlJPTExfQ09VUlNFIERFTEVURV9DT1VSU0UgQ1JFQVRFX1BPU1QgVVBMT0FEX0NPVVJTRSBWSUVXX0NPVVJTRSBFRElUX1BPU1QgREVMRVRFX1BPU1QgRURJVF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwODExMjAsImlhdCI6MTc2MzgyMTkyMCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiJlZWU0ZDFlNy04MzY4LTQ1MTEtYmY2Ny0yZDY3ODczMzk4ZTEifQ.d4NkIFJ3hA41OBiENLe9__160IHjt7sZBg8RIMFE8V-QYrwD9Tug-iUYLIMqRCkGkHIBw9LdmflzJK4GZlNANA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/payment/refund/24",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"payment",
+										"refund",
+										"24"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "check order(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBERUxFVEVfUE9TVCBFTlJPTExfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCBERUxFVEVfQ09VUlNFIEVESVRfQ09VUlNFIFVQTE9BRF9DT1VSU0UgVklFV19DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwNzc0NDgsImlhdCI6MTc2MzgxODI0OCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJqdGkiOiIwMDI2Mjk1My05ZTRhLTQ0MGMtYjA1My1mMmRjNDA4OTcyYzkifQ.tkUU1bvns7RGNLza6NFS-Sdub52PVuOFBmR7cluUuXuNv4mlyiystUMthikh3-VvL18RZRtA-fIMlNUqmqZpQg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/payment/21/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"payment",
+										"21",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "get list user(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX0FETUlOIERFTEVURV9QT1NUIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIEVOUk9MTF9DT1VSU0UgREVMRVRFX0NPVVJTRSBVUExPQURfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCIsImlzcyI6ImNvbS5wcm9qZWN0LjJUTCIsImV4cCI6MTc2NDkzMDMxNiwiaWF0IjoxNzY0NjcxMTE2LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjJlN2IxODIyLTRkZGMtNDQyZS05OTcyLWRjZmI1ZWUwZjI2ZCJ9.bX_48zupS_uJ0zYsuWWSTFJsI3TmqZoGJ7YtlXEIwRPMosAScgQXhzsXvQGvnqz1yzpA-ukS8tdAbqfhdIkVyQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/users?page=0&size=20",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user(token)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwic2NvcGUiOiJST0xFX0FETUlOIERFTEVURV9QT1NUIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIEVOUk9MTF9DT1VSU0UgREVMRVRFX0NPVVJTRSBVUExPQURfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCIsImlzcyI6ImNvbS5wcm9qZWN0LjJUTCIsImV4cCI6MTc2NDkzMDMxNiwiaWF0IjoxNzY0NjcxMTE2LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjJlN2IxODIyLTRkZGMtNDQyZS05OTcyLWRjZmI1ZWUwZjI2ZCJ9.bX_48zupS_uJ0zYsuWWSTFJsI3TmqZoGJ7YtlXEIwRPMosAScgQXhzsXvQGvnqz1yzpA-ukS8tdAbqfhdIkVyQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/project/admin/users/delete/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"project",
+										"admin",
+										"users",
+										"delete",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Erollment",
+			"item": [
+				{
+					"name": "ghi danh khoa hoc(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIFZJRVdfQ09VUlNFIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQwMDA4MTUsImlhdCI6MTc2Mzc0MTYxNSwiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiOTE1MWM1ZjMtMWE2NC00MmFjLWE3ZGMtMzQyZGFhODU2NTU5In0.p2FpGiMJxaapUo8roQTI1nw3rReeS2LRqC-KwulGalLEa9IiF8W5h02iYPT4cy09RNNdHKLlINeLbCUn94fw6w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/enrollments/free/18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"enrollments",
+								"free",
+								"18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List course enrollmen (token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0Iiwic2NvcGUiOiJST0xFX1VTRVIgRURJVF9QT1NUIFZJRVdfQ09VUlNFIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UgQ1JFQVRFX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjQ0Njg4NTMsImlhdCI6MTc2NDIwOTY1MywiZW1haWwiOiJsb2lrb2JpMTIzNDVAZ21haWwuY29tIiwianRpIjoiMjY4NTFhZDQtN2RlMi00ODg5LTlhZTgtMzE1YTc0NDdlYjg3In0.c0vXEH5GHgNRKWSFV1qQKe3vGTsSiTG1qe4wzN0ETmkm_GU5HWcCnPQaHPgPj5Ec5zzQEfSJyS0q8BeDgLwxzA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/enrollments/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"enrollments",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "create payment(token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsInNjb3BlIjoiUk9MRV9VU0VSIFZJRVdfQ09VUlNFIENSRUFURV9QT1NUIEVESVRfUE9TVCBERUxFVEVfUE9TVCBFTlJPTExfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzY0MDc0ODgwLCJpYXQiOjE3NjM4MTU2ODAsImVtYWlsIjoibG9uY29uY2F0MDA4QGdtYWlsLmNvbSIsImp0aSI6IjE3OGYwYzcyLWM1MzQtNDUzZi05MjI3LWQ4NzVmZjgyMzBlOSJ9.SdfxPCzAfv4eSG7yP9rAwz5cl6jcbmrThm7OL8AM6XA6by_bon-1-tep2F3H_RehQM22JAF4Pd1xWA2mRtkkxQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/project/payment/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"payment",
+								"16"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://template.postman-echo.com"
+		}
+	]
+}

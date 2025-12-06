@@ -17,7 +17,18 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(404, "Refresh token not found", HttpStatus.NOT_FOUND),
     REFRESH_TOKEN_EXPIRED(405, "Refresh token expired", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_FAILED(406, "Refresh token was used or expired", HttpStatus.UNAUTHORIZED),
-    INVALID_ACCESS_TOKEN(407, "Invalid access token", HttpStatus.UNAUTHORIZED);
+    INVALID_ACCESS_TOKEN(407, "Invalid access token", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(408, "Unauthorized", HttpStatus.UNAUTHORIZED),
+    PROFILE_NOT_FOUND(409, "Profile not found", HttpStatus.NOT_FOUND),
+    CATEGORY_NOT_FOUND(410, "Category not found", HttpStatus.NOT_FOUND),
+    UPLOAD_FILE_FAILED(411, "Upload file failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    POST_NOT_FOUND(412, "Post not found", HttpStatus.NOT_FOUND),
+    COURSE_NOT_FOUND(413, "Course not found", HttpStatus.NOT_FOUND),
+    ALREADY_ENROLLED(414, "Already enrolled", HttpStatus.CONFLICT),
+    COURSE_IS_NOT_FREE(415, "Course is not free", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(416, "Order not found", HttpStatus.NOT_FOUND),
+    USER_NOT_FOUND(417, "User not found", HttpStatus.NOT_FOUND),
+    INVALID_OTP(418, "Invalid OTP", HttpStatus.BAD_REQUEST);
 
     int status;
     String message;

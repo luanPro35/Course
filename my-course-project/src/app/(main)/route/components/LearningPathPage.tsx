@@ -30,10 +30,13 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
           throw new Error("Failed to fetch data");
         }
 
-        const [coursesFree, coursesPro] = await Promise.all([
+        const [freeResult, proResult] = await Promise.all([
           resFree.json(),
           resPro.json(),
         ]);
+
+        const coursesFree = freeResult?.data?.content || [];
+        const coursesPro = proResult?.data?.content || [];
 
         const allCourses = [...coursesFree, ...coursesPro];
 
@@ -77,7 +80,7 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        {/* Image Section - 60% */}
+        {}
         <div className="lg:col-span-3">
           <div className="bg-white rounded-lg shadow-md p-4">
             <div className="h-[600px] overflow-y-auto border border-gray-200 rounded-lg">
@@ -92,7 +95,7 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
           </div>
         </div>
 
-        {/* Courses Section - 40% */}
+        {}
         <div className="lg:col-span-2">
           <div className="h-[600px] overflow-y-auto pr-2">
             <div className="space-y-4">
@@ -104,7 +107,7 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
                   <div className="flex gap-4">
                     <div className="relative flex-shrink-0">
                       <Image
-                        src={course.image}
+                        src={course.thumbnailUrl && course.thumbnailUrl.trim() !== "" && !course.thumbnailUrl.startsWith("data:image") && course.thumbnailUrl !== "/default-course.jpg" ? course.thumbnailUrl : "/images/PostF8.png"}
                         alt={course.title}
                         width={110}
                         height={110}
@@ -119,19 +122,11 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
 
                       <div className="mb-2">
                         {course.price ? (
-                          <div>
-                            <div className="text-red-600 font-bold text-lg">
-                              {new Intl.NumberFormat("vi-VN", {
-                                style: "currency",
-                                currency: "VND",
-                              }).format(course.price ?? 0)}
-                            </div>
-                            <div className="text-gray-400 line-through text-sm">
-                              {new Intl.NumberFormat("vi-VN", {
-                                style: "currency",
-                                currency: "VND",
-                              }).format(course.discountPrice ?? 0)}
-                            </div>
+                          <div className="text-red-600 font-bold text-lg">
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(course.price ?? 0)}
                           </div>
                         ) : (
                           <span className="inline-block bg-green-100 text-green-700 font-bold text-sm px-3 py-1 rounded-full">

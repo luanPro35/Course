@@ -7,8 +7,10 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
+import com.project.courseweb.enums.CategoryType;
+
 @Entity
-@Table(name = "categorys")
+@Table(name = "categories")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +22,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(unique = true, nullable = false)
-    String name;
-    @Column(unique = true, nullable = false)
-    String slug;
+    @Enumerated(EnumType.STRING)
+    CategoryType slug;
     @OneToMany(mappedBy = "category")
     Set<Post> posts;
 }

@@ -12,7 +12,6 @@ export interface StatItem {
   value: number;
   icon: LucideIcon;
   trend?: {
-    value: string;
     isPositive: boolean;
   };
   iconBgColor?: string;

@@ -5,17 +5,29 @@ import com.project.courseweb.dtos.response.AuthenticatedResponse;
 import com.project.courseweb.dtos.response.IntrospectTokenResponse;
 import com.project.courseweb.dtos.response.TokenResponse;
 import com.project.courseweb.dtos.response.UserResponse;
+import com.project.courseweb.entities.authentication.Auth;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface AuthService {
+
     UserResponse createUser(UserCreateRequest userCreateRequest);
 
     AuthenticatedResponse authenticated(AuthenticatedRequest authenticatedRequest);
+
+    AuthenticatedResponse authenticatedUserGoogle(String code);
 
     TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
     void logout(LogoutRequest logoutRequest);
 
     IntrospectTokenResponse introspectToken(IntrospectTokenRequest request);
+
+    void createAuthAdmin(Auth auth);
+
+    void deleteAccount();
+
+    void forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+
+    void resetPassword(ResetPasswordRequest request);
 }

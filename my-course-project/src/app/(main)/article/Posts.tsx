@@ -6,62 +6,79 @@ import Image from "next/image";
 import Loading from "../../../components/ui/Loading";
 import { FiBookmark } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
-import { ARTICLE_API_URL } from "@/services/api.service";
+import { getPublishedArticlesURL } from "@/services/api.service";
 import { BlogService } from "@/services/blog.service";
 import { useRouter } from "next/navigation";
 
-const POSTS_PER_PAGE = 10;
+const POSTS_PER_PAGE = 5;
 
 interface PostsProps {
-  filterCategories?: string[]; // Nhận categories để lọc
+  filterCategories?: string[]; 
+}
+
+interface ApiPostItem {
+  id: number | string;
+  author: string;
+  title: string;
+  content: string;
+  fullContent?: string;
+  category: string;
+  thumbnailUrl?: string;
+  image?: string;
+  createdAt: string;
+  timeAgo: string;
+  readTime: string;
 }
 
 export default function Posts({ filterCategories }: PostsProps) {
   const router = useRouter();
-  const [allPosts, setAllPosts] = useState<Post[]>([]); // Lưu tất cả bài viết
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]); // Bài viết sau khi lọc
+  const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Load dữ liệu ban đầu
   useEffect(() => {
     setLoading(true);
-    fetch(ARTICLE_API_URL)
+    fetch(getPublishedArticlesURL(currentPage - 1, POSTS_PER_PAGE))
       .then((res) => res.json())
       .then((data) => {
-        // Sắp xếp bài viết theo thời gian tạo, mới nhất ở đầu
-        const sortedData = data.sort((a: Post, b: Post) => {
-          const dateA = new Date(a.createdAt).getTime();
-          const dateB = new Date(b.createdAt).getTime();
-          return dateB - dateA; // Bài mới lên đầu, bài cũ ở cuối
-        });
-        setAllPosts(sortedData);
-        setFilteredPosts(sortedData); // Mặc định hiển thị tất cả
+        const container = (data && (data.result || data.data)) || data;
+        const list = Array.isArray(container?.content)
+          ? container.content
+          : Array.isArray(container)
+          ? container
+          : [];
+        const normalized = list.map((item: ApiPostItem) => ({
+          id: String(item.id),
+          author: item.author,
+          title: item.title,
+          content: item.content,
+          fullContent: item.fullContent,
+          category: item.category,
+          image: item.thumbnailUrl || item.image,
+          createdAt: item.createdAt,
+          timeAgo: item.timeAgo,
+          readTime: item.readTime,
+        }));
+        setPosts(normalized as Post[]);
+        setTotalPages(
+          Number(container?.totalPages) || Number(data?.totalPages) || 0
+        );
+        setLoading(false);
+      })
+      .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, [currentPage]);
 
-  // Lọc bài viết khi filterCategories thay đổi
-  useEffect(() => {
-    if (!filterCategories || filterCategories.length === 0) {
-      setFilteredPosts(allPosts);
-    } else {
-      const filtered = allPosts.filter((post) =>
-        filterCategories.includes(post.category)
-      );
-      setFilteredPosts(filtered);
-    }
-    setCurrentPage(1); // Reset về trang 1 khi filter
-  }, [filterCategories, allPosts]);
+  const displayedPosts =
+    !filterCategories || filterCategories.length === 0
+      ? posts
+      : posts.filter((post) => filterCategories.includes(post.category));
 
   const handleNavigate = (postId: string) => {
     router.push(`/blog/${postId}`);
   };
-
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
-  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-  const endIndex = startIndex + POSTS_PER_PAGE;
-  const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
   return (
     <div className="max-w-5xl pl-13">
@@ -75,19 +92,20 @@ export default function Posts({ filterCategories }: PostsProps) {
         </p>
         {filterCategories && filterCategories.length > 0 && (
           <p className="text-sm text-blue-600 mt-2">
-            Đang hiển thị {filteredPosts.length} bài viết được lọc
+            Đang hiển thị {displayedPosts.length} bài viết được lọc trên trang
+            này
           </p>
         )}
       </div>
 
       {loading ? (
         <Loading />
-      ) : currentPosts.length === 0 ? (
+      ) : displayedPosts.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           Không tìm thấy bài viết nào
         </div>
       ) : (
-        currentPosts.map((post) => {
+        displayedPosts.map((post) => {
           return (
             <div
               key={post.id}
@@ -130,7 +148,7 @@ export default function Posts({ filterCategories }: PostsProps) {
         })
       )}
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-center mt-8">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

@@ -1,31 +1,29 @@
-import {RegisterFormData, RegisterResponse} from "@/app/auth/register/type";
+import { RegisterFormData, RegisterResponse } from "@/app/auth/register/type";
 import { signIn } from "next-auth/react";
 import { LoginFormData, LoginResponse } from "@/app/auth/login/types";
-import { getAccessToken } from "@/utils/token";
-
+import { getAccessToken, getRefreshToken, setTokens } from "@/utils/token";
+import {
+  CALL_LOGIN_GG,
+  refreshTokenURL,
+  forgotPasswordURL,
+  resetPasswordURL,
+  deleteAccountURL
+} from "./api.service";
+import api from "@/lib/validations/axios";
 
 const register = async (
-    formData: RegisterFormData
+  formData: RegisterFormData
 ): Promise<RegisterResponse> => {
-  // 1. Thay đổi điểm cuối (endpoint) API
-  // Thay vì gọi trực tiếp tới 'http://localhost:8080/project/auth/register',
-  // bây giờ chúng ta gọi tới API Route nội bộ '/api/register'.
   const response = await fetch(`/api/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    // 2. Đơn giản hóa việc gửi dữ liệu
-    // Chúng ta chỉ cần gửi thẳng `formData` từ form.
-    // Việc ánh xạ sang định dạng của BE Java đã có API Route lo.
     body: JSON.stringify(formData),
   });
 
   const data = await response.json();
 
-  // 3. Xử lý phản hồi
-  // Logic xử lý lỗi và thành công không thay đổi nhiều,
-  // vì API Route đã được thiết kế để trả về định dạng mà FE mong đợi.
   if (!response.ok) {
     return { success: false, mess: data.mess || "Đăng ký thất bại" };
   }
@@ -45,7 +43,6 @@ const login = async (formData: LoginFormData): Promise<LoginResponse> => {
   const data = await response.json();
 
   if (!response.ok) {
-    // Ném lỗi để custom hook (useLoginForm) có thể bắt và xử lý
     throw new Error(data.mess || "Đăng nhập thất bại");
   }
   return data;
@@ -54,11 +51,9 @@ const login = async (formData: LoginFormData): Promise<LoginResponse> => {
 const logout = async (): Promise<void> => {
   const accessToken = getAccessToken();
   if (!accessToken) {
-    // Nếu không có accessToken trong localStorage, không cần gọi API
     return;
   }
 
-  // Gọi đến API Route của Next.js
   await fetch(`/api/logout`, {
     method: "POST",
     headers: {
@@ -66,10 +61,145 @@ const logout = async (): Promise<void> => {
     },
     body: JSON.stringify({ accessToken }),
   });
-  // Chúng ta không cần xử lý response ở đây,
-  // vì dù thành công hay thất bại, FE vẫn sẽ xóa token và đăng xuất người dùng.
 };
 
-const loginWithSocial = (provider: "google" | "facebook") => signIn(provider);
+const loginWithSocial = (provider: "google" | "facebook") => {
+  if (provider === "google") {
+    window.location.href = CALL_LOGIN_GG;
+    return Promise.resolve();
+  }
+  return signIn(provider);
+};
 
-export const AuthService = { register, login, logout, loginWithSocial };
+const loginWithGoogle = async (code: string): Promise<LoginResponse> => {
+  const response = await fetch(
+    `http://localhost:8080/project/oauth2/callback?code=${code}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.mess || data.message || "Authentication failed");
+  }
+  const data1 = data.data;
+  return {
+    mess: data1.message || "Login successful",
+    user: data1.user,
+    accessToken: data1.token.accessToken,
+    refreshToken: data1.token.refreshToken,
+  };
+};
+
+const refreshToken = async (): Promise<LoginResponse> => {
+  const currentRefreshToken = getRefreshToken();
+  if (!currentRefreshToken) {
+    throw new Error("Refresh token not found");
+  }
+
+  const response = await fetch(refreshTokenURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ refreshToken: currentRefreshToken }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Refresh token failed");
+  }
+
+  const tokenData = data.data;
+  setTokens(tokenData.accessToken, tokenData.refreshToken);
+
+  return {
+    mess: "Token refreshed successfully",
+    user: tokenData.user,
+    accessToken: tokenData.accessToken,
+    refreshToken: tokenData.refreshToken,
+  };
+};
+
+const forgotPassword = async (email: string): Promise<{ message: string }> => {
+  const response = await fetch(forgotPasswordURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to send reset email");
+  }
+
+  return {
+    message: data.message || "If email exists, OTP has been sent",
+  };
+};
+
+interface ResetPasswordRequest {
+  email: string;
+  otp: string;
+  newPassword: string;
+}
+
+const resetPassword = async (request: ResetPasswordRequest): Promise<{ message: string }> => {
+  const response = await fetch(resetPasswordURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to reset password");
+  }
+
+  return {
+    message: data.message || "Password reset successfully",
+  };
+};
+
+const deleteAccount = async (): Promise<{ message: string }> => {
+  try {
+    const response = await api.delete(deleteAccountURL);
+    return {
+      message: response.data.message || "Account deleted successfully",
+    };
+  } catch (error) {
+    let errorMessage = "Failed to delete account";
+    
+    if (error && typeof error === "object" && "response" in error) {
+      const axiosError = error as { response?: { data?: { data?: { message?: string }; message?: string } }; message?: string };
+      errorMessage =
+        axiosError.response?.data?.data?.message ||
+        axiosError.response?.data?.message ||
+        axiosError.message ||
+        errorMessage;
+    }
+    
+    throw new Error(errorMessage);
+  }
+};
+
+export const AuthService = {
+  register,
+  login,
+  logout,
+  loginWithSocial,
+  loginWithGoogle,
+  refreshToken,
+  forgotPassword,
+  resetPassword,
+  deleteAccount,
+};
