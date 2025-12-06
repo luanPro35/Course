@@ -12,5 +12,5 @@ public class CourseWebBeApplication {
     public static void main(String[] args) {
         SpringApplication.run(CourseWebBeApplication.class, args);
     }
-
+    
 }

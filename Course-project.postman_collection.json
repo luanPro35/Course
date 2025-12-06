@@ -258,6 +258,100 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "delete account(token user)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsInNjb3BlIjoiUk9MRV9VU0VSIFZJRVdfQ09VUlNFIENSRUFURV9QT1NUIERFTEVURV9QT1NUIEVOUk9MTF9DT1VSU0UgRURJVF9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzY1MTAyNTcyLCJpYXQiOjE3NjQ4NDMzNzIsImVtYWlsIjoic2hvcDFAZ21haWwuY29tIiwianRpIjoiMjUyYmMxN2MtYzliMC00YjQxLWFmMDUtYjg1NmZhNzBhNjBjIn0.lFtlMbKbdycfMfJRewg__zMFCM3ONvl3JK5cFC0qnSD9b01YrsxbpJ8MVzXqCNzFCGQPfg1T4greGzR2qTh7KQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"email\": \"loikobi12345@gmail.com\",\r\n    // \"password\" : \"12345678\"\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"shopbanaccgiare2020@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/forgot-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"shopbanaccgiare2020@gmail.com\",\r\n    \"otp\": \"979049\",\r\n    \"newPassword\" : \"87654321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/project/auth/reset-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"project",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1434,6 +1528,14 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},

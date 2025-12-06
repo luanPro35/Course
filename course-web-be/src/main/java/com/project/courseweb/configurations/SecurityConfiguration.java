@@ -35,6 +35,8 @@ public class SecurityConfiguration {
     private static final String[] PUBLIC_URLS = {
             "/auth/register",
             "/auth/login",
+            "/auth/forgot-password",
+            "/auth/reset-password",
             "/auth/refresh-token",
             "/auth/introspect",
             "/oauth2/callback",

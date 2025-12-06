@@ -1,0 +1,1569 @@
+Index: course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.project.courseweb.services.implement;\r\n\r\n\r\nimport java.time.LocalDateTime;\r\n\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.security.access.prepost.PreAuthorize;\r\nimport org.springframework.stereotype.Component;\r\nimport org.springframework.transaction.annotation.Transactional;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport com.project.courseweb.dtos.PageResponse;\r\nimport com.project.courseweb.dtos.request.PostRequest;\r\nimport com.project.courseweb.dtos.response.FileResponse;\r\nimport com.project.courseweb.dtos.response.PostResponse;\r\nimport com.project.courseweb.entities.Post;\r\nimport com.project.courseweb.enums.CategoryType;\r\nimport com.project.courseweb.enums.ErrorCode;\r\nimport com.project.courseweb.enums.PostStatus;\r\nimport com.project.courseweb.exceptions.AppException;\r\nimport com.project.courseweb.mappers.PostMapper;\r\nimport com.project.courseweb.repositories.PostRepository;\r\nimport com.project.courseweb.services.CategoryService;\r\nimport com.project.courseweb.services.FileUploadAWSService;\r\nimport com.project.courseweb.services.PostService;\r\n\r\nimport lombok.AccessLevel;\r\nimport lombok.RequiredArgsConstructor;\r\nimport lombok.experimental.FieldDefaults;\r\nimport lombok.extern.slf4j.Slf4j;\r\n\r\n@Slf4j\r\n@RequiredArgsConstructor\r\n@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)\r\n@Component\r\npublic class PostServiceImpl implements PostService {\r\n\r\n    PostRepository postRepository;\r\n    FileUploadAWSService fileUploadAWSService;\r\n    PostMapper postMapper;\r\n    ProfileServiceImpl profileServiceImpl;\r\n    CategoryService categoryService;\r\n\r\n    @Override\r\n    public FileResponse uploadPostThumbnail(MultipartFile file) {\r\n        return FileResponse.builder()\r\n                .url(this.fileUploadAWSService.uploadFile(\r\n                        this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),\r\n                        \"post-thumbnail\",\r\n                        file\r\n                        )\r\n                )\r\n                .build();\r\n    }\r\n    @Override\r\n    @Transactional\r\n    @PreAuthorize(\"hasAuthority('CREATE_POST')\")\r\n    public PostResponse createPost(PostRequest request) {\r\n        Post post = this.postMapper.toPostEntity(request);\r\n        post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));\r\n        post.setStatus(PostStatus.valueOf(request.getStatusPost()));\r\n        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));\r\n        var entity = this.postRepository.save(post);\r\n        return this.toResponse(entity);\r\n    }\r\n    @Override\r\n    public PageResponse<PostResponse> getPostsByStatus(Pageable pageable, String status) {\r\n        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());\r\n        Page<Post> posts = this.postRepository.getPostsByStatusAndProfileId(PostStatus.valueOf(status), profile.getId(), pageable);\r\n        return this.toPageResponse(posts);\r\n    }\r\n    @Override\r\n    @Transactional(readOnly = true)\r\n    public PostResponse getPostById(Long id) {\r\n        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());\r\n        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());\r\n        if(postOptional.isEmpty()){\r\n            throw new AppException(ErrorCode.POST_NOT_FOUND);\r\n        }\r\n        var post = postOptional.get();\r\n        return this.toResponse(post);\r\n    }\r\n    @Override\r\n    @Transactional\r\n    @PreAuthorize(\"hasRole('ADMIN') or (hasAuthority('EDIT_POST') and @postServiceImpl.isPostOwner(#id))\")\r\n    public PostResponse updatePost(Long id, PostRequest request) {\r\n        // var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());\r\n        // var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());\r\n        // if(!postOptional.isPresent()){\r\n        //     throw new AppException(ErrorCode.POST_NOT_FOUND);\r\n        // }   \r\n        // var post = postOptional.get();\r\n        var post = this.postRepository.findById(id).orElseThrow(\r\n            () -> new AppException(ErrorCode.POST_NOT_FOUND)\r\n        );\r\n        post.setUpdatedAt(LocalDateTime.now());\r\n        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));\r\n        post.setStatus(PostStatus.valueOf(request.getStatusPost()));\r\n        this.postMapper.updatePostFromRequest(request, post);\r\n        return this.toResponse(this.postRepository.save(post));\r\n    }\r\n\r\n    @Override\r\n    @Transactional(readOnly = true)\r\n    @PreAuthorize(\"hasRole('ADMIN')\")\r\n    public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {\r\n        Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);\r\n        return this.toPageResponse(posts);\r\n    }\r\n\r\n    @Override\r\n    public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {\r\n        Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);\r\n        return this.toPageResponse(posts);\r\n    }\r\n\r\n    @Override\r\n    @Transactional\r\n    @PreAuthorize(\"hasRole('ADMIN') or (hasAuthority('DELETE_POST') and @postServiceImpl.isPostOwner(#id))\")\r\n    public void deletePost(Long id) {\r\n        Post post = this.postRepository.findById(id)\r\n                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));\r\n        this.postRepository.delete(post);\r\n    }\r\n\r\n    private PostResponse toResponse(Post post){\r\n        var res = this.postMapper.toPostResponse(post);\r\n        res.setCategory(post.getCategory().getSlug().name());\r\n        res.setStatusPost(post.getStatus().name());\r\n        return res;\r\n    }\r\n\r\n    private PageResponse<PostResponse> toPageResponse(Page<Post> page){\r\n        var content = page.stream().map(this::toResponse).toList();\r\n        return PageResponse.<PostResponse>builder()\r\n            .content(content)\r\n            .pageNo(page.getNumber())\r\n            .pageSize(page.getSize())\r\n            .totalElements(page.getTotalElements())\r\n            .totalPages(page.getTotalPages())\r\n            .last(page.isLast())\r\n            .build();\r\n    }\r\n\r\n    public boolean isPostOwner(Long id){\r\n        return postRepository.existsByIdAndProfileId(id, this.profileServiceImpl.getId());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java b/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java
+--- a/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java	(date 1763611686659)
+@@ -2,6 +2,7 @@
+ 
+ 
+ import java.time.LocalDateTime;
++import java.util.List;
+ 
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.Pageable;
+@@ -55,20 +56,46 @@
+     }
+     @Override
+     @Transactional
+-    @PreAuthorize("hasAuthority('CREATE_POST')")
+     public PostResponse createPost(PostRequest request) {
+         Post post = this.postMapper.toPostEntity(request);
+         post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
+-        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+-        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
++        try {
++            post.setStatus(PostStatus.valueOf(request.getStatusPost()));
++        } catch (IllegalArgumentException e) {
++            throw new RuntimeException("Invalid status: " + request.getStatusPost());
++        }
++        try {
++            CategoryType categoryType = CategoryType.valueOf(request.getCategory());
++            post.setCategory(this.categoryService.getCategoryByName(categoryType));
++        } catch (IllegalArgumentException e) {
++            throw new RuntimeException("Invalid category: " + request.getCategory());
++        }
+         var entity = this.postRepository.save(post);
+-        return this.toResponse(entity);
++        var response = this.postMapper.toPostResponse(post);
++        response.setCategory(entity.getCategory().getSlug().name());
++        response.setStatusPost(entity.getStatus().name());
++        return response;
+     }
+     @Override
+     public PageResponse<PostResponse> getPostsByStatus(Pageable pageable, String status) {
+         var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+         Page<Post> posts = this.postRepository.getPostsByStatusAndProfileId(PostStatus.valueOf(status), profile.getId(), pageable);
+-        return this.toPageResponse(posts);
++        List<PostResponse> postResponses = posts.stream().map(
++            post -> {
++                var response = this.postMapper.toPostResponse(post);
++                response.setCategory(post.getCategory().getSlug().name());
++                response.setStatusPost(post.getStatus().name());
++                return response;
++            }
++        ).toList();
++        return PageResponse.<PostResponse>builder()
++                .content(postResponses)
++                .pageNo(posts.getNumber())
++                .pageSize(posts.getSize())
++                .totalElements(posts.getTotalElements())
++                .totalPages(posts.getTotalPages())
++                .last(posts.isLast())
++                .build();
+     }
+     @Override
+     @Transactional(readOnly = true)
+@@ -79,71 +106,93 @@
+             throw new AppException(ErrorCode.POST_NOT_FOUND);
+         }
+         var post = postOptional.get();
+-        return this.toResponse(post);
++        var response = this.postMapper.toPostResponse(post);
++        response.setCategory(post.getCategory().getSlug().name()); 
++        response.setStatusPost(post.getStatus().name());
++        return response;
+     }
+     @Override
+     @Transactional
+-    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_POST') and @postServiceImpl.isPostOwner(#id))")
+     public PostResponse updatePost(Long id, PostRequest request) {
+-        // var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+-        // var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
+-        // if(!postOptional.isPresent()){
+-        //     throw new AppException(ErrorCode.POST_NOT_FOUND);
+-        // }   
+-        // var post = postOptional.get();
+-        var post = this.postRepository.findById(id).orElseThrow(
+-            () -> new AppException(ErrorCode.POST_NOT_FOUND)
+-        );
+-        post.setUpdatedAt(LocalDateTime.now());
+-        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
+-        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
++        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
++        var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
++        if(!postOptional.isPresent()){
++            throw new AppException(ErrorCode.POST_NOT_FOUND);
++        }   
++        var post = postOptional.get();
++        post.setCreatedAt(LocalDateTime.now());
++        try {
++            CategoryType categoryType = CategoryType.valueOf(request.getCategory());
++            post.setCategory(this.categoryService.getCategoryByName(categoryType));
++        } catch (IllegalArgumentException e) {
++            throw new RuntimeException("Invalid category: " + request.getCategory());
++        }
++        try {
++            post.setStatus(PostStatus.valueOf(request.getStatusPost()));
++        } catch (IllegalArgumentException e) {
++            throw new RuntimeException("Invalid status: " + request.getStatusPost());
++        }
+         this.postMapper.updatePostFromRequest(request, post);
+-        return this.toResponse(this.postRepository.save(post));
++        var response = this.postMapper.toPostResponse(this.postRepository.save(post));
++        response.setCategory(post.getCategory().getSlug().name());
++        response.setStatusPost(post.getStatus().name());
++        return response;
+     }
+ 
+     @Override
+     @Transactional(readOnly = true)
+-    @PreAuthorize("hasRole('ADMIN')")
+     public PageResponse<PostResponse> getPostsByStatusPending(Pageable pageable) {
+         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PENDING, pageable);
+-        return this.toPageResponse(posts);
++        List<PostResponse> postResponses = posts.stream().map(
++            post -> {
++                var response = this.postMapper.toPostResponse(post);
++                response.setCategory(post.getCategory().getSlug().name());
++                response.setStatusPost(post.getStatus().name());
++                return response;
++            }
++        ).toList();
++        return PageResponse.<PostResponse>builder()
++                .content(postResponses)
++                .pageNo(posts.getNumber())
++                .pageSize(posts.getSize())
++                .totalElements(posts.getTotalElements())
++                .totalPages(posts.getTotalPages())
++                .last(posts.isLast())
++                .build();
+     }
+-
+     @Override
+     public PageResponse<PostResponse> getAllPostsByStatusPublished(Pageable pageable) {
+         Page<Post> posts = this.postRepository.getPostsByStatus(PostStatus.PUBLISHED, pageable);
+-        return this.toPageResponse(posts);
++        List<PostResponse> postResponses = posts.stream().map(
++            post -> {
++                var response = this.postMapper.toPostResponse(post);
++                response.setCategory(post.getCategory().getSlug().name());
++                response.setStatusPost(post.getStatus().name());
++                return response;
++            }
++        ).toList();
++        return PageResponse.<PostResponse>builder()
++                .content(postResponses)
++                .pageNo(posts.getNumber())
++                .pageSize(posts.getSize())
++                .totalElements(posts.getTotalElements())
++                .totalPages(posts.getTotalPages())
++                .last(posts.isLast())
++                .build();
+     }
+-
+     @Override
+     @Transactional
+-    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('DELETE_POST') and @postServiceImpl.isPostOwner(#id))")
++    @PreAuthorize("hasAuthority('DELETE_POST') and this.isPostOwner(#id) or hasRole('ADMIN')")
+     public void deletePost(Long id) {
+         Post post = this.postRepository.findById(id)
+                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+         this.postRepository.delete(post);
+     }
+ 
+-    private PostResponse toResponse(Post post){
+-        var res = this.postMapper.toPostResponse(post);
+-        res.setCategory(post.getCategory().getSlug().name());
+-        res.setStatusPost(post.getStatus().name());
+-        return res;
+-    }
+-
+-    private PageResponse<PostResponse> toPageResponse(Page<Post> page){
+-        var content = page.stream().map(this::toResponse).toList();
+-        return PageResponse.<PostResponse>builder()
+-            .content(content)
+-            .pageNo(page.getNumber())
+-            .pageSize(page.getSize())
+-            .totalElements(page.getTotalElements())
+-            .totalPages(page.getTotalPages())
+-            .last(page.isLast())
+-            .build();
+-    }
+-
+     public boolean isPostOwner(Long id){
+-        return postRepository.existsByIdAndProfileId(id, this.profileServiceImpl.getId());
++        return postRepository.findById(id)
++            .map(post->post.getProfile().getId()
++            .equals(this.profileServiceImpl.getId()))
++            .orElse(false);
+     }
+ }
+Index: course-web-be/update_categories.sql
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course-web-be/update_categories.sql b/course-web-be/update_categories.sql
+new file mode 100644
+--- /dev/null	(date 1763611478075)
++++ b/course-web-be/update_categories.sql	(date 1763611478075)
+@@ -0,0 +1,6 @@
++-- Update existing category data to match new uppercase enum values
++UPDATE categories SET slug = 'CPP' WHERE slug = 'cpp';
++UPDATE categories SET slug = 'DEVOPS' WHERE slug = 'devops';
++UPDATE categories SET slug = 'JAVASCRIPT' WHERE slug = 'javascript';
++UPDATE categories SET slug = 'PYTHON' WHERE slug = 'python';
++UPDATE categories SET slug = 'REACT_NATIVE' WHERE slug = 'react_native';
+\ No newline at end of file
+Index: my-course-project/src/hooks/useBlogForm.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"use client\";\r\nimport { useState, ChangeEvent, useEffect } from \"react\";\r\nimport { AppRouterInstance } from \"next/dist/shared/lib/app-router-context.shared-runtime\";\r\nimport { BlogService } from \"@/services/blog.service\";\r\nimport { BlogFormData } from \"@/types/blog.types\";\r\n\r\nexport const useBlogForm = (initialState: BlogFormData) => {\r\n  const [formData, setFormData] = useState<BlogFormData>(initialState);\r\n  const [imagePreview, setImagePreview] = useState<string | null>(null);\r\n  const [errors, setErrors] = useState<Record<string, string | undefined>>({});\r\n  const [isSubmitting, setIsSubmitting] = useState(false);\r\n  const [isUploading, setIsUploading] = useState(false); // State for image upload\r\n\r\n  const resetForm = () => {\r\n    setFormData(initialState);\r\n    setImagePreview(null);\r\n    setErrors({});\r\n  };\r\n\r\n  useEffect(() => {\r\n    if (formData.image) {\r\n      setImagePreview(formData.image);\r\n    } else {\r\n      setImagePreview(null);\r\n    }\r\n  }, [formData.image]);\r\n\r\n  const handleChange = (\r\n    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,\r\n    name: string\r\n  ) => {\r\n    const value = e.target.value;\r\n    setFormData((prev) => ({ ...prev, [name]: value }));\r\n  };\r\n\r\n  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {\r\n    const items = e.clipboardData.items;\r\n    for (const index in items) {\r\n      const item = items[index];\r\n      if (item.kind === \"file\") {\r\n        const file = item.getAsFile();\r\n        if (file) {\r\n          setIsUploading(true);\r\n          const uploadFormData = new FormData();\r\n          uploadFormData.append(\"file\", file);\r\n\r\n          try {\r\n            const res = await fetch(\"/api/upload\", {\r\n              method: \"POST\",\r\n              body: uploadFormData,\r\n            });\r\n            const result = await res.json();\r\n            if (!res.ok || !result.success) {\r\n              throw new Error(result.error || \"Tải ảnh lên thất bại.\");\r\n            }\r\n            const imageUrl = `\\n![Image](${result.path})\\n`;\r\n            const currentContent = formData.fullContent || \"\";\r\n            setFormData((prev) => ({\r\n              ...prev,\r\n              fullContent: currentContent + imageUrl,\r\n            }));\r\n          } catch (error) {\r\n            console.error(error);\r\n            setErrors((prev) => ({\r\n              ...prev,\r\n              image: \"Lỗi khi tải ảnh lên. Vui lòng thử lại.\",\r\n            }));\r\n          } finally {\r\n            setIsUploading(false);\r\n          }\r\n        }\r\n      }\r\n    }\r\n  };\r\n\r\n  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {\r\n    const file = e.target.files?.[0] || null;\r\n    if (!file) return;\r\n\r\n    // Set uploading state\r\n    setIsUploading(true);\r\n    setErrors((prev) => ({ ...prev, image: undefined })); // Clear previous image error\r\n\r\n    const uploadFormData = new FormData();\r\n    uploadFormData.append(\"file\", file);\r\n\r\n    try {\r\n      const res = await fetch(\"/api/upload\", {\r\n        method: \"POST\",\r\n        body: uploadFormData,\r\n      });\r\n\r\n      const result = await res.json();\r\n\r\n      if (!res.ok || !result.success) {\r\n        throw new Error(result.error || \"Tải ảnh lên thất bại.\");\r\n      }\r\n\r\n      // On successful upload, update the form data with the REAL path\r\n      setFormData((prev) => ({ ...prev, image: result.path }));\r\n    } catch (error) {\r\n      console.error(error);\r\n      setErrors((prev) => ({\r\n        ...prev,\r\n        image: \"Lỗi khi tải ảnh lên. Vui lòng thử lại.\",\r\n      }));\r\n    } finally {\r\n      // Unset uploading state\r\n      setIsUploading(false);\r\n    }\r\n  };\r\n\r\n  const handleSubmit = async (\r\n    status: \"draft\" | \"published\",\r\n    userId: string | null,\r\n    postId?: number | string,\r\n    router?: AppRouterInstance\r\n  ) => {\r\n    setErrors({});\r\n    const newErrors: Record<string, string> = {};\r\n\r\n    if (!formData.author) newErrors.author = \"Tên tác giả là bắt buộc\";\r\n    if (!formData.title) newErrors.title = \"Tiêu đề là bắt buộc\";\r\n    if (!formData.content) newErrors.content = \"Nội dung là bắt buộc\";\r\n    if (!formData.fullContent)\r\n      newErrors.fullContent = \"Nội dung đầy đủ là bắt buộc\";\r\n    if (!formData.category) newErrors.category = \"Danh mục là bắt buộc\";\r\n    if (!formData.image) newErrors.image = \"Ảnh đại diện là bắt buộc\";\r\n\r\n    if (Object.keys(newErrors).length > 0) {\r\n      setErrors(newErrors);\r\n      return;\r\n    }\r\n\r\n    if (!userId) {\r\n      setErrors((prev) => ({ ...prev, userId: \"User ID is required\" }));\r\n      return;\r\n    }\r\n\r\n    setIsSubmitting(true);\r\n\r\n    try {\n      if (postId) {\n        // Update existing post with status\n        await BlogService.update(\n          userId,\n          parseInt(postId.toString(), 10),\n          { ...formData, status }\n        );\n        alert(`Bài viết đã được cập nhật dưới dạng ${status === \"draft\" ? \"bản nháp\" : \"xuất bản\"}`);\n      } else {\n        // Create new post\n        await BlogService.create(formData, userId, status);\n        alert(`Bài viết đã được lưu dưới dạng ${status === \"draft\" ? \"bản nháp\" : \"xuất bản\"}`);\n        resetForm(); // Reset the form after successful creation\n      }\n\r\n      // Redirect to my-posts page after successful save\r\n      if (router) {\r\n        router.push(\"/blog/my-posts\");\r\n      }\r\n    } catch (error) {\r\n      console.error(\"Failed to save the post:\", error);\r\n      alert(\"Có lỗi xảy ra khi lưu bài viết.\");\r\n    } finally {\r\n      setIsSubmitting(false);\r\n    }\r\n  };\r\n\r\n  return {\r\n    formData,\r\n    setFormData,\r\n    errors,\r\n    isSubmitting,\r\n    isUploading, // Expose uploading state to the component\r\n    imagePreview,\r\n    setImagePreview, // Expose setImagePreview\r\n    handleChange,\r\n    handleImageChange, // Use this new handler for the file input\r\n    handlePaste,\r\n    handleSubmit,\r\n    resetForm, // Expose the reset function\r\n  };\r\n};\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/hooks/useBlogForm.tsx b/my-course-project/src/hooks/useBlogForm.tsx
+--- a/my-course-project/src/hooks/useBlogForm.tsx	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/hooks/useBlogForm.tsx	(date 1763611478082)
+@@ -113,6 +113,7 @@
+   const handleSubmit = async (
+     status: "draft" | "published",
+     userId: string | null,
++    token: string | null,
+     postId?: number | string,
+     router?: AppRouterInstance
+   ) => {
+@@ -134,24 +135,40 @@
+ 
+     if (!userId) {
+       setErrors((prev) => ({ ...prev, userId: "User ID is required" }));
++      alert("Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.");
++      return;
++    }
++
++    if (!token) {
++      setErrors((prev) => ({ ...prev, token: "Authentication token is missing" }));
++      alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+       return;
+     }
+ 
+     setIsSubmitting(true);
+ 
+     try {
++      console.log("Submitting blog post with userId:", userId, "token:", token ? "present" : "missing");
++      
+       if (postId) {
+         // Update existing post with status
+         await BlogService.update(
+-          userId,
+           parseInt(postId.toString(), 10),
+           { ...formData, status }
+         );
+-        alert(`Bài viết đã được cập nhật dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
++        alert(
++          `Bài viết đã được cập nhật dưới dạng ${
++            status === "draft" ? "bản nháp" : "xuất bản"
++          }`
++        );
+       } else {
+         // Create new post
+-        await BlogService.create(formData, userId, status);
+-        alert(`Bài viết đã được lưu dưới dạng ${status === "draft" ? "bản nháp" : "xuất bản"}`);
++        await BlogService.create(formData, status);
++        alert(
++          `Bài viết đã được lưu dưới dạng ${
++            status === "draft" ? "bản nháp" : "xuất bản"
++          }`
++        );
+         resetForm(); // Reset the form after successful creation
+       }
+ 
+@@ -161,7 +178,8 @@
+       }
+     } catch (error) {
+       console.error("Failed to save the post:", error);
+-      alert("Có lỗi xảy ra khi lưu bài viết.");
++      const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra khi lưu bài viết.";
++      alert(errorMessage);
+     } finally {
+       setIsSubmitting(false);
+     }
+Index: my-course-project/src/constants/blog.constants.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>export const BLOG_CATEGORIES = [\r\n  { value: \"react-native\", label: \"React Native\" },\r\n  { value: \"devops\", label: \"DevOps\" },\r\n  { value: \"cpp\", label: \"C++\" },\r\n  { value: \"javascript\", label: \"JavaScript\" },\r\n  { value: \"python\", label: \"Python\" },\r\n];\r\n\r\nexport const FORM_VALIDATION = {\r\n  AUTHOR_MIN_LENGTH: 2,\r\n  TITLE_MIN_LENGTH: 10,\r\n  CONTENT_MIN_LENGTH: 50,\r\n  MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB\r\n} as const;\r\n\r\nexport const TIPS = [\r\n  \"Tiêu đề nên ngắn gọn, súc tích và thu hút\",\r\n  \"Nội dung nên có cấu trúc rõ ràng\",\r\n  \"Thêm ví dụ thực tế để tăng tính thuyết phục\",\r\n  \"Sử dụng ảnh chất lượng cao\",\r\n];\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/constants/blog.constants.ts b/my-course-project/src/constants/blog.constants.ts
+--- a/my-course-project/src/constants/blog.constants.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/constants/blog.constants.ts	(date 1763611478081)
+@@ -1,9 +1,9 @@
+ export const BLOG_CATEGORIES = [
+-  { value: "react-native", label: "React Native" },
+-  { value: "devops", label: "DevOps" },
+-  { value: "cpp", label: "C++" },
+-  { value: "javascript", label: "JavaScript" },
+-  { value: "python", label: "Python" },
++  { value: "REACT_NATIVE", label: "React Native" },
++  { value: "DEVOPS", label: "DevOps" },
++  { value: "CPP", label: "C++" },
++  { value: "JAVASCRIPT", label: "JavaScript" },
++  { value: "PYTHON", label: "Python" },
+ ];
+ 
+ export const FORM_VALIDATION = {
+Index: my-course-project/src/app/(main)/blog/my-posts/page.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"use client\";\r\nimport { useEffect, useState } from \"react\";\r\nimport { BlogService } from \"@/services/blog.service\"; // Force re-import\r\nimport { BlogPost } from \"@/types/blog.types\";\r\nimport { PostItem } from \"./PostItem\";\r\nimport { useRouter } from \"next/navigation\";\r\nimport { useAuth } from \"@/hooks/useAuth\";\r\n\r\nexport default function MyPosts() {\r\n  const router = useRouter();\r\n  const { user } = useAuth();\r\n  const [posts, setPosts] = useState<BlogPost[]>([]);\r\n  const [activeContent, setActiveContent] = useState<\"draft\" | \"published\">(\r\n    \"draft\"\r\n  );\r\n\r\n  const handleDelete = (id: number | string) => {\r\n    if (!user?.id) {\r\n      alert(\"Vui lòng đăng nhập để xóa bài viết\");\r\n      return;\r\n    }\r\n\r\n    if (window.confirm(\"Bạn có chắc chắn muốn xóa bài viết này không?\")) {\r\n      BlogService.delete(user.id, Number(id))\r\n        .then(() => {\r\n          setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));\r\n        })\r\n        .catch((error) => {\r\n          console.error(\"Lỗi khi xóa bài viết:\", error);\r\n          alert(`Lỗi khi xóa bài viết: ${error.message}`);\r\n        });\r\n    }\r\n  };\r\n\r\n  const handleEdit = (id: number | string) => {\r\n    router.push(`/blog/create?id=${id}`);\r\n  };\r\n\r\n  useEffect(() => {\r\n    if (!user?.id) {\r\n      return;\r\n    }\r\n\r\n    BlogService.getAll()\r\n      .then((allPosts) => {\r\n        // Filter posts to only show current user's posts\r\n        const userPosts = allPosts.filter((post) => post.user?.id === user.id);\r\n        setPosts(userPosts);\r\n      })\r\n      .catch((err) => console.error(err));\r\n  }, [user?.id]);\r\n\r\n  const drafts = posts.filter((p) => p.status === \"draft\");\r\n  const published = posts.filter((p) => p.status === \"published\");\r\n\r\n  return (\r\n    <div className=\"p-4 md:p-6 lg:ml-10\">\r\n      <h2 className=\"text-2xl md:text-3xl font-bold mb-8 md:mb-12 lg:mb-24\">\r\n        \uD83D\uDCDD Bài viết của tôi\r\n      </h2>\r\n\r\n      <div className=\"flex gap-4 mb-6 border-b\">\r\n        <button\r\n          onClick={() => setActiveContent(\"draft\")}\r\n          className={`px-3 sm:px-4 py-2 transition-all duration-200 text-base sm:text-lg ${\r\n            activeContent === \"draft\"\r\n              ? \"text-black font-bold border-b-2 border-black\"\r\n              : \"text-gray-500 hover:text-black\"\r\n          }`}\r\n        >\r\n          Bản nháp ({drafts.length})\r\n        </button>\r\n\r\n        <button\r\n          onClick={() => setActiveContent(\"published\")}\r\n          className={`px-3 sm:px-4 py-2 transition-all duration-200 text-base sm:text-lg ${\r\n            activeContent === \"published\"\r\n              ? \"text-black font-bold border-b-2 border-black\"\r\n              : \"text-gray-500 hover:text-black\"\r\n          }`}\r\n        >\r\n          Đã xuất bản ({published.length})\r\n        </button>\r\n      </div>\r\n\r\n      {/* Hiển thị nội dung theo trạng thái */}\r\n      {activeContent === \"draft\" && (\r\n        <section>\r\n          {drafts.length ? (\r\n            drafts.map((p) => (\r\n              <PostItem\r\n                key={p.id}\r\n                post={p}\r\n                handleDelete={handleDelete}\r\n                handleEdit={handleEdit}\r\n              />\r\n            ))\r\n          ) : (\r\n            <p className=\"text-gray-500\">Chưa có bài nháp</p>\r\n          )}\r\n        </section>\r\n      )}\r\n\r\n      {activeContent === \"published\" && (\r\n        <section>\r\n          {published.length ? (\r\n            published.map((p) => (\r\n              <PostItem\r\n                key={p.id}\r\n                post={p}\r\n                handleDelete={handleDelete}\r\n                handleEdit={handleEdit}\r\n              />\r\n            ))\r\n          ) : (\r\n            <p className=\"text-gray-500\">Chưa có bài viết nào được xuất bản</p>\r\n          )}\r\n        </section>\r\n      )}\r\n    </div>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/app/(main)/blog/my-posts/page.tsx b/my-course-project/src/app/(main)/blog/my-posts/page.tsx
+--- a/my-course-project/src/app/(main)/blog/my-posts/page.tsx	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/app/(main)/blog/my-posts/page.tsx	(date 1763611478078)
+@@ -21,7 +21,7 @@
+     }
+ 
+     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+-      BlogService.delete(user.id, Number(id))
++      BlogService.delete(Number(id))
+         .then(() => {
+           setPosts((prevPosts) => prevPosts.filter((p) => p.id !== id));
+         })
+Index: my-course-project/src/app/api/posts/route.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { NextResponse } from \"next/server\";\r\nimport fs from \"fs\";\r\nimport path from \"path\";\r\n\r\n// Unified interfaces\r\ninterface Post {\r\n  id: number;\r\n  author?: string;\r\n  title?: string;\r\n  content?: string;\r\n  category?: string;\r\n  timeAgo?: string;\r\n  readTime?: string;\r\n  image?: string;\r\n}\r\n\r\ninterface Db {\r\n  posts: Post[];\r\n}\r\n\r\n// Unified DB helpers\r\nconst dbPath = path.join(process.cwd(), \"db.json\");\r\n\r\nconst readDb = (): Db => {\r\n  try {\r\n    // Check if db.json exists before reading\r\n    if (fs.existsSync(dbPath)) {\r\n      const data = fs.readFileSync(dbPath, \"utf8\");\r\n      // Handle empty file case\r\n      if (data) {\r\n        return JSON.parse(data);\r\n      }\r\n    }\r\n    // If file doesn't exist or is empty, return a default structure\r\n    return { posts: [] };\r\n  } catch (error) {\r\n    console.error(\"Error reading db.json:\", error);\r\n    return { posts: [] };\r\n  }\r\n};\r\n\r\nconst writeDb = (data: Db): boolean => {\r\n  try {\r\n    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), \"utf8\");\r\n    return true;\r\n  } catch (error) {\r\n    console.error(\"Error writing to db.json:\", error);\r\n    return false;\r\n  }\r\n};\r\n\r\n// Combined GET handler\r\nexport async function GET(request: Request) {\r\n  const { searchParams } = new URL(request.url);\r\n  const id = searchParams.get(\"id\");\r\n\r\n  try {\r\n    const db = readDb();\r\n    if (id) {\r\n      // Get single post by ID\r\n      const post = db.posts.find((p) => p.id.toString() === id);\r\n      if (!post) {\r\n        return NextResponse.json({ error: \"Post not found\" }, { status: 404 });\r\n      }\r\n      return NextResponse.json(post);\r\n    } else {\r\n      // Get all posts\r\n      return NextResponse.json(db.posts);\r\n    }\r\n  } catch (error) {\r\n    console.error(\"Error in GET method:\", error);\r\n    return NextResponse.json(\r\n      { error: \"Không thể tải bài viết\" },\r\n      { status: 500 }\r\n    );\r\n  }\r\n}\r\n\r\n// POST handler to create a new post\r\nexport async function POST(request: Request) {\r\n  try {\r\n    const postData = await request.json();\r\n    const db = readDb();\r\n\r\n    if (!db.posts) {\r\n      db.posts = [];\r\n    }\r\n\r\n    const newPost: Post = {\r\n      id: Date.now(),\r\n      ...postData,\r\n      createdAt: new Date().toISOString(), // More standard field name\r\n      updatedAt: new Date().toISOString(),\r\n    };\r\n\r\n    db.posts.unshift(newPost);\r\n\r\n    if (writeDb(db)) {\r\n      return NextResponse.json(newPost, { status: 201 });\r\n    } else {\r\n      return NextResponse.json(\r\n        { error: \"Không thể lưu bài viết mới\" },\r\n        { status: 500 }\r\n      );\r\n    }\r\n  } catch (error) {\r\n    console.error(\"Error in POST method:\", error);\r\n    return NextResponse.json(\r\n      { error: \"Lỗi khi tạo bài viết\" },\r\n      { status: 500 }\r\n    );\r\n  }\r\n}\r\n\r\n// PUT handler to update a post\r\nexport async function PUT(request: Request) {\r\n  const { searchParams } = new URL(request.url);\r\n  const id = searchParams.get(\"id\");\r\n\r\n  if (!id) {\r\n    return NextResponse.json({ error: \"Post ID is required\" }, { status: 400 });\r\n  }\r\n\r\n  try {\r\n    const body = await request.json();\r\n    const db = readDb();\r\n\r\n    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);\r\n\r\n    if (postIndex === -1) {\r\n      return NextResponse.json({ error: \"Post not found\" }, { status: 404 });\r\n    }\r\n\r\n    db.posts[postIndex] = {\r\n      ...db.posts[postIndex],\r\n      ...body,\r\n      updatedAt: new Date().toISOString(),\r\n    };\r\n\r\n    if (writeDb(db)) {\r\n      return NextResponse.json(db.posts[postIndex]);\r\n    } else {\r\n      return NextResponse.json(\r\n        { error: \"Không thể cập nhật bài viết\" },\r\n        { status: 500 }\r\n      );\r\n    }\r\n  } catch (error) {\r\n    console.error(\"Error updating post:\", error);\r\n    return NextResponse.json(\r\n      { error: \"Failed to update post\" },\r\n      { status: 500 }\r\n    );\r\n  }\r\n}\r\n\r\n// DELETE handler to remove a post\r\nexport async function DELETE(request: Request) {\r\n  const { searchParams } = new URL(request.url);\r\n  const id = searchParams.get(\"id\");\r\n\r\n  if (!id) {\r\n    return NextResponse.json({ error: \"Post ID is required\" }, { status: 400 });\r\n  }\r\n\r\n  try {\r\n    const db = readDb();\r\n    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);\r\n\r\n    if (postIndex === -1) {\r\n      return NextResponse.json({ error: \"Post not found\" }, { status: 404 });\r\n    }\r\n\r\n    const deletedPost = db.posts[postIndex];\r\n    db.posts.splice(postIndex, 1);\r\n\r\n    if (writeDb(db)) {\r\n      return NextResponse.json({\r\n        success: true,\r\n        message: \"Xóa bài viết thành công\",\r\n        deletedPost,\r\n      });\r\n    } else {\r\n      return NextResponse.json(\r\n        { error: \"Không thể xóa bài viết\" },\r\n        { status: 500 }\r\n      );\r\n    }\r\n  } catch (error) {\r\n    console.error(\"Error deleting post:\", error);\r\n    return NextResponse.json(\r\n      { error: \"Failed to delete post\" },\r\n      { status: 500 }\r\n    );\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/app/api/posts/route.ts b/my-course-project/src/app/api/posts/route.ts
+--- a/my-course-project/src/app/api/posts/route.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/app/api/posts/route.ts	(date 1763611478080)
+@@ -1,72 +1,43 @@
+ import { NextResponse } from "next/server";
+-import fs from "fs";
+-import path from "path";
+-
+-// Unified interfaces
+-interface Post {
+-  id: number;
+-  author?: string;
+-  title?: string;
+-  content?: string;
+-  category?: string;
+-  timeAgo?: string;
+-  readTime?: string;
+-  image?: string;
+-}
+-
+-interface Db {
+-  posts: Post[];
+-}
+-
+-// Unified DB helpers
+-const dbPath = path.join(process.cwd(), "db.json");
++import { getServerSession } from "next-auth/next";
++import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+ 
+-const readDb = (): Db => {
+-  try {
+-    // Check if db.json exists before reading
+-    if (fs.existsSync(dbPath)) {
+-      const data = fs.readFileSync(dbPath, "utf8");
+-      // Handle empty file case
+-      if (data) {
+-        return JSON.parse(data);
+-      }
+-    }
+-    // If file doesn't exist or is empty, return a default structure
+-    return { posts: [] };
+-  } catch (error) {
+-    console.error("Error reading db.json:", error);
+-    return { posts: [] };
+-  }
+-};
++// Define the base URL for the posts API from an environment variable.
++import { POSTS_API_URL, UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
+ 
+-const writeDb = (data: Db): boolean => {
+-  try {
+-    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), "utf8");
+-    return true;
+-  } catch (error) {
+-    console.error("Error writing to db.json:", error);
+-    return false;
+-  }
+-};
++if (!POSTS_API_URL || !UPLOAD_IMAGE_POST_URL) {
++  // Throw an error if the environment variable is not set.
++  throw new Error(
++    "POSTS_API_URL or UPLOAD_IMAGE_POST_URL is not defined in your environment variables."
++  );
++}
+ 
+-// Combined GET handler
++/**
++ * Handles GET requests to fetch all posts or a single post by ID.
++ */
+ export async function GET(request: Request) {
+   const { searchParams } = new URL(request.url);
+   const id = searchParams.get("id");
+ 
+   try {
+-    const db = readDb();
+-    if (id) {
+-      // Get single post by ID
+-      const post = db.posts.find((p) => p.id.toString() === id);
+-      if (!post) {
+-        return NextResponse.json({ error: "Post not found" }, { status: 404 });
+-      }
+-      return NextResponse.json(post);
+-    } else {
+-      // Get all posts
+-      return NextResponse.json(db.posts);
++    const targetUrl = id ? `${POSTS_API_URL}/${id}` : POSTS_API_URL;
++    const res = await fetch(targetUrl);
++
++    if (!res.ok) {
++      const errorData = await res
++        .json()
++        .catch(() => ({ message: "An unknown error occurred" }));
++      return NextResponse.json(
++        {
++          error:
++            errorData.message || `Failed to fetch data. Status: ${res.status}`,
++        },
++        { status: res.status }
++      );
+     }
++
++    const data = await res.json();
++    return NextResponse.json(data);
+   } catch (error) {
+     console.error("Error in GET method:", error);
+     return NextResponse.json(
+@@ -76,44 +47,103 @@
+   }
+ }
+ 
+-// POST handler to create a new post
++/**
++ * Handles POST requests to create a new post or upload an image.
++ */
+ export async function POST(request: Request) {
+-  try {
+-    const postData = await request.json();
+-    const db = readDb();
++  const session = await getServerSession(authOptions);
++
++  if (!session) {
++    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
++  }
++
++  const contentType = request.headers.get("content-type") || "";
++  const token = request.headers.get("Authorization");
++
++  // Handle image upload with multipart/form-data
++  if (contentType.includes("multipart/form-data")) {
++    try {
++      const formData = await request.formData();
+ 
+-    if (!db.posts) {
+-      db.posts = [];
+-    }
++      const res = await fetch(UPLOAD_IMAGE_POST_URL, {
++        method: "POST",
++        headers: {
++          ...(token && { Authorization: token }),
++        },
++        body: formData,
++      });
+ 
+-    const newPost: Post = {
+-      id: Date.now(),
+-      ...postData,
+-      createdAt: new Date().toISOString(), // More standard field name
+-      updatedAt: new Date().toISOString(),
+-    };
++      if (!res.ok) {
++        const errorData = await res
++          .json()
++          .catch(() => ({ message: "An unknown error occurred" }));
++        return NextResponse.json(
++          { error: errorData.message || "Failed to upload image" },
++          { status: res.status }
++        );
++      }
+ 
+-    db.posts.unshift(newPost);
+-
+-    if (writeDb(db)) {
+-      return NextResponse.json(newPost, { status: 201 });
+-    } else {
++      const result = await res.json();
++      return NextResponse.json(result, { status: 201 });
++    } catch (error) {
++      console.error("Error in POST (upload) method:", error);
+       return NextResponse.json(
+-        { error: "Không thể lưu bài viết mới" },
++        { error: "Error uploading image" },
+         { status: 500 }
+       );
+     }
+-  } catch (error) {
+-    console.error("Error in POST method:", error);
+-    return NextResponse.json(
+-      { error: "Lỗi khi tạo bài viết" },
+-      { status: 500 }
+-    );
+-  }
+-}
++  }
++
++  // Handle post creation with application/json
++  if (contentType.includes("application/json")) {
++    try {
++      const postData = await request.json();
++
++      const res = await fetch(POSTS_API_URL, {
++        method: "POST",
++        headers: {
++          "Content-Type": "application/json",
++          ...(token && { Authorization: token }),
++        },
++        body: JSON.stringify(postData),
++      });
++
++      if (!res.ok) {
++        const errorData = await res
++          .json()
++          .catch(() => ({ message: "An unknown error occurred" }));
++        return NextResponse.json(
++          { error: errorData.message || "Không thể lưu bài viết mới" },
++          { status: res.status }
++        );
++      }
++
++      const newPost = await res.json();
++      return NextResponse.json(newPost, { status: 201 });
++    } catch (error) {
++      console.error("Error in POST (create post) method:", error);
++      return NextResponse.json(
++        { error: "Lỗi khi tạo bài viết" },
++        { status: 500 }
++      );
++    }
++  }
+ 
+-// PUT handler to update a post
++  return NextResponse.json(
++    { error: "Unsupported Media Type" },
++    { status: 415 }
++  );
++}
++
++/**
++ * Handles PUT requests to update an existing post.
++ */
+ export async function PUT(request: Request) {
++  const session = await getServerSession(authOptions);
++
++  if (!session) {
++    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
++  }
+   const { searchParams } = new URL(request.url);
+   const id = searchParams.get("id");
+ 
+@@ -123,28 +153,29 @@
+ 
+   try {
+     const body = await request.json();
+-    const db = readDb();
+-
+-    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
++    const token = request.headers.get("Authorization");
+ 
+-    if (postIndex === -1) {
+-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+-    }
++    const res = await fetch(`${POSTS_API_URL}/${id}`, {
++      method: "PUT",
++      headers: {
++        "Content-Type": "application/json",
++        ...(token && { Authorization: token }),
++      },
++      body: JSON.stringify(body),
++    });
+ 
+-    db.posts[postIndex] = {
+-      ...db.posts[postIndex],
+-      ...body,
+-      updatedAt: new Date().toISOString(),
+-    };
+-
+-    if (writeDb(db)) {
+-      return NextResponse.json(db.posts[postIndex]);
+-    } else {
++    if (!res.ok) {
++      const errorData = await res
++        .json()
++        .catch(() => ({ message: "An unknown error occurred" }));
+       return NextResponse.json(
+-        { error: "Không thể cập nhật bài viết" },
+-        { status: 500 }
++        { error: errorData.message || "Không thể cập nhật bài viết" },
++        { status: res.status }
+       );
+     }
++
++    const updatedPost = await res.json();
++    return NextResponse.json(updatedPost);
+   } catch (error) {
+     console.error("Error updating post:", error);
+     return NextResponse.json(
+@@ -154,8 +185,15 @@
+   }
+ }
+ 
+-// DELETE handler to remove a post
++/**
++ * Handles DELETE requests to remove a post.
++ */
+ export async function DELETE(request: Request) {
++  const session = await getServerSession(authOptions);
++
++  if (!session) {
++    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
++  }
+   const { searchParams } = new URL(request.url);
+   const id = searchParams.get("id");
+ 
+@@ -164,27 +202,42 @@
+   }
+ 
+   try {
+-    const db = readDb();
+-    const postIndex = db.posts.findIndex((p) => p.id.toString() === id);
++    const token = request.headers.get("Authorization");
++    const res = await fetch(`${POSTS_API_URL}/${id}`, {
++      method: "DELETE",
++      headers: {
++        ...(token && { Authorization: token }),
++      },
++    });
+ 
+-    if (postIndex === -1) {
+-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
++    if (!res.ok) {
++      if (res.status === 204) {
++        // Handle no content success
++        return new NextResponse(null, { status: 204 });
++      }
++      const errorData = await res
++        .json()
++        .catch(() => ({ message: "An unknown error occurred" }));
++      return NextResponse.json(
++        { error: errorData.message || "Không thể xóa bài viết" },
++        { status: res.status }
++      );
+     }
+-
+-    const deletedPost = db.posts[postIndex];
+-    db.posts.splice(postIndex, 1);
+ 
+-    if (writeDb(db)) {
++    // Handle case where delete returns the deleted object or a success message
++    try {
++      const data = await res.json();
+       return NextResponse.json({
+         success: true,
+         message: "Xóa bài viết thành công",
+-        deletedPost,
++        deletedPost: data,
+       });
+-    } else {
+-      return NextResponse.json(
+-        { error: "Không thể xóa bài viết" },
+-        { status: 500 }
+-      );
++    } catch (e) {
++      // If there's no body, return a simple success response
++      return NextResponse.json({
++        success: true,
++        message: "Xóa bài viết thành công",
++      });
+     }
+   } catch (error) {
+     console.error("Error deleting post:", error);
+Index: .vscode/settings.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"java.configuration.updateBuildConfiguration\": \"interactive\"\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+--- a/.vscode/settings.json	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/.vscode/settings.json	(date 1763611478072)
+@@ -1,3 +1,4 @@
+ {
+-  "java.configuration.updateBuildConfiguration": "interactive"
++  "java.configuration.updateBuildConfiguration": "interactive",
++  "java.debug.settings.onBuildFailureProceed": true
+ }
+Index: my-course-project/src/services/blog.service.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { BlogFormData, BlogPost, BlogStatus } from \"../types/blog.types\";\r\nimport { User } from \"@/types/user\";\r\nimport type { Post } from \"@/types/post\";\r\nimport { USER_API_URL } from \"@/services/api.service\";\r\n// export const API_BASE_URL = \"http://localhost:3001/blogs\";\r\nimport { BLOG_BASE_URL } from \"@/services/api.service\";\r\nimport { ARTICLE_API_URL } from \"@/services/api.service\";\r\n\r\nexport class BlogService {\r\n  static async create(\r\n    data: BlogFormData,\r\n    userId: number | string,\r\n    status: BlogStatus = \"draft\"\r\n  ): Promise<BlogPost> {\r\n    const userResponse = await fetch(`${USER_API_URL}/${userId}`);\r\n    if (!userResponse.ok) {\r\n      throw new Error(\"Không tìm thấy người dùng để thêm bài viết.\");\r\n    }\r\n    const user: User = await userResponse.json();\r\n\r\n    const newPost: BlogPost = {\r\n      ...data,\r\n      id: Date.now(),\r\n      status,\r\n      createdAt: new Date().toISOString(),\r\n      updatedAt: new Date().toISOString(),\r\n    };\r\n\r\n    const updatedBlogs = [...(user.blogs || []), newPost];\r\n\r\n    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {\r\n      method: \"PATCH\",\r\n      headers: { \"Content-Type\": \"application/json\" },\r\n      body: JSON.stringify({ blogs: updatedBlogs }),\r\n    });\r\n\r\n    if (!updateUserResponse.ok) {\r\n      throw new Error(\"Lỗi khi cập nhật bài viết cho người dùng.\");\r\n    }\r\n\r\n    // If status is published, add to article collection\r\n    if (status === \"published\") {\r\n      console.log(\"\uD83D\uDCDD Adding blog to article collection:\", newPost.title);\r\n      await this.addToArticle(newPost);\r\n    }\r\n\r\n    return newPost;\r\n  }\r\n\r\n  static async getAll(): Promise<BlogPost[]> {\r\n    const response = await fetch(USER_API_URL);\r\n    if (!response.ok) {\r\n      throw new Error(\"Lỗi khi tải danh sách người dùng.\");\r\n    }\r\n    const users: User[] = await response.json();\r\n    const allBlogs = users.flatMap((user) =>\r\n      (user.blogs || []).map((blog) => ({ ...blog, user: user }))\r\n    );\r\n    return allBlogs;\r\n  }\r\n\r\n  static async getById(\r\n    userId: number | string,\r\n    blogId: number\r\n  ): Promise<BlogPost | undefined> {\r\n    const userResponse = await fetch(`${USER_API_URL}/${userId}`);\r\n    if (!userResponse.ok) {\r\n      throw new Error(\"Không tìm thấy người dùng.\");\r\n    }\r\n    const user: User = await userResponse.json();\r\n    console.log(\"getById called with userId:\", userId, \"and blogId:\", blogId);\r\n    const blog = user.blogs\r\n      ? user.blogs.find((b) => b.id === blogId)\r\n      : undefined;\r\n    return blog ? { ...blog, user: user } : undefined;\r\n  }\r\n\r\n  static async update(\r\n    userId: number | string,\r\n    blogId: number,\r\n    data: Partial<BlogFormData>\r\n  ): Promise<BlogPost> {\r\n    const userResponse = await fetch(`${USER_API_URL}/${userId}`);\r\n    if (!userResponse.ok) {\r\n      throw new Error(\"Không tìm thấy người dùng.\");\r\n    }\r\n    const user: User = await userResponse.json();\r\n\r\n    const blogIndex = (user.blogs || []).findIndex((b) => b.id === blogId);\r\n    if (blogIndex === -1) {\r\n      throw new Error(\"Không tìm thấy bài viết để cập nhật.\");\r\n    }\r\n\r\n    const oldBlog = user.blogs ? user.blogs[blogIndex] : null;\r\n    const oldStatus = oldBlog?.status;\r\n\r\n    const updatedBlog: BlogPost = {\r\n      ...(user.blogs ? user.blogs[blogIndex] : {}),\r\n      ...(user.blogs && user.blogs[blogIndex]\r\n        ? {\r\n            id: user.blogs[blogIndex].id,\r\n            author: user.blogs[blogIndex].author || \"\",\r\n            title: user.blogs[blogIndex].title || \"\",\r\n            content: user.blogs[blogIndex].content || \"\",\r\n            fullContent: user.blogs[blogIndex].fullContent || \"\",\r\n            category: user.blogs[blogIndex].category || \"\",\r\n            image: user.blogs[blogIndex].image || \"\",\r\n          }\r\n        : {\r\n            id: 0,\r\n            author: \"\",\r\n            title: \"\",\r\n            content: \"\",\r\n            fullContent: \"\",\r\n            category: \"\",\r\n            image: \"\",\r\n          }),\r\n      ...data,\r\n      updatedAt: new Date().toISOString(),\r\n    };\r\n\r\n    const updatedBlogs = user.blogs || [];\r\n    updatedBlogs[blogIndex] = updatedBlog;\r\n\r\n    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {\r\n      method: \"PATCH\",\r\n      headers: { \"Content-Type\": \"application/json\" },\r\n      body: JSON.stringify({ blogs: updatedBlogs }),\r\n    });\r\n\r\n    if (!updateUserResponse.ok) {\r\n      throw new Error(\"Lỗi khi cập nhật bài viết.\");\r\n    }\r\n\r\n    // Handle article collection updates based on status change\r\n    const newStatus = updatedBlog.status;\r\n\r\n    if (oldStatus === \"draft\" && newStatus === \"published\") {\r\n      // Changed from draft to published - add to article\r\n      await this.addToArticle(updatedBlog);\r\n    } else if (oldStatus === \"published\" && newStatus === \"draft\") {\r\n      // Changed from published to draft - remove from article\r\n      await this.removeFromArticle(blogId);\r\n    } else if (newStatus === \"published\") {\r\n      // Already published, just update the article\r\n      await this.updateArticle(updatedBlog);\r\n    }\r\n\r\n    return updatedBlog;\r\n  }\r\n\r\n  static async delete(userId: number | string, blogId: number): Promise<void> {\r\n    const userResponse = await fetch(`${USER_API_URL}/${userId}`);\r\n    if (!userResponse.ok) {\r\n      console.error(\r\n        \"User not found in BlogService.delete with userId:\",\r\n        userId\r\n      );\r\n      return;\r\n    }\r\n    const user: User = await userResponse.json();\r\n\r\n    const blogToDelete = (user.blogs || []).find((b) => b.id === blogId);\r\n    const updatedBlogs = (user.blogs || []).filter((b) => b.id !== blogId);\r\n\r\n    if (updatedBlogs.length === (user.blogs || []).length) {\r\n      throw new Error(\"Không tìm thấy bài viết để xóa.\");\r\n    }\r\n\r\n    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {\r\n      method: \"PATCH\",\r\n      headers: { \"Content-Type\": \"application/json\" },\r\n      body: JSON.stringify({ blogs: updatedBlogs }),\r\n    });\r\n\r\n    if (!updateUserResponse.ok) {\r\n      throw new Error(\"Lỗi khi xóa bài viết.\");\r\n    }\r\n\r\n    // If the deleted blog was published, remove it from article collection\r\n    if (blogToDelete?.status === \"published\") {\r\n      await this.removeFromArticle(blogId);\r\n    }\r\n  }\r\n\r\n  // Helper method to add a blog post to article collection\r\n  private static async addToArticle(blog: BlogPost): Promise<void> {\r\n    try {\r\n      const articlePost: Post = {\r\n        id: blog.id.toString(),\r\n        title: blog.title,\r\n        content: blog.content,\r\n        fullContent: blog.fullContent,\r\n        author: blog.author,\r\n        category: blog.category,\r\n        image: blog.image,\r\n        createdAt: blog.createdAt || new Date().toISOString(),\r\n        timeAgo: this.calculateTimeAgo(\r\n          blog.createdAt || new Date().toISOString()\r\n        ),\r\n        readTime: this.calculateReadTime(blog.fullContent),\r\n      };\r\n\r\n      console.log(\"\uD83D\uDE80 Posting to article API:\", ARTICLE_API_URL);\r\n      console.log(\"\uD83D\uDCC4 Article data:\", articlePost);\r\n\r\n      const response = await fetch(ARTICLE_API_URL, {\r\n        method: \"POST\",\r\n        headers: { \"Content-Type\": \"application/json\" },\r\n        body: JSON.stringify(articlePost),\r\n      });\r\n\r\n      if (!response.ok) {\r\n        throw new Error(`HTTP error! status: ${response.status}`);\r\n      }\r\n\r\n      const result = await response.json();\r\n      console.log(\"✅ Successfully added to article collection:\", result);\r\n    } catch (error) {\r\n      console.error(\"❌ Lỗi khi thêm bài viết vào article:\", error);\r\n    }\r\n  }\r\n\r\n  // Helper method to update an article\r\n  private static async updateArticle(blog: BlogPost): Promise<void> {\r\n    try {\r\n      const articlePost: Post = {\r\n        id: blog.id.toString(),\r\n        title: blog.title,\r\n        content: blog.content,\r\n        fullContent: blog.fullContent,\r\n        author: blog.author,\r\n        category: blog.category,\r\n        image: blog.image,\r\n        createdAt: blog.createdAt || new Date().toISOString(),\r\n        timeAgo: this.calculateTimeAgo(\r\n          blog.createdAt || new Date().toISOString()\r\n        ),\r\n        readTime: this.calculateReadTime(blog.fullContent),\r\n      };\r\n\r\n      await fetch(`${ARTICLE_API_URL}/${blog.id}`, {\r\n        method: \"PUT\",\r\n        headers: { \"Content-Type\": \"application/json\" },\r\n        body: JSON.stringify(articlePost),\r\n      });\r\n    } catch (error) {\r\n      console.error(\"Lỗi khi cập nhật bài viết trong article:\", error);\r\n    }\r\n  }\r\n\r\n  // Helper method to remove a blog post from article collection\r\n  private static async removeFromArticle(blogId: number): Promise<void> {\r\n    try {\r\n      await fetch(`${ARTICLE_API_URL}/${blogId}`, {\r\n        method: \"DELETE\",\r\n      });\r\n    } catch (error) {\r\n      console.error(\"Lỗi khi xóa bài viết khỏi article:\", error);\r\n    }\r\n  }\r\n\r\n  // Helper function to calculate time ago\r\n  private static calculateTimeAgo(dateString: string): string {\r\n    const now = new Date();\r\n    const past = new Date(dateString);\r\n    const diffInMs = now.getTime() - past.getTime();\r\n    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));\r\n    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));\r\n    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));\r\n    const diffInMonths = Math.floor(diffInDays / 30);\r\n    const diffInYears = Math.floor(diffInDays / 365);\r\n\r\n    if (diffInMinutes < 60) {\r\n      return `${diffInMinutes} phút trước`;\r\n    } else if (diffInHours < 24) {\r\n      return `${diffInHours} giờ trước`;\r\n    } else if (diffInDays < 30) {\r\n      return `${diffInDays} ngày trước`;\r\n    } else if (diffInMonths < 12) {\r\n      return `${diffInMonths} tháng trước`;\r\n    } else {\r\n      return `${diffInYears} năm trước`;\r\n    }\r\n  }\r\n\r\n  // Helper function to calculate read time\r\n  private static calculateReadTime(content: string): string {\r\n    const wordsPerMinute = 200;\r\n    const wordCount = content.split(/\\s+/).length;\r\n    const minutes = Math.ceil(wordCount / wordsPerMinute);\r\n    return `${minutes} phút đọc`;\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/services/blog.service.ts b/my-course-project/src/services/blog.service.ts
+--- a/my-course-project/src/services/blog.service.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/services/blog.service.ts	(date 1763611478085)
+@@ -1,294 +1,191 @@
+ import { BlogFormData, BlogPost, BlogStatus } from "../types/blog.types";
+-import { User } from "@/types/user";
+-import type { Post } from "@/types/post";
+-import { USER_API_URL } from "@/services/api.service";
++import { USER_API_URL, POSTS_API_URL } from "@/services/api.service";
+ // export const API_BASE_URL = "http://localhost:3001/blogs";
+-import { BLOG_BASE_URL } from "@/services/api.service";
+-import { ARTICLE_API_URL } from "@/services/api.service";
++import { fetchWithAuth } from "@/utils/api.utils";
+ 
+ export class BlogService {
+   static async create(
+     data: BlogFormData,
+-    userId: number | string,
+-    status: BlogStatus = "draft"
++    status: BlogStatus
+   ): Promise<BlogPost> {
+-    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
+-    if (!userResponse.ok) {
+-      throw new Error("Không tìm thấy người dùng để thêm bài viết.");
+-    }
+-    const user: User = await userResponse.json();
+-
+-    const newPost: BlogPost = {
+-      ...data,
+-      id: Date.now(),
+-      status,
+-      createdAt: new Date().toISOString(),
+-      updatedAt: new Date().toISOString(),
++    const postData = {
++      title: data.title,
++      content: data.content,
++      fullContent: data.fullContent,
++      author: data.author,
++      // Backend expects lowercase enum slugs: react_native, devops, cpp, javascript, python
++      category: data.category?.toLowerCase(),
++      thumbnailUrl: data.image, // Backend expects thumbnailUrl, not image
++      statusPost: status.toUpperCase(), // Backend expects uppercase status
+     };
+ 
+-    const updatedBlogs = [...(user.blogs || []), newPost];
++    try {
++      console.log("Creating post with data:", postData);
+ 
+-    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
+-      method: "PATCH",
+-      headers: { "Content-Type": "application/json" },
+-      body: JSON.stringify({ blogs: updatedBlogs }),
+-    });
++      const response = await fetchWithAuth(POSTS_API_URL, {
++        method: "POST",
++        body: JSON.stringify(postData),
++      });
+ 
+-    if (!updateUserResponse.ok) {
+-      throw new Error("Lỗi khi cập nhật bài viết cho người dùng.");
+-    }
++      if (!response.ok) {
++        const errorData = await response.json().catch(() => ({}));
++        console.error("Failed to create post:", response.status, errorData);
++        const errorMessage =
++          errorData.message ||
++          `Lỗi ${response.status}: Không thể tạo bài viết.`;
++        throw new Error(errorMessage);
++      }
+ 
+-    // If status is published, add to article collection
+-    if (status === "published") {
+-      console.log("📝 Adding blog to article collection:", newPost.title);
+-      await this.addToArticle(newPost);
++      const result = await response.json();
++      console.log("Post created successfully:", result);
++      return result.data as BlogPost;
++    } catch (error: unknown) {
++      console.error("Failed to create post:", error);
++      if (error instanceof Error) {
++        throw error;
++      }
++      throw new Error("Lỗi khi tạo bài viết.");
+     }
+-
+-    return newPost;
+   }
+ 
+   static async getAll(): Promise<BlogPost[]> {
+-    const response = await fetch(USER_API_URL);
+-    if (!response.ok) {
+-      throw new Error("Lỗi khi tải danh sách người dùng.");
+-    }
+-    const users: User[] = await response.json();
+-    const allBlogs = users.flatMap((user) =>
+-      (user.blogs || []).map((blog) => ({ ...blog, user: user }))
+-    );
+-    return allBlogs;
+-  }
+-
+-  static async getById(
+-    userId: number | string,
+-    blogId: number
+-  ): Promise<BlogPost | undefined> {
+-    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
+-    if (!userResponse.ok) {
+-      throw new Error("Không tìm thấy người dùng.");
+-    }
+-    const user: User = await userResponse.json();
+-    console.log("getById called with userId:", userId, "and blogId:", blogId);
+-    const blog = user.blogs
+-      ? user.blogs.find((b) => b.id === blogId)
+-      : undefined;
+-    return blog ? { ...blog, user: user } : undefined;
+-  }
+-
+-  static async update(
+-    userId: number | string,
+-    blogId: number,
+-    data: Partial<BlogFormData>
+-  ): Promise<BlogPost> {
+-    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
+-    if (!userResponse.ok) {
+-      throw new Error("Không tìm thấy người dùng.");
+-    }
+-    const user: User = await userResponse.json();
+-
+-    const blogIndex = (user.blogs || []).findIndex((b) => b.id === blogId);
+-    if (blogIndex === -1) {
+-      throw new Error("Không tìm thấy bài viết để cập nhật.");
+-    }
++    try {
++      // Fetch both draft and published posts
++      const [drafts, published] = await Promise.all([
++        this.getMyPostsByStatus("DRAFT"),
++        this.getMyPostsByStatus("PUBLISHED"),
++      ]);
++
++      return [...drafts, ...published];
++    } catch (error) {
++      console.error("Error fetching all posts:", error);
++      throw new Error("Lỗi khi tải danh sách bài viết.");
++    }
++  }
++
++  static async getMyPostsByStatus(status: string): Promise<BlogPost[]> {
++    try {
++      const response = await fetchWithAuth(
++        `${USER_API_URL}/posts/my-posts?status=${status}`
++      );
++
++      if (!response.ok) {
++        throw new Error(`Lỗi khi tải danh sách bài viết với status ${status}.`);
++      }
+ 
+-    const oldBlog = user.blogs ? user.blogs[blogIndex] : null;
+-    const oldStatus = oldBlog?.status;
++      const result = await response.json();
++      const posts = result.data?.content || result.data || [];
+ 
+-    const updatedBlog: BlogPost = {
+-      ...(user.blogs ? user.blogs[blogIndex] : {}),
+-      ...(user.blogs && user.blogs[blogIndex]
+-        ? {
+-            id: user.blogs[blogIndex].id,
+-            author: user.blogs[blogIndex].author || "",
+-            title: user.blogs[blogIndex].title || "",
+-            content: user.blogs[blogIndex].content || "",
+-            fullContent: user.blogs[blogIndex].fullContent || "",
+-            category: user.blogs[blogIndex].category || "",
+-            image: user.blogs[blogIndex].image || "",
+-          }
+-        : {
+-            id: 0,
+-            author: "",
+-            title: "",
+-            content: "",
+-            fullContent: "",
+-            category: "",
+-            image: "",
+-          }),
+-      ...data,
+-      updatedAt: new Date().toISOString(),
+-    };
+-
+-    const updatedBlogs = user.blogs || [];
+-    updatedBlogs[blogIndex] = updatedBlog;
+-
+-    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
+-      method: "PATCH",
+-      headers: { "Content-Type": "application/json" },
+-      body: JSON.stringify({ blogs: updatedBlogs }),
+-    });
+-
+-    if (!updateUserResponse.ok) {
+-      throw new Error("Lỗi khi cập nhật bài viết.");
+-    }
++      return posts.map((post: BlogPost) => ({
++        id: post.id,
++        author: post.author,
++        title: post.title,
++        content: post.content,
++        fullContent: post.fullContent,
++        category: post.category,
++        image: post.thumbnailUrl || post.image,
++        status: post.statusPost || post.status,
++        createdAt: post.createdAt,
++        updatedAt: post.updatedAt,
++      }));
++    } catch (error) {
++      console.error(`Error fetching posts with status ${status}:`, error);
++      return [];
++    }
++  }
+ 
+-    // Handle article collection updates based on status change
+-    const newStatus = updatedBlog.status;
+-
+-    if (oldStatus === "draft" && newStatus === "published") {
+-      // Changed from draft to published - add to article
+-      await this.addToArticle(updatedBlog);
+-    } else if (oldStatus === "published" && newStatus === "draft") {
+-      // Changed from published to draft - remove from article
+-      await this.removeFromArticle(blogId);
+-    } else if (newStatus === "published") {
+-      // Already published, just update the article
+-      await this.updateArticle(updatedBlog);
+-    }
+-
+-    return updatedBlog;
+-  }
+-
+-  static async delete(userId: number | string, blogId: number): Promise<void> {
+-    const userResponse = await fetch(`${USER_API_URL}/${userId}`);
+-    if (!userResponse.ok) {
+-      console.error(
+-        "User not found in BlogService.delete with userId:",
+-        userId
+-      );
+-      return;
+-    }
+-    const user: User = await userResponse.json();
+-
+-    const blogToDelete = (user.blogs || []).find((b) => b.id === blogId);
+-    const updatedBlogs = (user.blogs || []).filter((b) => b.id !== blogId);
+-
+-    if (updatedBlogs.length === (user.blogs || []).length) {
+-      throw new Error("Không tìm thấy bài viết để xóa.");
+-    }
+-
+-    const updateUserResponse = await fetch(`${USER_API_URL}/${userId}`, {
+-      method: "PATCH",
+-      headers: { "Content-Type": "application/json" },
+-      body: JSON.stringify({ blogs: updatedBlogs }),
+-    });
+-
+-    if (!updateUserResponse.ok) {
+-      throw new Error("Lỗi khi xóa bài viết.");
+-    }
+-
+-    // If the deleted blog was published, remove it from article collection
+-    if (blogToDelete?.status === "published") {
+-      await this.removeFromArticle(blogId);
+-    }
+-  }
+-
+-  // Helper method to add a blog post to article collection
+-  private static async addToArticle(blog: BlogPost): Promise<void> {
++  static async getById(blogId: number): Promise<BlogPost | undefined> {
+     try {
+-      const articlePost: Post = {
+-        id: blog.id.toString(),
+-        title: blog.title,
+-        content: blog.content,
+-        fullContent: blog.fullContent,
+-        author: blog.author,
+-        category: blog.category,
+-        image: blog.image,
+-        createdAt: blog.createdAt || new Date().toISOString(),
+-        timeAgo: this.calculateTimeAgo(
+-          blog.createdAt || new Date().toISOString()
+-        ),
+-        readTime: this.calculateReadTime(blog.fullContent),
+-      };
++      console.log("Fetching post with blogId:", blogId);
+ 
+-      console.log("🚀 Posting to article API:", ARTICLE_API_URL);
+-      console.log("📄 Article data:", articlePost);
+-
+-      const response = await fetch(ARTICLE_API_URL, {
+-        method: "POST",
+-        headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify(articlePost),
+-      });
++      const response = await fetchWithAuth(
++        `${USER_API_URL}/posts/my-posts/${blogId}`
++      );
+ 
+       if (!response.ok) {
+-        throw new Error(`HTTP error! status: ${response.status}`);
++        throw new Error("Không tìm thấy bài viết.");
+       }
+ 
+       const result = await response.json();
+-      console.log("✅ Successfully added to article collection:", result);
++      const post = result.data;
++
++      if (!post) {
++        return undefined;
++      }
++
++      return {
++        id: post.id,
++        author: post.author,
++        title: post.title,
++        content: post.content,
++        fullContent: post.fullContent,
++        category: post.category,
++        image: post.image,
++        status: post.status,
++        createdAt: post.createdAt,
++        updatedAt: post.updatedAt,
++      };
+     } catch (error) {
+-      console.error("❌ Lỗi khi thêm bài viết vào article:", error);
++      console.error("Error fetching post by ID:", error);
++      return undefined;
+     }
+   }
+ 
+-  // Helper method to update an article
+-  private static async updateArticle(blog: BlogPost): Promise<void> {
++  static async update(
++    postId: number,
++    data: Partial<BlogFormData>
++  ): Promise<BlogPost> {
++    const postData = {
++      title: data.title,
++      content: data.content,
++      fullContent: data.fullContent,
++      author: data.author,
++      category: data.category?.toLowerCase(), // align with backend enum slugs
++      thumbnailUrl: data.image,
++      statusPost: data.status?.toUpperCase(), // Backend expects uppercase status
++    };
++
+     try {
+-      const articlePost: Post = {
+-        id: blog.id.toString(),
+-        title: blog.title,
+-        content: blog.content,
+-        fullContent: blog.fullContent,
+-        author: blog.author,
+-        category: blog.category,
+-        image: blog.image,
+-        createdAt: blog.createdAt || new Date().toISOString(),
+-        timeAgo: this.calculateTimeAgo(
+-          blog.createdAt || new Date().toISOString()
+-        ),
+-        readTime: this.calculateReadTime(blog.fullContent),
+-      };
+-
+-      await fetch(`${ARTICLE_API_URL}/${blog.id}`, {
+-        method: "PUT",
+-        headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify(articlePost),
+-      });
+-    } catch (error) {
+-      console.error("Lỗi khi cập nhật bài viết trong article:", error);
++      const response = await fetchWithAuth(
++        `${USER_API_URL}/posts/my-posts/update-post/${postId}`,
++        {
++          method: "PUT",
++          body: JSON.stringify(postData),
++        }
++      );
++
++      if (!response.ok) {
++        const errorData = await response.json();
++        console.error("Failed to update post:", response.status, errorData);
++        throw new Error("Lỗi khi cập nhật bài viết.");
++      }
++
++      const result = await response.json();
++      return result.data as BlogPost;
++    } catch (error: unknown) {
++      console.error("Failed to update post:", error);
++      throw new Error("Lỗi khi cập nhật bài viết.");
+     }
+   }
+ 
+-  // Helper method to remove a blog post from article collection
+-  private static async removeFromArticle(blogId: number): Promise<void> {
++  static async delete(postId: number): Promise<void> {
+     try {
+-      await fetch(`${ARTICLE_API_URL}/${blogId}`, {
+-        method: "DELETE",
+-      });
++      const response = await fetchWithAuth(
++        `${USER_API_URL}/posts/my-posts/${postId}`,
++        {
++          method: "DELETE",
++        }
++      );
++
++      if (!response.ok && response.status !== 204) {
++        const errorText = await response.text();
++        console.error("Failed to delete post:", response.status, errorText);
++        throw new Error("Lỗi khi xóa bài viết.");
++      }
++
++      console.log("Post deleted successfully");
+     } catch (error) {
+-      console.error("Lỗi khi xóa bài viết khỏi article:", error);
++      console.error("Error deleting post:", error);
+     }
+   }
+-
+-  // Helper function to calculate time ago
+-  private static calculateTimeAgo(dateString: string): string {
+-    const now = new Date();
+-    const past = new Date(dateString);
+-    const diffInMs = now.getTime() - past.getTime();
+-    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+-    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+-    const diffInMonths = Math.floor(diffInDays / 30);
+-    const diffInYears = Math.floor(diffInDays / 365);
+-
+-    if (diffInMinutes < 60) {
+-      return `${diffInMinutes} phút trước`;
+-    } else if (diffInHours < 24) {
+-      return `${diffInHours} giờ trước`;
+-    } else if (diffInDays < 30) {
+-      return `${diffInDays} ngày trước`;
+-    } else if (diffInMonths < 12) {
+-      return `${diffInMonths} tháng trước`;
+-    } else {
+-      return `${diffInYears} năm trước`;
+-    }
+-  }
+-
+-  // Helper function to calculate read time
+-  private static calculateReadTime(content: string): string {
+-    const wordsPerMinute = 200;
+-    const wordCount = content.split(/\s+/).length;
+-    const minutes = Math.ceil(wordCount / wordsPerMinute);
+-    return `${minutes} phút đọc`;
+-  }
+ }
+Index: course-web-be/src/main/java/com/project/courseweb/entities/Section.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.project.courseweb.entities;\r\n\r\nimport jakarta.persistence.*;\r\nimport lombok.*;\r\nimport lombok.experimental.FieldDefaults;\r\n\r\nimport java.util.List;\r\n\r\n@Entity\r\n@Table(name = \"sections\")\r\n@Builder\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\n@Getter\r\n@Setter\r\n@FieldDefaults(level = AccessLevel.PRIVATE)\r\npublic class Section {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    Long id;\r\n    String title;\r\n    @ManyToOne\r\n    @JoinColumn(name = \"course_id\", nullable = false)\r\n    Course course;\r\n    @OneToMany(mappedBy = \"section\", cascade = CascadeType.ALL, orphanRemoval = true)\r\n    @OrderBy(\"id ASC\")\r\n    List<Lesson> lessons;\r\n    @Column(columnDefinition = \"int default 0\", nullable = false)\r\n    int orderIndex;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course-web-be/src/main/java/com/project/courseweb/entities/Section.java b/course-web-be/src/main/java/com/project/courseweb/entities/Section.java
+--- a/course-web-be/src/main/java/com/project/courseweb/entities/Section.java	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/course-web-be/src/main/java/com/project/courseweb/entities/Section.java	(date 1763568947170)
+@@ -23,7 +23,7 @@
+     @JoinColumn(name = "course_id", nullable = false)
+     Course course;
+     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
+-    @OrderBy("id ASC")
++    @OrderBy("orderIndex ASC")
+     List<Lesson> lessons;
+     @Column(columnDefinition = "int default 0", nullable = false)
+     int orderIndex;
+Index: .idea/jsLibraryMappings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"JavaScriptLibraryMappings\">\r\n    <file url=\"file://$PROJECT_DIR$\" libraries=\"{Node.js Core}\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jsLibraryMappings.xml b/.idea/jsLibraryMappings.xml
+--- a/.idea/jsLibraryMappings.xml	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/.idea/jsLibraryMappings.xml	(date 1763547265425)
+@@ -2,5 +2,6 @@
+ <project version="4">
+   <component name="JavaScriptLibraryMappings">
+     <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
++    <file url="file://$PROJECT_DIR$/course-web-be" libraries="{Node.js Core}" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: my-course-project/src/app/api/login/route.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { NextResponse } from \"next/server\";\r\nimport { USER_API_URL } from \"@/services/api.service\";\r\n\r\n// Lấy URL của Backend Java từ biến môi trường\r\n\r\nexport async function POST(req: Request) {\r\n  try {\r\n    const { email, password } = await req.json();\r\n\r\n    // Gọi thẳng đến API login của Backend Java\r\n    const beResponse = await fetch(`${USER_API_URL}/auth/login`, {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/json\",\r\n      },\r\n      body: JSON.stringify({ email, password }),\r\n    });\r\n    console.log(\"Calling Java API:\", `${USER_API_URL}/auth/login`);\r\n\r\n    const data = await beResponse.json();\r\n\r\n    // Nếu Backend Java trả về lỗi (ví dụ 401 Unauthorized)\r\n    if (!beResponse.ok) {\r\n      return NextResponse.json(\r\n        { mess: data.message || \"Email hoặc mật khẩu không đúng!\" },\r\n        { status: beResponse.status }\r\n      );\r\n    }\r\n\r\n    // Nếu thành công, trả về phần `result` từ Backend Java cho Frontend\r\n    // BE Java trả về { data: { user: {...}, token: { accessToken, refreshToken } }, message: \"...\" }\r\n    return NextResponse.json(\r\n      {\r\n        mess: data.message, // Lấy message từ response của BE\r\n        user: data.data.user,\r\n        accessToken: data.data.token.accessToken,\r\n        refreshToken: data.data.token.refreshToken,\r\n      },\r\n      { status: 200 }\r\n    );\r\n  } catch (error) {\r\n    console.error(\"Login error:\", error);\r\n    return NextResponse.json(\r\n      { mess: \"Không thể kết nối đến máy chủ xác thực\" },\r\n      { status: 500 }\r\n    );\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/app/api/login/route.ts b/my-course-project/src/app/api/login/route.ts
+--- a/my-course-project/src/app/api/login/route.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/app/api/login/route.ts	(date 1763611478079)
+@@ -38,11 +38,15 @@
+       },
+       { status: 200 }
+     );
+-  } catch (error) {
++  } catch (error: unknown) {
+     console.error("Login error:", error);
+-    return NextResponse.json(
+-      { mess: "Không thể kết nối đến máy chủ xác thực" },
+-      { status: 500 }
+-    );
++    let mess = "Không thể kết nối đến máy chủ xác thực";
++    if (
++      (error as { cause?: { code?: string } }).cause?.code === "ECONNREFUSED"
++    ) {
++      mess =
++        "Không thể kết nối đến máy chủ. Vui lòng kiểm tra xem máy chủ đã chạy chưa.";
++    }
++    return NextResponse.json({ mess: mess }, { status: 500 });
+   }
+ }
+Index: my-course-project/src/services/api.service.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>export const USER_API_URL = \"http://localhost:8080\"; // call server BE\r\nexport const TOP_VIDEO_API_URL = \"http://localhost:3001/topVideos\";\r\nexport const PROFILE_API_URL = \"http://localhost:8080/profile/update\";\r\nexport const PROFILE_GET_API_URL = \"http://localhost:8080/profile\";\r\nexport const AVATAR_API_URL = \"http://localhost:8080/profile/update-avatar\";\r\nexport const TRENDING_API_URL = \"http://localhost:3001/trending\";\r\nexport const PRO_API_URL = \"http://localhost:3001/coursesPro\";\r\nexport const FREE_API_URL = \"http://localhost:3001/coursesFree\";\r\nexport const BLOG_BASE_URL = \"http://localhost:3001/blogs\";\r\nexport const ARTICLE_API_URL = \"http://localhost:3001/article\";\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/services/api.service.ts b/my-course-project/src/services/api.service.ts
+--- a/my-course-project/src/services/api.service.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/services/api.service.ts	(date 1763611478083)
+@@ -1,10 +1,14 @@
+-export const USER_API_URL = "http://localhost:8080"; // call server BE
++export const USER_API_URL = "http://localhost:8080/project"; // call server BE
+ export const TOP_VIDEO_API_URL = "http://localhost:3001/topVideos";
+-export const PROFILE_API_URL = "http://localhost:8080/profile/update";
+-export const PROFILE_GET_API_URL = "http://localhost:8080/profile";
+-export const AVATAR_API_URL = "http://localhost:8080/profile/update-avatar";
++export const PROFILE_API_URL = "http://localhost:8080/project/profile/update";
++export const PROFILE_GET_API_URL = "http://localhost:8080/project/profile";
++export const AVATAR_API_URL =
++  "http://localhost:8080/project/profile/update-avatar";
+ export const TRENDING_API_URL = "http://localhost:3001/trending";
+ export const PRO_API_URL = "http://localhost:3001/coursesPro";
+ export const FREE_API_URL = "http://localhost:3001/coursesFree";
+ export const BLOG_BASE_URL = "http://localhost:3001/blogs";
+ export const ARTICLE_API_URL = "http://localhost:3001/article";
++export const POSTS_API_URL = "http://localhost:8080/project/posts/create-post";
++export const UPLOAD_IMAGE_POST_URL =
++  "http://localhost:8080/project/posts/upload-thumbnail";
+Index: my-course-project/src/app/(main)/blog/create/CreateBlogForm.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"use client\";\r\nimport React from \"react\";\r\nimport { useBlogForm } from \"@/hooks/useBlogForm\";\r\nimport { BLOG_CATEGORIES, TIPS } from \"@/constants/blog.constants\";\r\nimport { FileText, Tag, User } from \"lucide-react\";\r\n\r\n// Import các component con\r\nimport { FormInput } from \"./FormInput\";\r\nimport { FormTextarea } from \"./FormTextarea\";\r\nimport { FormSelect } from \"./FormSelect\";\r\nimport { ImageUpload } from \"./ImageUpload\";\r\nimport { ErrorMessages } from \"./ErrorMessages\";\r\nimport { FormActions } from \"./FormActions\";\r\nimport { FormHeader } from \"./FormHeader\";\r\nimport { TipsSection } from \"./TipsSection\";\r\nimport { BlogPreview } from \"./BlogPreview\";\r\n\r\nexport default function CreateBlogPost() {\r\n  const {\r\n    formData,\r\n    errors,\r\n    isSubmitting,\r\n    isUploading,\r\n    imagePreview,\r\n    handleChange,\r\n    handleImageChange,\r\n    handleSubmit,\r\n  } = useBlogForm({\r\n    id: 0,\r\n    author: \"\",\r\n    title: \"\",\r\n    content: \"\",\r\n    fullContent: \"\",\r\n    category: \"\",\r\n    image: \"\",\r\n  });\r\n\r\n  return (\r\n    <div className=\"min-h-screen bg-gray-50 py-12 px-4\">\r\n      <div className=\"max-w-6xl mx-auto\">\r\n        <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">\r\n          {/* Form Section */}\r\n          <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\r\n            <FormHeader\r\n              title=\"Tạo Bài Viết Mới\"\r\n              subtitle=\"Chia sẻ kiến thức và khóa học của bạn\"\r\n              variant=\"form\"\r\n            />\r\n\r\n            <div className=\"px-8 py-8\">\r\n              <ErrorMessages errors={errors} />\r\n\r\n              <FormInput\r\n                label=\"Tác giả\"\r\n                name=\"author\"\r\n                icon={User}\r\n                required\r\n                value={formData.author}\r\n                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>\r\n                  handleChange(e, \"author\")\r\n                }\r\n                placeholder=\"VD: Huyền Lê Ngọc\"\r\n              />\r\n\r\n              <FormInput\r\n                label=\"Tiêu đề bài viết\"\r\n                name=\"title\"\r\n                icon={FileText}\r\n                required\r\n                value={formData.title}\r\n                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>\r\n                  handleChange(e, \"title\")\r\n                }\r\n                placeholder=\"VD: TRẢI NGHIỆM HỌC THỬ REACT NATIVE\"\r\n              />\r\n\r\n              <FormSelect\r\n                label=\"Danh mục\"\r\n                name=\"category\"\r\n                icon={Tag}\r\n                required\r\n                value={formData.category}\r\n                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>\r\n                  handleChange(e, \"category\")\r\n                }\r\n                options={BLOG_CATEGORIES}\r\n                placeholder=\"Chọn danh mục\"\r\n              />\r\n\r\n              <ImageUpload\r\n                onChange={handleImageChange}\r\n                image={formData.image}\r\n                imagePreview={imagePreview || \"\"}\r\n              />\r\n\r\n              <FormTextarea\r\n                label=\"Nội dung bài viết\"\r\n                name=\"content\"\r\n                icon={FileText}\r\n                required\r\n                rows={10}\r\n                value={formData.content}\r\n                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>\r\n                  handleChange(e, \"content\")\r\n                }\r\n                placeholder=\"Nhập nội dung bài viết của bạn tại đây...\"\r\n              />\r\n\r\n              <FormTextarea\r\n                label=\"Nội dung đầy đủ\"\r\n                name=\"fullContent\"\r\n                icon={FileText}\r\n                required\r\n                rows={15}\r\n                value={formData.fullContent}\r\n                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>\r\n                  handleChange(e, \"fullContent\")\r\n                }\r\n                placeholder=\"Nhập nội dung đầy đủ của bài viết...\"\r\n              />\r\n\r\n              <FormActions\r\n                onDraft={() => handleSubmit(\"draft\", \"1\")}\r\n                onPublish={() => handleSubmit(\"published\", \"1\")}\r\n                isSubmitting={isSubmitting}\r\n                isUploading={isUploading}\r\n              />\r\n            </div>\r\n          </div>\r\n\r\n          {/* Preview Section */}\r\n          <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\r\n            <FormHeader\r\n              title=\"Xem trước\"\r\n              subtitle=\"Bài viết sẽ hiển thị như thế này\"\r\n              variant=\"preview\"\r\n            />\r\n\r\n            <div className=\"p-8\">\r\n              <BlogPreview\r\n                formData={formData}\r\n                imagePreview={imagePreview || \"\"}\r\n              />\r\n\r\n              <TipsSection tips={TIPS} />\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/app/(main)/blog/create/CreateBlogForm.tsx b/my-course-project/src/app/(main)/blog/create/CreateBlogForm.tsx
+--- a/my-course-project/src/app/(main)/blog/create/CreateBlogForm.tsx	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/app/(main)/blog/create/CreateBlogForm.tsx	(date 1763611478076)
+@@ -3,6 +3,7 @@
+ import { useBlogForm } from "@/hooks/useBlogForm";
+ import { BLOG_CATEGORIES, TIPS } from "@/constants/blog.constants";
+ import { FileText, Tag, User } from "lucide-react";
++import { useRouter } from "next/navigation";
+ 
+ // Import các component con
+ import { FormInput } from "./FormInput";
+@@ -16,6 +17,7 @@
+ import { BlogPreview } from "./BlogPreview";
+ 
+ export default function CreateBlogPost() {
++  const router = useRouter();
+   const {
+     formData,
+     errors,
+@@ -120,8 +122,24 @@
+               />
+ 
+               <FormActions
+-                onDraft={() => handleSubmit("draft", "1")}
+-                onPublish={() => handleSubmit("published", "1")}
++                onDraft={() =>
++                  handleSubmit(
++                    "draft",
++                    "1",
++                    "YOUR_AUTH_TOKEN_HERE",
++                    undefined,
++                    router
++                  )
++                }
++                onPublish={() =>
++                  handleSubmit(
++                    "published",
++                    "1",
++                    "YOUR_AUTH_TOKEN_HERE",
++                    undefined,
++                    router
++                  )
++                }
+                 isSubmitting={isSubmitting}
+                 isUploading={isUploading}
+               />
+Index: my-course-project/src/types/blog.types.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { User } from \"@/types/user\";\r\n\r\nexport interface BlogPost {\r\n  id: number;\r\n  author: string;\r\n  title: string;\r\n  content: string;\r\n  fullContent: string;\r\n  category: string;\r\n  image: string;\r\n  createdAt?: string;\r\n  updatedAt?: string;\r\n  status?: \"draft\" | \"published\";\r\n  user?: User;\r\n}\r\n\r\nexport interface BlogFormData {\n  id: number;\n  author: string;\n  title: string;\n  content: string;\n  fullContent: string;\n  category: string;\n  image: string;\n  updatedAt?: string;\n  status?: \"draft\" | \"published\";\n}\n\r\nexport type BlogStatus = \"draft\" | \"published\";\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/types/blog.types.ts b/my-course-project/src/types/blog.types.ts
+--- a/my-course-project/src/types/blog.types.ts	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/types/blog.types.ts	(date 1763611478086)
+@@ -8,6 +8,8 @@
+   fullContent: string;
+   category: string;
+   image: string;
++  thumbnailUrl?: string;
++  statusPost?: string;
+   createdAt?: string;
+   updatedAt?: string;
+   status?: "draft" | "published";
+Index: my-course-project/src/app/(main)/blog/create/page.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"use client\";\r\nimport { useBlogForm } from \"@/hooks/useBlogForm\";\r\nimport { BLOG_CATEGORIES, TIPS } from \"@/constants/blog.constants\";\r\nimport { FileText, Tag, User as UserIcon } from \"lucide-react\";\r\nimport { BlogPreview } from \"./BlogPreview\";\r\nimport React, { useEffect, Suspense } from \"react\";\r\nimport { useRouter, useSearchParams } from \"next/navigation\";\r\nimport { BlogService } from \"@/services/blog.service\";\r\nimport { FormInput } from \"./FormInput\";\r\nimport { FormTextarea } from \"./FormTextarea\";\r\nimport { FormSelect } from \"./FormSelect\";\r\nimport { ImageUpload } from \"./ImageUpload\";\r\nimport { ErrorMessages } from \"./ErrorMessages\";\r\nimport { FormHeader } from \"./FormHeader\";\r\nimport { TipsSection } from \"./TipsSection\";\r\nimport { FormActions } from \"./FormActions\";\r\nimport { useAuth } from \"@/hooks/useAuth\";\r\n\r\nexport default function CreateBlogPost() {\r\n  const router = useRouter();\r\n  const searchParams = useSearchParams();\r\n  const postId = searchParams.get(\"id\");\r\n  const { user } = useAuth();\r\n\r\n  const {\r\n    formData,\r\n    errors,\r\n    isSubmitting,\r\n    isUploading,\r\n    imagePreview,\r\n    handleChange,\r\n    handleImageChange,\r\n    handleSubmit,\r\n    setFormData,\r\n    setImagePreview,\r\n    handlePaste,\r\n  } = useBlogForm({\r\n    id: postId ? parseInt(postId, 10) : 0,\r\n    author: \"\",\r\n    title: \"\",\r\n    content: \"\",\r\n    category: \"\",\r\n    image: \"\",\r\n    fullContent: \"\",\r\n  });\r\n\r\n  useEffect(() => {\r\n    if (postId && user?.id) {\r\n      BlogService.getById(user.id, parseInt(postId, 10))\r\n        .then((post) => {\r\n          if (post) {\r\n            setFormData(post);\r\n            setImagePreview(post.image);\r\n          } else {\r\n            console.error(\"Post not found for ID:\", postId);\r\n            router.push(\"/blog/create\");\r\n          }\r\n        })\r\n        .catch((err) => {\r\n          console.error(\"Error fetching post for editing:\", err);\r\n          router.push(\"/blog/create\");\r\n        });\r\n    }\r\n  }, [postId, user?.id, setFormData, setImagePreview, router]);\r\n\r\n  const pageTitle = postId ? \"Chỉnh Sửa Bài Viết\" : \"Tạo Bài Viết Mới\";\r\n  const draftButtonText = postId ? \"Cập nhật bản nháp\" : \"Lưu bản nháp\";\r\n  const publishButtonText = postId ? \"Cập nhật bài viết\" : \"Xuất bản ngay\";\r\n\r\n  return (\r\n    <Suspense fallback={<div>Loading...</div>}>\r\n      <div className=\"min-h-screen bg-gray-50 py-12 px-4\">\r\n        <div className=\"max-w-6xl mx-auto\">\r\n          <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">\r\n            {/* Form Section */}\r\n            <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\r\n              <FormHeader\r\n                title={pageTitle}\r\n                subtitle=\"Chia sẻ kiến thức và khóa học của bạn\"\r\n                variant=\"form\"\r\n              />\r\n\r\n              <div className=\"px-8 py-8\">\r\n                <ErrorMessages errors={errors} />\r\n\r\n                <FormInput\r\n                  label=\"Tác giả\"\r\n                  name=\"author\"\r\n                  icon={UserIcon}\r\n                  required\r\n                  value={formData.author}\r\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>\r\n                    handleChange(e, \"author\")\r\n                  }\r\n                  placeholder=\"VD: Huyền Lê Ngọc\"\r\n                />\r\n\r\n                <FormInput\r\n                  label=\"Tiêu đề bài viết\"\r\n                  name=\"title\"\r\n                  icon={FileText}\r\n                  required\r\n                  value={formData.title}\r\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>\r\n                    handleChange(e, \"title\")\r\n                  }\r\n                  placeholder=\"VD: TRẢ NGHIỆM HỌC THỬ REACT NATIVE\"\r\n                />\r\n\r\n                <FormSelect\r\n                  label=\"Danh mục\"\r\n                  name=\"category\"\r\n                  icon={Tag}\r\n                  required\r\n                  value={formData.category}\r\n                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>\r\n                    handleChange(e, \"category\")\r\n                  }\r\n                  options={BLOG_CATEGORIES}\r\n                  placeholder=\"Chọn danh mục\"\r\n                />\r\n\r\n                <ImageUpload\r\n                  onChange={handleImageChange}\r\n                  image={formData.image}\r\n                  imagePreview={imagePreview || \"\"}\r\n                />\r\n                {errors.image && (\r\n                  <p className=\"mt-2 text-sm text-red-600\">{errors.image}</p>\r\n                )}\r\n\r\n                <FormTextarea\r\n                  label=\"Nội dung bài viết\"\r\n                  name=\"content\"\r\n                  icon={FileText}\r\n                  required\r\n                  rows={10}\r\n                  value={formData.content}\r\n                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>\r\n                    handleChange(e, \"content\")\r\n                  }\r\n                  placeholder=\"Nhập nội dung bài viết của bạn tại đây...\"\r\n                />\r\n\r\n                <FormTextarea\r\n                  label=\"Nội dung đầy đủ\"\r\n                  name=\"fullContent\"\r\n                  icon={FileText}\r\n                  required\r\n                  rows={15}\r\n                  value={formData.fullContent}\r\n                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>\r\n                    handleChange(e, \"fullContent\")\r\n                  }\r\n                  onPaste={handlePaste}\r\n                  placeholder=\"Nhập nội dung đầy đủ của bài viết...\"\r\n                />\r\n\r\n                <FormActions\r\n                  onDraft={() =>\r\n                    handleSubmit(\r\n                      \"draft\",\r\n                      user?.id ?? null,\r\n                      postId ?? undefined,\r\n                      router\r\n                    )\r\n                  }\r\n                  onPublish={() =>\r\n                    handleSubmit(\r\n                      \"published\",\r\n                      user?.id ?? null,\r\n                      postId ?? undefined,\r\n                      router\r\n                    )\r\n                  }\r\n                  isSubmitting={isSubmitting}\r\n                  isUploading={isUploading}\r\n                />\r\n              </div>\r\n            </div>\r\n\r\n            {/* Preview Section */}\r\n            <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\r\n              <FormHeader\r\n                title=\"Xem trước\"\r\n                subtitle=\"Bài viết sẽ hiển thị như thế này\"\r\n                variant=\"preview\"\r\n              />\r\n\r\n              <div className=\"p-8\">\r\n                <BlogPreview\r\n                  formData={formData}\r\n                  imagePreview={imagePreview || \"\"}\r\n                />\r\n\r\n                <TipsSection tips={TIPS} />\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </Suspense>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/app/(main)/blog/create/page.tsx b/my-course-project/src/app/(main)/blog/create/page.tsx
+--- a/my-course-project/src/app/(main)/blog/create/page.tsx	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/my-course-project/src/app/(main)/blog/create/page.tsx	(date 1763611478077)
+@@ -20,7 +20,7 @@
+   const router = useRouter();
+   const searchParams = useSearchParams();
+   const postId = searchParams.get("id");
+-  const { user } = useAuth();
++  const { user, token } = useAuth();
+ 
+   const {
+     formData,
+@@ -45,8 +45,8 @@
+   });
+ 
+   useEffect(() => {
+-    if (postId && user?.id) {
+-      BlogService.getById(user.id, parseInt(postId, 10))
++    if (postId && user?.id && token) {
++      BlogService.getById(parseInt(postId, 10))
+         .then((post) => {
+           if (post) {
+             setFormData(post);
+@@ -61,7 +61,7 @@
+           router.push("/blog/create");
+         });
+     }
+-  }, [postId, user?.id, setFormData, setImagePreview, router]);
++  }, [postId, user?.id, token, setFormData, setImagePreview, router]);
+ 
+   const pageTitle = postId ? "Chỉnh Sửa Bài Viết" : "Tạo Bài Viết Mới";
+   const draftButtonText = postId ? "Cập nhật bản nháp" : "Lưu bản nháp";
+@@ -161,6 +161,7 @@
+                     handleSubmit(
+                       "draft",
+                       user?.id ?? null,
++                      token ?? null,
+                       postId ?? undefined,
+                       router
+                     )
+@@ -169,6 +170,7 @@
+                     handleSubmit(
+                       "published",
+                       user?.id ?? null,
++                      token ?? null,
+                       postId ?? undefined,
+                       router
+                     )
+Index: course-web-be/src/main/java/com/project/courseweb/entities/Course.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.project.courseweb.entities;\r\n\r\n\r\nimport jakarta.persistence.*;\r\nimport lombok.*;\r\nimport lombok.experimental.FieldDefaults;\r\n\r\nimport java.math.BigDecimal;\r\nimport java.time.LocalDateTime;\r\nimport java.util.List;\r\n\r\nimport com.project.courseweb.enums.CourseStatus;\r\n\r\n@Entity\r\n@Table(name = \"courses\")\r\n@Builder\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\n@Getter\r\n@Setter\r\n@FieldDefaults(level = AccessLevel.PRIVATE)\r\npublic class Course {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    Long id;\r\n    String title;\r\n    String thumbnailUrl;\r\n    @Lob\r\n    String description;\r\n    BigDecimal price;\r\n    @Enumerated(EnumType.STRING)\r\n    @Column(name = \"status\", length = 20)\r\n    CourseStatus status;\r\n    @OneToMany(mappedBy = \"course\", cascade = CascadeType.ALL, orphanRemoval = true)\r\n    @OrderBy(\"id ASC\")\r\n    List<Section> sections;\r\n\r\n    LocalDateTime createdAt;\r\n    LocalDateTime updatedAt;\r\n\r\n    @PrePersist\r\n    protected void onCreate() {\r\n        createdAt = LocalDateTime.now();\r\n        updatedAt = LocalDateTime.now();\r\n    }\r\n    @PreUpdate\r\n    protected void onUpdate() {\r\n        updatedAt = LocalDateTime.now();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course-web-be/src/main/java/com/project/courseweb/entities/Course.java b/course-web-be/src/main/java/com/project/courseweb/entities/Course.java
+--- a/course-web-be/src/main/java/com/project/courseweb/entities/Course.java	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/course-web-be/src/main/java/com/project/courseweb/entities/Course.java	(date 1763568944859)
+@@ -1,6 +1,5 @@
+ package com.project.courseweb.entities;
+ 
+-
+ import jakarta.persistence.*;
+ import lombok.*;
+ import lombok.experimental.FieldDefaults;
+@@ -23,16 +22,18 @@
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     Long id;
++    @Column(nullable = false)
+     String title;
+     String thumbnailUrl;
+     @Lob
+     String description;
++    @Column(columnDefinition = "int default 0", nullable = false)
+     BigDecimal price;
+     @Enumerated(EnumType.STRING)
+     @Column(name = "status", length = 20)
+     CourseStatus status;
+     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+-    @OrderBy("id ASC")
++    @OrderBy("orderIndex ASC")
+     List<Section> sections;
+ 
+     LocalDateTime createdAt;
+@@ -42,7 +43,9 @@
+     protected void onCreate() {
+         createdAt = LocalDateTime.now();
+         updatedAt = LocalDateTime.now();
++        status = CourseStatus.DRAFT;
+     }
++
+     @PreUpdate
+     protected void onUpdate() {
+         updatedAt = LocalDateTime.now();
+Index: course-web-be/src/main/java/com/project/courseweb/configurations/ApplicationInitConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.project.courseweb.configurations;\r\n\r\nimport com.project.courseweb.entities.authentication.Auth;\r\nimport com.project.courseweb.entities.authentication.Permission;\r\nimport com.project.courseweb.enums.CategoryType;\r\nimport com.project.courseweb.enums.Permissions;\r\nimport com.project.courseweb.enums.Roles;\r\nimport com.project.courseweb.services.AuthService;\r\nimport com.project.courseweb.services.CategoryService;\r\nimport com.project.courseweb.services.PermissionService;\r\nimport com.project.courseweb.services.RoleService;\r\nimport lombok.AccessLevel;\r\nimport lombok.RequiredArgsConstructor;\r\nimport lombok.experimental.FieldDefaults;\r\nimport lombok.extern.slf4j.Slf4j;\r\nimport org.springframework.boot.ApplicationArguments;\r\nimport org.springframework.boot.ApplicationRunner;\r\nimport org.springframework.stereotype.Component;\r\n\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\n@Component\r\n@RequiredArgsConstructor\r\n@Slf4j\r\n@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)\r\npublic class ApplicationInitConfig implements ApplicationRunner {\r\n    PermissionService permissionService;\r\n    RoleService roleService;\r\n    CategoryService categoryService;\r\n    AuthService authService;\r\n    @Override\r\n    public void run(ApplicationArguments args) throws Exception {\r\n        log.info(\"Application started\");\r\n        var permission_upload_course = this.permissionService.createPermission(\r\n                Permissions.UPLOAD_COURSE.toString(), \"Upload course\"\r\n        );\r\n        var permission_delete_course = this.permissionService.createPermission(\r\n                Permissions.DELETE_COURSE.toString(), \"Delete course\"\r\n        );\r\n        var permission_edit_course = this.permissionService.createPermission(\r\n                Permissions.EDIT_COURSE.toString(), \"Edit course\"\r\n        );\r\n        var permission_create_post = this.permissionService.createPermission(\r\n                Permissions.CREATE_POST.toString(), \"Create post\"\r\n        );\r\n        var permission_edit_post = this.permissionService.createPermission(\r\n                Permissions.EDIT_POST.toString(), \"Edit post\"\r\n        );\r\n        var permission_delete_post = this.permissionService.createPermission(\r\n                Permissions.DELETE_POST.toString(), \"Delete post\"\r\n        );\r\n        Set<Permission> permissions_admin = new HashSet<>();\r\n        permissions_admin.add(permission_upload_course);\r\n        permissions_admin.add(permission_delete_course);\r\n        permissions_admin.add(permission_edit_course);\r\n        permissions_admin.add(permission_create_post);\r\n        permissions_admin.add(permission_edit_post);\r\n        permissions_admin.add(permission_delete_post);\r\n        this.roleService.createRole(\r\n                Roles.ADMIN.name(), \"Admin\", permissions_admin\r\n        );\r\n        Set<Permission> permissions_user = new HashSet<>();\r\n        permissions_user.add(permission_create_post);\r\n        permissions_user.add(permission_edit_post);\r\n        permissions_user.add(permission_delete_post);\r\n        this.roleService.createRole(Roles.USER.name(), \"User\",permissions_user);\r\n        \r\n        this.categoryService.createCategory(CategoryType.cpp);\r\n        this.categoryService.createCategory(CategoryType.devops);\r\n        this.categoryService.createCategory(CategoryType.javascript);\r\n        this.categoryService.createCategory(CategoryType.python);\r\n        this.categoryService.createCategory(CategoryType.react_native);\r\n\r\n        this.authService.createAuthAdmin(Auth.builder()\r\n                .email(\"admin@gmail.com\")\r\n                .passwordHash(\"admin123\")\r\n        .build());\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course-web-be/src/main/java/com/project/courseweb/configurations/ApplicationInitConfig.java b/course-web-be/src/main/java/com/project/courseweb/configurations/ApplicationInitConfig.java
+--- a/course-web-be/src/main/java/com/project/courseweb/configurations/ApplicationInitConfig.java	(revision 6716da7d2ec88f17c793740fd6bac18dbd9483a1)
++++ b/course-web-be/src/main/java/com/project/courseweb/configurations/ApplicationInitConfig.java	(date 1763611478074)
+@@ -57,13 +57,7 @@
+         permissions_admin.add(permission_create_post);
+         permissions_admin.add(permission_edit_post);
+         permissions_admin.add(permission_delete_post);
+-        this.roleService.createRole(
+-                Roles.ADMIN.name(), "Admin", permissions_admin
+-        );
+-        Set<Permission> permissions_user = new HashSet<>();
+-        permissions_user.add(permission_create_post);
+-        permissions_user.add(permission_edit_post);
+-        permissions_user.add(permission_delete_post);
++         Set<Permission> permissions_user = new HashSet<>();
+         this.roleService.createRole(Roles.USER.name(), "User",permissions_user);
+         
+         this.categoryService.createCategory(CategoryType.cpp);
+@@ -75,6 +69,7 @@
+         this.authService.createAuthAdmin(Auth.builder()
+                 .email("admin@gmail.com")
+                 .passwordHash("admin123")
++                .phone("1234567890")
+         .build());
+ 
+     }
+Index: my-course-project/src/utils/api.utils.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my-course-project/src/utils/api.utils.ts b/my-course-project/src/utils/api.utils.ts
+new file mode 100644
+--- /dev/null	(date 1763611478087)
++++ b/my-course-project/src/utils/api.utils.ts	(date 1763611478087)
+@@ -0,0 +1,76 @@
++import { getTokens, setTokens, removeTokens } from "./token";
++
++/**
++ * Utility function to make authenticated API requests with automatic token refresh
++ */
++export async function fetchWithAuth(
++  url: string,
++  options: RequestInit = {}
++): Promise<Response> {
++  const { accessToken, refreshToken } = getTokens();
++
++  if (!accessToken) {
++    throw new Error("No access token found. Please login again.");
++  }
++
++  // Add authorization header
++  const headers = {
++    "Content-Type": "application/json",
++    ...options.headers,
++    Authorization: `Bearer ${accessToken}`,
++  };
++
++  // Make the request
++  let response = await fetch(url, {
++    ...options,
++    headers,
++  });
++
++  // If unauthorized, try to refresh the token
++  if (response.status === 401 && refreshToken) {
++    console.log("Access token expired, attempting to refresh...");
++    
++    try {
++      // Call refresh token endpoint
++      const refreshResponse = await fetch("http://localhost:8080/project/auth/refresh", {
++        method: "POST",
++        headers: {
++          "Content-Type": "application/json",
++        },
++        body: JSON.stringify({ refreshToken }),
++      });
++
++      if (refreshResponse.ok) {
++        const data = await refreshResponse.json();
++        const newAccessToken = data.data?.token?.accessToken;
++        const newRefreshToken = data.data?.token?.refreshToken;
++
++        if (newAccessToken && newRefreshToken) {
++          // Save new tokens
++          setTokens(newAccessToken, newRefreshToken);
++
++          // Retry the original request with new token
++          response = await fetch(url, {
++            ...options,
++            headers: {
++              ...headers,
++              Authorization: `Bearer ${newAccessToken}`,
++            },
++          });
++        }
++      } else {
++        // Refresh failed, clear tokens
++        removeTokens();
++        localStorage.removeItem("user");
++        throw new Error("Session expired. Please login again.");
++      }
++    } catch (error) {
++      console.error("Token refresh failed:", error);
++      removeTokens();
++      localStorage.removeItem("user");
++      throw new Error("Session expired. Please login again.");
++    }
++  }
++
++  return response;
++}
+\ No newline at end of file

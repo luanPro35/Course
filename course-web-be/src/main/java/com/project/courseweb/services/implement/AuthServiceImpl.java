@@ -1,8 +1,5 @@
 package com.project.courseweb.services.implement;
 
-import com.project.courseweb.dtos.https.brevo.EmailRequest;
-import com.project.courseweb.dtos.https.brevo.Recipient;
-import com.project.courseweb.dtos.https.brevo.SendEmailRequest;
 import com.project.courseweb.dtos.request.*;
 import com.project.courseweb.dtos.response.AuthenticatedResponse;
 import com.project.courseweb.dtos.response.IntrospectTokenResponse;
@@ -15,11 +12,11 @@ import com.project.courseweb.entities.authentication.Role;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.Roles;
 import com.project.courseweb.exceptions.AppException;
+import com.project.courseweb.httpsClients.GoogleOauth2Client;
+import com.project.courseweb.httpsClients.GoogleUserInfoClient;
 import com.project.courseweb.mappers.AuthMapper;
 import com.project.courseweb.repositories.AuthRepository;
 import com.project.courseweb.repositories.RefreshTokenRepository;
-import com.project.courseweb.httpsClients.GoogleOauth2Client;
-import com.project.courseweb.httpsClients.GoogleUserInfoClient;
 import com.project.courseweb.services.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +24,13 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Slf4j
@@ -47,9 +44,11 @@ public class AuthServiceImpl implements AuthService {
     RefreshTokenRepository refreshTokenRepository;
     BCryptPasswordEncoder bCryptPasswordEncoder;
     JwtService jwtService;
+    ProfileServiceImpl profileServiceImpl;
     RedisService redisService;
     GoogleOauth2Client googleOauth2Client;
     GoogleUserInfoClient googleUserInfoClient;
+    NotificationService notificationService;
     @NonFinal
     @Value("${google.client-id}")
     String clientId;
@@ -62,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
     @NonFinal
     @Value("${google.redirect-uri}")
     String redirectUrl;
-    NotificationService notificationService;
 
     @Transactional
     @Override
@@ -170,6 +168,44 @@ public class AuthServiceImpl implements AuthService {
                         .build()
                 )
                 .build();
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @Transactional
+    @Override
+    public void deleteAccount() {
+        Long currentUserId = profileServiceImpl.getId();
+        refreshTokenRepository.deleteByAuthId(currentUserId);
+        authRepository.deleteById(currentUserId);
+    }
+
+    @Override
+    public void forgotPassword(ForgotPasswordRequest request) {
+        this.authRepository.findByEmail(request.getEmail()).ifPresent(auth -> {
+            String otpValue = generateOtp();
+            String redisKey = "password-reset-otp::" + auth.getEmail();
+            redisService.saveOtp(redisKey, otpValue, 10);
+            notificationService.sendForgotPasswordEmail(auth.getEmail(), auth.getProfile().getFullName(), otpValue);
+        });
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        this.authRepository.findByEmail(request.getEmail()).ifPresent(auth -> {
+            String redisKey = "password-reset-otp::" + auth.getEmail();
+            String otpValue = redisService.getOtp(redisKey);
+            if (otpValue == null || !otpValue.equals(request.getOtp())) {
+                throw new AppException(ErrorCode.INVALID_OTP);
+            }
+            auth.setPasswordHash(bCryptPasswordEncoder.encode(request.getNewPassword()));
+            authRepository.save(auth);
+
+            redisService.deleteOtp(redisKey);
+        });
+    }
+
+    private String generateOtp() {
+        return new DecimalFormat("000000").format(new Random().nextInt(999999));
     }
 
     @Override

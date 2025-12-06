@@ -33,6 +33,9 @@ public class VnPayQueryDrResponse {
     @JsonProperty("vnp_TransactionNo")
     private String transactionNo;
 
+    @JsonProperty("vnp_PayDate")
+    private String payDate;
+
     // TRƯỜNG QUAN TRỌNG NHẤT
     @JsonProperty("vnp_TransactionStatus")
     private String transactionStatus;
