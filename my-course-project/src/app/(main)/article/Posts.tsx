@@ -10,7 +10,7 @@ import { getPublishedArticlesURL } from "@/services/api.service";
 import { BlogService } from "@/services/blog.service";
 import { useRouter } from "next/navigation";
 
-const POSTS_PER_PAGE = 5;
+const POSTS_PER_PAGE = 8;
 
 interface PostsProps {
   filterCategories?: string[]; 

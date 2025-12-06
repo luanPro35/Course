@@ -1,25 +1,51 @@
-import { TopVideo } from "@/types/topVideo";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import { Play, Eye, ThumbsUp, MessageCircle } from "lucide-react";
-import Loading from "@/components/ui/Loading";
-import { getTopVideos } from "@/services/topVideo.service";
+
+const featuredVideos = [
+  {
+    id: 1,
+    title: "Học ReactJS cùng F8",
+    url: "https://www.youtube.com/playlist?list=PLwJIrGynFq9DIHRpFOEbVJPwKEbxmLjbf",
+    image: "https://files.fullstack.edu.vn/f8-prod/courses/13/13.png",
+    time: "10:30",
+    numberOfEyes: 15000,
+    numberOfLike: 1200,
+    numberOfComment: 350,
+  },
+  {
+    id: 2,
+    title: "Học NodeJS cùng F8",
+    url: "https://www.youtube.com/playlist?list=PLwJIrGynFq9BZto5VvKw7OEDNxN6plq_3",
+    image: "https://trungquandev.com/wp-content/uploads/2018/04/tong-quan-nodejs-trungquandev-02.jpg",
+    time: "15:45",
+    numberOfEyes: 23000,
+    numberOfLike: 2100,
+    numberOfComment: 580,
+  },
+  {
+    id: 3,
+    title: "Kiến Thức Nhập Môn",
+    url: "https://www.youtube.com/playlist?list=PL_-VfJajZj0WSVCw3lKo2lYifzXekkv6M",
+    image: "https://topdev.vn/blog/wp-content/uploads/2023/05/nhap-mon-lap-trinh-9-canh-gioi-ma-ban-co-the-dat-toi.png",
+    time: "08:20",
+    numberOfEyes: 18500,
+    numberOfLike: 1650,
+    numberOfComment: 420,
+  },
+  {
+    id: 4,
+    title: "Học HTML, CSS trước khi học ReactJS",
+    url: "https://fullstack.edu.vn/courses/html-css?utm_source=chatgpt.com",
+    image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80",
+    time: "12:15",
+    numberOfEyes: 31000,
+    numberOfLike: 2800,
+    numberOfComment: 720,
+  },
+];
 
 export default function FeaturedVideos() {
-  const [videoTop, setVideoTop] = useState<TopVideo[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getTopVideos()
-      .then(setVideoTop)
-      .catch((error: Error) => console.error("Error fetching courses:", error))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
-    return <Loading />;
-  }
-
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";
@@ -32,7 +58,7 @@ export default function FeaturedVideos() {
 
   return (
     <>
-      {videoTop.map((video) => (
+      {featuredVideos.map((video) => (
         <a
           key={video.id}
           href={video.url}

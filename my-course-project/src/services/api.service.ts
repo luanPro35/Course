@@ -6,7 +6,7 @@ export const PROFILE_GET_API_URL = `${BASE_API_URL}/profile`;
 export const AVATAR_API_URL = `${BASE_API_URL}/profile/update-avatar`;
 
 export const PRO_API_URL = `${BASE_API_URL}/courses/published?page=0&size=100&sort=createdAt,desc`;
-export const FREE_API_URL = `${BASE_API_URL}/courses/published?page=0&size=3&sort=createdAt,desc`;
+export const FREE_API_URL = `${BASE_API_URL}/courses/published?page=0&size=100&sort=createdAt,desc`;
 export const getCourseByIdURL = (id: string) => `${BASE_API_URL}/courses/${id}`;
 
 export const getPublishedArticlesURL = (page: number, size: number) =>

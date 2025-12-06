@@ -1,7 +1,7 @@
 
 
 import React from "react";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import SuccessAnimation from "@/components/ui/SuccessAnimation";
@@ -81,12 +81,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               icon={<FaGoogle />}
               text="Đăng ký với Google"
               onClick={() => handleSocialRegister("google")}
-            />
-
-            <SocialButton
-              icon={<FaFacebook />}
-              text="Đăng ký với Facebook"
-              onClick={() => handleSocialRegister("facebook")}
             />
           </div>
 

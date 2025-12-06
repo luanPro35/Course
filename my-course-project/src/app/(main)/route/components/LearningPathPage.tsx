@@ -40,11 +40,21 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
 
         const allCourses = [...coursesFree, ...coursesPro];
 
-        const filteredCourses = allCourses.filter((course: { title: string }) =>
-          config.courseTitles.includes(course.title)
+        const uniqueCourses = Array.from(
+          new Map(allCourses.map((course: Course) => [course.id, course])).values()
         );
 
-        setCourses(filteredCourses);
+        const shuffleArray = <T,>(array: T[]): T[] => {
+          const shuffled = [...array];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled;
+        };
+
+        const shuffledCourses = shuffleArray(uniqueCourses);
+        setCourses(shuffledCourses.slice(0, 7));
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : "An unknown error occurred");
       } finally {
@@ -53,7 +63,7 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
     }
 
     getCourses();
-  }, [pathType, config.courseTitles]);
+  }, [pathType]);
 
   if (loading) {
     return (
@@ -121,7 +131,7 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
                       </h3>
 
                       <div className="mb-2">
-                        {course.price ? (
+                        {course.price && course.price > 0 ? (
                           <div className="text-red-600 font-bold text-lg">
                             {new Intl.NumberFormat("vi-VN", {
                               style: "currency",
@@ -130,13 +140,13 @@ export default function LearningPathPage({ pathType }: LearningPathPageProps) {
                           </div>
                         ) : (
                           <span className="inline-block bg-green-100 text-green-700 font-bold text-sm px-3 py-1 rounded-full">
-                            {course.free ? "Miễn phí" : "Trả phí"}
+                            Miễn phí
                           </span>
                         )}
                       </div>
 
                       <Link
-                        href={`/courses/${course.free ? "free" : "pro"}/${
+                        href={`/courses/${course.price === 0 || !course.price ? "free" : "pro"}/${
                           course.id
                         }`}
                         className="text-blue-600 hover:text-blue-700 font-semibold text-sm inline-flex items-center gap-1 group"
