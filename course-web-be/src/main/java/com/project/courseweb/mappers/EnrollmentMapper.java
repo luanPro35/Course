@@ -18,6 +18,5 @@ public interface EnrollmentMapper {
     @Mapping(target = "courseId", source = "course.id")
     @Mapping(target = "courseTitle", source = "course.title")
     @Mapping(target = "courseThumbnail", source = "course.thumbnailUrl")
-    @Mapping(target = "enrolledAt", source = "enrollmentDate")
     CourseEnrollmentResponse toEnrolledCourseResponse(Enrollment enrollment);
 }

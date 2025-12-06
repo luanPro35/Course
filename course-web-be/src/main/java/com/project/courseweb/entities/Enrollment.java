@@ -27,10 +27,10 @@ public class Enrollment {
     @JoinColumn(name = "course_id", nullable = false)
     Course course;
 
-    LocalDateTime enrollmentDate;
+    LocalDateTime enrolledAt;
 
     @PrePersist
     protected void onCreate() {
-        enrollmentDate = LocalDateTime.now();
+        enrolledAt = LocalDateTime.now();
     }
 }

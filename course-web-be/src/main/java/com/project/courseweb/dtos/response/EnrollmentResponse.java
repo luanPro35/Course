@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EnrollmentResponse {
     Long id;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    LocalDateTime enrollmentDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime enrolledAt;
 
     Long courseId;
     String courseTitle;
