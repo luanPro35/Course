@@ -19,9 +19,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -127,6 +126,11 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long id) {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        if (post.getThumbnailUrl() != null && !post.getThumbnailUrl().isEmpty()) {
+            fileUploadAWSService.deleteFile(post.getThumbnailUrl());
+        }
+
         this.postRepository.delete(post);
     }
 

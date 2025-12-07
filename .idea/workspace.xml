@@ -4,39 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="feat: add account deletion and password reset functionalities with OTP verification">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_6_22_AM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_6_22_AM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_20_2025_11_08_AM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_20_2025_11_08_AM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)">
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/utils/RefreshTokenClearAuto.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application-dev.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.ask.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762223183859-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762243257847-ktx.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762244701926-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762244839990-cnn-L19jb21wb25lbnRzL2ltYWdlL2luc3RhbmNlcy9jbWNvdWd3b3AwMDRoMjducDl6OGI1MDZx-L19jb21wb25lbnRzL2FydGljbGUvaW5zdGFuY2VzL2NtY291Z3dvcTAwNG0yN25wN2RhZWdpcng.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762325467263-z6756276697393_9f541a408d0892795188927cea3ca6c2(1)(1).jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-course-project/public/images/1762398671731-z7172600638304_6813af25d072a65e52b831ab121942cd.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codeTokenStore.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docAPI" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/CourseWebBeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/CourseWebBeApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/RefreshTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/RefreshTokenRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/FileUploadAWSService.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/FileUploadAWSService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/CourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/FileUploadAWSServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/FileUploadAWSServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-course-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,17 +59,17 @@
     &quot;state&quot;: &quot;OPEN&quot;
   }
 }</component>
-  <component name="GitHubPullRequestState"><![CDATA[{
-  "prStates": [
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
     {
-      "id": {
-        "id": "PR_kwDOP3_9yc63EesL",
-        "number": 21
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOP3_9yc63EesL&quot;,
+        &quot;number&quot;: 21
       },
-      "lastSeen": 1764982029003
+      &quot;lastSeen&quot;: 1764982029003
     }
   ]
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/luanPro35/Course.git&quot;,
@@ -111,36 +90,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.course-web-be [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.course-web-be [install].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
-    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#21 on implement-be&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;24.11.1&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.10.1&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/MyProjects/Course&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/loiko/AppData/Roaming/JetBrains/IntelliJIdea2025.1/node/versions/24.11.1/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMThirdPartyAiProvidersConfigurable&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CourseWebBeApplication.executor": "Run",
+    "Maven.course-web-be [clean].executor": "Run",
+    "Maven.course-web-be [install].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.CourseWebBeApplication.executor": "Run",
+    "code.cleanup.on.save": "true",
+    "git-widget-placeholder": "implement-be",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.nodejs.core.library.configured.version": "24.11.1",
+    "javascript.nodejs.core.library.typings.version": "24.10.1",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/MyProjects/Course",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_interpreter_path": "C:/Users/loiko/AppData/Roaming/JetBrains/IntelliJIdea2025.1/node/versions/24.11.1/node",
+    "nodejs_package_manager_path": "npm",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "redis"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.project.courseweb.dtos.response" />
@@ -435,14 +419,21 @@
       <option name="project" value="LOCAL" />
       <updated>1764854911964</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)">
+      <option name="closed" value="true" />
+      <created>1765011250785</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1765011250785</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactor file upload service to support generic file uploads and update avatar handling" />
     <MESSAGE value="Implement category management and post creation features with file upload support" />
     <MESSAGE value="Refactor authentication and Google OAuth2 integration for improved user profile handling" />
     <MESSAGE value="Add admin authentication creation in AuthService and initialize in ApplicationInitConfig" />
@@ -467,7 +458,8 @@
     <MESSAGE value="refactor code" />
     <MESSAGE value="feat: add account management features including delete account, forgot password, and reset password" />
     <MESSAGE value="feat: add account deletion and password reset functionalities with OTP verification" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add account deletion and password reset functionalities with OTP verification" />
+    <MESSAGE value="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
