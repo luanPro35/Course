@@ -14,8 +14,7 @@ export default function CourseFree() {
     const fetchCourses = async () => {
       try {
         const data = await getAllCourses();
-
-        setCourses(data);
+        setCourses(data.slice(0, 8));
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {

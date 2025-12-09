@@ -41,11 +41,15 @@ export default function MyPosts() {
       return;
     }
 
-    BlogService.getAll()
-      .then((allPosts) => {
+    Promise.all([
+      BlogService.getMyPostsByStatus("DRAFT"),
+      BlogService.getMyPostsByStatus("PUBLISHED")
+    ])
+      .then(([draftPosts, publishedPosts]) => {
+        const allPosts = [...draftPosts, ...publishedPosts];
         setPosts(allPosts);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Error fetching my posts:", err));
   }, [user?.id]);
 
   const drafts = posts.filter((p) => p.status === "draft");

@@ -1,5 +1,4 @@
-import { enrollCourse } from "./api.service";
-
+import { enrollCourse, enrollFreeCourse } from "./api.service";
 export interface EnrollmentResponse {
   id: number;
   userId: number;
@@ -44,7 +43,12 @@ export const enrollInFreeCourse = async (
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        throw new Error(`Lỗi ${response.status}: Không thể ghi danh khóa học. Vui lòng kiểm tra quyền truy cập.`);
+      }
       throw new Error(errorData.message || "Không thể ghi danh khóa học");
     }
 
@@ -75,9 +79,7 @@ export const getEnrolledCourses = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(
-        errorData.message || "Không thể lấy danh sách khóa học"
-      );
+      throw new Error(errorData.message || "Không thể lấy danh sách khóa học");
     }
 
     const result = await response.json();

@@ -92,29 +92,41 @@ export const useBlogForm = (initialState: BlogFormData) => {
 
     try {
       const { accessToken } = getTokens();
-      const headers = accessToken
-        ? { Authorization: `Bearer ${accessToken}` }
-        : undefined;
+      if (!accessToken) {
+        throw new Error("Bạn cần đăng nhập để tải ảnh lên.");
+      }
       const res = await fetch("/api/upload", {
         method: "POST",
-        headers,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: uploadFormData,
       });
 
       const result = await res.json();
 
       if (!res.ok || !result.success) {
-        throw new Error(result.error || "Tải ảnh lên thất bại.");
+        const errorMessage = result.error || result.message || "Tải ảnh lên thất bại.";
+        console.error("Upload failed:", { status: res.status, error: errorMessage, result });
+        throw new Error(errorMessage);
       }
 
       
       setFormData((prev) => ({ ...prev, image: result.path }));
     } catch (error) {
-      console.error(error);
+      console.error("Upload error:", error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Lỗi khi tải ảnh lên. Vui lòng thử lại.";
+      
       setErrors((prev) => ({
         ...prev,
-        image: "Lỗi khi tải ảnh lên. Vui lòng thử lại.",
+        image: errorMessage,
       }));
+      
+      if (errorMessage.includes("đăng nhập")) {
+        alert(errorMessage + " Vui lòng đăng nhập lại.");
+      }
     } finally {
       
       setIsUploading(false);

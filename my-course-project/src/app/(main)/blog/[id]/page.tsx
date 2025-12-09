@@ -4,9 +4,12 @@ import { useParams } from "next/navigation";
 import { BlogPost } from "@/types/blog.types";
 import Image from "next/image";
 import { getPublishedArticlesURL } from "@/services/api.service";
+import { BlogService } from "@/services/blog.service";
+import { useAuth } from "@/hooks/useAuth";
 
 const BlogPostPage = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,6 +18,19 @@ const BlogPostPage = () => {
     if (!id) return;
     const fetchPost = async () => {
       try {
+        if (user?.id) {
+          try {
+            const myPost = await BlogService.getById(Number(id));
+            if (myPost) {
+              setPost(myPost);
+              setLoading(false);
+              return;
+            }
+          } catch (err) {
+            console.log("Not user's post, trying public posts...");
+          }
+        }
+
         let page = 0;
         const size = 10;
         let found = null;
@@ -68,7 +84,7 @@ const BlogPostPage = () => {
       }
     };
     fetchPost();
-  }, [id]);
+  }, [id, user?.id]);
 
   if (loading) {
     return <div className="text-center py-20">Đang tải...</div>;

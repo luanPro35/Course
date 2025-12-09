@@ -1,7 +1,10 @@
 package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.PageResponse;
-import com.project.courseweb.dtos.request.*;
+import com.project.courseweb.dtos.request.CourseCreateRequest;
+import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
+import com.project.courseweb.dtos.request.LessonCreateRequest;
+import com.project.courseweb.dtos.request.SectionCreateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
 import com.project.courseweb.dtos.response.FileResponse;
@@ -103,8 +106,8 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or (hasAuthority('EDIT_COURSE') and @courseServiceImpl.isOwn(#id))")
     @Caching(evict = {
-        @CacheEvict(value = "courses", allEntries = true),
-        @CacheEvict(value = "course", key = "#id")
+            @CacheEvict(value = "courses", allEntries = true),
+            @CacheEvict(value = "course", key = "#id")
     })
     public CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request) {
         //
@@ -181,12 +184,15 @@ public class CourseServiceImpl implements CourseService {
     public void deleteCourse(Long id) {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
-        
+
         // Manually delete related orders to avoid foreign key constraint violation
         if (course.getOrders() != null && !course.getOrders().isEmpty()) {
             orderRepository.deleteAll(course.getOrders());
         }
-        
+
+        if (course.getThumbnailUrl() != null && !course.getThumbnailUrl().isEmpty()) {
+            fileUploadAWSService.deleteFile(course.getThumbnailUrl());
+        }
         courseRepository.delete(course);
     }
 

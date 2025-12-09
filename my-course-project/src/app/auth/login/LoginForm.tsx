@@ -1,5 +1,5 @@
 import React from "react";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import SuccessAnimation from "@/components/ui/SuccessAnimation";
 import ErrorAnimation from "@/components/ui/ErrorAnimation";
@@ -85,12 +85,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
               icon={<FaGoogle />}
               text={"Đăng nhập với Google"}
               onClick={() => handleSocialLogin("google")}
-            />
-
-            <SocialButton
-              icon={<FaFacebook />}
-              text={"Đăng nhập với Facebook"}
-              onClick={() => handleSocialLogin("facebook")}
             />
           </div>
 

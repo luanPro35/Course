@@ -18,21 +18,16 @@ export default function FreeCourseBtn({ course }: FreeCoursesBtnProps) {
     setError(null);
 
     try {
-      const token = localStorage.getItem("accessToken");
-      
+      const { accessToken: token } = await import("@/utils/token").then(m => m.getTokens());
       if (!token) {
         alert("Bạn cần đăng nhập để đăng ký khóa học.");
         router.push("/login");
         return;
       }
-
       await enrollInFreeCourse(course.id, token);
-      
       alert("Đăng ký khóa học thành công! Bạn có thể bắt đầu học ngay.");
-      
-      router.push(`/my-courses`);
+      router.push(`/`);
     } catch (error: any) {
-      console.error("Error registering course:", error);
       setError(error.message || "Đăng ký khóa học thất bại");
       alert(error.message || "Đăng ký khóa học thất bại. Vui lòng thử lại.");
     } finally {

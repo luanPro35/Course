@@ -81,7 +81,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                             .courseId(course.getId())
                             .courseTitle(course.getTitle())
                             .courseThumbnail(course.getThumbnailUrl())
-                            .enrolledAt(enrollment.getEnrollmentDate())
+                            .enrolledAt(enrollment.getEnrolledAt())
                             .build();
                 }).toList();
         return PageResponse.<CourseEnrollmentResponse>builder()
