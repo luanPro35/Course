@@ -46,12 +46,12 @@ export default function ProfileForm() {
     }
   };
 
-  if (!user && loading) {
+  if (loading) {
     return <Loading />;
   }
 
   if (!user) {
-    return <div>Đang tải thông tin người dùng...</div>;
+    return <div className="text-center p-8">Vui lòng đăng nhập để xem trang này.</div>;
   }
 
   return (

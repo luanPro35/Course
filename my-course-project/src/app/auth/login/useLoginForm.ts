@@ -1,11 +1,11 @@
 
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/app/auth/login/types";
 import { validateLoginForm } from "@/lib/validations/login.validation";
 import { AuthService } from "@/services/auth.service";
 import { useAuth } from "@/hooks/useAuth";
+import { getProfile } from "@/services/profileService.service";
 export const useLoginForm = (onClose: () => void) => {
   const router = useRouter();
   const { login, user } = useAuth();
@@ -35,7 +35,6 @@ export const useLoginForm = (onClose: () => void) => {
     setIsError(false);
     setIsSuccess(false);
 
-    
     const validation = validateLoginForm(formData);
     if (!validation.isValid) {
       setErrorMessage(validation.message!);
@@ -47,21 +46,29 @@ export const useLoginForm = (onClose: () => void) => {
 
     try {
       const data = await AuthService.login(formData);
+      
       await login(data.user, data.accessToken, data.refreshToken);
 
-
+      try {
+        const profileData = await getProfile(Number(data.user.id));
+        const completeUserData = {
+          ...profileData,
+          email: data.user.email,
+          role: data.user.role,
+          roles: data.user.roles,
+        };
+        
+        await login(completeUserData, data.accessToken, data.refreshToken);
+      } catch (profileError) {
+        console.error("Failed to fetch profile data:", profileError);
+      }
 
       setIsSuccess(true);
       setIsError(false);
 
       setTimeout(() => {
-        const savedUser = localStorage.getItem("user");
-        const savedToken = localStorage.getItem("accessToken");
-        
-
-        
         onClose();
-        onClose();
+        
         const isAdmin = 
           data.user?.email === "admin@gmail.com" ||
           data.user?.role === "ADMIN" || 
@@ -76,13 +83,9 @@ export const useLoginForm = (onClose: () => void) => {
              )
            ));
 
-
-
         if (isAdmin) {
-
           router.push("/admin");
         } else {
-
           router.push("/");
         }
         router.refresh();

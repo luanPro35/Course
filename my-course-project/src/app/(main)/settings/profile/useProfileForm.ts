@@ -41,7 +41,24 @@ export function useProfileForm() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (user?.id && token) {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
+      setForm({
+        name: user.fullName || "",
+        fullName: user.fullName || "",
+        about: user.about || "",
+        avatar: user.avatar || "",
+        personalWebsite: user.personalWebsite || "",
+        github: user.github || "",
+        linkedin: user.linkedin || "",
+        facebook: user.facebook || "",
+        youtube: user.youtube || "",
+      });
+
+      if (token) {
         setLoading(true);
         try {
           const profileData = await getProfile(Number(user.id));
@@ -67,11 +84,13 @@ export function useProfileForm() {
         } finally {
           setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [user?.id, setUser, token]);
+  }, [user?.id, token]);
 
   const handleFieldClick = (fieldName: string) => {
     setEditingField(fieldName);
@@ -82,7 +101,6 @@ export function useProfileForm() {
     setEditingField(null);
   };
 
-  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -106,10 +124,16 @@ export function useProfileForm() {
     try {
       const updatedUser = await updateAvatar(Number(user.id), file);
       
-      setUser({
+      const newUserData = {
         ...updatedUser,
         email: user.email,
-      });
+      };
+      
+      setUser(newUserData);
+      
+
+      localStorage.setItem("user", JSON.stringify(newUserData));
+      
       setForm((prevForm) => ({
         ...prevForm,
         avatar: updatedUser.avatar || "",
@@ -141,11 +165,15 @@ export function useProfileForm() {
 
       const updatedUser = await updateProfile(Number(user.id), payload);
 
-      
-      setUser({
+      const newUserData = {
         ...updatedUser,
         email: user.email,
-      });
+      };
+      
+      setUser(newUserData);
+      
+
+      localStorage.setItem("user", JSON.stringify(newUserData));
 
       
       setForm({
@@ -190,14 +218,16 @@ export function useProfileForm() {
         email: user.email,
       };
 
-      
       const updatedUser = await updateProfile(Number(user.id), payload);
 
-      
-      setUser({
+      const newUserData = {
         ...updatedUser,
         email: user.email,
-      });
+      };
+      
+      setUser(newUserData);
+      
+      localStorage.setItem("user", JSON.stringify(newUserData));
 
       
       setForm({
