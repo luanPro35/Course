@@ -445,47 +445,6 @@
 			"name": "Post",
 			"item": [
 				{
-					"name": "gọi api để upload file lên aws và nhậnveef url rồi lấy truyền vào api tạo bài(token)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgRURJVF9QT1NUIERFTEVURV9QT1NUIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzODkyODc3LCJpYXQiOjE3NjM2MzM2NzcsImVtYWlsIjoibG9pa29iaTEyMzRAZ21haWwuY29tIiwianRpIjoiZWUzMzYwNzYtNmRkOC00OTdhLWI3YTYtM2Q2Nzg1NjVkYTNiIn0.dOVYImlrxgj6mDtzmFvgKsxotiNOQPOfQNsF8rFYHZqKP8DSh_RWhUU-azDD4XPMHXw2ll59oHYdajs7y8eHiQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/D:/OneDrive/Pictures/Camera Roll/z7172600638304_6813af25d072a65e52b831ab121942cd.jpg"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost:8080/project/posts/upload-thumbnail",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"project",
-								"posts",
-								"upload-thumbnail"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "created post(token)",
 					"request": {
 						"auth": {
@@ -614,7 +573,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwic2NvcGUiOiIiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjM3NzgxMjcsImlhdCI6MTc2MzUxODkyNywiZW1haWwiOiJsb2lrb2JpMTIzNDU2QGdtYWlsLmNvbSIsImp0aSI6IjNlYTI5OWFlLTM2OGUtNGYzMC1iZGI0LTJiOTFkOGVmMzhlZiJ9.gb3NQ6hzcOolJM79C430uWyrRE_2tB-7UJMlKQPJu-RbUPlwVcO7Tq2XupYo5YQKViVZtgolmpNCpYDMzj4syA",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwic2NvcGUiOiJST0xFX1VTRVIgQ1JFQVRFX1BPU1QgREVMRVRFX1BPU1QgRU5ST0xMX0NPVVJTRSBWSUVXX0NPVVJTRSBFRElUX1BPU1QiLCJpc3MiOiJjb20ucHJvamVjdC4yVEwiLCJleHAiOjE3NjU2MzI2MDYsImlhdCI6MTc2NTM3MzQwNiwiZW1haWwiOiJsb2lrb2JpMTIzQGdtYWlsLmNvbSIsImp0aSI6IjYxZTNhNzk5LTFiMGYtNGViOS04OGJkLWZiZWFmYTIxZWQ4YiJ9.Pqd-lLeb86FQyCsr0PG4qXqiq2QGv0AlkmsPz64ovfQF0muf-DBlSxmUfm8eWtgNGK0USvW0SxVv92752j0Aog",
 									"type": "string"
 								}
 							]
@@ -622,16 +581,23 @@
 						"method": "PUT",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n        \"author\": \"Tan\",\r\n        \"title\": \"a\",\r\n        \"category\": \"cpp\",\r\n        \"thumbnailUrl\": \"https://my-course-webapp-2025.s3.us-east-1.amazonaws.com/1/post-thumbnail/67db7300-3993-4375-bf42-b0a5a3954080-vatly.jpg\",\r\n        \"content\": \"dad\",\r\n        \"fullContent\": \"D\",\r\n        \"statusPost\": \"DRAFT\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Downloads/blog_1717649009.png"
+								},
+								{
+									"key": "request",
+									"value": "{\n        \"author\": \"Tanloi\",\n        \"title\": \"nhu qq\",\n        \"category\": \"cpp\",\n        \"content\": \"dad\",\n        \"fullContent\": \"SSSSSD\",\n        \"statusPost\": \"PUBLISHED\"\n}",
+									"contentType": "application/json",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/project/posts/my-posts/update-post/1",
+							"raw": "http://localhost:8080/project/posts/my-posts/update-post/12",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -642,7 +608,7 @@
 								"posts",
 								"my-posts",
 								"update-post",
-								"1"
+								"12"
 							]
 						}
 					},
@@ -1138,48 +1104,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 190000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\",\r\n    \"sections\": [\r\n        {\r\n            \"title\": \"Chương 1: Giới thiệu và Cài đặt môi trường\",\r\n            \"orderIndex\": 0,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 1.2: Hướng dẫn cài đặt JDK và IntelliJ IDEA\",\r\n                    \"contentUrl\": \"images/lessons/java-setup.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Chương 2: Biến, Kiểu dữ liệu và Toán tử\",\r\n            \"orderIndex\": 1,\r\n            \"lessons\": [\r\n                {\r\n                    \"title\": \"Bài 2.2: Các toán tử số học, so sánh và logic\",\r\n                    \"contentUrl\": \"mage/lessonsjava-operators.png\",\r\n                    \"orderIndex\": 1,\r\n                    \"durationInMinutes\": 25\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/project/admin/courses/update/16",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"project",
-										"admin",
-										"courses",
-										"update",
-										"16"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "cách 2: upodate từng phân riêng rẻ (update course)(token)",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInNjb3BlIjoiUk9MRV9BRE1JTiBVUExPQURfQ09VUlNFIERFTEVURV9QT1NUIEVESVRfUE9TVCBDUkVBVEVfUE9TVCBERUxFVEVfQ09VUlNFIFZJRVdfQ09VUlNFIEVESVRfQ09VUlNFIiwiaXNzIjoiY29tLnByb2plY3QuMlRMIiwiZXhwIjoxNzYzOTkxMjY5LCJpYXQiOjE3NjM3MzIwNjksImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiYTlmNmI5ZmYtNjU5ZS00NDczLThhZTktOTI3ZWU0ZDEzZDE2In0.7QdHumy5AOSISPSkHWjJNU5_fT0lHA-uLg2nYkUH_7Y3SpkkP8dAbcl8cl8cKelGoH_1GuuoBKR7TcWFMw_3ZQ",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"Khóa học \",\r\n    \"description\": \"Đây là một khóa học toàn diện\",\r\n    \"price\": 800000.00,\r\n    \"thumbnailUrl\": \"images/courses/java-masterclass.png\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
