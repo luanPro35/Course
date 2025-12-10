@@ -2,7 +2,6 @@ package com.project.courseweb.mappers;
 
 import com.project.courseweb.dtos.request.CourseCreateRequest;
 import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
-import com.project.courseweb.dtos.request.CourseUpdateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
 import com.project.courseweb.entities.Course;
@@ -19,8 +18,6 @@ public interface CourseMapper {
     CourseLabelResponse toLabelResponse(Course course);
 
     Course toEntity(CourseCreateRequest request);
-
-    void updateCourse(@MappingTarget Course course, CourseUpdateRequest request);
 
     void updateCourseIngredient(@MappingTarget Course course, CourseIngredientUpdateRequest request);
 }

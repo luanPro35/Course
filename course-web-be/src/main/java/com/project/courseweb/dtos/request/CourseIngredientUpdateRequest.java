@@ -15,7 +15,6 @@ import java.util.List;
 public class CourseIngredientUpdateRequest {
     String title;
     String description;
-    String thumbnailUrl;
     BigDecimal price;
     String badge;
     String titleHighlight;

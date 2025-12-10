@@ -14,7 +14,6 @@ public class PostRequest {
     String author;
     String title;
     String category;
-    String thumbnailUrl;
     String content;
     String fullContent;
     String statusPost;

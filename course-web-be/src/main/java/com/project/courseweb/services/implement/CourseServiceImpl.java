@@ -7,7 +7,6 @@ import com.project.courseweb.dtos.request.LessonCreateRequest;
 import com.project.courseweb.dtos.request.SectionCreateRequest;
 import com.project.courseweb.dtos.response.CourseLabelResponse;
 import com.project.courseweb.dtos.response.CourseResponse;
-import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.entities.Course;
 import com.project.courseweb.enums.CourseStatus;
 import com.project.courseweb.enums.ErrorCode;
@@ -50,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     //default course status is DRAFT
-    public CourseResponse createCourse(CourseCreateRequest request) {
+    public CourseResponse createCourse(CourseCreateRequest request, MultipartFile file) {
         //1. created obj Course
         var course = this.courseMapper.toEntity(request);
         course.setSections(new ArrayList<>());
@@ -73,23 +72,31 @@ public class CourseServiceImpl implements CourseService {
                 course.getSections().add(section);
             }
         }
+        if (file != null) {
+            var url = this.fileUploadAWSService.uploadFile(profile,
+                    "course-thumbnail",
+                    file
+            );
+            course.setThumbnailUrl(url);
+        }
+
         courseRepository.save(course);
         return this.courseMapper.toResponse(course);
     }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('UPLOAD_COURSE') and @courseServiceImpl.isOwn(#id))")
-    public FileResponse uploadCourseThumbnail(MultipartFile file) {
-        return FileResponse.builder()
-                .url(
-                        this.fileUploadAWSService.uploadFile(
-                                this.profileService.getProfileById(this.profileService.getId()),
-                                "course-thumbnail",
-                                file
-                        ))
-                .build();
-    }
+//    @Override
+//    @Transactional
+//    @PreAuthorize("hasRole('ADMIN') or (hasAuthority('UPLOAD_COURSE') and @courseServiceImpl.isOwn(#id))")
+//    public FileResponse uploadCourseThumbnail(MultipartFile file) {
+//        return FileResponse.builder()
+//                .url(
+//                        this.fileUploadAWSService.uploadFile(
+//                                this.profileService.getProfileById(this.profileService.getId()),
+//                                "course-thumbnail",
+//                                file
+//                        ))
+//                .build();
+//    }
 
 
 //    @Override
@@ -109,27 +116,39 @@ public class CourseServiceImpl implements CourseService {
             @CacheEvict(value = "courses", allEntries = true),
             @CacheEvict(value = "course", key = "#id")
     })
-    public CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request) {
+    public CourseResponse updateCourseIngredient(Long id, CourseIngredientUpdateRequest request, MultipartFile file) {
         //
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         //
+        if (file != null) {
+            var url = this.fileUploadAWSService.uploadFile(course.getCreator(),
+                    "course-thumbnail",
+                    file
+            );
+            if (course.getThumbnailUrl() != null && !course.getThumbnailUrl().isEmpty()) {
+                fileUploadAWSService.deleteFile(course.getThumbnailUrl());
+            }
+            course.setThumbnailUrl(url);
+        }
         courseMapper.updateCourseIngredient(course, request);
         //
-        course.getSections().clear();
-        if (request.getSections() != null) {
-            for (SectionCreateRequest sectionRequest : request.getSections()) {
-                var section = this.sectionMapper.toEntity(sectionRequest);
-                section.setLessons(new ArrayList<>());
-                section.setCourse(course);
-                if (sectionRequest.getLessons() != null) {
-                    for (LessonCreateRequest lessonRequest : sectionRequest.getLessons()) {
-                        var lesson = this.lessonMapper.toEntity(lessonRequest);
-                        lesson.setSection(section);
-                        section.getLessons().add(lesson);
+        if (request != null) {
+            course.getSections().clear();
+            if (request.getSections() != null) {
+                for (SectionCreateRequest sectionRequest : request.getSections()) {
+                    var section = this.sectionMapper.toEntity(sectionRequest);
+                    section.setLessons(new ArrayList<>());
+                    section.setCourse(course);
+                    if (sectionRequest.getLessons() != null) {
+                        for (LessonCreateRequest lessonRequest : sectionRequest.getLessons()) {
+                            var lesson = this.lessonMapper.toEntity(lessonRequest);
+                            lesson.setSection(section);
+                            section.getLessons().add(lesson);
+                        }
                     }
+                    course.getSections().add(section);
                 }
-                course.getSections().add(section);
             }
         }
         return courseMapper.toResponse(courseRepository.save(course));

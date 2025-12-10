@@ -3,9 +3,9 @@ package com.project.courseweb.services.implement;
 
 import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.PostRequest;
-import com.project.courseweb.dtos.response.FileResponse;
 import com.project.courseweb.dtos.response.PostResponse;
 import com.project.courseweb.entities.Post;
+import com.project.courseweb.entities.Profile;
 import com.project.courseweb.enums.CategoryType;
 import com.project.courseweb.enums.ErrorCode;
 import com.project.courseweb.enums.PostStatus;
@@ -43,27 +43,35 @@ public class PostServiceImpl implements PostService {
     ProfileServiceImpl profileServiceImpl;
     CategoryService categoryService;
 
-    @Override
-    public FileResponse uploadPostThumbnail(MultipartFile file) {
-        return FileResponse.builder()
-                .url(this.fileUploadAWSService.uploadFile(
-                                this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),
-                                "post-thumbnail",
-                                file
-                        )
-                )
-                .build();
-    }
+//    @Override
+//    public FileResponse uploadPostThumbnail(MultipartFile file) {
+//        return FileResponse.builder()
+//                .url(this.fileUploadAWSService.uploadFile(
+//                                this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()),
+//                                "post-thumbnail",
+//                                file
+//                        )
+//                )
+//                .build();
+//    }
 
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_POST')")
     @CacheEvict(value = "posts", allEntries = true)
-    public PostResponse createPost(PostRequest request) {
+    public PostResponse createPost(PostRequest request, MultipartFile file) {
         Post post = this.postMapper.toPostEntity(request);
-        post.setProfile(this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId()));
+        var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+        post.setProfile(profile);
         post.setStatus(PostStatus.valueOf(request.getStatusPost()));
         post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
+        if (file != null) {
+            var url = this.fileUploadAWSService.uploadFile(profile,
+                    "post-thumbnail",
+                    file
+            );
+            post.setThumbnailUrl(url);
+        }
         var entity = this.postRepository.save(post);
         return this.toResponse(entity);
     }
@@ -92,19 +100,26 @@ public class PostServiceImpl implements PostService {
             @CacheEvict(value = "posts", allEntries = true),
             @CacheEvict(value = "post", key = "#id")
     })
-    public PostResponse updatePost(Long id, PostRequest request) {
-        // var profile = this.profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
-        // var postOptional = this.postRepository.getPostByIdAndProfileId(id, profile.getId());
-        // if(!postOptional.isPresent()){
-        //     throw new AppException(ErrorCode.POST_NOT_FOUND);
-        // }   
-        // var post = postOptional.get();
+    public PostResponse updatePost(Long id, PostRequest request, MultipartFile file) {
         var post = this.postRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.POST_NOT_FOUND)
         );
         post.setUpdatedAt(LocalDateTime.now());
-        post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
-        post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        if (request != null) {
+            post.setCategory(this.categoryService.getCategoryByName(CategoryType.valueOf(request.getCategory())));
+            post.setStatus(PostStatus.valueOf(request.getStatusPost()));
+        }
+        if (file != null) {
+            Profile profile = profileServiceImpl.getProfileById(this.profileServiceImpl.getId());
+            var url = this.fileUploadAWSService.uploadFile(profile,
+                    "post-thumbnail",
+                    file
+            );
+            if (post.getThumbnailUrl() != null && !post.getThumbnailUrl().isEmpty()) {
+                fileUploadAWSService.deleteFile(post.getThumbnailUrl());
+            }
+            post.setThumbnailUrl(url);
+        }
         this.postMapper.updatePostFromRequest(request, post);
         return this.toResponse(this.postRepository.save(post));
     }

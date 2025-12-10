@@ -26,14 +26,15 @@ public class AdminController {
     UserService userService;
 
     @PostMapping("/courses/create")
-    ApiResponse<CourseResponse> createCourse(@RequestBody CourseCreateRequest request) {
-        return ApiResponse.ok(this.courseService.createCourse(request), SuccessCode.CREATE_COURSE_SUCCESS);
+    ApiResponse<CourseResponse> createCourse(@RequestPart(value = "file", required = false) MultipartFile file,
+                                             @RequestPart("request") CourseCreateRequest request) {
+        return ApiResponse.ok(this.courseService.createCourse(request, file), SuccessCode.CREATE_COURSE_SUCCESS);
     }
 
-    @PostMapping("/courses/upload-thumbnail")
-    ApiResponse<FileResponse> uploadThumbnail(@RequestParam("file") MultipartFile file) {
-        return ApiResponse.ok(this.courseService.uploadCourseThumbnail(file), SuccessCode.UPLOAD_FILE_SUCCESS);
-    }
+//    @PostMapping("/courses/upload-thumbnail")
+//    ApiResponse<FileResponse> uploadThumbnail(@RequestParam("file") MultipartFile file) {
+//        return ApiResponse.ok(this.courseService.uploadCourseThumbnail(file), SuccessCode.UPLOAD_FILE_SUCCESS);
+//    }
 
     @GetMapping("/courses/get/{id}")
     ApiResponse<CourseResponse> getCourseById(@PathVariable Long id) {
@@ -47,8 +48,11 @@ public class AdminController {
     }
 
     @PutMapping("/courses/update/{id}")
-    ApiResponse<CourseResponse> updateFullCourse(@PathVariable Long id, @RequestBody CourseIngredientUpdateRequest request) {
-        return ApiResponse.ok(this.courseService.updateCourseIngredient(id, request), SuccessCode.UPDATE_COURSE_SUCCESS);
+    ApiResponse<CourseResponse> updateFullCourse(@PathVariable Long id,
+                                                 @RequestPart(value = "file", required = false) MultipartFile file,
+                                                 @RequestPart(value = "request", required = false) CourseIngredientUpdateRequest request) {
+
+        return ApiResponse.ok(this.courseService.updateCourseIngredient(id, request, file), SuccessCode.UPDATE_COURSE_SUCCESS);
     }
 
 //    @PatchMapping("/courses/update/{id}")
