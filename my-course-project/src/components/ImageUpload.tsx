@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from "react";
 import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
-import { UPLOAD_IMAGE_POST_URL } from "@/services/api.service";
 
 interface ImageUploadProps {
   value: string;
@@ -24,14 +23,10 @@ export default function ImageUpload({
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    
     if (!file.type.startsWith("image/")) {
       setError("Vui lòng chọn file ảnh");
       return;
     }
-
-    
     if (file.size > 5 * 1024 * 1024) {
       setError("Kích thước ảnh không được vượt quá 5MB");
       return;
@@ -41,40 +36,11 @@ export default function ImageUpload({
     setUploading(true);
 
     try {
-      const token = localStorage.getItem("accessToken");
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch(UPLOAD_IMAGE_POST_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-
-      const result = await response.json();
-      
-      
-      let imageUrl: string;
-      if (typeof result === 'string') {
-        imageUrl = result;
-      } else if (result.data) {
-        imageUrl = typeof result.data === 'string' ? result.data : result.data.url;
-      } else if (result.url) {
-        imageUrl = result.url;
-      } else {
-        throw new Error("Invalid response format");
-      }
-      
-      onChange(imageUrl);
+      const previewUrl = URL.createObjectURL(file);
+      onChange(previewUrl);
     } catch (err) {
-      console.error("Upload error:", err);
-      setError("Không thể upload ảnh. Vui lòng thử lại.");
+      console.error("Error creating preview:", err);
+      setError("Không thể tạo preview. Vui lòng thử lại.");
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -139,7 +105,7 @@ export default function ImageUpload({
               <div className="flex flex-col items-center">
                 <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-2" />
                 <p className="text-sm text-blue-600 font-medium">
-                  Đang upload...
+                  Đang tạo preview...
                 </p>
               </div>
             ) : (

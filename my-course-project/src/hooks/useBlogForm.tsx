@@ -8,6 +8,7 @@ import { BlogFormData } from "@/types/blog.types";
 export const useBlogForm = (initialState: BlogFormData) => {
   const [formData, setFormData] = useState<BlogFormData>(initialState);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null); // Track the file object for FormData
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false); 
@@ -50,7 +51,9 @@ export const useBlogForm = (initialState: BlogFormData) => {
             const headers = accessToken
               ? { Authorization: `Bearer ${accessToken}` }
               : undefined;
-            const res = await fetch("/api/upload", {
+            
+            const { UPLOAD_IMAGE_POST_URL } = await import("@/services/api.service");
+            const res = await fetch(UPLOAD_IMAGE_POST_URL, {
               method: "POST",
               headers,
               body: uploadFormData,
@@ -59,11 +62,12 @@ export const useBlogForm = (initialState: BlogFormData) => {
             if (!res.ok || !result.success) {
               throw new Error(result.error || "Tải ảnh lên thất bại.");
             }
-            const imageUrl = `\n![Image](${result.path})\n`;
+            const imageUrl = result.data || result.path || result.url;
+            const imageMarkdown = `\n![Image](${imageUrl})\n`;
             const currentContent = formData.fullContent || "";
             setFormData((prev) => ({
               ...prev,
-              fullContent: currentContent + imageUrl,
+              fullContent: currentContent + imageMarkdown,
             }));
           } catch (error) {
             console.error(error);
@@ -83,54 +87,14 @@ export const useBlogForm = (initialState: BlogFormData) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
 
+    setImageFile(file);
     
-    setIsUploading(true);
-    setErrors((prev) => ({ ...prev, image: undefined })); 
-
-    const uploadFormData = new FormData();
-    uploadFormData.append("file", file);
-
-    try {
-      const { accessToken } = getTokens();
-      if (!accessToken) {
-        throw new Error("Bạn cần đăng nhập để tải ảnh lên.");
-      }
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: uploadFormData,
-      });
-
-      const result = await res.json();
-
-      if (!res.ok || !result.success) {
-        const errorMessage = result.error || result.message || "Tải ảnh lên thất bại.";
-        console.error("Upload failed:", { status: res.status, error: errorMessage, result });
-        throw new Error(errorMessage);
-      }
-
-      
-      setFormData((prev) => ({ ...prev, image: result.path }));
-    } catch (error) {
-      console.error("Upload error:", error);
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : "Lỗi khi tải ảnh lên. Vui lòng thử lại.";
-      
-      setErrors((prev) => ({
-        ...prev,
-        image: errorMessage,
-      }));
-      
-      if (errorMessage.includes("đăng nhập")) {
-        alert(errorMessage + " Vui lòng đăng nhập lại.");
-      }
-    } finally {
-      
-      setIsUploading(false);
-    }
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreview(previewUrl);
+    
+    setFormData((prev) => ({ ...prev, image: previewUrl }));
+    
+    setErrors((prev) => ({ ...prev, image: undefined }));
   };
 
   const handleSubmit = async (
@@ -182,19 +146,21 @@ export const useBlogForm = (initialState: BlogFormData) => {
       );
 
       if (postId) {
-        
-        await BlogService.update(parseInt(postId.toString(), 10), {
-          ...formData,
-          status,
-        });
+        await BlogService.update(
+          parseInt(postId.toString(), 10),
+          {
+            ...formData,
+            status,
+          },
+          imageFile || undefined // Pass the file object for FormData upload
+        );
         alert(
           `Bài viết đã được cập nhật dưới dạng ${
             status === "draft" ? "bản nháp" : "xuất bản"
           }`
         );
       } else {
-        
-        await BlogService.create(formData, status);
+        await BlogService.create(formData, status, imageFile || undefined);
         alert(
           `Bài viết đã được lưu dưới dạng ${
             status === "draft" ? "bản nháp" : "xuất bản"

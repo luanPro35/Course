@@ -22,14 +22,19 @@ export async function createCourse(
   const token = localStorage.getItem("accessToken");
   
   console.log("Creating course with data:", courseData);
+  const formData = new FormData();
+  
+  const requestBlob = new Blob([JSON.stringify(courseData)], {
+    type: 'application/json'
+  });
+  formData.append("request", requestBlob);
   
   const response = await fetch(CREATE_COURSE_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(courseData),
+    body: formData,
   });
 
   if (!response.ok) {
@@ -91,13 +96,19 @@ export async function updateCourse(
   console.log("Updating course ID:", id);
   console.log("Update data (cleaned):", cleanCourseData);
   
+  const formData = new FormData();
+  
+  const requestBlob = new Blob([JSON.stringify(cleanCourseData)], {
+    type: 'application/json'
+  });
+  formData.append("request", requestBlob);
+  
   const response = await fetch(updateCourseByAdminURL(id), {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(cleanCourseData),
+    body: formData,
   });
 
   if (!response.ok) {

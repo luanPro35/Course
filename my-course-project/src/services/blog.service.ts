@@ -10,23 +10,38 @@ import { fetchWithAuth } from "@/utils/api.utils";
 export class BlogService {
   static async create(
     data: BlogFormData,
-    status: BlogStatus
+    status: BlogStatus,
+    imageFile?: File
   ): Promise<BlogPost> {
-    const postData = {
+    const requestData = {
+      author: data.author,
       title: data.title,
+      category: data.category?.toLowerCase(),
       content: data.content,
       fullContent: data.fullContent,
-      author: data.author,
-      
-      category: data.category?.toLowerCase(),
-      thumbnailUrl: data.image, 
-      statusPost: status.toUpperCase(), 
+      statusPost: status.toUpperCase(),
     };
 
+    const formData = new FormData();
+    
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+    
+    const requestBlob = new Blob([JSON.stringify(requestData)], {
+      type: 'application/json'
+    });
+    formData.append("request", requestBlob);
+
     try {
-      const response = await fetchWithAuth(POSTS_API_URL, {
+      const { accessToken } = await import("@/utils/token").then(m => ({ accessToken: m.getTokens().accessToken }));
+      
+      const response = await fetch(POSTS_API_URL, {
         method: "POST",
-        body: JSON.stringify(postData),
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
       });
 
       if (!response.ok) {
@@ -153,10 +168,11 @@ export class BlogService {
         content: post.content,
         fullContent: post.fullContent,
         category: post.category,
-        image: post.image,
-        status: post.status,
+        image: post.thumbnailUrl || post.image || "", // Map thumbnailUrl to image
+        status: post.statusPost || post.status,
         createdAt: post.createdAt,
         updatedAt: post.updatedAt,
+        user: post.user,
       };
     } catch (error) {
       console.error("Error fetching post by ID:", error);
@@ -166,37 +182,56 @@ export class BlogService {
 
   static async update(
     postId: number,
-    data: Partial<BlogFormData>
+    data: Partial<BlogFormData>,
+    imageFile?: File
   ): Promise<BlogPost> {
-    const postData = {
+    const requestData = {
+      author: data.author,
       title: data.title,
+      category: data.category?.toLowerCase(),
       content: data.content,
       fullContent: data.fullContent,
-      author: data.author,
-      category: data.category?.toLowerCase(), 
-      thumbnailUrl: data.image,
-      statusPost: data.status?.toUpperCase(), 
+      statusPost: data.status?.toUpperCase(),
     };
 
+    const formData = new FormData();
+    
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+    
+    const requestBlob = new Blob([JSON.stringify(requestData)], {
+      type: 'application/json'
+    });
+    formData.append("request", requestBlob);
+
     try {
-      const response = await fetchWithAuth(
+      const { accessToken } = await import("@/utils/token").then(m => ({ accessToken: m.getTokens().accessToken }));
+      
+      const response = await fetch(
         `${USER_API_URL}/posts/my-posts/update-post/${postId}`,
         {
           method: "PUT",
-          body: JSON.stringify(postData),
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
         }
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         console.error("Failed to update post:", response.status, errorData);
-        throw new Error("Lỗi khi cập nhật bài viết.");
+        throw new Error(errorData.message || "Lỗi khi cập nhật bài viết.");
       }
 
       const result = await response.json();
       return result.data as BlogPost;
     } catch (error: unknown) {
       console.error("Failed to update post:", error);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error("Lỗi khi cập nhật bài viết.");
     }
   }
