@@ -4,19 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)">
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/utils/RefreshTokenClearAuto.java" afterDir="false" />
+    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="feat: enhance course and post creation/update endpoints to support file uploads">
+      <change afterPath="$PROJECT_DIR$/course-web-be/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/advisors/TokenPrintAdvisor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/EmbeddingConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/MultiAiClientConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/VectorStoreConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataLoaderImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataTransformerImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/endpoint/AIEndpoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/handler/ChatHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/output/QuizResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/config/AppStartupRunner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/ai/ChatMessageRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/ai/ChatMessageResponse.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application-dev.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/prompts/system-prompt-adv.st" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/prompts/system-prompt.st" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/zenuml/AuthServiceImpl_createUser.zenuml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/CourseWebBeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/CourseWebBeApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/RefreshTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/RefreshTokenRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/FileUploadAWSService.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/FileUploadAWSService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/CourseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/FileUploadAWSServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/FileUploadAWSServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-course-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/enums/SuccessCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/enums/SuccessCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/update_categories.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/update_thumbnail_url_column.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-course-project/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-course-project/src/app/courses/pro/CoursePaymentModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/src/app/courses/pro/CoursePaymentModal.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +55,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="ZenUML Diagram" />
+        <option value="Record" />
         <option value="Interface" />
         <option value="Class" />
       </list>
@@ -90,43 +114,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CourseWebBeApplication.executor": "Run",
-    "Maven.course-web-be [clean].executor": "Run",
-    "Maven.course-web-be [install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Spring Boot.CourseWebBeApplication.executor": "Run",
-    "code.cleanup.on.save": "true",
-    "git-widget-placeholder": "implement-be",
-    "ignore.virus.scanning.warn.message": "true",
-    "javascript.nodejs.core.library.configured.version": "24.11.1",
-    "javascript.nodejs.core.library.typings.version": "24.10.1",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/MyProjects/Course",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_interpreter_path": "C:/Users/loiko/AppData/Roaming/JetBrains/IntelliJIdea2025.1/node/versions/24.11.1/node",
-    "nodejs_package_manager_path": "npm",
-    "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.course-web-be.redis: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.course-web-be [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.course-web-be [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.course-web-be [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;Spring Boot.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#24 on implement-be&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;24.11.1&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.10.1&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/MyProjects/Course&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/loiko/AppData/Roaming/JetBrains/IntelliJIdea2025.1/node/versions/24.11.1/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.other&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "redis"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;redis&quot;
     ]
   }
-}]]></component>
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.project.courseweb.ai" />
       <recent name="com.project.courseweb.dtos.response" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -136,10 +169,11 @@
       <recent name="D:\MyProjects\Course" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.project.courseweb.dtos.ai" />
       <recent name="com.project.courseweb.dtos.response" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CourseWebBeApplication">
+  <component name="RunManager" selected="Spring Boot.CourseWebBeApplication">
     <configuration name="CourseWebBeApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.project.courseweb.CourseWebBeApplication" />
       <module name="course-web-be" />
@@ -160,8 +194,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="course-web-be.redis: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="redis" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="course-web-be/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.course-web-be.redis: Compose Deployment" />
         <item itemvalue="Application.CourseWebBeApplication" />
       </list>
     </recent_temporary>
@@ -169,8 +223,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
-        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.29188.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.29188.11" />
       </set>
     </attachedChunks>
   </component>
@@ -427,15 +481,37 @@
       <option name="project" value="LOCAL" />
       <updated>1765011250785</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="feat: add scheduled cleanup for expired refresh tokens and enhance file deletion handling in course and post services">
+      <option name="closed" value="true" />
+      <created>1765090639389</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1765090639389</updated>
+    </task>
+    <task id="LOCAL-00031" summary="feat: enhance course and post creation/update endpoints to support file uploads">
+      <option name="closed" value="true" />
+      <created>1765378121728</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1765378121728</updated>
+    </task>
+    <task id="LOCAL-00032" summary="feat: enhance course and post creation/update endpoints to support file uploads">
+      <option name="closed" value="true" />
+      <created>1765378265325</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1765378265325</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implement category management and post creation features with file upload support" />
-    <MESSAGE value="Refactor authentication and Google OAuth2 integration for improved user profile handling" />
     <MESSAGE value="Add admin authentication creation in AuthService and initialize in ApplicationInitConfig" />
     <MESSAGE value="Implement post management features including creation, retrieval, and updating with pagination support" />
     <MESSAGE value="Add new Postman requests for retrieving and updating posts with token authentication" />
@@ -459,7 +535,9 @@
     <MESSAGE value="feat: add account management features including delete account, forgot password, and reset password" />
     <MESSAGE value="feat: add account deletion and password reset functionalities with OTP verification" />
     <MESSAGE value="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)" />
+    <MESSAGE value="feat: add scheduled cleanup for expired refresh tokens and enhance file deletion handling in course and post services" />
+    <MESSAGE value="feat: enhance course and post creation/update endpoints to support file uploads" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: enhance course and post creation/update endpoints to support file uploads" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

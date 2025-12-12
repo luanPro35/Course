@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-251.26927.53">
+  <component name="dataSourceStorageLocal" created-in="IU-251.29188.11">
     <data-source name="@localhost" uuid="b13468ea-f534-4464-86fe-8ae7f0ff9444">
       <database-info product="MySQL" version="8.3.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.3.0" exact-driver-version="8.2">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
       </database-info>
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
@@ -20,7 +21,7 @@
       <load-sources>user_and_system_sources</load-sources>
     </data-source>
     <data-source name="@localhost [2]" uuid="afd73d8a-fa54-4bed-a3fd-bc1c8e5e63b1">
-      <database-info product="Redis Standalone" version="7.2.11" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.2.11" exact-driver-version="1.5" />
+      <database-info product="Redis Standalone" version="7.4.6" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.4.6" exact-driver-version="1.5" />
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
       <secret-storage>master_key</secret-storage>
       <auth-provider>no-auth</auth-provider>

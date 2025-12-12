@@ -43,7 +43,8 @@ public enum SuccessCode {
     DELETE_USER_SUCCESS(200, "Xóa người dùng thành công", HttpStatus.OK),
     DELETE_ACCOUNT_SUCCESS(200, "Xóa tài khoản thành công", HttpStatus.OK),
     FORGOT_PASSWORD_SUCCESS(200, "Gửi mã OTP thành công", HttpStatus.OK),
-    RESET_PASSWORD_SUCCESS(200, "Đặt lại mật khẩu thành công", HttpStatus.OK);
+    RESET_PASSWORD_SUCCESS(200, "Đặt lại mật khẩu thành công", HttpStatus.OK),
+    GENERATED_QUIZ_SUCCESS(200, "", HttpStatus.OK);
 
     final int status;
     final String message;

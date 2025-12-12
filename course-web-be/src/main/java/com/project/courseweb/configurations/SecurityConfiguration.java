@@ -43,7 +43,8 @@ public class SecurityConfiguration {
             "/posts/published",
             "/courses/**",
             "/payment/vnp-ipn",
-            "/payment/vnp-return"
+            "/payment/vnp-return",
+//            "/ai/**"
     };
     CustomJwtDecoder customJwtDecoder;
 
