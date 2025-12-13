@@ -3,6 +3,36 @@ server:
   servlet:
     context-path: /project
 spring:
+  autoconfigure:
+    exclude: org.springframework.ai.vectorstore.redis.autoconfigure.RedisVectorStoreAutoConfiguration
+  ai:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+    retry:
+      max-attempts: 3 # Chỉnh về 1 để test lỗi nhanh hơn
+      backoff:
+        initialInterval: 2s  # Thời gian chờ giữa các lần thử
+        max-interval: 5s
+    openai:
+      api-key: ${GEMINI_KEY}
+      chat:
+        base-url: https://generativelanguage.googleapis.com
+        completions-path: /v1beta/openai/chat/completions
+    #        options:
+    #          model: gemini-2.5-flash
+    ollama:
+      embedding:
+        enabled: true
+        options:
+          model: nomic-embed-text
+      base-url: http://localhost:11434
+      chat:
+  #        options:
+  #          model: qwen2.5:latest
+  #          temperature: 0.7
   profiles:
     active: dev
   application:
@@ -20,12 +50,17 @@ spring:
       hibernate:
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
+  ## limit file size
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   jackson:
     time-zone: Asia/Ho_Chi_Minh
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      #      host: ${REDIS_HOST}
+      #      port: ${REDIS_PORT}
       lecture:
         pool:
           max-active: 50
@@ -46,6 +81,14 @@ spring:
         spring.json.trusted.packages: "*"
   main:
     allow-bean-definition-overriding: true
+logging:
+  level:
+    org:
+      springframework:
+        ai:
+          chat:
+            client:
+              advisor: DEBUG
 jwt:
   secret-key: ${SECRET_KEY}
   access-token-expiration: ${ACCESS_TOKEN_EX}
