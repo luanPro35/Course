@@ -10,7 +10,13 @@ import org.springframework.context.annotation.Primary;
 public class EmbeddingConfig {
     @Bean
     @Primary
-    public EmbeddingModel embeddingModel(@Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel) {
+    public EmbeddingModel embeddingModelOllama(@Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel) {
         return embeddingModel;
     }
+
+//    @Bean
+//    @Primary
+//    public EmbeddingModel embeddingModelOpenAI(@Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
+//        return embeddingModel;
+//    }
 }

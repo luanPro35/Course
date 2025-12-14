@@ -21,13 +21,15 @@ spring:
       chat:
         base-url: https://generativelanguage.googleapis.com
         completions-path: /v1beta/openai/chat/completions
+    #      embedding:
+    #        base-url: https://api.openai.com
+    #        embeddings-path: /v1/embeddings
     #        options:
     #          model: gemini-2.5-flash
     ollama:
       embedding:
-        enabled: true
         options:
-          model: nomic-embed-text
+          model: embeddinggemma:latest
       base-url: http://localhost:11434
       chat:
   #        options:

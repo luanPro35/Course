@@ -7,6 +7,7 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
+import org.springframework.ai.chat.metadata.Usage;
 import reactor.core.publisher.Flux;
 
 @Slf4j
@@ -27,8 +28,17 @@ public class TokenPrintAdvisor implements CallAdvisor, StreamAdvisor {
 
     @Override
     public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain) {
-        Flux<ChatClientResponse> chatClientResponseFlux = streamAdvisorChain.nextStream(chatClientRequest);
-        return chatClientResponseFlux;
+        return streamAdvisorChain.nextStream(chatClientRequest)
+                .doOnNext(chatClientResponse -> {
+                    // Trong Stream, Usage thường chỉ xuất hiện ở chunk cuối cùng
+                    Usage usage = chatClientResponse.chatResponse().getMetadata().getUsage();
+                    if (usage != null && (usage.getTotalTokens() > 0 || usage.getPromptTokens() > 0)) {
+                        log.info("Stream Token Usage - Prompt: {}, Completion: {}, Total: {}",
+                                usage.getPromptTokens(),
+                                usage.getCompletionTokens(),
+                                usage.getTotalTokens());
+                    }
+                });
     }
 
     @Override
