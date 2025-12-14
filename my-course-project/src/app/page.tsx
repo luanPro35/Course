@@ -11,7 +11,7 @@ import CourseTrending from "./articles/[id]/Trending";
 import FeaturedVideos from "./video/[id]/FeaturedVideos";
 import { CoursePro as CourseProType } from "@/types/coursePro";
 import { getCourses as getProCourses } from "@/services/coursesPro.service";
-
+import Chatbot from "./(main)/chatbot/page";
 interface SectionHeaderProps {
   title: string;
   showNewBadge?: boolean;
@@ -132,6 +132,9 @@ export default function Home() {
             <FeaturedVideos />
           </ContentSection>
         </main>
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <Chatbot />
       </div>
 
       <Footer />
