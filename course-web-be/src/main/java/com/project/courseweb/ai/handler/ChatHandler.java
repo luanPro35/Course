@@ -47,9 +47,9 @@ public class ChatHandler {
     @Transactional
     public String consultCourse(String userQuery) {
 //        Query Rewriting: Viết lại câu hỏi dựa trên lịch sử để tìm kiếm chính xác hơn
-        String rewrittenQuery = rewriteQuery(userQuery);
-        log.info("Original Query: '{}' -> Rewritten Query: '{}'", userQuery, rewrittenQuery);
-//        String rewrittenQuery = userQuery;
+//        String rewrittenQuery = rewriteQuery(userQuery);
+//        log.info("Original Query: '{}' -> Rewritten Query: '{}'", userQuery, rewrittenQuery);
+        String rewrittenQuery = userQuery;
 
         //dùng 1 model khác để phân loại tin nhắn giữu tài liệu và tán ngẫu
         String intent = classifyIntent(rewrittenQuery); // Phân loại dựa trên câu đã viết lại
@@ -125,7 +125,7 @@ public class ChatHandler {
         SearchRequest request = SearchRequest.builder()
                 .query(searchQuery)
                 .topK(5)
-                .similarityThreshold(0.4)
+                .similarityThreshold(0.5)
                 .build();
 
         List<Document> similarDocs = vectorStore.similaritySearch(request);
