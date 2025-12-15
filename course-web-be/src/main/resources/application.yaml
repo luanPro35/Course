@@ -12,7 +12,7 @@ spring:
           jdbc:
             initialize-schema: always
     retry:
-      max-attempts: 3 # Chỉnh về 1 để test lỗi nhanh hơn
+      max-attempts: 1 # Chỉnh về 1 để test lỗi nhanh hơn
       backoff:
         initialInterval: 2s  # Thời gian chờ giữa các lần thử
         max-interval: 5s

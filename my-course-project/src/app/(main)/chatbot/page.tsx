@@ -10,17 +10,31 @@ interface Message {
   timestamp: Date;
 }
 
+const TypingIndicator = () => (
+  <div className="flex justify-start animate-slide-in-right">
+    <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-white text-gray-800 shadow-md border border-gray-100">
+      <div className="flex items-center space-x-1">
+        <span className="text-sm">Bot đang nhập</span>
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+      </div>
+    </div>
+  </div>
+);
+
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "👋 Xin chào! Tôi là trợ lý ảo. Tôi có thể giúp gì cho bạn?",
+      text: "👋 Xin chào! Tôi là Kobi, trợ lý ảo của Course Web. Tôi có thể giúp gì cho bạn?",
       sender: "bot",
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -29,33 +43,73 @@ const Chatbot = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
 
-    const newMessage: Message = {
-      id: messages.length + 1,
+    const userMessage: Message = {
+      id: Date.now(),
       text: inputValue,
       sender: "user",
       timestamp: new Date(),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue("");
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: messages.length + 2,
-        text: "Cảm ơn bạn đã liên hệ! Tôi đang xử lý yêu cầu của bạn...",
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        throw new Error("Bạn cần đăng nhập để sử dụng tính năng này.");
+      }
+
+      const params = new URLSearchParams();
+      params.append("content", currentInput);
+
+      // Gọi đến API Route của Next.js
+      const response = await fetch(`/api/ai?${params.toString()}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Rất tiếc, đã có lỗi xảy ra từ máy chủ."
+        );
+      }
+
+      const botResponseText = await response.text();
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        text: botResponseText,
         sender: "bot",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      const errorMessage: Message = {
+        id: Date.now() + 1,
+        text:
+          error instanceof Error
+            ? error.message
+            : "Không thể kết nối đến trợ lý ảo.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !isLoading) {
       handleSendMessage();
     }
   };
@@ -82,7 +136,7 @@ const Chatbot = () => {
                   <span className="text-2xl">🤖</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">Trợ lý ảo</h3>
+                  <h3 className="font-bold text-lg">Trợ lý ảo Kobi</h3>
                   <p className="text-xs text-sky-100">Luôn sẵn sàng hỗ trợ</p>
                 </div>
               </div>
@@ -123,7 +177,12 @@ const Chatbot = () => {
                         : "bg-white text-gray-800 shadow-md border border-gray-100"
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    <p
+                      className="text-sm leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: message.text.replace(/\n/g, "<br />"),
+                      }}
+                    ></p>
                     <p
                       className={`text-xs mt-1 ${
                         message.sender === "user"
@@ -139,6 +198,7 @@ const Chatbot = () => {
                   </div>
                 </div>
               ))}
+              {isLoading && <TypingIndicator />}
               <div ref={messagesEndRef} />
             </div>
           </div>
@@ -151,26 +211,31 @@ const Chatbot = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Nhập tin nhắn..."
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-200 text-sm"
+                disabled={isLoading}
+                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100"
               />
               <button
                 onClick={handleSendMessage}
-                disabled={inputValue.trim() === ""}
+                disabled={inputValue.trim() === "" || isLoading}
                 className="bg-gradient-to-r from-sky-400 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
