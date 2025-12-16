@@ -1,5 +1,9 @@
 package com.project.courseweb.ai.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.courseweb.entities.Course;
+import com.project.courseweb.repositories.CourseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -16,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,6 +29,8 @@ public class ChatHandler {
     private final ChatClient ollamaClient;
     private final ChatClient openAiClient;
     private final VectorStore vectorStore;
+    private final CourseRepository courseRepository;
+    private final ObjectMapper objectMapper;
 
     private final ChatMemory chatMemory;
 
@@ -37,11 +43,15 @@ public class ChatHandler {
     public ChatHandler(@Qualifier("ollamaChatClient") ChatClient ollamaClient,
                        @Qualifier("openAiChatClient") ChatClient openAiClient,
                        VectorStore vectorStore,
-                       ChatMemory chatMemory) {
+                       ChatMemory chatMemory,
+                       CourseRepository courseRepository,
+                       ObjectMapper objectMapper) {
         this.ollamaClient = ollamaClient;
         this.openAiClient = openAiClient;
         this.vectorStore = vectorStore;
         this.chatMemory = chatMemory;
+        this.courseRepository = courseRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Transactional
@@ -131,25 +141,76 @@ public class ChatHandler {
         List<Document> similarDocs = vectorStore.similaritySearch(request);
 
         // 2. Augmentation: Ghép thông tin tìm được vào ngữ cảnh (Context)
-        String context = similarDocs.stream()
+        Set<Long> courseIds = similarDocs.stream()
                 .map(doc -> {
-                    // Trình bày thông tin rõ ràng để AI hiểu đâu là nội dung, đâu là giá
-                    return String.format("""
-                            %s
-                            -> Học phí tham khảo: %s
-                            ----------------
-                            """, doc.getFormattedContent(), doc.getMetadata().get("price"));
+                    try {
+                        Object idObj = doc.getMetadata().get("id");
+                        if (idObj != null) {
+                            return Long.valueOf(idObj.toString());
+                        }
+                        return null;
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
                 })
-                .collect(Collectors.joining("\n\n"));
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
-//        log.info("Tìm thấy context: \n{}", context);
+        List<Course> courses = courseRepository.findAllById(courseIds);
 
-        // 3. Generation: Tạo Prompt và gửi cho AI
+        StringBuilder contextBuilder = new StringBuilder();
+        List<Map<String, Object>> courseDataForJson = new ArrayList<>();
+
+        for (Course course : courses) {
+            contextBuilder.append(String.format("""
+                    [ID: %d] Tên: %s
+                    Giá: %s
+                    Mô tả: %s
+                    Kết quả output: %s
+                    ----------------
+                    """, course.getId(), course.getTitle(), course.getPrice(), course.getDescription(), course.getLearningOutcomes()));
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", course.getId());
+            data.put("title", course.getTitle());
+            data.put("price", course.getPrice());
+            data.put("thumbnail", course.getThumbnailUrl());
+            data.put("slug", course.getId()); 
+            courseDataForJson.add(data);
+        }
+
+        String context = contextBuilder.toString();
+        String availableCoursesJson = "[]";
+        try {
+            availableCoursesJson = objectMapper.writeValueAsString(courseDataForJson);
+        } catch (JsonProcessingException e) {
+            log.error("Error serializing course data", e);
+        }
 
         try {
             log.info("Gemini running.............");
             String systemText = loadPrompt(ragPromptResource, "Bạn là chuyên gia tư vấn.");
-            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC HIỆN CÓ]\n" + context;
+            
+            String outputInstruction = String.format("""
+                    
+                    [DỮ LIỆU KHÓA HỌC CHI TIẾT (JSON - SYSTEM ONLY)]
+                    %s
+                    
+                    [YÊU CẦU ĐẶC BIỆT]
+                    Nếu bạn giới thiệu bất kỳ khóa học nào trong danh sách trên, hãy đưa thêm một khối JSON ở CUỐI CÙNG của câu trả lời theo định dạng sau:
+                    [COURSES]
+                    [
+                      { "id": 1, "title": "...", "price": 1000, "image": "thumbnail_url", "slug": "course_id" }
+                    ]
+                    [/COURSES]
+                    
+                    Hãy đảm bảo khối JSON này nằm ở cuối cùng và đúng định dạng. Chỉ lấy thông tin từ [DỮ LIỆU KHÓA HỌC CHI TIẾT].
+                    """, availableCoursesJson);
+
+            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC (TÓM TẮT)]\n" + context + outputInstruction;
+
+            // Log prompt để debug
+            // log.info("System Prompt: {}", finalSystemPrompt);
 
             return openAiClient.prompt()
                     .system(finalSystemPrompt)
@@ -161,7 +222,24 @@ public class ChatHandler {
         } catch (Exception exception) {
             log.info("Ollama running..........");
             String systemText = loadPrompt(ragPromptResource, "Bạn là chuyên gia tư vấn.");
-            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC HIỆN CÓ]\n" + context;
+
+            String outputInstruction = String.format("""
+                    
+                    [DỮ LIỆU KHÓA HỌC CHI TIẾT (JSON - SYSTEM ONLY)]
+                    %s
+                    
+                    [YÊU CẦU ĐẶC BIỆT]
+                    Nếu bạn giới thiệu bất kỳ khóa học nào trong danh sách trên, hãy đưa thêm một khối JSON ở CUỐI CÙNG của câu trả lời theo định dạng sau:
+                    [COURSES]
+                    [
+                      { "id": 1, "title": "...", "price": 1000, "image": "thumbnail_url", "slug": "course_id" }
+                    ]
+                    [/COURSES]
+                    
+                    Hãy đảm bảo khối JSON này nằm ở cuối cùng và đúng định dạng. Chỉ lấy thông tin từ [DỮ LIỆU KHÓA HỌC CHI TIẾT].
+                    """, availableCoursesJson);
+
+            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC (TÓM TẮT)]\n" + context + outputInstruction;
 
             return ollamaClient.prompt()
                     .system(finalSystemPrompt)

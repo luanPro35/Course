@@ -2,12 +2,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import Lottie from "lottie-react";
 import animationChat from "../../../../public/animations/chatbot.json";
+import ChatCourseCard from "@/components/ui/ChatCourseCard";
+
+interface Course {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  slug?: string;
+}
 
 interface Message {
   id: number;
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
+  courses?: Course[];
 }
 
 const TypingIndicator = () => (
@@ -43,7 +53,7 @@ const Chatbot = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isLoading]);
+  }, [messages, isLoading, isOpen]); 
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -59,7 +69,6 @@ const Chatbot = () => {
     const currentInput = inputValue;
     setInputValue("");
     setIsLoading(true);
-
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -68,8 +77,6 @@ const Chatbot = () => {
 
       const params = new URLSearchParams();
       params.append("content", currentInput);
-
-      // Gọi đến API Route của Next.js
       const response = await fetch(`/api/ai?${params.toString()}`, {
         method: "POST",
         headers: {
@@ -85,11 +92,27 @@ const Chatbot = () => {
       }
 
       const botResponseText = await response.text();
+      
+      let cleanText = botResponseText;
+      let courses: Course[] = [];
+      const courseBlockRegex = /\[COURSES\]([\s\S]*?)\[\/COURSES\]/;
+      const match = botResponseText.match(courseBlockRegex);
+
+      if (match && match[1]) {
+        try {
+          courses = JSON.parse(match[1]);
+          cleanText = botResponseText.replace(courseBlockRegex, "").trim();
+        } catch (e) {
+          console.error("Error parsing courses JSON", e);
+        }
+      }
+
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: botResponseText,
+        text: cleanText,
         sender: "bot",
         timestamp: new Date(),
+        courses: courses.length > 0 ? courses : undefined,
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -115,10 +138,10 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="relative w-24 h-24 cursor-pointer transform hover:scale-110 transition-all duration-300"
+        className="relative w-24 h-24 cursor-pointer transform hover:scale-110 transition-all duration-300 z-50"
       >
         <Lottie animationData={animationChat} loop={true} />
         <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">
@@ -127,12 +150,12 @@ const Chatbot = () => {
       </div>
 
       {isOpen && (
-        <div className="absolute bottom-20 right-0 w-96 h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-in border border-gray-100">
-          <div className="relative bg-gradient-to-r from-sky-400 to-blue-500 text-white px-6 py-4">
+        <div className="fixed bottom-24 right-5 md:absolute md:bottom-20 md:right-0 w-[90vw] md:w-96 h-[600px] md:h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-in border border-gray-100 z-50">
+          <div className="relative bg-gradient-to-r from-sky-400 to-blue-500 text-white px-6 py-4 flex-shrink-0">
             <div className="absolute inset-0 bg-black opacity-0 hover:opacity-5 transition-opacity duration-300" />
             <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
                   <span className="text-2xl">🤖</span>
                 </div>
                 <div>
@@ -164,38 +187,56 @@ const Chatbot = () => {
           <div className="flex-1 p-4 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
             <div className="space-y-4">
               {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${
-                    message.sender === "user" ? "justify-end" : "justify-start"
-                  } animate-slide-in-right`}
-                >
+                <div key={message.id} className="flex flex-col space-y-2">
                   <div
-                    className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                      message.sender === "user"
-                        ? "bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-md"
-                        : "bg-white text-gray-800 shadow-md border border-gray-100"
-                    }`}
+                    className={`flex ${
+                      message.sender === "user" ? "justify-end" : "justify-start"
+                    } animate-slide-in-right`}
                   >
-                    <p
-                      className="text-sm leading-relaxed"
-                      dangerouslySetInnerHTML={{
-                        __html: message.text.replace(/\n/g, "<br />"),
-                      }}
-                    ></p>
-                    <p
-                      className={`text-xs mt-1 ${
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                         message.sender === "user"
-                          ? "text-sky-100"
-                          : "text-gray-400"
+                          ? "bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-md"
+                          : "bg-white text-gray-800 shadow-md border border-gray-100"
                       }`}
                     >
-                      {message.timestamp.toLocaleTimeString("vi-VN", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
+                      <div
+                        className="text-sm leading-relaxed prose prose-sm max-w-none dark:prose-invert"
+                        dangerouslySetInnerHTML={{
+                          __html: message.text
+                            ? message.text.replace(/\n/g, "<br />")
+                            : "",
+                        }}
+                      ></div>
+                      <p
+                        className={`text-xs mt-1 ${
+                          message.sender === "user"
+                            ? "text-sky-100"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {message.timestamp.toLocaleTimeString("vi-VN", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
                   </div>
+              
+                  {message.courses && message.courses.length > 0 && (
+                     <div className="flex flex-col gap-3 pb-2 pt-1 px-1">
+                        {message.courses.map((course) => (
+                           <ChatCourseCard
+                             key={course.id}
+                             id={course.id}
+                             title={course.title}
+                             price={course.price}
+                             image={course.image}
+                             slug={course.slug}
+                           />
+                        ))}
+                     </div>
+                  )}
                 </div>
               ))}
               {isLoading && <TypingIndicator />}
@@ -203,7 +244,7 @@ const Chatbot = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-white border-t border-gray-100">
+          <div className="p-4 bg-white border-t border-gray-100 flex-shrink-0">
             <div className="flex gap-2">
               <input
                 type="text"
