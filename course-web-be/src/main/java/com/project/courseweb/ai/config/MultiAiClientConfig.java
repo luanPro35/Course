@@ -26,7 +26,7 @@ public class MultiAiClientConfig {
     ChatMemory chatMemory(JdbcChatMemoryRepository chatMemoryRepository) {
         return MessageWindowChatMemory.builder()
                 .chatMemoryRepository(chatMemoryRepository)
-                .maxMessages(20)
+                .maxMessages(200)
                 .build();
     }
 
@@ -42,9 +42,10 @@ public class MultiAiClientConfig {
                 )
 //                .defaultSystem(systemPrompt)
                 .defaultOptions(OpenAiChatOptions.builder()
-                        .temperature(0.8)
-                        .model("gemini-2.5-flash") // Sửa thành bản stable phổ biến
-                        .build()
+//                        .temperature(0.3)
+//                        .maxTokens(1000)
+//                                .model("gemini-2.5-flash")
+                                .build()
                 )
                 .build();
     }
@@ -62,9 +63,9 @@ public class MultiAiClientConfig {
                 )//RAG
 //                .defaultSystem(systemPrompt)
                 .defaultOptions(OllamaOptions.builder()
-                        .model("llama3.1:latest")
-                        .temperature(0.5)
-                        .build()
+//                                .model("llama3.1:latest")
+//                        .temperature(0.5)
+                                .build()
                 )
                 .build();
     }

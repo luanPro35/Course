@@ -8,12 +8,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuizResponse {
-    String question;
-    String a;
-    String b;
-    String c;
-    String d;
-    String correctAnswer;
-    String explanation;
+public class ChatHistoryResponse {
+    String role;
+    String content;
+//    String timestamp;
 }

@@ -1,5 +1,6 @@
 package com.project.courseweb.services.implement;
 
+import com.project.courseweb.ai.data.DataLoader;
 import com.project.courseweb.dtos.PageResponse;
 import com.project.courseweb.dtos.request.CourseCreateRequest;
 import com.project.courseweb.dtos.request.CourseIngredientUpdateRequest;
@@ -43,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
     ProfileServiceImpl profileService;
     FileUploadAWSServiceImpl fileUploadAWSService;
     com.project.courseweb.repositories.OrderRepository orderRepository;
+    DataLoader dataLoader;
 
 
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPLOAD_COURSE')")
@@ -81,6 +83,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         courseRepository.save(course);
+        this.dataLoader.reloadDataVector();
         return this.courseMapper.toResponse(course);
     }
 
@@ -151,6 +154,7 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
         }
+        this.dataLoader.reloadDataVector();
         return courseMapper.toResponse(courseRepository.save(course));
     }
 
@@ -165,6 +169,7 @@ public class CourseServiceImpl implements CourseService {
         var course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         course.setStatus(CourseStatus.valueOf(status.toUpperCase()));
+        this.dataLoader.reloadDataVector();
         return courseMapper.toResponse(courseRepository.save(course));
     }
 
@@ -212,6 +217,7 @@ public class CourseServiceImpl implements CourseService {
         if (course.getThumbnailUrl() != null && !course.getThumbnailUrl().isEmpty()) {
             fileUploadAWSService.deleteFile(course.getThumbnailUrl());
         }
+        this.dataLoader.reloadDataVector();
         courseRepository.delete(course);
     }
 

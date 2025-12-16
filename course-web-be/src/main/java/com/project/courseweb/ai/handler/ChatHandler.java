@@ -1,14 +1,12 @@
 package com.project.courseweb.ai.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.courseweb.entities.Course;
-import com.project.courseweb.repositories.CourseRepository;
+import com.project.courseweb.ai.output.ChatHistoryResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -20,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,8 +28,6 @@ public class ChatHandler {
     private final ChatClient ollamaClient;
     private final ChatClient openAiClient;
     private final VectorStore vectorStore;
-    private final CourseRepository courseRepository;
-    private final ObjectMapper objectMapper;
 
     private final ChatMemory chatMemory;
 
@@ -43,20 +40,16 @@ public class ChatHandler {
     public ChatHandler(@Qualifier("ollamaChatClient") ChatClient ollamaClient,
                        @Qualifier("openAiChatClient") ChatClient openAiClient,
                        VectorStore vectorStore,
-                       ChatMemory chatMemory,
-                       CourseRepository courseRepository,
-                       ObjectMapper objectMapper) {
+                       ChatMemory chatMemory) {
         this.ollamaClient = ollamaClient;
         this.openAiClient = openAiClient;
         this.vectorStore = vectorStore;
         this.chatMemory = chatMemory;
-        this.courseRepository = courseRepository;
-        this.objectMapper = objectMapper;
     }
 
     @Transactional
     public String consultCourse(String userQuery) {
-//        Query Rewriting: Viết lại câu hỏi dựa trên lịch sử để tìm kiếm chính xác hơn
+        //Query Rewriting: Viết lại câu hỏi dựa trên lịch sử để tìm kiếm chính xác hơn
 //        String rewrittenQuery = rewriteQuery(userQuery);
 //        log.info("Original Query: '{}' -> Rewritten Query: '{}'", userQuery, rewrittenQuery);
         String rewrittenQuery = userQuery;
@@ -71,28 +64,52 @@ public class ChatHandler {
             // load prompt tán gẫu
             String socialSystemPrompt = loadPrompt(socialPromptResource, "Bạn là Kobi, trợ lý ảo thân thiện.");
 
-            try {
-                log.info("Gemini running............");
-                return openAiClient.prompt()
-                        .user(userQuery)
-                        .advisors(this.chatMemoryAdvisor())
-                        .advisors(advisorSpec -> {
-                            advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
-                        })
-                        .system(socialSystemPrompt)
-                        .call()
-                        .content();
-            } catch (Exception exception) {
-                log.info("Ollama running.........");
-                return ollamaClient.prompt()
-                        .advisors(this.chatMemoryAdvisor())
-                        .user(userQuery)
-                        .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName())))
-                        .system(socialSystemPrompt)
-                        .call()
-                        .content();
-            }
+//            try {
+//                log.info("Gemini running............");
+//                return openAiClient.prompt()
+//                        .user(userQuery)
+//                        .advisors(this.chatMemoryAdvisor())
+//                        .advisors(advisorSpec -> {
+//                            advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
+//                        })
+//                        .options(ChatOptions.builder()
+//                                .temperature(0.5)
+//                                .maxTokens(800)
+//                                .model("gemini-2.5-flash")
+//                                .build())
+//                        .system(socialSystemPrompt)
+//                        .call()
+//                        .content();
+//            } catch (Exception exception) {
+//                log.info("Ollama running.........");
+//                return ollamaClient.prompt()
+//                        .advisors(this.chatMemoryAdvisor())
+//                        .user(userQuery)
+//                        .options(ChatOptions.builder()
+//                                .temperature(0.5)
+//                                .model("llama3.1:latest")
+//                                .maxTokens(800)
+//                                .build())
+//                        .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName())))
+//                        .system(socialSystemPrompt)
+//                        .call()
+//                        .content();
+//            }
+            log.info("Ollama running.........");
+            return ollamaClient.prompt()
+                    .advisors(this.chatMemoryAdvisor())
+                    .user(userQuery)
+                    .options(ChatOptions.builder()
+                            .temperature(0.8)
+                            .model("minimax-m2:cloud")
+                            .maxTokens(800)
+                            .build())
+                    .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName())))
+                    .system(socialSystemPrompt)
+                    .call()
+                    .content();
         }
+
         return handleCourseSearch(userQuery, rewrittenQuery);
     }
 
@@ -103,27 +120,23 @@ public class ChatHandler {
                 Bạn là một bộ định tuyến thông minh (Intent Router).
                 Nhiệm vụ: Phân loại câu người dùng thành 'SEARCH' hoặc 'CHAT'.
                 
-                1. SEARCH (Tìm kiếm/Tư vấn):
-                   - Hỏi về khóa học, giá cả, nội dung, công nghệ (Java, React...).
-                   - Hỏi kiến thức lập trình, lộ trình học, tư vấn nghề nghiệp.
-                   - Ví dụ: "Khóa Java giá bao nhiêu?", "Học React cần gì?", "Chào bạn, tư vấn giúp mình".
-                
-                2. CHAT (Xã giao):
-                   - Chào hỏi đơn thuần, cảm ơn, khen ngợi.
-                   - Không chứa yêu cầu thông tin cụ thể.
-                   - Ví dụ: "Xin chào", "Cảm ơn nhé", "Bạn tên gì?".
-                
-                QUY TẮC ƯU TIÊN: Nếu câu chứa cả chào hỏi VÀ câu hỏi nghiệp vụ (VD: "Hi, giá khóa học?"), PHẢI chọn 'SEARCH'.
+                QUY TẮC ƯU TIÊN: Nếu câu chứa cả chào hỏi VÀ câu hỏi nghiệp vụ, PHẢI chọn 'SEARCH'.
                 
                 Output: Chỉ trả về đúng 1 từ: SEARCH hoặc CHAT.
                 Câu: "%s"
                 """.formatted(query);
+
         try {
-            return ollamaClient.prompt()
-                    .user(prompt)
-                    .call()
-                    .content()
-                    .trim().toUpperCase().contains("SEARCH") ? "SEARCH" : "CHAT";
+            String out = ollamaClient.prompt().user(prompt)
+                    .options(ChatOptions.builder()
+                            .model("mistral:latest")
+                            .temperature(0.3).build())
+                    .call().content();
+            String normalized = out == null ? "" : out.trim().toUpperCase(Locale.ROOT);
+            if ("SEARCH".equals(normalized)) return "SEARCH";
+            if ("CHAT".equals(normalized)) return "CHAT";
+            // nếu model trả dài dòng, fallback bằng contains nhưng vẫn ưu tiên an toàn
+            return normalized.contains("SEARCH") ? "SEARCH" : "CHAT";
         } catch (Exception e) {
             log.error("Intent classification failed, fallback to SEARCH", e);
             return "SEARCH";
@@ -134,87 +147,54 @@ public class ChatHandler {
         // 1. Retrieval: Dùng câu hỏi ĐÃ VIẾT LẠI (searchQuery) để tìm trong Redis cho chính xác
         SearchRequest request = SearchRequest.builder()
                 .query(searchQuery)
-                .topK(5)
-                .similarityThreshold(0.5)
+                .topK(10)
+                .similarityThreshold(0.35)
                 .build();
 
         List<Document> similarDocs = vectorStore.similaritySearch(request);
 
+        //neu 0 data response format
+        if (similarDocs.isEmpty()) {
+            return """
+                    Hiện mình chưa tìm thấy khóa học phù hợp trong danh sách hiện có với câu hỏi của bạn.
+                    
+                                        Bạn thử giúp mình:
+                                        - Nêu rõ công nghệ (ví dụ: Java/Spring, React, DevOps…)
+                                        - Hoặc mục tiêu (học để đi làm / chuyển ngành / nâng cấp kỹ năng)
+                    
+                                        Bạn đang quan tâm mảng nào nhất?
+                    
+                    """;
+        }
+
         // 2. Augmentation: Ghép thông tin tìm được vào ngữ cảnh (Context)
-        Set<Long> courseIds = similarDocs.stream()
+        String context = similarDocs.stream()
                 .map(doc -> {
-                    try {
-                        Object idObj = doc.getMetadata().get("id");
-                        if (idObj != null) {
-                            return Long.valueOf(idObj.toString());
-                        }
-                        return null;
-                    } catch (NumberFormatException e) {
-                        return null;
-                    }
+                    // Trình bày thông tin rõ ràng để AI hiểu đâu là nội dung, đâu là giá
+                    return String.format("""
+                            %s
+                            -> Học phí tham khảo: %s
+                            ----------------
+                            """, doc.getFormattedContent(), doc.getMetadata().get("price"));
                 })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .collect(Collectors.joining("\n\n"));
 
-        List<Course> courses = courseRepository.findAllById(courseIds);
+        log.info("Tìm thấy context: \n{}", context);
 
-        StringBuilder contextBuilder = new StringBuilder();
-        List<Map<String, Object>> courseDataForJson = new ArrayList<>();
-
-        for (Course course : courses) {
-            contextBuilder.append(String.format("""
-                    [ID: %d] Tên: %s
-                    Giá: %s
-                    Mô tả: %s
-                    Kết quả output: %s
-                    ----------------
-                    """, course.getId(), course.getTitle(), course.getPrice(), course.getDescription(), course.getLearningOutcomes()));
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("id", course.getId());
-            data.put("title", course.getTitle());
-            data.put("price", course.getPrice());
-            data.put("thumbnail", course.getThumbnailUrl());
-            data.put("slug", course.getId()); 
-            courseDataForJson.add(data);
-        }
-
-        String context = contextBuilder.toString();
-        String availableCoursesJson = "[]";
-        try {
-            availableCoursesJson = objectMapper.writeValueAsString(courseDataForJson);
-        } catch (JsonProcessingException e) {
-            log.error("Error serializing course data", e);
-        }
+        // 3. Generation: Tạo Prompt và gửi cho AI
 
         try {
             log.info("Gemini running.............");
             String systemText = loadPrompt(ragPromptResource, "Bạn là chuyên gia tư vấn.");
-            
-            String outputInstruction = String.format("""
-                    
-                    [DỮ LIỆU KHÓA HỌC CHI TIẾT (JSON - SYSTEM ONLY)]
-                    %s
-                    
-                    [YÊU CẦU ĐẶC BIỆT]
-                    Nếu bạn giới thiệu bất kỳ khóa học nào trong danh sách trên, hãy đưa thêm một khối JSON ở CUỐI CÙNG của câu trả lời theo định dạng sau:
-                    [COURSES]
-                    [
-                      { "id": 1, "title": "...", "price": 1000, "image": "thumbnail_url", "slug": "course_id" }
-                    ]
-                    [/COURSES]
-                    
-                    Hãy đảm bảo khối JSON này nằm ở cuối cùng và đúng định dạng. Chỉ lấy thông tin từ [DỮ LIỆU KHÓA HỌC CHI TIẾT].
-                    """, availableCoursesJson);
-
-            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC (TÓM TẮT)]\n" + context + outputInstruction;
-
-            // Log prompt để debug
-            // log.info("System Prompt: {}", finalSystemPrompt);
+            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC HIỆN CÓ]\n" + context;
 
             return openAiClient.prompt()
                     .system(finalSystemPrompt)
                     .user(userQuery)
+                    .options(ChatOptions.builder().temperature(0.4)
+                            .model("gemini-2.5-flash")
+                            .maxTokens(2000)
+                            .build())
                     .advisors(this.chatMemoryAdvisor())
                     .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName())))
                     .call()
@@ -222,27 +202,14 @@ public class ChatHandler {
         } catch (Exception exception) {
             log.info("Ollama running..........");
             String systemText = loadPrompt(ragPromptResource, "Bạn là chuyên gia tư vấn.");
-
-            String outputInstruction = String.format("""
-                    
-                    [DỮ LIỆU KHÓA HỌC CHI TIẾT (JSON - SYSTEM ONLY)]
-                    %s
-                    
-                    [YÊU CẦU ĐẶC BIỆT]
-                    Nếu bạn giới thiệu bất kỳ khóa học nào trong danh sách trên, hãy đưa thêm một khối JSON ở CUỐI CÙNG của câu trả lời theo định dạng sau:
-                    [COURSES]
-                    [
-                      { "id": 1, "title": "...", "price": 1000, "image": "thumbnail_url", "slug": "course_id" }
-                    ]
-                    [/COURSES]
-                    
-                    Hãy đảm bảo khối JSON này nằm ở cuối cùng và đúng định dạng. Chỉ lấy thông tin từ [DỮ LIỆU KHÓA HỌC CHI TIẾT].
-                    """, availableCoursesJson);
-
-            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC (TÓM TẮT)]\n" + context + outputInstruction;
+            String finalSystemPrompt = systemText + "\n\n[DANH SÁCH KHÓA HỌC HIỆN CÓ]\n" + context;
 
             return ollamaClient.prompt()
                     .system(finalSystemPrompt)
+                    .options(ChatOptions.builder().temperature(0.4)
+                            .model("llama3.1:latest")
+//                            .model("qwen2.5:32b")
+                            .maxTokens(2000).build())
                     .advisors(this.chatMemoryAdvisor())
                     .advisors(advisorSpec -> {
                         advisorSpec.param(ChatMemory.CONVERSATION_ID, String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -275,7 +242,11 @@ public class ChatHandler {
                 return originalQuery;
             }
 
-            String historyText = history.stream()
+            // Lấy tối đa 10 tin nhắn gần nhất để làm ngữ cảnh rewrite, tránh quá dài
+            int start = Math.max(0, history.size() - 10);
+            List<Message> recentHistory = history.subList(start, history.size());
+
+            String historyText = recentHistory.stream()
                     .map(msg -> String.format("%s: %s", msg.getMessageType().name(), msg.getText()))
                     .collect(Collectors.joining("\n"));
 
@@ -299,5 +270,26 @@ public class ChatHandler {
         } catch (Exception e) {
             return originalQuery; // Fallback nếu lỗi thì dùng câu gốc
         }
+    }
+
+    public List<ChatHistoryResponse> getHistory() {
+        List<Message> allMessages = chatMemory.get(getId());
+        log.info(String.valueOf(allMessages.size()));
+        return allMessages.stream().map(
+                message -> {
+                    return ChatHistoryResponse.builder()
+                            .role(message.getMessageType().name())
+                            .content(message.getText())
+                            .build();
+                }
+        ).collect(Collectors.toList());
+    }
+
+    public void clearHistory() {
+        chatMemory.clear(getId());
+    }
+
+    private String getId() {
+        return String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

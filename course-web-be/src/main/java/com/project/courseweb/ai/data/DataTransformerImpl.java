@@ -14,9 +14,16 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DataTransformerImpl implements DataTransformer {
 
-    // Khởi tạo Splitter một lần duy nhất (Singleton)
-    // Giảm minChunkSizeChars xuống 100 để đảm bảo các đoạn mô tả ngắn vẫn được giữ nguyên vẹn
-    TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(300, 100, 10, 5000, true);
+    // Chunk lớn hơn + overlap nhiều hơn để giữ ngữ cảnh cho tiếng Việt & RAG
+    // (giảm số lượng chunk, tăng chất lượng embedding)
+    TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(
+            500,  // defaultChunkSize
+            200,  // minChunkSizeChars
+            60,   // minChunkOverlap
+            5000, // maxCharsPerDocument
+            true  // keepSeparator
+    );
+
 
     @Override
     public List<Document> transformer(List<Document> documents) {
