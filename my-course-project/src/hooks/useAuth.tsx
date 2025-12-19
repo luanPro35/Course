@@ -39,11 +39,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     accessToken: string,
     refreshToken: string
   ) => {
+    console.log("Login function called with user:", userData);
+    setTokens(accessToken, refreshToken);
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setToken(accessToken); 
-    localStorage.setItem("user", JSON.stringify(userData));
     
-    setTokens(accessToken, refreshToken);
+    console.log("User state updated in AuthContext");
   };
 
   
@@ -64,19 +66,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   
   useEffect(() => {
+    console.log("AuthProvider: Loading user from localStorage...");
     const savedUser = localStorage.getItem("user");
     
     const { accessToken: savedToken } = getTokens();
 
     if (savedUser && savedToken) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        console.log("AuthProvider: User loaded from localStorage:", parsedUser);
+        setUser(parsedUser);
         setToken(savedToken);
       } catch (error) {
         console.error("Failed to parse user data from localStorage", error);
         
         logout();
       }
+    } else {
+      console.log("AuthProvider: No saved user or token found");
     }
 
     setLoading(false);

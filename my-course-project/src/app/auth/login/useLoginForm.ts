@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/app/auth/login/types";
@@ -35,7 +33,6 @@ export const useLoginForm = (onClose: () => void) => {
     setIsError(false);
     setIsSuccess(false);
 
-    
     const validation = validateLoginForm(formData);
     if (!validation.isValid) {
       setErrorMessage(validation.message!);
@@ -49,43 +46,33 @@ export const useLoginForm = (onClose: () => void) => {
       const data = await AuthService.login(formData);
       await login(data.user, data.accessToken, data.refreshToken);
 
-
-
       setIsSuccess(true);
       setIsError(false);
 
       setTimeout(() => {
-        const savedUser = localStorage.getItem("user");
-        const savedToken = localStorage.getItem("accessToken");
-        
+        onClose();
 
-        
-        onClose();
-        onClose();
-        const isAdmin = 
+        const isAdmin =
           data.user?.email === "admin@gmail.com" ||
-          data.user?.role === "ADMIN" || 
+          data.user?.role === "ADMIN" ||
           data.user?.role === "admin" ||
-          (Array.isArray(data.user?.roles) && 
-           data.user.roles.some((r: any) => 
-             r && (
-               r === "ADMIN" || 
-               r === "admin" || 
-               r?.name === "ADMIN" || 
-               r?.name === "admin"
-             )
-           ));
-
-
+          (Array.isArray(data.user?.roles) &&
+            data.user.roles.some(
+              (r: string | { name: string; description?: string }) =>
+                r &&
+                (r === "ADMIN" ||
+                  r === "admin" ||
+                  (typeof r === "object" &&
+                    (r.name === "ADMIN" || r.name === "admin")))
+            ));
 
         if (isAdmin) {
-
           router.push("/admin");
         } else {
-
           router.push("/");
         }
-        router.refresh();
+
+        setTimeout(() => router.refresh(), 100);
       }, 1500);
     } catch (error) {
       const message =

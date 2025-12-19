@@ -24,13 +24,13 @@ export default function CoursePro({ course }: CourseProProps) {
       key={course.id}
       className="w-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative">
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 relative overflow-hidden">
         <Image
           src={imgSrc}
           alt={course.title}
           width={320}
           height={180}
-          className="w-full h-40 object-cover"
+          className="w-full h-40 object-cover transition-transform duration-300 hover:scale-110"
           onError={() => {
             setImgSrc("/images/PostF8.png");
           }}

@@ -59,7 +59,7 @@ const OAuth2CallbackPage = () => {
 
         setTimeout(() => {
           router.push("/");
-          router.refresh();
+          setTimeout(() => router.refresh(), 100);
         }, 1500);
       } catch (err: unknown) {
         console.error("Google login error details:", err);

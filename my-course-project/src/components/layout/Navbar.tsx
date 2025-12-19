@@ -91,7 +91,11 @@ export default function Navbar({
       fetchCourses();
     }
   }, [user?.id, showMyCoursesDropdown]);
-
+  useEffect(() => {
+    if (user) {
+      console.log("User loaded in Navbar:", user.fullName);
+    }
+  }, [user]);
   const handleRegisterClick =
     propOnRegisterClick ||
     (() => {
