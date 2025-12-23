@@ -174,6 +174,38 @@ const Chatbot = () => {
         }
     };
 
+    const handleClearChat = async () => {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa toàn bộ nội dung chat? Hành động này không thể hoàn tác.")) {
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                throw new Error("Bạn cần đăng nhập để thực hiện thao tác này.");
+            }
+
+            const response = await fetch(`${API_BASE_URL}/ai/history`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Xóa lịch sử thất bại.");
+            }
+
+            setMessages([]);
+        } catch (error) {
+            console.error("Failed to clear chat history:", error);
+            alert("Có lỗi xảy ra khi xóa lịch sử chat.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="relative z-50">
             <div
@@ -205,10 +237,30 @@ const Chatbot = () => {
                                     <p className="text-xs text-sky-100">Luôn sẵn sàng hỗ trợ</p>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => setIsOpen(false)}
-                                className="w-8 h-8 rounded-full hover:bg-white/20 transition-colors duration-200 flex items-center justify-center"
-                            >
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleClearChat}
+                                    className="w-8 h-8 rounded-full hover:bg-white/20 transition-colors duration-200 flex items-center justify-center"
+                                    title="Xóa lịch sử chat"
+                                >
+                                    <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
+                                </button>
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="w-8 h-8 rounded-full hover:bg-white/20 transition-colors duration-200 flex items-center justify-center"
+                                >
                                 <svg
                                     className="w-5 h-5"
                                     fill="none"
@@ -223,6 +275,7 @@ const Chatbot = () => {
                                     />
                                 </svg>
                             </button>
+                        </div>
                         </div>
                     </div>
 
