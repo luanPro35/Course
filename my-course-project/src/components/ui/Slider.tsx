@@ -24,10 +24,10 @@ const CourseLandingSlider: React.FC = () => {
 
   const courses: CourseSection[] = [
     {
-      id: "f8-youtube",
-      title: "F8 trên Youtube",
+      id: "LearnX youtube",
+      title: "LearnX on Youtube",
       description:
-        "F8 được nhắc tới ở mọi nơi, ở đâu có có hỏi việc làm cho nghề IT và có những con người yêu thích lập trình F8 sẽ ở đó.",
+        "LearnX được nhắc tới ở mọi nơi, ở đâu có có hỏi việc làm cho nghề IT và có những con người yêu thích lập trình LearnX sẽ ở đó.",
       buttonText: "ĐĂNG KÝ KÊNH",
       image: "Page.png",
       backgroundColors: "from-pink-500 to-orange-500",

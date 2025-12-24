@@ -72,7 +72,7 @@ export default function Path() {
           {}
           <div className="pr-0 md:pr-8 w-full md:w-[500px]">
             <h3 className="text-2xl font-bold mb-5">
-              Tham gia cộng đồng học viên F8 trên Facebook
+              Tham gia cộng đồng học viên LearnX trên Facebook
             </h3>
             <p className="text-gray-600 text-lg  mb-5 leading-relaxed">
               Hàng nghìn người khác đang học lộ trình giống như bạn. Hãy tham

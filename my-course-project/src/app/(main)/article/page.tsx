@@ -87,15 +87,6 @@ export default function RoutePage() {
 
         {}
         <div className="hidden lg:flex flex-col gap-6 justify-center items-center mt-8">
-          <Link href="/images/PostF8.png">
-            <Image
-              src="/images/PostF8.png"
-              alt="PostF8"
-              width={300}
-              height={300}
-              className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-            />
-          </Link>
           <Link href="/images/PostHTML.png">
             <Image
               src="/images/PostHTML.png"
