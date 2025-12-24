@@ -30,7 +30,7 @@ export async function GET(req: Request) {
         ...p,
         id: `post-${p.id}`,
         type: "Bài viết",
-        url: `/posts/${p.id}`,
+        url: `/blog/${p.id}`,
       }));
 
     const filteredProCourses = (proCourses || [])
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
         ...c,
         id: `pro-${c.id}`,
         type: "Khóa học Pro",
-        url: `/coursesPro/${c.id}`,
+        url: `/courses/pro/${c.id}`,
       }));
 
     const filteredTrendingCourses = (trendingCourses || [])
@@ -52,7 +52,7 @@ export async function GET(req: Request) {
         ...t,
         id: `trending-${t.id}`,
         type: "Xu hướng",
-        url: `/Trending/${t.id}`,
+        url: `/blog/${t.id}`,
       }));
 
     const filteredFreeCourses = (freeCourses || [])
@@ -63,7 +63,7 @@ export async function GET(req: Request) {
         ...f,
         id: `free-${f.id}`,
         type: "Khóa học miễn phí",
-        url: `/coursesFree/${f.id}`,
+        url: `/courses/free/${f.id}`,
       }));
 
     const filteredTopVideos = (topVideos || [])
@@ -74,7 +74,7 @@ export async function GET(req: Request) {
         ...v,
         id: `video-${v.id}`,
         type: "Video nổi bật",
-        url: `/topVideos/${v.id}`,
+        url: `/video/${v.id}`,
       }));
 
     const results = [
