@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     .map((c) => ({
       ...c,
       id: `pro-${c.id}`,
-      type: "Khóa học miễn phí",
+      type: "Khóa học Pro",
       url: `/coursesPro/${c.id}`,
     }));
 
@@ -66,7 +66,7 @@ export async function GET(req: Request) {
     .map((f) => ({
       ...f,
       id: `free-${f.id}`,
-      type: "Khóa học Pro",
+      type: "Khóa học miễn phí",
       url: `/coursesFree/${f.id}`,
     }));
 
