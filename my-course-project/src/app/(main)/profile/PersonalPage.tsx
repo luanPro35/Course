@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import { User } from "@/types/user";
@@ -12,11 +12,35 @@ import {
   FaFacebook,
   FaYoutube,
 } from "react-icons/fa";
+import { getProfile } from "@/services/profileService.service";
 
 export default function PersonalPage() {
-  const { user } = useAuth();
+  const { user, setUser, token } = useAuth();
+  const [loading, setLoading] = useState(true);
 
-  if (!user) {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user?.id && token) {
+        try {
+          const profileData = await getProfile(Number(user.id));
+          setUser({
+            ...profileData,
+            email: user.email,
+          });
+        } catch (error) {
+          console.error("Failed to fetch profile:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user?.id, token, setUser]);
+
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loading></Loading>
