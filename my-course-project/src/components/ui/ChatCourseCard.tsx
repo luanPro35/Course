@@ -47,12 +47,12 @@ const ChatCourseCard: React.FC<CourseCardProps> = ({
         </h4>
         
         <div className="flex items-center justify-between mt-2">
-             <div className="text-sky-600 text-sm font-bold">
+             <div className="text-gray-900 text-sm font-bold">
               {price === 0 ? "Miễn phí" : formatPrice(price)}
             </div>
             <Link
               href={`/courses/pro/${id}`}
-              className="text-xs bg-sky-50 text-sky-600 hover:bg-sky-100 px-3 py-1.5 rounded-full font-medium transition-colors"
+              className="text-xs bg-gray-100 text-gray-900 hover:bg-gray-200 px-3 py-1.5 rounded-full font-medium transition-colors"
             >
               Xem ngay
             </Link>

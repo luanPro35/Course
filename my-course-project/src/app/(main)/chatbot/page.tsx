@@ -33,12 +33,8 @@ const TypingIndicator = () => (
     </div>
 );
 
-// Cấu hình đường dẫn Backend (Lưu ý: Đảm bảo Backend đã bật CORS cho cổng 3000)
 const API_BASE_URL = "http://localhost:8080/project";
 
-/**
- * Helper function để trích xuất thông tin khóa học từ text của bot
- */
 const parseBotResponse = (text: string): { cleanText: string; courses: Course[] } => {
     const courseBlockRegex = /\[COURSES\]([\s\S]*?)\[\/COURSES\]/;
     const match = text.match(courseBlockRegex);
@@ -55,7 +51,7 @@ const parseBotResponse = (text: string): { cleanText: string; courses: Course[] 
 };
 
 const Chatbot = () => {
-    const [isOpen, setIsOpen] = useState(true); // Mở sẵn để test
+    const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -70,22 +66,17 @@ const Chatbot = () => {
         scrollToBottom();
     }, [messages, isLoading, isOpen]);
 
-    // Hàm lấy lịch sử chat từ backend
     const fetchHistory = async () => {
         setIsLoading(true);
         try {
             const token = localStorage.getItem("accessToken");
             if (!token) return;
 
-            // Lấy trang đầu tiên, 20 tin nhắn
             const response = await fetch(`${API_BASE_URL}/ai/history`, {
                 headers: {Authorization: `Bearer ${token}`},
             });
             const data = await response.json();
 
-            // API thường trả về tin nhắn MỚI NHẤT ở đầu (index 0).
-            // Ta cần đảo ngược lại (.reverse()) để hiển thị theo thứ tự thời gian: CŨ -> MỚI (từ trên xuống dưới)
-            // Thêm ID và timestamp cho tin nhắn lịch sử
             const historyMessages = data.map((msg: any, index: number) => ({
                 ...msg,
                 id: `hist-${Date.now()}-${index}`,
@@ -100,7 +91,6 @@ const Chatbot = () => {
     };
 
     useEffect(() => {
-        // Chỉ gọi fetchHistory một lần duy nhất khi component được mount
         fetchHistory();
     }, []);
 
@@ -108,7 +98,7 @@ const Chatbot = () => {
         if (inputValue.trim() === "") return;
 
         const userMessage: Message = {
-            id: `user-${Date.now()}`, // Tạo ID cho tin nhắn người dùng
+            id: `user-${Date.now()}`, 
             content: inputValue,
             role: "USER",
             timestamp: new Date(),
@@ -145,7 +135,7 @@ const Chatbot = () => {
             const { cleanText, courses } = parseBotResponse(botResponseText);
 
             const botMessage: Message = {
-                id: `bot-${Date.now()}`, // Tạo ID cho tin nhắn bot
+                id: `bot-${Date.now()}`, 
                 content: cleanText,
                 role: "ASSISTANT",
                 timestamp: new Date(),
@@ -154,7 +144,7 @@ const Chatbot = () => {
             setMessages((prev) => [...prev, botMessage]);
         } catch (error) {
             const errorMessage: Message = {
-                id: `error-${Date.now()}`, // Tạo ID cho tin nhắn lỗi
+                id: `error-${Date.now()}`, 
                 content:
                     error instanceof Error
                         ? error.message
@@ -223,18 +213,18 @@ const Chatbot = () => {
                 <div
                     className="fixed bottom-24 right-5 md:absolute md:bottom-20 md:right-0 w-[90vw] md:w-96 h-[600px] md:h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-in border border-gray-100 z-50">
                     <div
-                        className="relative bg-gradient-to-r from-sky-400 to-blue-500 text-white px-6 py-4 flex-shrink-0">
+                        className="relative bg-gray-900 text-white px-6 py-4 flex-shrink-0">
                         <div
-                            className="absolute inset-0 bg-black opacity-0 hover:opacity-5 transition-opacity duration-300"/>
+                            className="absolute inset-0 bg-white opacity-0 hover:opacity-5 transition-opacity duration-300"/>
                         <div className="relative flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div
                                     className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                    <span className="text-2xl">🤖</span>
+                                    <span className="text-xl">🤖</span>
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-lg">Trợ lý ảo Kobi</h3>
-                                    <p className="text-xs text-sky-100">Luôn sẵn sàng hỗ trợ</p>
+                                    <p className="text-xs text-gray-400">Luôn sẵn sàng hỗ trợ</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -294,8 +284,8 @@ const Chatbot = () => {
                                         <div
                                             className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                                                 message.role === "USER"
-                                                    ? "bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-md"
-                                                    : "bg-white text-gray-800 shadow-md border border-gray-100"
+                                                    ? "bg-gray-100 text-gray-800 border border-gray-200"
+                                                    : "bg-white text-gray-800 shadow-sm border border-gray-100"
                                             }`}
                                         >
                                             <div
@@ -307,7 +297,7 @@ const Chatbot = () => {
                                                 }}
                                             ></div>
                                             <p
-                                                className={`text-xs mt-1 ${message.role === "USER" ? "text-sky-100" : "text-gray-400"
+                                                className={`text-xs mt-1 ${message.role === "USER" ? "text-gray-400" : "text-gray-400"
                                                 }`}
                                             >
                                                 {message.timestamp
@@ -353,12 +343,12 @@ const Chatbot = () => {
                                 onKeyPress={handleKeyPress}
                                 placeholder="Nhập tin nhắn..."
                                 disabled={isLoading}
-                                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100"
+                                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 text-sm disabled:bg-gray-100"
                             />
                             <button
                                 onClick={handleSendMessage}
                                 disabled={inputValue.trim() === "" || isLoading}
-                                className="bg-gradient-to-r from-sky-400 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                className="bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-black transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                             >
                                 {isLoading ? (
                                     <div
