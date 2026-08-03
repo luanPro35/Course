@@ -28,8 +28,8 @@ public class ProfileController {
         return ApiResponse.ok(this.profileService.uploadAvatar(file), SuccessCode.UPDATE_AVATAR_SUCCESS);
     }
 
-    @GetMapping()
-    ApiResponse<ProfileUpdateResponse> getProfile(@RequestParam("userId") Long userId) {
-        return ApiResponse.ok(this.profileService.getProfile(userId), SuccessCode.GET_PROFILE_SUCCESS);
+    @GetMapping
+    ApiResponse<ProfileUpdateResponse> getProfile() {
+        return ApiResponse.ok(this.profileService.getProfile(), SuccessCode.GET_PROFILE_SUCCESS);
     }
 }

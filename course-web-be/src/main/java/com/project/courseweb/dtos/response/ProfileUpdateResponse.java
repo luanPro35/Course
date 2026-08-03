@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProfileUpdateResponse {
-    String id;
+    Long id;
     //profile basic
     String fullName;
     String about;

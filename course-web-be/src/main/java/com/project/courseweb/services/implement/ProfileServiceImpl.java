@@ -42,8 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public ProfileUpdateResponse getProfile(Long userId) {
-        Optional<Profile> optionalProfile = this.profileRepository.findById(userId);
+    public ProfileUpdateResponse getProfile() {
+        Optional<Profile> optionalProfile = this.profileRepository.findById(this.getId());
         if (optionalProfile.isEmpty()) {
             return new ProfileUpdateResponse();
         }

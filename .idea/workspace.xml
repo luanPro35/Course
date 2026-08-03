@@ -4,41 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="feat: enhance course and post creation/update endpoints to support file uploads">
-      <change afterPath="$PROJECT_DIR$/course-web-be/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/advisors/TokenPrintAdvisor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/EmbeddingConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/MultiAiClientConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/config/VectorStoreConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataLoaderImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataTransformer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/data/DataTransformerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/endpoint/AIEndpoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/handler/ChatHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/output/QuizResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/config/AppStartupRunner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/ai/ChatMessageRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/ai/ChatMessageResponse.java" afterDir="false" />
+    <list default="true" id="2ac560ee-9b40-4c07-8edd-e4c07c0eed06" name="Changes" comment="feat: update README with project overview, technology analysis, and architecture details">
       <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application-dev.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/prompts/system-prompt-adv.st" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/prompts/system-prompt.st" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zenuml/AuthServiceImpl_createUser.zenuml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b13468ea-f534-4464-86fe-8ae7f0ff9444.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course-web-be/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/configurations/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/enums/SuccessCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/enums/SuccessCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/repositories/CourseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/update_categories.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/course-web-be/update_thumbnail_url_column.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-course-project/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/handler/ChatHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/ai/handler/ChatHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/controllers/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/controllers/ProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/response/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/dtos/response/UserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/mappers/AuthMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/mappers/AuthMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/course-web-be/src/main/java/com/project/courseweb/services/implement/PostServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-course-project/src/app/courses/pro/CoursePaymentModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/src/app/courses/pro/CoursePaymentModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-course-project/src/services/blog.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-course-project/src/services/blog.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,13 +30,18 @@
     <option name="CLEAR_OUTPUT_DIRECTORY" value="false" />
     <option name="REBUILD_ON_DEPENDENCY_CHANGE" value="false" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_D:/MyProjects/Course" value="35320d6YgZEEGMpeKV4oq1yDJQp" />
+    </persistenceIdMap>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
         <option value="ZenUML Diagram" />
-        <option value="Record" />
         <option value="Interface" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -72,6 +56,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;history&quot;: [
@@ -128,10 +113,12 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
     &quot;Spring Boot.CourseWebBeApplication.executor&quot;: &quot;Run&quot;,
     &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#24 on implement-be&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;SQL Inserts&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#29 on implement-be&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;24.11.1&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.10.1&quot;,
@@ -145,7 +132,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.other&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\MyProjects\\Course\\my-course-project\\node_modules\\typescript\\lib&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -505,27 +492,85 @@
       <option name="project" value="LOCAL" />
       <updated>1765378265325</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="feat: implement AI-powered course consultation system with RAG architecture">
+      <option name="closed" value="true" />
+      <created>1765555680756</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1765555680756</updated>
+    </task>
+    <task id="LOCAL-00034" summary="feat: configure AI chat settings and file upload limits in application.yaml">
+      <option name="closed" value="true" />
+      <created>1765638549942</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1765638549942</updated>
+    </task>
+    <task id="LOCAL-00035" summary="feat: refactor AI consultation logic to support query rewriting and enhance intent classification">
+      <option name="closed" value="true" />
+      <created>1765727598034</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1765727598034</updated>
+    </task>
+    <task id="LOCAL-00036" summary="feat: refactor AI consultation logic to support query rewriting and enhance intent classification">
+      <option name="closed" value="true" />
+      <created>1765788460517</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1765788460517</updated>
+    </task>
+    <task id="LOCAL-00037" summary="feat: implement AI chatbot enhancements with loading indicator and error handling">
+      <option name="closed" value="true" />
+      <created>1765809134567</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1765809134567</updated>
+    </task>
+    <task id="LOCAL-00038" summary="feat: refactor chatbot and backend integration for improved user experience  &#10;&#10;- Removed unused `QuizResponse` class to clean up redundant code.  &#10;- Updated chatbot logic to implement history fetching, unified message parsing, and enhanced error handling.  &#10;- Adjusted frontend layout and UI interaction to align with the latest backend responses.  &#10;- Replaced `loadData` with `loadDataVector` in `AppStartupRunner` for Vector Store syncing.  &#10;- Enhanced memory configuration in `MultiAiClientConfig` with increased `maxMessages` and updated default options placeholders.  &#10;- Extended `DataLoader` interface with methods to support reloading Vector Store data.">
+      <option name="closed" value="true" />
+      <created>1765902460210</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1765902460210</updated>
+    </task>
+    <task id="LOCAL-00039" summary="feat: add comprehensive README for E-learning platform project overview and technology stack">
+      <option name="closed" value="true" />
+      <created>1766120514741</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1766120514741</updated>
+    </task>
+    <task id="LOCAL-00040" summary="chore: remove legacy database schema script no longer in use">
+      <option name="closed" value="true" />
+      <created>1766120536699</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1766120536699</updated>
+    </task>
+    <task id="LOCAL-00041" summary="feat: update README with project overview, technology analysis, and architecture details">
+      <option name="closed" value="true" />
+      <created>1766120926625</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1766120926625</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add admin authentication creation in AuthService and initialize in ApplicationInitConfig" />
-    <MESSAGE value="Implement post management features including creation, retrieval, and updating with pagination support" />
-    <MESSAGE value="Add new Postman requests for retrieving and updating posts with token authentication" />
-    <MESSAGE value="Enhance course and enrollment models with new fields and relationships; add timestamps and update transaction management in PostServiceImpl" />
-    <MESSAGE value="Add CourseStatus enum to define course publication states" />
-    <MESSAGE value="add api public(get all post status publish) and api delete post" />
-    <MESSAGE value="add role user" />
-    <MESSAGE value="REMOVE STATUS POST(PENDING AND REJECT)" />
-    <MESSAGE value="ADD POSTMAN" />
-    <MESSAGE value="ADD admin and course management functionality" />
-    <MESSAGE value="add api admin management courses and posts and api external" />
-    <MESSAGE value="feat: implement order management and payment processing functionalit with VnPaySanbox" />
-    <MESSAGE value="feat: refactor auth service for improved API integration and error handling" />
-    <MESSAGE value="feat: add course thumbnail upload functionality and enrollment response DTO" />
     <MESSAGE value="add postman" />
     <MESSAGE value="feat: add user management functionalities including user list retrieval and deletion" />
     <MESSAGE value="feat: implement user management endpoints for retrieving and deleting users" />
@@ -537,7 +582,21 @@
     <MESSAGE value="refactor: rename enrollmentDate to enrolledAt and update related mappings(fix enrollmentAt)" />
     <MESSAGE value="feat: add scheduled cleanup for expired refresh tokens and enhance file deletion handling in course and post services" />
     <MESSAGE value="feat: enhance course and post creation/update endpoints to support file uploads" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: enhance course and post creation/update endpoints to support file uploads" />
+    <MESSAGE value="feat: implement AI data loading and chat handling features with vector store integration" />
+    <MESSAGE value="feat: integrate AI-based course recommendation and chat functionalities&#10;&#10;- Added multi-AI client configuration (OpenAI and Ollama) with customizable options.&#10;- Implemented support for course consultation via vector-based search using RedisVectorStore.&#10;- Introduced DataLoader and DataTransformer services to preprocess and index course data for AI retrieval.&#10;- Configured AI prompts and system instructions for chat and recommendation tasks.&#10;- Enhanced ChatHandler to classify user queries and handle intents (CHAT or SEARCH).&#10;- Added QuizResponse and ChatMessageRequest DTOs for AI interactions.&#10;- Simplified database schema setup by migrating previous SQL scripts to unified schema creation in script.sql." />
+    <MESSAGE value="feat: implement AI-powered course consultation system with RAG architecture" />
+    <MESSAGE value="feat: configure AI chat settings and file upload limits in application.yaml" />
+    <MESSAGE value="feat: refine AI consultation prompts and enhance chat functionality  &#10;&#10;- Updated prompts with distinct roles for course consultation and social interaction.  &#10;- Improved intent classification logic for handling chat and course search queries.  &#10;- Added query rewriting to enhance retrieval accuracy for vector searches.  &#10;- Standardized prompt loading with fallback mechanisms for robustness.  &#10;- Refactored token splitter configuration for optimized performance in `DataTransformerImpl`.  &#10;- Adjusted token usage logging in `TokenPrintAdvisor` for stream responses.  &#10;- Replaced `GET` with `POST` in AIEndpoint to align with RESTful standards.  &#10;- Updated AI chat configurations for better model stability and performance.  " />
+    <MESSAGE value="feat: overhaul AI chat system with multi-prompt support and query rewriting&#10;&#10;- Introduced new social and RAG-specific prompts to enhance user engagement and accuracy.&#10;- Configured advisor chaining for better context handling in conversations.&#10;- Implemented query rewriting to improve search relevance in the course recommendation system.&#10;- Adjusted token text splitter for more efficient document transformations.&#10;- Refactored chat client configuration to streamline advisor and system prompt usage.&#10;- Enhanced logging for better visibility into system behavior and token usage during AI interactions." />
+    <MESSAGE value="feat: enhance AI chat system with query rewriting, improved prompts, and better model configuration" />
+    <MESSAGE value="feat: refactor AI consultation logic to support query rewriting and enhance intent classification" />
+    <MESSAGE value="feat: implement AI chatbot enhancements with loading indicator and error handling" />
+    <MESSAGE value="feat: enhance chatbot with course data display and add ChatCourseCard component" />
+    <MESSAGE value="feat: refactor chatbot and backend integration for improved user experience  &#10;&#10;- Removed unused `QuizResponse` class to clean up redundant code.  &#10;- Updated chatbot logic to implement history fetching, unified message parsing, and enhanced error handling.  &#10;- Adjusted frontend layout and UI interaction to align with the latest backend responses.  &#10;- Replaced `loadData` with `loadDataVector` in `AppStartupRunner` for Vector Store syncing.  &#10;- Enhanced memory configuration in `MultiAiClientConfig` with increased `maxMessages` and updated default options placeholders.  &#10;- Extended `DataLoader` interface with methods to support reloading Vector Store data." />
+    <MESSAGE value="feat: add comprehensive README for E-learning platform project overview and technology stack" />
+    <MESSAGE value="chore: remove legacy database schema script no longer in use" />
+    <MESSAGE value="feat: update README with project overview, technology analysis, and architecture details" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: update README with project overview, technology analysis, and architecture details" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

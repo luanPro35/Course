@@ -107,7 +107,13 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         // Cho phép FE Next.js (chạy ở port 3000) gọi API
 //        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(
+                Arrays.asList(
+                        "http://localhost:3000",
+                        "http://10.0.2.2",
+                        "http://localhost"
+                )
+        );
         // Cho phép các method này
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // Cho phép các header này

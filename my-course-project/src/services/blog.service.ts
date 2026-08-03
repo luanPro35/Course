@@ -151,7 +151,10 @@ export class BlogService {
       );
 
       if (!response.ok) {
-        throw new Error("Không tìm thấy bài viết.");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Failed to get post:", response.status, errorData);
+        const errorMessage = errorData.message || `Lỗi ${response.status}: Không tìm thấy bài viết.`;
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();

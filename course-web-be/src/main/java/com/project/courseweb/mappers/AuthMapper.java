@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 public interface AuthMapper {
     @Mapping(target = "fullName", source = "profile.fullName")
     @Mapping(target = "roles", source = "auth.roles")
+    @Mapping(target = "avatar", source = "profile.avatar")
     UserResponse toUserResponse(Auth auth);
 
     @Mapping(target = "profile.fullName", source = "fullName")

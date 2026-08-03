@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.document.Document;
@@ -28,6 +29,7 @@ public class ChatHandler {
     private final ChatClient ollamaClient;
     private final ChatClient openAiClient;
     private final VectorStore vectorStore;
+    private final ChatMemoryRepository chatMemoryRepository;
 
     private final ChatMemory chatMemory;
 
@@ -39,11 +41,12 @@ public class ChatHandler {
 
     public ChatHandler(@Qualifier("ollamaChatClient") ChatClient ollamaClient,
                        @Qualifier("openAiChatClient") ChatClient openAiClient,
-                       VectorStore vectorStore,
+                       VectorStore vectorStore, ChatMemoryRepository chatMemoryRepository,
                        ChatMemory chatMemory) {
         this.ollamaClient = ollamaClient;
         this.openAiClient = openAiClient;
         this.vectorStore = vectorStore;
+        this.chatMemoryRepository = chatMemoryRepository;
         this.chatMemory = chatMemory;
     }
 
@@ -273,7 +276,8 @@ public class ChatHandler {
     }
 
     public List<ChatHistoryResponse> getHistory() {
-        List<Message> allMessages = chatMemory.get(getId());
+        List<Message> allMessages = this.chatMemoryRepository.findByConversationId(getId());
+        log.info(allMessages.toString());
         log.info(String.valueOf(allMessages.size()));
         return allMessages.stream().map(
                 message -> {

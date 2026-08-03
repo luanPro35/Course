@@ -145,18 +145,38 @@ export default function CoursePaymentModal({
               </div>
 
               <div className="text-gray-700 mb-8 text-lg leading-relaxed bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-sm">
-                {course?.subtitleHighlights?.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <span
-                      className={
-                        item.isHighlight ? "font-bold text-blue-600" : ""
+                {(() => {
+                  let highlights: { text: string; isHighlight: boolean }[] = [];
+                  if (course?.subtitleHighlights) {
+                    if (Array.isArray(course.subtitleHighlights)) {
+                      highlights = course.subtitleHighlights;
+                    } else if (typeof course.subtitleHighlights === "string") {
+                      try {
+                        highlights = JSON.parse(course.subtitleHighlights);
+                      } catch (e) {
+                        // Nếu không phải JSON, coi như là chuỗi văn bản bình thường
+                        highlights = [
+                          {
+                            text: course.subtitleHighlights,
+                            isHighlight: false,
+                          },
+                        ];
                       }
-                    >
-                      {item.text}
-                    </span>
-                    {index < course!.subtitleHighlights!.length - 1 ? " " : ""}
-                  </React.Fragment>
-                ))}
+                    }
+                  }
+                  return highlights.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <span
+                        className={
+                          item.isHighlight ? "font-bold text-blue-600" : ""
+                        }
+                      >
+                        {item.text}
+                      </span>
+                      {index < highlights.length - 1 ? " " : ""}
+                    </React.Fragment>
+                  ));
+                })()}
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm">

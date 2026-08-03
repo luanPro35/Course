@@ -13,7 +13,7 @@ public interface ProfileService {
 
     FileResponse uploadAvatar(MultipartFile file);
 
-    ProfileUpdateResponse getProfile(Long userId);
+    ProfileUpdateResponse getProfile();
 
     Profile getProfileById(Long id);
 

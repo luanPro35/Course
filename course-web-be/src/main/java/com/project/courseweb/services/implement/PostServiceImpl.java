@@ -85,7 +85,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isPostOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isPostOwner(#id) or @postServiceImpl.isPostPublished(#id)")
+//    @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isPostOwner(#id)")
     @Cacheable(value = "post", key = "#id")
     public PostResponse getPostById(Long id) {
         return this.toResponse(this.postRepository.findById(id)
@@ -170,5 +171,11 @@ public class PostServiceImpl implements PostService {
 
     public boolean isPostOwner(Long id) {
         return postRepository.existsByIdAndProfileId(id, this.profileServiceImpl.getId());
+    }
+
+    public boolean isPostPublished(Long id) {
+        return postRepository.findById(id)
+                .map(post -> post.getStatus() == PostStatus.PUBLISHED)
+                .orElse(false);
     }
 }

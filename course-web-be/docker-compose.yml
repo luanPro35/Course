@@ -65,3 +65,32 @@ services:
 volumes:
   mysql_data:
   redis_data:
+#version: "3.8"
+
+#services:
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql-course
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 123456
+#      MYSQL_DATABASE: course_db
+#    volumes:
+#      - mysql_data:/var/lib/msql
+#    ports:
+#      - "3306:3306"
+#  api:
+#    build: .
+#    container_name: api_course
+#    depends_on:
+#      - mysql
+#    environment:
+#      DB_HOST: mysql
+#      DB_PORT: 3306
+#      DB_USER: user
+#      DB_PASS: 123456
+#    ports:
+#      - "3000:3000"
+#
+#volumes:
+#  mysql_data:
+
